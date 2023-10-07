@@ -62,6 +62,7 @@ local M = {
             },
           },
         },
+        rnix = { mason = false },
       },
       setup = {
         eslint = function()
@@ -88,7 +89,7 @@ local M = {
     opts = function(_, _opts)
       local opts = _opts
       opts.ensure_installed = opts.ensure_installed or {}
-opts.PATH="append"
+      opts.PATH = "append"
 
       vim.list_extend(opts.ensure_installed, { "taplo", "eslint-lsp", "intelephense", "pyright" })
     end,

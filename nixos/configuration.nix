@@ -11,6 +11,8 @@
     # ./users.nix
 
     inputs.home-manager.nixosModules.home-manager
+    # inputs.nixvim.nixosModules.nixvim
+    # ../nixvim/default.nix
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
   ];
@@ -88,7 +90,7 @@
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
       # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "networkmanager" "docker" ];
     };
   };
 
@@ -118,6 +120,8 @@
   };
 
   stylix = {
+    targets.gnome.enable = false;
+
     base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-frappe.yaml";
     polarity = "dark";
     image = pkgs.fetchurl {
@@ -134,6 +138,17 @@
     };
   };
 
+  # environment.sessionVariables = rec {
+  #   XDG_CACHE_HOME = "$HOME/.cache";
+  #   XDG_CONFIG_HOME = "$HOME/.config";
+  #   XDG_DATA_HOME = "$HOME/.local/share";
+  #   XDG_STATE_HOME = "$HOME/.local/state";
+
+  # Not officially in the specification
+  #   XDG_BIN_HOME = "$HOME/.local/bin";
+  #   PATH = [ "${XDG_BIN_HOME}" ];
+  # };
+
   environment.systemPackages = (with pkgs;
     [
       alejandra
@@ -142,6 +157,7 @@
       git
       wget
       nil
+      rnix-lsp
       nixfmt
       # clang
       # libclang
@@ -155,6 +171,7 @@
       gnumake
       lua-language-server
       lshw
+      unzip
     ] ++ (with gnome; [ gnome-tweaks adwaita-icon-theme ])
     ++ (with gnomeExtensions; [ appindicator dash-to-panel espresso ]));
 

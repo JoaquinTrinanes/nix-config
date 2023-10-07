@@ -35,6 +35,16 @@
   home = {
     username = "joaquin";
     homeDirectory = "/home/joaquin";
+    sessionVariables = rec {
+      XDG_CACHE_HOME = "$HOME/.cache";
+      XDG_CONFIG_HOME = "$HOME/.config";
+      XDG_DATA_HOME = "$HOME/.local/share";
+      XDG_STATE_HOME = "$HOME/.local/state";
+
+      # Not officially in the specification
+      XDG_BIN_HOME = "$HOME/.local/bin";
+    };
+    sessionPath = [ config.home.sessionVariables."XDG_CONFIG_HOME" ];
   };
 
   # Add stuff for your user as you see fit:
@@ -51,13 +61,19 @@
     source = ../nvim;
     recursive = true;
   };
+  #xdg.configFile."nvim/lazy-lock.json" = {
+  #  enable = false;
+  #  source = config.lib.file.mkOutOfStoreSymlink ../nvim/lazy-lock.json;
+
+  #};
+
   # home.packages = with pkgs; [ steam ];
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
   programs.git = {
     enable = true;
-    userName ="Joaquín Triñanes";
+    userName = "Joaquín Triñanes";
     userEmail = "hi@joaquint.io";
     extraConfig = { init = { defaultBranch = "main"; }; };
   };
@@ -71,15 +87,12 @@
       fi
     '';
   };
-  programs.nushell.enable = true;
+  programs.nushell = {
+    enable = true;
+    shellAliases = config.home.shellAliases;
+  };
   programs.zoxide.enable = true;
-  # programs.neovim = {
-  #   enable = true;
-  #   defaultEditor = true;
-  #   vimAlias = true;
-  #   package = pkgs.neovim-nightly;
-  #   withNodeJs = true;
-  # };
+
   programs.ripgrep.enable = true;
   programs.wezterm = {
     enable = true;
@@ -131,6 +144,11 @@
   };
 
   home.sessionVariables.XCURSOR_THEME = "Bibata-Modern-Classic";
+  home.shellAliases = {
+    g = "git";
+    ll = "ls -l";
+    la = "ls -la";
+  };
 
   services.gnome-keyring.enable = true;
 
