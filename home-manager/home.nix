@@ -91,7 +91,10 @@
     enable = true;
     shellAliases = config.home.shellAliases;
   };
-  programs.zoxide.enable = true;
+  programs.zoxide = {
+    enable = true;
+    options = [ "--cmd=j" ];
+  };
 
   programs.ripgrep.enable = true;
   programs.wezterm = {
@@ -106,10 +109,7 @@
   };
   programs.starship = { enable = true; };
 
-  programs.firefox = {
-    enable = true;
-    # enableGnomeExtensions = true;
-  };
+  programs.firefox = { enable = true; };
 
   gtk = {
     enable = true;
