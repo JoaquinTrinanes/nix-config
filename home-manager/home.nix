@@ -35,7 +35,7 @@
   home = {
     username = "joaquin";
     homeDirectory = "/home/joaquin";
-    sessionVariables = rec {
+    sessionVariables = {
       XDG_CACHE_HOME = "$HOME/.cache";
       XDG_CONFIG_HOME = "$HOME/.config";
       XDG_DATA_HOME = "$HOME/.local/share";
@@ -44,7 +44,7 @@
       # Not officially in the specification
       XDG_BIN_HOME = "$HOME/.local/bin";
     };
-    sessionPath = [ config.home.sessionVariables."XDG_CONFIG_HOME" ];
+    sessionPath = [ config.home.sessionVariables."XDG_BIN_HOME" ];
   };
 
   # Add stuff for your user as you see fit:
