@@ -11,32 +11,50 @@
 
     stylix.url = "github:danth/stylix";
 
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # nixvim = {
+    #   url = "github:nix-community/nixvim";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
-    # TODO: Add any other flake you might need
     hardware.url = "github:nixos/nixos-hardware";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs:
-    let inherit (self) outputs;
+  outputs = { self, nixpkgs, home-manager, stylix, flake-utils, ... }@inputs:
+    let
+      inherit (self) outputs;
+      forAllSystems = flake-utils.lib.eachDefaultSystem;
     in {
+      # Your custom packages
+      # Acessible through 'nix build', 'nix shell', etc
+      packages =
+        forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      # Formatter for your nix files, available through 'nix fmt'
+      # Other options beside 'alejandra' include 'nixpkgs-fmt'
+      formatter =
+        forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+
+      # Your custom packages and modifications, exported as overlays
+      overlays = import ./overlays { inherit inputs; };
+
+      # Reusable nixos modules you might want to export
+      # These are usually stuff you would upstream into nixpkgs
+      nixosModules = import ./modules/nixos;
+
+      # Reusable home-manager modules you might want to export
+      # These are usually stuff you would upstream into home-manager
+      homeManagerModules = import ./modules/home-manager;
+
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
-        razer-blade-14 = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          # > Our main nixos configuration file <
-          modules = [
-            stylix.nixosModules.stylix
-            ./common
-            ./nixos/home-manager.nix
-            ./nixos/configuration.nix
-          ];
+        razer-blade-14 = let hostname = "razer-blade-14";
+        in nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs hostname; };
+          modules = [ ./nixos/configuration.nix ];
         };
       };
 
@@ -49,11 +67,7 @@
             nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs; };
           # > Our main home-manager configuration file <
-          modules = [
-            ./common
-            ./home-manager/home.nix
-            stylix.homeManagerModules.stylix
-          ];
+          modules = [ ./home-manager/home.nix ];
         };
       };
     };

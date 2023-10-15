@@ -1,6 +1,6 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{ inputs, outputs, lib, config, pkgs, hostname, ... }: {
   # You can import other NixOS modules here
   imports = [
     # You can also split up your configuration and import pieces of it here:
@@ -15,9 +15,14 @@
 
   nixpkgs = {
     # You can add overlays here
+    # Add overlays your own flake exports (from overlays and pkgs dir):
     overlays = [
-      # If you want to use overlays exported from other flakes:
-      # inputs.neovim-nightly-overlay.overlay
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
+
+      # You can also add overlays exported from other flakes:
+      # neovim-nightly-overlay.overlays.default
 
       # Or define it inline, for example:
       # (final: prev: {
@@ -26,7 +31,6 @@
       #   });
       # })
     ];
-    # Configure your nixpkgs instance
   };
 
   # home-manager = {
@@ -64,7 +68,7 @@
   # FIXME: Add the rest of your current configuration
 
   # TODO: Set your hostname
-  networking.hostName = "razer-blade-14";
+  networking.hostName = hostname;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -95,20 +99,25 @@
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
+  programs.dconf.enable = true;
+  services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
   services.xserver.libinput.touchpad = {
     tapping = true;
     scrollMethod = "twofinger";
     naturalScrolling = true;
   };
 
-  programs = {
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-    };
-    dconf.enable = true;
-    steam.enable = true;
-    npm.enable = true;
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+  };
+  programs.steam.enable = true;
+  programs.npm.enable = true;
+  programs.nix-ld.enable = true;
+
+  virtualisation.docker = {
+    enable = true;
+    # rootless.enable = true;
   };
 
   # stylix = {
@@ -159,9 +168,13 @@
       libcxx
       stylua
       ripgrep
+      sd
+      fd
       fzf
       gnumake
       lua-language-server
+      pciutils
+      nix-index
       lshw
       unzip
     ] ++ (with gnome; [ gnome-tweaks adwaita-icon-theme ])

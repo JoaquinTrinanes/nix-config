@@ -9,3 +9,4 @@ in {
   };
   users.users.${user}.packages = with pkgs; [ home-manager ];
 }
+

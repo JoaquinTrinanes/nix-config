@@ -7,6 +7,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     inputs.hardware.nixosModules.common-cpu-amd
+    inputs.hardware.nixosModules.common-pc-laptop-ssd
     # <nixos-hardware/common/gpu/nvidia/prime.nix>
     # <nixos-hardware/common/cpu/amd>
   ];
@@ -16,6 +17,7 @@
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+  boot.kernelParams = [ "acpi_backlight=native" ];
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/2576-7F71";
@@ -37,17 +39,15 @@
 
   services.switcherooControl.enable = true;
 
-  # environment.systemPackages = [
-  #   pkgs.writeShellScriptBin
-  #   "prime-run"
-  #   ''
-  #     export __NV_PRIME_RENDER_OFFLOAD=1
-  #     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
-  #     export __GLX_VENDOR_LIBRARY_NAME=nvidia
-  #     export __VK_LAYER_NV_optimus=NVIDIA_only
-  #     exec "$@"
-  #   ''
-  # ];
+  environment.systemPackages = [
+    (pkgs.writeShellScriptBin "prime-run" ''
+      export __NV_PRIME_RENDER_OFFLOAD=1
+      export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+      export __GLX_VENDOR_LIBRARY_NAME=nvidia
+      export __VK_LAYER_NV_optimus=NVIDIA_only
+      exec "$@"
+    '')
+  ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -61,6 +61,10 @@
   # networking.interfaces.vethc314d8f.useDHCP = lib.mkDefault true;
   # networking.interfaces.vethc48591f.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
+
+  services.tlp.enable = true;
+  services.tlp.settings = { RUNTIME_PM_ON_AC = "auto"; };
+  services.power-profiles-daemon.enable = false;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
@@ -76,14 +80,37 @@
     nvidiaSettings = true;
     prime = {
       offload = {
-        enable = lib.mkOverride 990 true;
-        enableOffloadCmd = lib.mkIf config.hardware.nvidia.prime.offload.enable
-          true; # Provides `nvidia-offload` command.
+        enable = true;
+        enableOffloadCmd = true;
       };
       amdgpuBusId = "PCI:64:00:0";
       nvidiaBusId = "PCI:1:0:0";
     };
   };
+
+  # sound.enable = false;
+  security.rtkit.enable = true;
+  hardware.pulseaudio.enable = false;
+  services.pipewire = {
+    enable = true;
+    audio.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    # jack.enable = true;
+    pulse.enable = true;
+    wireplumber.enable = true;
+  };
+  # sound
+  # security.rtkit.enable = true;
+  # hardware.pulseaudio.enable = false;
+  # services.pipewire = {
+  #   enable = true;
+  #   wireplumber.enable = true;
+  #   media-session.enable = false;
+  #   jack.enable = true;
+  #   alsa.enable = true;
+  #   alsa.support32Bit = true;
+  # };
 
 }
 
