@@ -6,11 +6,12 @@
     # You can also split up your configuration and import pieces of it here:
     # ./users.nix
 
-    inputs.home-manager.nixosModules.home-manager
+    # inputs.home-manager.nixosModules.home-manager
     # ../nixvim/default.nix
     # Import your generated (nixos-generate-config) hardware configuration
+    ../common
     ./hardware-configuration.nix
-    ./home-manager.nix
+    outputs.nixosModules.theme
   ];
 
   nixpkgs = {

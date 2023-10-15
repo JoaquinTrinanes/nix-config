@@ -1,8 +1,6 @@
-{ pkgs, inputs, outputs, ... }:
-let user = "joaquin";
-in {
+{ pkgs, inputs, outputs, user ? "joaquin", ... }: {
   home-manager = {
-    users.${user} = import ../home-manager/home.nix;
+    users.${user} = import ../../home-manager/home.nix;
     useUserPackages = true;
     useGlobalPkgs = true;
     extraSpecialArgs = { inherit inputs outputs; };
