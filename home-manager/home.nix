@@ -39,27 +39,27 @@
   #   ];
   # };
 
-  # nixpkgs = {
-  #   # You can add overlays here
-  #   overlays = [
-  #     # If you want to use overlays exported from other flakes:
-  #     # neovim-nightly-overlay.overlays.default
-  #
-  #     # Or define it inline, for example:
-  #     # (final: prev: {
-  #     #   hi = final.hello.overrideAttrs (oldAttrs: {
-  #     #     patches = [ ./change-hello-to-hi.patch ];
-  #     #   });
-  #     # })
-  #   ];
-  #   # Configure your nixpkgs instance
-  #   config = {
-  #     # Disable if you don't want unfree packages
-  #     allowUnfree = true;
-  #     # Workaround for https://github.com/nix-community/home-manager/issues/2942
-  #     allowUnfreePredicate = _: true;
-  #   };
-  # };
+  nixpkgs = {
+    # You can add overlays here
+    # overlays = [
+    #   # If you want to use overlays exported from other flakes:
+    #   # neovim-nightly-overlay.overlays.default
+    #
+    #   # Or define it inline, for example:
+    #   # (final: prev: {
+    #   #   hi = final.hello.overrideAttrs (oldAttrs: {
+    #   #     patches = [ ./change-hello-to-hi.patch ];
+    #   #   });
+    #   # })
+    # ];
+    # Configure your nixpkgs instance
+    config = {
+      # Disable if you don't want unfree packages
+      # allowUnfree = true;
+      # Workaround for https://github.com/nix-community/home-manager/issues/2942
+      allowUnfreePredicate = _: true;
+    };
+  };
 
   home = {
     username = "joaquin";
@@ -68,16 +68,27 @@
       then "/home/${config.home.username}"
       else "/Users/${config.home.username}";
     sessionVariables = {
-      XDG_CACHE_HOME = "$HOME/.cache";
-      XDG_CONFIG_HOME = "$HOME/.config";
-      XDG_DATA_HOME = "$HOME/.local/share";
-      XDG_STATE_HOME = "$HOME/.local/state";
+      # XDG_CACHE_HOME = "$HOME/.cache";
+      # XDG_CONFIG_HOME = "$HOME/.config";
+      # XDG_DATA_HOME = "$HOME/.local/share";
+      # XDG_STATE_HOME = "$HOME/.local/state";
 
       # Not officially in the specification
       XDG_BIN_HOME = "$HOME/.local/bin";
     };
     sessionPath = [config.home.sessionVariables."XDG_BIN_HOME"];
+    packages = with pkgs; [
+      discord
+
+      # TODO: bridge dep? Override so it gets added to PATH somehow
+      xorg.libxcb.dev
+      xwaylandvideobridge
+    ];
   };
+  xdg.systemDirs.data = [
+    # show desktop entries
+    "$HOME/.nix-profile/share"
+  ];
 
   # Add stuff for your user as you see fit:
   programs.neovim = {
@@ -159,6 +170,7 @@
       direnv_load rtx direnv exec
     }
   '';
+  # TODO: set to false when custom hook is added
   # programs.direnv.enableNushellInteraction = false;
 
   gtk = {

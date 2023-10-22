@@ -6,6 +6,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
+    ./hardware-acceleration.nix
     # <nixos-hardware/common/gpu/nvidia/prime.nix>
     # <nixos-hardware/common/cpu/amd>
   ];
@@ -84,13 +85,6 @@
       amdgpuBusId = "PCI:64:00:0";
       nvidiaBusId = "PCI:1:0:0";
     };
-  };
-
-  # hardware acceleration
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
-
   };
 
   # sound
