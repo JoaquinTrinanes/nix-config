@@ -51,7 +51,7 @@ local M = {
         python = { "black" },
         toml = { "taplo" },
         php = { "custom_pint_formatter" },
-        nix = { "nixfmt" },
+        nix = { "alejandra" },
         ["_"] = {
           "trim_whitespace",
         },

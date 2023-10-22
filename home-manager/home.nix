@@ -1,6 +1,13 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   # You can import other home-manager modules here
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors):
@@ -8,29 +15,29 @@
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
-    inputs.stylix.homeManagerModules.stylix
-    ../common
-    ../common/stylix.nix
+    # inputs.stylix.homeManagerModules.stylix
+    outputs.homeManagerModules.theme
+    ../common/default.nix
   ];
 
-  nixpkgs = {
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-  };
+  # nixpkgs = {
+  #   overlays = [
+  #     # Add overlays your own flake exports (from overlays and pkgs dir):
+  #     outputs.overlays.additions
+  #     outputs.overlays.modifications
+  #     outputs.overlays.unstable-packages
+  #
+  #     # You can also add overlays exported from other flakes:
+  #     # neovim-nightly-overlay.overlays.default
+  #
+  #     # Or define it inline, for example:
+  #     # (final: prev: {
+  #     #   hi = final.hello.overrideAttrs (oldAttrs: {
+  #     #     patches = [ ./change-hello-to-hi.patch ];
+  #     #   });
+  #     # })
+  #   ];
+  # };
 
   # nixpkgs = {
   #   # You can add overlays here
@@ -56,10 +63,10 @@
 
   home = {
     username = "joaquin";
-    homeDirectory = if pkgs.stdenv.isLinux then
-      "/home/${config.home.username}"
-    else
-      "/Users/${config.home.username}";
+    homeDirectory =
+      if pkgs.stdenv.isLinux
+      then "/home/${config.home.username}"
+      else "/Users/${config.home.username}";
     sessionVariables = {
       XDG_CACHE_HOME = "$HOME/.cache";
       XDG_CONFIG_HOME = "$HOME/.config";
@@ -69,7 +76,7 @@
       # Not officially in the specification
       XDG_BIN_HOME = "$HOME/.local/bin";
     };
-    sessionPath = [ config.home.sessionVariables."XDG_BIN_HOME" ];
+    sessionPath = [config.home.sessionVariables."XDG_BIN_HOME"];
   };
 
   # Add stuff for your user as you see fit:
@@ -98,7 +105,7 @@
     enable = true;
     userName = "Joaquín Triñanes";
     userEmail = "hi@joaquint.io";
-    extraConfig = { init = { defaultBranch = "main"; }; };
+    extraConfig = {init = {defaultBranch = "main";};};
   };
 
   programs.bash = {
@@ -119,7 +126,7 @@
 
   programs.zoxide = {
     enable = true;
-    options = [ "--cmd=j" ];
+    options = ["--cmd=j"];
   };
 
   programs.ripgrep.enable = true;
@@ -139,12 +146,11 @@
       nix_shell = {
         impure_msg = "";
         # format = "via [$symbol($state)($name)]($style) ";
-
       };
     };
   };
 
-  programs.firefox = { enable = true; };
+  programs.firefox = {enable = true;};
 
   programs.direnv.enable = true;
   programs.direnv.stdlib = ''
@@ -203,5 +209,4 @@
   systemd.user.startServices = "sd-switch";
 
   home.stateVersion = "23.05";
-
 }

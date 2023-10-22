@@ -26,7 +26,7 @@
   outputs = { self, nixpkgs, home-manager, stylix, flake-utils, ... }@inputs:
     let
       inherit (self) outputs;
-      forAllSystems = flake-utils.lib.eachDefaultSystem;
+      forAllSystems = nixpkgs.lib.genAttrs flake-utils.lib.defaultSystems;
     in {
       # Your custom packages
       # Acessible through 'nix build', 'nix shell', etc
@@ -54,7 +54,11 @@
         razer-blade-14 = let hostname = "razer-blade-14";
         in nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs hostname; };
-          modules = [ ./nixos/configuration.nix ];
+          modules = [
+            ./nixos/configuration.nix
+            outputs.nixosModules.home-manager
+            # ./common/stylix.nix
+          ];
         };
       };
 

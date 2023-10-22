@@ -1,6 +1,14 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
-{ inputs, outputs, lib, config, pkgs, hostname, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  hostname,
+  ...
+}: {
   # You can import other NixOS modules here
   imports = [
     # You can also split up your configuration and import pieces of it here:
@@ -11,28 +19,30 @@
     # Import your generated (nixos-generate-config) hardware configuration
     ../common
     ./hardware-configuration.nix
-    outputs.nixosModules.theme
+    # inputs.stylix.nixosModules.stylix
   ];
 
-  nixpkgs = {
-    # You can add overlays here
-    # Add overlays your own flake exports (from overlays and pkgs dir):
-    overlays = [
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-  };
+  # nixpkgs = {
+  #   # You can add overlays here
+  #   # Add overlays your own flake exports (from overlays and pkgs dir):
+  #   overlays = [
+  #     outputs.overlays.additions
+  #     outputs.overlays.modifications
+  #     outputs.overlays.unstable-packages
+  #     outputs.overlays.neovim-nightly
+  #
+  #     # You can also add overlays exported from other flakes:
+  #     # neovim-nightly-overlay.overlays.default
+  #
+  #     # Or define it inline, for example:
+  #     # (final: prev: {
+  #     #   hi = final.hello.overrideAttrs (oldAttrs: {
+  #     #     patches = [ ./change-hello-to-hi.patch ];
+  #     #   });
+  #     # })
+  #   ];
+  #   config = { allowUnfree = true; };
+  # };
 
   # home-manager = {
   #   extraSpecialArgs = { inherit inputs outputs; };
@@ -46,11 +56,12 @@
   nix = {
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
+    registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
 
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}")
+    nixPath =
+      lib.mapAttrsToList (key: value: "${key}=${value.to.path}")
       config.nix.registry;
 
     settings = {
@@ -58,8 +69,7 @@
       experimental-features = "nix-command flakes";
       # Deduplicate and optimize nix store
       auto-optimise-store = true;
-      substituters =
-        [ "https://nix-community.cachix.org" "https://cache.nixos.org/" ];
+      substituters = ["https://nix-community.cachix.org" "https://cache.nixos.org/"];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
@@ -87,21 +97,20 @@
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
       # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-      extraGroups = [ "wheel" "networkmanager" "docker" ];
+      extraGroups = ["wheel" "networkmanager" "docker"];
     };
   };
 
   networking.networkmanager.enable = true;
 
-  fonts.packages = with pkgs;
-    [ (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; }) ];
+  fonts.packages = with pkgs; [(nerdfonts.override {fonts = ["FiraCode" "DroidSansMono"];})];
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
   programs.dconf.enable = true;
-  services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+  services.udev.packages = with pkgs; [gnome.gnome-settings-daemon];
   services.xserver.libinput.touchpad = {
     tapping = true;
     scrollMethod = "twofinger";
@@ -151,7 +160,7 @@
   #   PATH = [ "${XDG_BIN_HOME}" ];
   # };
 
-  environment.systemPackages = (with pkgs;
+  environment.systemPackages = with pkgs;
     [
       alejandra
       firefox
@@ -178,8 +187,9 @@
       nix-index
       lshw
       unzip
-    ] ++ (with gnome; [ gnome-tweaks adwaita-icon-theme ])
-    ++ (with gnomeExtensions; [ appindicator dash-to-panel espresso ]));
+    ]
+    ++ (with gnome; [gnome-tweaks adwaita-icon-theme])
+    ++ (with gnomeExtensions; [appindicator dash-to-panel espresso]);
 
   # This setups a SSH server. Very important if you're setting up a headless system.
   # Feel free to remove if you don't need it.

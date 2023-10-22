@@ -5,12 +5,9 @@
 }: let
   theme = "catppuccin-frappe";
 in {
-  imports = [inputs.stylix.nixosModules.stylix ../../common/stylix.nix];
-  targets.gnome.enable = false;
+  imports = [inputs.stylix.homeManagerModules.stylix ../../common/stylix.nix];
 
   # stylix = {
-  #   targets.gnome.enable = false;
-  #
   #   base16Scheme = "${pkgs.base16-schemes}/share/themes/${theme}.yaml";
   #   polarity = "dark";
   #   image = pkgs.fetchurl {
