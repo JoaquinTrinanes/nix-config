@@ -1,8 +1,5 @@
-{
-  pkgs,
-  lib,
-  ...
-}: let
+{pkgs, ...}: let
+  # TODO: overridable attribute
   theme = "catppuccin-frappe";
 in {
   stylix = {
@@ -18,6 +15,11 @@ in {
           pkgs.nerdfonts.override {fonts = ["FiraCode" "DroidSansMono"];};
         name = "FiraCode Nerd Font";
       };
+      emoji = {
+        package = pkgs.joypixels;
+        name = "Joypixels";
+      };
     };
   };
+  nixpkgs.config.joypixels.acceptLicense = true;
 }

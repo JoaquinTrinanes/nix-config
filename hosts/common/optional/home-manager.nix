@@ -1,14 +1,14 @@
 {
   pkgs,
-  inputs,
   outputs,
+  inputs,
   ...
 }: let
   user = "joaquin";
 in {
   imports = [inputs.home-manager.nixosModules.home-manager];
   home-manager = {
-    users.${user} = import ../../home-manager/home.nix;
+    users.${user} = ../../../home-manager/home.nix;
     # useUserPackages = true;
     # useGlobalPkgs = true;
     extraSpecialArgs = {inherit inputs outputs;};
