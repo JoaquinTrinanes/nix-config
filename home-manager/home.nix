@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }: {
   # TODO: option to specify if GUI applications should be included or not?
@@ -101,7 +100,7 @@
   };
   programs.nushell = {
     enable = true;
-    shellAliases = config.home.shellAliases;
+    inherit (config.home) shellAliases;
   };
 
   programs.rtx.enable = true;
