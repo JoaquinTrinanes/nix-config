@@ -12,40 +12,6 @@
     ../common/optional/home-manager.nix
     ./hardware-configuration.nix
   ];
-
-  # nixpkgs = {
-  #   # You can add overlays here
-  #   # Add overlays your own flake exports (from overlays and pkgs dir):
-  #   overlays = [
-  #     outputs.overlays.additions
-  #     outputs.overlays.modifications
-  #     outputs.overlays.unstable-packages
-  #     outputs.overlays.neovim-nightly
-  #
-  #     # You can also add overlays exported from other flakes:
-  #     # neovim-nightly-overlay.overlays.default
-  #
-  #     # Or define it inline, for example:
-  #     # (final: prev: {
-  #     #   hi = final.hello.overrideAttrs (oldAttrs: {
-  #     #     patches = [ ./change-hello-to-hi.patch ];
-  #     #   });
-  #     # })
-  #   ];
-  #   config = { allowUnfree = true; };
-  # };
-
-  # home-manager = {
-  #   extraSpecialArgs = { inherit inputs outputs; };
-  #   users = {
-  #     # Import your home-manager configuration
-  #     joaquin = import ../home-manager/home.nix;
-  #   };
-  #   useGlobalPkgs = true;
-  # };
-
-  # FIXME: Add the rest of your current configuration
-
   # TODO: Set your hostname
   networking.hostName = hostname;
 

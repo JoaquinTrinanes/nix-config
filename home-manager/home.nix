@@ -6,9 +6,7 @@
 }: {
   # TODO: option to specify if GUI applications should be included or not?
 
-  imports = [
-    ../common/default.nix
-  ];
+  imports = [];
 
   # nixpkgs = {
   #   overlays = [
