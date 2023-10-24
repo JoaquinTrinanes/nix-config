@@ -1,7 +1,4 @@
 {
-  inputs,
-  lib,
-  config,
   pkgs,
   hostname,
   ...
@@ -10,6 +7,7 @@
     ../common/global
     ../common/optional/desktop
     ../common/optional/home-manager.nix
+    ../common/optional/gaming
     ./hardware-configuration.nix
   ];
   # TODO: Set your hostname
@@ -20,8 +18,7 @@
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
-    # FIXME: Replace with your username
-    joaquin = {
+    "joaquin" = {
       # TODO: You can set an initial password for your user.
       # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
       # Be sure to change it (using passwd) after rebooting!
@@ -38,20 +35,6 @@
   networking.networkmanager.enable = true;
 
   fonts.packages = with pkgs; [(nerdfonts.override {fonts = ["FiraCode" "DroidSansMono"];})];
-
-  # # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  # services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.desktopManager.gnome.enable = true;
-  # programs.dconf.enable = true;
-  # services.udev.packages = with pkgs; [gnome.gnome-settings-daemon];
-  # services.xserver.libinput.touchpad = {
-  #   tapping = true;
-  #   scrollMethod = "twofinger";
-  #   naturalScrolling = true;
-  # };
-
-  programs.steam.enable = true;
 
   virtualisation.docker = {
     enable = true;

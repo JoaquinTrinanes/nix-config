@@ -54,13 +54,6 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.br-ab2907ad847f.useDHCP = lib.mkDefault true;
-  # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp101s0f3u1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth0df21c5.useDHCP = lib.mkDefault true;
-  # networking.interfaces.vethc314d8f.useDHCP = lib.mkDefault true;
-  # networking.interfaces.vethc48591f.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
 
   services.tlp.enable = true;
   services.tlp.settings = {RUNTIME_PM_ON_AC = "auto";};
@@ -74,7 +67,6 @@
   hardware.nvidia = {
     package = config.boot.kernelPackages.nvidiaPackages.stable;
     modesetting.enable = false;
-    # modesetting.enable = true;
     powerManagement.enable = true;
     powerManagement.finegrained = true;
     nvidiaSettings = true;
