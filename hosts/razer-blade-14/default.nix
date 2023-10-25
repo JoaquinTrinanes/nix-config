@@ -4,7 +4,6 @@
   ...
 }: {
   imports = [
-    ../common/global
     ../common/optional/desktop
     ../common/optional/home-manager.nix
     ../common/optional/gaming

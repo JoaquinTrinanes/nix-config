@@ -27,12 +27,18 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
-    forAllSystems = nixpkgs.lib.genAttrs flake-utils.lib.defaultSystems;
+    forAllSystems = flake-utils.lib.eachDefaultSystem;
+    mkNixosSystem = args:
+      nixpkgs.lib.nixosSystem (args
+        // {
+          modules = [./hosts/common/global] ++ args.modules;
+        });
   in {
     # Your custom packages
     # Acessible through 'nix build', 'nix shell', etc
     packages =
       forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+
     # Formatter for your nix files, available through 'nix fmt'
     # Other options beside 'alejandra' include 'nixpkgs-fmt'
     formatter =
@@ -52,18 +58,16 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      razer-blade-14 = let
-        hostname = "razer-blade-14";
-      in
-        nixpkgs.lib.nixosSystem {
-          specialArgs = {inherit inputs outputs hostname;};
-          modules = [
-            ./hosts/razer-blade-14
-            ./hosts/common/optional/desktop
-            # ./nixos/configuration.nix
-            # ./common/stylix.nix
-          ];
+      razer-blade-14 = mkNixosSystem {
+        specialArgs = {
+          inherit inputs outputs;
+          hostname = "razer-blade-14";
         };
+        modules = [
+          ./hosts/razer-blade-14
+          ./hosts/common/optional/desktop
+        ];
+      };
     };
 
     # Standalone home-manager configuration entrypoint
