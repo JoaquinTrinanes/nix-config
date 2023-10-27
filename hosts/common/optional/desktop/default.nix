@@ -7,4 +7,6 @@
     discord
   ];
   programs.dconf.enable = true;
+
+  xdg.portal.enable = true;
 }
