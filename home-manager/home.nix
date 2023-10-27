@@ -65,6 +65,7 @@
     enable = true;
     defaultEditor = true;
     vimAlias = true;
+    viAlias = true;
     extraLuaConfig = ''
       require("config.lazy")
     '';
@@ -101,6 +102,10 @@
   programs.nushell = {
     enable = true;
     inherit (config.home) shellAliases;
+    extraConfig = ''
+      $env.config = ($env.config? | default {})
+      $env.config.ls = ($env.config.ls? | default {} | upsert clickable_links false)
+    '';
   };
 
   programs.rtx.enable = true;
@@ -146,44 +151,20 @@
     nix-direnv.enable = true;
   };
 
-  gtk = {
-    enable = true;
-
-    # iconTheme = {
-    #   name = "Papirus-Dark";
-    #   package = pkgs.papirus-icon-theme;
-    # };
-
-    # theme = {
-    #   name = "palenight";
-    #   package = pkgs.palenight-theme;
-    # };
-    #
-    cursorTheme = {
-      # name = "Numix-Cursor";
-      name = "Bibata-Modern-Classic";
-      package = pkgs.bibata-cursors; # numix-cursor-theme;
-    };
-
-    # gtk3.extraConfig = {
-    #   Settings = ''
-    #     gtk-application-prefer-dark-theme=1
-    #   '';
-    # };
-    #
-    # gtk4.extraConfig = {
-    #   Settings = ''
-    #     gtk-application-prefer-dark-theme=1
-    #   '';
-    # };
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    package = pkgs.vanilla-dmz;
+    name = "Vanilla-DMZ";
   };
 
-  home.sessionVariables.XCURSOR_THEME = "Bibata-Modern-Classic";
+  # home.sessionVariables."XCURSOR_THEME" = "Bibata-Modern-Classic";
+
   home.shellAliases = {
-    g = "git";
-    ll = "ls -l";
-    la = "ls -la";
-    hm = "home-manager";
+    "g" = "git";
+    "ll" = "ls -l";
+    "la" = "ls -la";
+    "hm" = "home-manager";
   };
 
   services.gnome-keyring.enable = true;

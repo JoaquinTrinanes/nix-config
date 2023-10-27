@@ -63,6 +63,8 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
   };
   programs.nix-ld.enable = true;
   programs.npm.enable = true;

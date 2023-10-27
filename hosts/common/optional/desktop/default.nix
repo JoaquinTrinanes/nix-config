@@ -27,4 +27,5 @@
     lshw
     unzip
   ];
+  programs.dconf.enable = true;
 }
