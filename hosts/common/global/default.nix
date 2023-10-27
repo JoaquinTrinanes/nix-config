@@ -9,7 +9,13 @@
   imports = [];
   system.stateVersion = "23.11";
   nixpkgs = {
-    overlays = builtins.attrValues outputs.overlays;
+    overlays = with outputs.overlays; [
+      # Add overlays your own flake exports (from overlays and pkgs dir):
+      additions
+      modifications
+      unstable-packages
+      neovim-nightly
+    ];
     config.allowUnfree = lib.mkDefault true;
   };
 
