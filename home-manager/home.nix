@@ -1,30 +1,14 @@
 {
   config,
   pkgs,
+  lib,
+  osConfig,
   ...
-}: {
-  # TODO: option to specify if GUI applications should be included or not?
-
+}: let
+  hasGui = osConfig.services.xserver.enable;
+  hasWayland = osConfig.services.xserver.displayManager.gdm.wayland;
+in {
   imports = [];
-
-  # nixpkgs = {
-  #   overlays = [
-  #     # Add overlays your own flake exports (from overlays and pkgs dir):
-  #     outputs.overlays.additions
-  #     outputs.overlays.modifications
-  #     outputs.overlays.unstable-packages
-  #
-  #     # You can also add overlays exported from other flakes:
-  #     # neovim-nightly-overlay.overlays.default
-  #
-  #     # Or define it inline, for example:
-  #     # (final: prev: {
-  #     #   hi = final.hello.overrideAttrs (oldAttrs: {
-  #     #     patches = [ ./change-hello-to-hi.patch ];
-  #     #   });
-  #     # })
-  #   ];
-  # };
 
   home = {
     username = "joaquin";
@@ -106,14 +90,17 @@
 
   programs.ripgrep.enable = true;
   programs.wezterm = {
-    enable = true;
-    extraConfig = ''
-      local config = wezterm.config_builder()
-
-      config.enable_wayland = true
-
-      return config
-    '';
+    enable = hasGui;
+    extraConfig =
+      ''
+        local config = wezterm.config_builder()
+      ''
+      + lib.optionalString hasWayland ''
+        config.enable_wayland = true
+      ''
+      + ''
+        return config
+      '';
   };
   programs.starship = {
     enable = true;
@@ -125,7 +112,7 @@
     };
   };
 
-  programs.firefox = {enable = true;};
+  programs.firefox = {enable = hasGui;};
 
   programs.direnv = {
     enable = true;
@@ -141,8 +128,8 @@
   };
 
   home.pointerCursor = {
-    gtk.enable = true;
-    x11.enable = true;
+    gtk.enable = hasGui;
+    x11.enable = hasGui;
     package = pkgs.vanilla-dmz;
     name = "Vanilla-DMZ";
   };

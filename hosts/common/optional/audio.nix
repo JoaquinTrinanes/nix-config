@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+_: {
   # sound
   security.rtkit.enable = true;
   hardware.pulseaudio.enable = false;
