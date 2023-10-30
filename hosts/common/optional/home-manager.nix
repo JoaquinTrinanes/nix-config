@@ -9,7 +9,7 @@ in {
   imports = [inputs.home-manager.nixosModules.home-manager];
   home-manager = {
     users.${user} = ../../../home-manager/home.nix;
-    # useUserPackages = true;
+    useUserPackages = true;
     useGlobalPkgs = true;
     extraSpecialArgs = {inherit inputs outputs;};
   };

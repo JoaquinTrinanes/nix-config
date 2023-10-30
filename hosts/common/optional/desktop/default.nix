@@ -1,6 +1,11 @@
 {pkgs, ...}: {
   # TODO: attr to override desired WM?
-  imports = [./gnome.nix ./stylix.nix ../audio.nix];
+  imports = [
+    ./gnome.nix
+    ./stylix.nix
+    ../audio.nix
+    ../fonts.nix
+  ];
 
   environment.systemPackages = with pkgs; [
     firefox
@@ -9,4 +14,6 @@
   programs.dconf.enable = true;
 
   xdg.portal.enable = true;
+
+  services.switcherooControl.enable = true;
 }

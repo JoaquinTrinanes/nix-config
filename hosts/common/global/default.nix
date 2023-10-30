@@ -6,7 +6,6 @@
   outputs,
   ...
 }: {
-  imports = [];
   system.stateVersion = "23.11";
   nixpkgs = {
     overlays = with outputs.overlays; [
