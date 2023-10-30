@@ -65,8 +65,6 @@
         };
         modules = [
           ./hosts/razer-blade-14
-          ./hosts/common/optional/desktop
-          ./hosts/common/optional/home-manager.nix
         ];
       };
     };
