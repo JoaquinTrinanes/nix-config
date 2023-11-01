@@ -14,8 +14,6 @@
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
-
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = {
@@ -23,15 +21,10 @@
     nixpkgs,
     home-manager,
     stylix,
-    flake-utils,
     ...
   } @ inputs: let
     inherit (self) outputs;
-    systems = flake-utils.lib.system;
     supportedSystems = ["x86_64-linux"];
-    # supportedSystems = [systems.x86_64-linux];
-    # forEachSystem = flake-utils.lib.eachSystem supportedSystems;
-    # forEachSystem = flake-utils.lib.eachDefaultSystem;
     forEachSystem = nixpkgs.lib.genAttrs supportedSystems;
     mkNixosSystem = args:
       nixpkgs.lib.nixosSystem (args
