@@ -127,13 +127,6 @@ in {
     nix-direnv.enable = true;
   };
 
-  home.pointerCursor = {
-    gtk.enable = hasGui;
-    x11.enable = hasGui;
-    package = pkgs.vanilla-dmz;
-    name = "Vanilla-DMZ";
-  };
-
   # home.sessionVariables."XCURSOR_THEME" = "Bibata-Modern-Classic";
 
   home.shellAliases = {
