@@ -41,4 +41,13 @@
     # DBUS_SESSION_BUS_PID = "";
     NIXOS_OZONE_WL = "1";
   };
+
+  xdg = {
+    portal = {
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+    };
+  };
 }
