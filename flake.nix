@@ -27,7 +27,12 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
-    forAllSystems = flake-utils.lib.eachDefaultSystem;
+    systems = flake-utils.lib.system;
+    supportedSystems = ["x86_64-linux"];
+    # supportedSystems = [systems.x86_64-linux];
+    # forEachSystem = flake-utils.lib.eachSystem supportedSystems;
+    # forEachSystem = flake-utils.lib.eachDefaultSystem;
+    forEachSystem = nixpkgs.lib.genAttrs supportedSystems;
     mkNixosSystem = args:
       nixpkgs.lib.nixosSystem (args
         // {
@@ -37,12 +42,12 @@
     # Your custom packages
     # Acessible through 'nix build', 'nix shell', etc
     packages =
-      forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      forEachSystem (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
     # Formatter for your nix files, available through 'nix fmt'
     # Other options beside 'alejandra' include 'nixpkgs-fmt'
     formatter =
-      forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+      forEachSystem (system: nixpkgs.legacyPackages.${system}.alejandra);
 
     # Your custom packages and modifications, exported as overlays
     overlays = import ./overlays {inherit inputs outputs;};
