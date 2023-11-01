@@ -34,8 +34,13 @@
   in {
     # Your custom packages
     # Acessible through 'nix build', 'nix shell', etc
-    packages =
-      forEachSystem (system: import ./pkgs nixpkgs.legacyPackages.${system});
+    packages = forEachSystem (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
+      (import ./pkgs pkgs)
+      // {
+        default = pkgs.nixos-rebuild;
+      });
 
     # Formatter for your nix files, available through 'nix fmt'
     # Other options beside 'alejandra' include 'nixpkgs-fmt'

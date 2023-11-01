@@ -1,17 +1,21 @@
 {
-  pkgs,
-  outputs,
   inputs,
+  outputs,
+  lib,
   ...
 }: let
-  user = "joaquin";
+  inherit ((import ../../../lib {inherit lib;})) mkHomeManagerUser;
+  user = {
+    name = "joaquin";
+    email = "hi@joaquint.io";
+    firstName = "Joaquín";
+    lastName = "Triñanes";
+  };
 in {
-  imports = [inputs.home-manager.nixosModules.home-manager];
+  imports = [inputs.home-manager.nixosModules.home-manager (mkHomeManagerUser user ../../../home-manager/home.nix)];
   home-manager = {
-    users.${user} = ../../../home-manager/home.nix;
     useUserPackages = true;
     useGlobalPkgs = true;
     extraSpecialArgs = {inherit inputs outputs;};
   };
-  users.users.${user}.packages = with pkgs; [home-manager];
 }

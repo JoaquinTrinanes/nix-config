@@ -3,6 +3,7 @@
   pkgs,
   lib,
   osConfig,
+  user,
   ...
 }: let
   hasGui = osConfig.services.xserver.enable;
@@ -11,7 +12,7 @@ in {
   imports = [];
 
   home = {
-    username = "joaquin";
+    username = user.name;
     homeDirectory =
       if pkgs.stdenv.isLinux
       then "/home/${config.home.username}"
@@ -58,8 +59,8 @@ in {
   programs.home-manager.enable = true;
   programs.git = {
     enable = true;
-    userName = "Joaquín Triñanes";
-    userEmail = "hi@joaquint.io";
+    userName = user.fullName;
+    userEmail = user.email;
     extraConfig = {init = {defaultBranch = "main";};};
   };
 
