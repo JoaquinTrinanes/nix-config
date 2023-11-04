@@ -13,7 +13,7 @@
     inputs.hardware.nixosModules.common-pc-laptop-ssd
     ../common/optional/hardware-acceleration/amdgpu.nix
   ];
-
+  boot.loader.systemd-boot.enable = true;
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usbhid" "usb_storage"];
   boot.initrd.kernelModules = ["dm-snapshot"];
   boot.kernelModules = ["kvm-amd"];
