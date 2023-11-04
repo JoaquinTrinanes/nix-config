@@ -21,22 +21,35 @@
   boot.extraModulePackages = [];
   boot.kernelParams = ["acpi_backlight=native"];
 
+  boot.initrd.luks.devices = {
+    root = {
+      device = "/dev/disks/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
+    };
+  };
+
+  boot.loader.efi.efiSysMountPoint = "/efi";
+
+  fileSystems."/efi" = {
+    device = "/dev/disk/by-uuid/FAE8-7EF9";
+  };
+
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/2576-7F71";
+    device = "/dev/disk/by-uuid/69C5-C1D9";
     fsType = "vfat";
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/a968eb65-3ad0-48a8-9d5e-dfd36857c0aa";
+    device = "/dev/disk/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
     fsType = "ext4";
   };
 
-  fileSystems."/data" = {
-    device = "/dev/disk/by-uuid/78E3BC451B7E5B2B";
-    fsType = "ntfs";
-  };
-
-  swapDevices = [{device = "/dev/disk/by-uuid/71bcbadf-0951-4686-9f17-6967fcd2dbeb";}];
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 16 * 1024;
+      randomEncryption.enable = true;
+    }
+  ];
 
   services.switcherooControl.enable = true;
 
