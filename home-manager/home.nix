@@ -9,7 +9,7 @@
   hasGui = osConfig.services.xserver.enable;
   hasWayland = osConfig.services.xserver.displayManager.gdm.wayland;
 in {
-  imports = [];
+  imports = [./modules/git];
 
   home = {
     username = user.name;
@@ -27,7 +27,7 @@ in {
       XDG_BIN_HOME = "$HOME/.local/bin";
     };
     sessionPath = [config.home.sessionVariables."XDG_BIN_HOME"];
-    packages = with pkgs; [];
+    # packages = with pkgs; [];
   };
   xdg.systemDirs.data = [
     # show desktop entries
@@ -75,6 +75,7 @@ in {
   };
   programs.nushell = {
     enable = true;
+    package = pkgs.nushellFull;
     inherit (config.home) shellAliases;
     extraConfig = ''
       $env.config = ($env.config? | default {})
