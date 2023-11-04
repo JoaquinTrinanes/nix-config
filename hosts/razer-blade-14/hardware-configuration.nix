@@ -17,6 +17,7 @@
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usbhid" "usb_storage"];
   boot.initrd.kernelModules = ["dm-snapshot"];
   boot.kernelModules = ["kvm-amd"];
+  boot.supportedFilesystems = ["ntfs"];
   boot.extraModulePackages = [];
   boot.kernelParams = ["acpi_backlight=native"];
 
