@@ -1,0 +1,48 @@
+_: {
+  programs.git.aliases = {
+    a = "add";
+    aa = "add --all";
+    ap = "add --path";
+    b = "branch -vv";
+    br = "branch";
+    branches = "for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)\" refs/remotes";
+    c = "commit";
+    ca = "commit --amend";
+    changes = "diff --name-status -r";
+    ci = "commit -v";
+    cm = "commit --message";
+    co = "checkout";
+    cp = "cherry-pick";
+    d = "diff";
+    dc = "diff --cached";
+    df = "diff --color --color-words --abbrev";
+    dt = "difftool";
+    dump = "cat-file -p";
+    filelog = "log -u";
+    fl = "log -u";
+    h = "help";
+    hide = "update-index --skip-worktree";
+    hist = "log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short";
+    l = "!git log --graph --pretty='tformat:%C(yellow)%h{%C(green)%ar{%C(bold blue)%an{%C(red)%d%C(reset) %s' $* | column -t -s '{' | less -FXRS";
+    la = "!git list-aliases";
+    lg = "log --graph --pretty=format:'%Cred%h%Creset %an -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative";
+    lh = "! git ls-files -v | grep '^S'";
+    list-aliases = "!git config -l | grep alias | cut -c 7-";
+    ll = "log --pretty=format:%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn] --decorate --numstat";
+    lol = "log --graph --decorate --pretty=oneline --abbrev-commit";
+    lola = "log --graph --decorate --pretty=oneline --abbrev-commit --all";
+    p = "push";
+    pf = "push --force-with-lease";
+    pnv = "push --no-verify";
+    ra = "log --graph --abbrev-commit --date=relative -20 --all --pretty='format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'";
+    rh = "reset --hard";
+    s = "status --short --branch";
+    stl = "stash list";
+    stp = "stash pop";
+    type = "cat-file -t";
+    undo = "reset --soft HEAD^";
+    unhide = "update-index --no-skip-worktree";
+    unhideall = "!git ls-files -v | grep '^h' | sed -e 's/h //g' | xargs git unhide";
+    up = "pull --rebase";
+  };
+}
