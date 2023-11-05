@@ -63,7 +63,12 @@
     pciutils
     lshw
     unzip
+    pinentry
+    pinentry-gnome
+    pinentry-gtk2
   ];
+
+  # services.pcscd.enable = true;
 
   programs.neovim = {
     enable = true;

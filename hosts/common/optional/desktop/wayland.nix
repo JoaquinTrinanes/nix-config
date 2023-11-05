@@ -18,7 +18,7 @@
     MOZ_ENABLE_WAYLAND = "1";
 
     # Qt environment
-    QT_QPA_PLATFORM = "wayland-egl"; #error with apps xcb
+    # QT_QPA_PLATFORM = "wayland-egl"; #error with apps xcb
     QT_WAYLAND_FORCE_DPI = "physical";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
 

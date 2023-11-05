@@ -8,6 +8,7 @@
 }: let
   hasGui = osConfig.services.xserver.enable;
   hasWayland = osConfig.services.xserver.displayManager.gdm.wayland;
+  hasGnome = osConfig.services.xserver.desktopManager.gnome.enable;
 in {
   imports = [./modules/git];
 
@@ -27,7 +28,7 @@ in {
       XDG_BIN_HOME = "$HOME/.local/bin";
     };
     sessionPath = [config.home.sessionVariables."XDG_BIN_HOME"];
-    # packages = with pkgs; [];
+    packages = with pkgs; [enpass];
   };
   xdg.systemDirs.data = [
     # show desktop entries
@@ -54,6 +55,10 @@ in {
   #  source = config.lib.file.mkOutOfStoreSymlink ../nvim/lazy-lock.json;
 
   #};
+
+  xdg.configFile."nix/config.nix".text = ''
+    { allowUnfree = true; }
+  '';
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
@@ -138,12 +143,30 @@ in {
     "hm" = "home-manager";
   };
 
+  programs.gpg.enable = true;
   services.gnome-keyring.enable = true;
-  services.gpg-agent.enable = true;
-  services.gpg-agent.enableSshSupport = true;
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
+    pinentryFlavor =
+      if hasGnome
+      then "gnome3"
+      else "gtk2";
+  };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
+
+  dconf.settings = lib.mkIf hasGui {
+    # "org/gnome/desktop/peripherals/touchpad/tap-to-click"
+    "org/gnome/desktop/peripherals/touchpad" = {
+      tap-to-click = true;
+      two-finger-scrolling-enabled = true;
+      # tapping = true;
+      # scrollMethod = "natural";
+      natural-scroll = false;
+    };
+  };
 
   home.stateVersion = "23.05";
 }

@@ -23,23 +23,27 @@
 
   boot.initrd.luks.devices = {
     root = {
-      device = "/dev/disks/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
+      # device = "/dev/disks/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
+      device = "/dev/mapper/vg-cryptroot";
+      preLVM = false;
     };
   };
 
   boot.loader.efi.efiSysMountPoint = "/efi";
 
   fileSystems."/efi" = {
-    device = "/dev/disk/by-uuid/FAE8-7EF9";
+    device = "/dev/nvme0n1p1";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/69C5-C1D9";
+    # fileSystems."/boot" = {
+    device = "/dev/nvme0n1p7";
     fsType = "vfat";
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
+    device = "/dev/mapper/root";
+    # device = "/dev/disk/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
     fsType = "ext4";
   };
 
