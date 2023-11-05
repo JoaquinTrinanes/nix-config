@@ -10,7 +10,7 @@
   hasWayland = osConfig.services.xserver.displayManager.gdm.wayland;
   hasGnome = osConfig.services.xserver.desktopManager.gnome.enable;
 in {
-  imports = [./modules/git];
+  imports = [./modules/git ./modules/nushell];
 
   home = {
     username = user.name;
@@ -62,12 +62,6 @@ in {
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
-  programs.git = {
-    enable = true;
-    userName = user.fullName;
-    userEmail = user.email;
-    extraConfig = {init = {defaultBranch = "main";};};
-  };
 
   programs.bash = {
     enable = true;
@@ -76,15 +70,6 @@ in {
       	shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION='''
       	exec "${pkgs.nushell}/bin/nu" "$LOGIN_OPTION"
       fi
-    '';
-  };
-  programs.nushell = {
-    enable = true;
-    package = pkgs.nushellFull;
-    inherit (config.home) shellAliases;
-    extraConfig = ''
-      $env.config = ($env.config? | default {})
-      $env.config.ls = ($env.config.ls? | default {} | upsert clickable_links false)
     '';
   };
 
@@ -112,6 +97,26 @@ in {
   programs.starship = {
     enable = true;
     settings = {
+      add_newline = true;
+      continuation_prompt = "[:::](bright-black) ";
+      character = {
+        success_symbol = "[➜](bold green)";
+        error_symbol = "[➜](bold blue)";
+      };
+      aws.disabled = true;
+      directory.truncation_length = 5;
+      php.format = "via [$symbol]($style)";
+
+      python.format = "via [$${symbol}$${pyenv_prefix}($${version})]($style) ";
+      status = {
+        disabled = false;
+        symbol = "✘";
+      };
+      shell = {
+        disabled = false;
+        nu_indicator = "";
+        format = "([$indicator](style) )";
+      };
       nix_shell = {
         impure_msg = "";
         # format = "via [$symbol($state)($name)]($style) ";
@@ -129,8 +134,6 @@ in {
         direnv_load rtx direnv exec
       }
     '';
-    # TODO: set to false when custom hook is added
-    # programs.direnv.enableNushellInteraction = false;
     nix-direnv.enable = true;
   };
 
@@ -148,6 +151,7 @@ in {
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
+    sshKeys = ["3F9EFD3BDEA64344C9F1FF2B6230454F4BE7405F"];
     pinentryFlavor =
       if hasGnome
       then "gnome3"
