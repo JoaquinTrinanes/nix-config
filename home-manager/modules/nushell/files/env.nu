@@ -32,9 +32,9 @@ $env.NU_PLUGIN_DIRS = [
     # ($nu.config-path | path dirname | path join 'plugins')
 ]
 
-def 'path home' [path?: string= ""] {
-    $nu.home-path | path join $path
-}
+# def 'path home' [path?: string= ""] {
+#     $nu.home-path | path join $path
+# }
 
 export-env {
     load-env {
@@ -61,25 +61,25 @@ export-env {
 #     }
 # }
 
-export-env {
-    def get_cache [name: string] {
-        let cache = ($env.XDG_CACHE_HOME | path join $name)
-        mkdir $cache
-        $cache
-    }
-    let cache_dir = (get_cache "nu")
-
-    # starship
-    starship init nu | save -f ($cache_dir | path join "starship.nu")
-
-    # zoxide
-    zoxide init nushell --cmd j | save -f ($cache_dir | path join "zoxide.nu")
-
-    # atuin
-    atuin init nu --disable-up-arrow | save -f ($cache_dir | path join "atuin.nu")
-
-    load-env {
-        NU_LIB_DIRS: ($env.NU_LIB_DIRS? | default [] | append $cache_dir)
-    }
-}
+# export-env {
+#     def get_cache [name: string] {
+#         let cache = ($env.XDG_CACHE_HOME | path join $name)
+#         mkdir $cache
+#         $cache
+#     }
+#     let cache_dir = (get_cache "nu")
+#
+#     # starship
+#     starship init nu | save -f ($cache_dir | path join "starship.nu")
+#
+#     # zoxide
+#     zoxide init nushell --cmd j | save -f ($cache_dir | path join "zoxide.nu")
+#
+#     # atuin
+#     atuin init nu --disable-up-arrow | save -f ($cache_dir | path join "atuin.nu")
+#
+#     load-env {
+#         NU_LIB_DIRS: ($env.NU_LIB_DIRS? | default [] | append $cache_dir)
+#     }
+# }
 
