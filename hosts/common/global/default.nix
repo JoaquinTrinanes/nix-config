@@ -41,6 +41,8 @@
     };
   };
 
+  time.timeZone = "Europe/Madrid";
+
   environment.systemPackages = with pkgs; [
     alejandra
     nil

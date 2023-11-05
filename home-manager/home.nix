@@ -28,7 +28,12 @@ in {
       XDG_BIN_HOME = "$HOME/.local/bin";
     };
     sessionPath = [config.home.sessionVariables."XDG_BIN_HOME"];
-    packages = with pkgs; [enpass];
+    packages = with pkgs; [
+      enpass
+
+      # for completions
+      fish
+    ];
   };
   xdg.systemDirs.data = [
     # show desktop entries
@@ -172,10 +177,21 @@ in {
     };
     "org/gnome/shell" = {
       favorite-apps = ["org.gnome.Nautilus.desktop" "firefox.desktop" "discord.desktop" "org.wezfurlong.wezterm.desktop"];
+      enabled-extensions = ["dash-to-panel@jderose9.github.com" "espresso@coadmunkee.github.com" "appindicatorsupport@rgcjonas.gmail.com"];
     };
     "org/gnome/desktop/interface" = {
       text-scaling-factor = 1.25;
+      show-battery-percentage = true;
     };
+    "org/gnome/shell/extensions/espresso" = {
+      show-notifications = false;
+    };
+    # "org/gnome/desktop/datetime" = {
+    #   automatic-timezone = true;
+    # };
+    # "org/gnome/system/location" = {
+    #   enabled = true;
+    # };
   };
 
   home.stateVersion = "23.05";
