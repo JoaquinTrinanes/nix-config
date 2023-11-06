@@ -6,6 +6,16 @@
   outputs,
   ...
 }: {
+  imports = [
+    inputs.nix-index-database.nixosModules.nix-index
+  ];
+
+  programs.command-not-found.enable = false;
+  programs.nix-index.enableBashIntegration = false;
+  programs.nix-index.enableZshIntegration = false;
+  programs.nix-index.enableFishIntegration = false;
+  programs.nix-index-database.comma.enable = true;
+
   system.stateVersion = "23.11";
   nixpkgs = {
     overlays = with outputs.overlays; [
