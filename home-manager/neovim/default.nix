@@ -13,4 +13,7 @@
     source = ./files/lua;
     recursive = true;
   };
+  xdg.configFile."nvim/neoconf.json" = {
+    source = ./files/neoconf.json;
+  };
 }

@@ -1,21 +1,19 @@
 ---@diagnostic disable: assign-type-mismatch
 local M = {}
 
-M.get_theme = function()
-  if vim.fn.executable("flavours") ~= 0 then
-    ---@type string
-    local current_theme = vim.fn.systemlist({ "flavours", "current" })[1]
-
-    return current_theme
-  end
+local get_theme = function()
+  return "catppuccin-frappe"
+  -- -@type string
+  -- local current_theme = vim.fn.systemlist({ "flavours", "current" })[1]
+  --
+  -- return current_theme
 end
 
 local themes_with_prefix = { "catppuccin" }
 local themes_without_prefix = { "gruvbox" }
 
 M.get_colorscheme = function()
-  local theme = M.get_theme() or "catppuccin-frappe"
-
+  local theme = get_theme()
   ---@type table
   local themes = vim.fn.getcompletion("", "color")
 
@@ -36,8 +34,6 @@ M.get_colorscheme = function()
       return theme_base_name
     end
   end
-
-  return "flavours"
 end
 
 return M

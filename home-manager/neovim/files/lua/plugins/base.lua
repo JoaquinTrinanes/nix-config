@@ -2,7 +2,6 @@ local M = {
   {
     "lewis6991/gitsigns.nvim",
     opts = {
-      -- yadm = { enable = true },
       -- show columnsign at the left
       sign_priority = 0,
       current_line_blame = true,
@@ -51,6 +50,13 @@ local M = {
         telescope = require("telescope.themes").get_dropdown(),
       },
     },
+  },
+  {
+    "nvim-lualine/lualine.nvim",
+    opts = function(_, opts)
+      -- disable clock
+      opts.sections.lualine_z = {}
+    end,
   },
 }
 

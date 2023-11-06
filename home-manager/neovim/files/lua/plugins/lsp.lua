@@ -62,14 +62,14 @@ local M = {
             },
           },
         },
-        -- rnix = { mason = false },
         nil_ls = { mason = false },
+        -- rnix = { mason = false },
       },
       setup = {
         eslint = function()
           vim.api.nvim_create_autocmd("BufWritePre", {
             callback = function(event)
-              if not require("lazyvim.plugins.lsp.format").enabled() then
+              if not require("lazyvim.util").format.enabled() then
                 -- exit early if autoformat is not enabled
                 return
               end
@@ -90,7 +90,6 @@ local M = {
     opts = function(_, _opts)
       local opts = _opts
       opts.ensure_installed = opts.ensure_installed or {}
-      opts.PATH = "append"
 
       vim.list_extend(opts.ensure_installed, { "taplo", "eslint-lsp", "intelephense", "pyright" })
     end,
@@ -98,49 +97,25 @@ local M = {
   {
     "LhKipp/nvim-nu",
     dependencies = {
-      {
-        "zioroboco/nu-ls.nvim",
-        dependencies = { { "nvimtools/none-ls.nvim" } },
-        ft = { "nu" },
-        config = function()
-          local ok, null_ls = pcall(require, "null-ls")
-          if not ok then
-            return
-          end
-          null_ls.register(require("nu-ls"))
-        end,
-      },
+      -- {
+      --   "zioroboco/nu-ls.nvim",
+      --   ft = { "nu" },
+      --   config = function()
+      --     local ok, nls = pcall(require, "null-ls")
+      --     if not ok then
+      --       return
+      --     end
+      --     nls.register(require("nu-ls"))
+      --   end,
+      -- },
     },
     event = "BufRead",
     build = ":TSInstall nu",
     opts = {
-      use_lsp_features = true,
+      use_lsp_features = false,
       all_cmd_names = [[nu -c 'help commands | get name | str join (char newline)']],
     },
     config = true,
-  },
-  {
-    "windwp/nvim-ts-autotag",
-    ft = {
-      "html",
-      "javascriptreact",
-      "typescriptreact",
-      "svelte",
-      "vue",
-      "tsx",
-      "jsx",
-      "rescript",
-      "xml",
-      "php",
-      "markdown",
-      "astro",
-      "glimmer",
-      "handlebars",
-      "hbs",
-    },
-    opts = function(plugin, opts)
-      opts.filetypes = plugin.ft
-    end,
   },
   { "imsnif/kdl.vim", ft = { "kdl" } },
 }
