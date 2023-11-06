@@ -1,7 +1,10 @@
-_: {
+{pkgs, ...}: {
   # sound
   security.rtkit.enable = true;
-  hardware.pulseaudio.enable = false;
+  hardware.pulseaudio = {
+    enable = false;
+    package = pkgs.pulseaudioFull;
+  };
   services.pipewire = {
     enable = true;
     audio.enable = true;
@@ -11,4 +14,10 @@ _: {
     pulse.enable = true;
     wireplumber.enable = true;
   };
+  hardware.bluetooth.settings = {
+    General = {
+      Enable = "Source,Sink,Media,Socket";
+    };
+  };
+  environment.systemPackages = with pkgs; [pavucontrol];
 }
