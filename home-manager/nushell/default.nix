@@ -18,7 +18,7 @@
   };
   programs.carapace.enable = true;
   xdg.configFile."nushell/scripts" = {
-    source = ./files/scripts; # config.lib.file.mkOutOfStoreSymlink ./config/nushell;
+    source = ./files/scripts;
     recursive = true;
   };
 

@@ -7,7 +7,7 @@
   programs.nushell.extraConfig = ''
     $env.config = ($env.config | default {} hooks)
     $env.config = ($env.config | update hooks ($env.config.hooks | default {} env_change))
-    $env.config = ($env.config | update hooks.env_change ($env.config.hooks.env_change | default [] PWD))
+    $env.config = ($env.config | update hooks.env_change ($env.config.hooks.env_change? | default [] PWD))
     $env.config = ($env.config | upsert hooks.pre_prompt ($env.config.hooks.pre_prompt? | default [] | append {||
 
     let direnv = (${pkgs.direnv}/bin/direnv export json | from json | default {})
@@ -15,7 +15,7 @@
         return
     }
 
-        $direnv
+    $direnv
         | items {|key, value|
         {
                 key: $key

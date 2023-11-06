@@ -24,6 +24,10 @@ in {
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
+  systemd.user.sessionVariables = {
+    SSH_AUTH_SOCK = "";
+  };
+
   home = {
     username = user.name;
     homeDirectory =
@@ -36,6 +40,11 @@ in {
       # XDG_DATA_HOME = "$HOME/.local/share";
       # XDG_STATE_HOME = "$HOME/.local/state";
 
+      # fixes GPG agent not being used as SSH agent due to gnome-keyring
+      GSM_SKIP_SSH_AGENT_WORKAROUND = "1";
+      SSH_AUTH_SOCK = "/run/user/1000/gnupg/S.gpg-agent.ssh";
+      # SSH_AUTH_SOCK = "";
+
       # Not officially in the specification
       XDG_BIN_HOME = "$HOME/.local/bin";
     };
@@ -44,6 +53,11 @@ in {
       enpass
     ];
   };
+  # Disable gnome-keyring ssh-agent
+  xdg.configFile."autostart/gnome-keyring-ssh.desktop".text = ''
+    ${lib.fileContents "${pkgs.gnome3.gnome-keyring}/etc/xdg/autostart/gnome-keyring-ssh.desktop"}
+    Hidden=true
+  '';
   xdg.systemDirs.data = [
     # show desktop entries
     "$HOME/.nix-profile/share"
@@ -90,7 +104,7 @@ in {
       directory.truncation_length = 5;
       php.format = "via [$symbol]($style)";
 
-      python.format = "via [$${symbol}$${pyenv_prefix}($${version})]($style) ";
+      python.format = "via [\${symbol}\${pyenv_prefix}(\${version})]($style) ";
       status = {
         disabled = false;
         symbol = "✘";
@@ -127,6 +141,11 @@ in {
 
   programs.gpg.enable = true;
   services.gnome-keyring.enable = true;
+  # xdg.configFile."autostart/gnome-keyring-ssh.desktop".text = ''
+  #   [Desktop Entry]
+  #   Type=Application
+  #   Hidden=true
+  # '';
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
