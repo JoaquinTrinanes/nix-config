@@ -24,10 +24,6 @@ in {
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
-  systemd.user.sessionVariables = {
-    SSH_AUTH_SOCK = "";
-  };
-
   home = {
     username = user.name;
     homeDirectory =
@@ -57,6 +53,9 @@ in {
     # show desktop entries
     "$HOME/.nix-profile/share"
   ];
+  systemd.user.sessionVariables = {
+    SSH_AUTH_SOCK = "";
+  };
 
   # Add stuff for your user as you see fit:
 
@@ -67,15 +66,7 @@ in {
   # Enable home-manager and git
   programs.home-manager.enable = true;
 
-  programs.bash = {
-    enable = true;
-    initExtra = ''
-      if [[ $(ps --no-header --pid=$PPID --format=comm) != "nu" && -z ''${BASH_EXECUTION_STRING} ]]; then
-      	shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION='''
-      	exec "${pkgs.nushell}/bin/nu" "$LOGIN_OPTION"
-      fi
-    '';
-  };
+  programs.bash.enable = true;
 
   programs.rtx.enable = true;
 
