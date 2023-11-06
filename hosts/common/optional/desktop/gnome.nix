@@ -15,4 +15,37 @@
   environment.systemPackages = with pkgs;
     (with gnome; [gnome-tweaks adwaita-icon-theme])
     ++ (with gnomeExtensions; [appindicator dash-to-panel espresso]);
+
+  environment.gnome.excludePackages = with pkgs;
+  with pkgs.gnome; [
+    # baobab # disk usage analyzer
+    # cheese # photo booth
+    # eog # image viewer
+    epiphany # web browser
+    # gedit # text editor
+    simple-scan # document scanner
+    totem # video player
+    yelp # help viewer
+    # evince # document viewer
+    # file-roller # archive manager
+    geary # email client
+    # seahorse # password manager
+
+    # gnome-calculator
+    # gnome-calendar
+    # gnome-characters
+    # gnome-clocks
+    gnome-contacts
+    gnome-connections
+    # gnome-disk-utility
+    gnome-font-viewer
+    gnome-logs
+    gnome-maps
+    gnome-music
+    # gnome-photos
+    # gnome-screenshot
+    # gnome-system-monitor
+    gnome-tour
+    gnome-weather
+  ];
 }
