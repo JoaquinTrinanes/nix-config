@@ -45,29 +45,31 @@
 
   environment.systemPackages = with pkgs; [
     alejandra
-    nil
-    git
-    wget
-    nil
-    rnix-lsp
-    nixfmt
-    gcc
-    libgcc
-    wl-clipboard
-    libcxx
-    stylua
-    ripgrep
-    sd
     fd
     fzf
+    gcc
+    git
     gnumake
-    lua-language-server
-    pciutils
+    libcxx
+    libgcc
     lshw
-    unzip
+    lua-language-server
+    nil
+    nil
+    nixfmt
+    pciutils
     pinentry
     pinentry-gnome
     pinentry-gtk2
+    ripgrep
+    rnix-lsp
+    sd
+    stylua
+    unzip
+    coreutils
+    # uutils-coreutils-noprefix
+    wget
+    wl-clipboard
   ];
 
   # services.pcscd.enable = true;

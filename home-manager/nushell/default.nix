@@ -21,4 +21,9 @@
     source = ./files/scripts; # config.lib.file.mkOutOfStoreSymlink ./config/nushell;
     recursive = true;
   };
+
+  home.packages = with pkgs; [
+    # for completions
+    fish
+  ];
 }

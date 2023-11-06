@@ -7,6 +7,7 @@
 in {
   imports = [inputs.stylix.nixosModules.stylix];
   stylix = {
+    autoEnable = false;
     targets.gnome.enable = false;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/${theme}.yaml";
     polarity = "dark";

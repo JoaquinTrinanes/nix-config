@@ -10,7 +10,7 @@
     withNodeJs = true;
   };
   xdg.configFile."nvim/lua" = {
-    source = ./files/lua; # config.lib.file.mkOutOfStoreSymlink ./config/nushell;
+    source = ./files/lua;
     recursive = true;
   };
 }
