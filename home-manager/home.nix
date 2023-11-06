@@ -41,9 +41,9 @@ in {
       # XDG_STATE_HOME = "$HOME/.local/state";
 
       # fixes GPG agent not being used as SSH agent due to gnome-keyring
-      GSM_SKIP_SSH_AGENT_WORKAROUND = "1";
-      SSH_AUTH_SOCK = "/run/user/1000/gnupg/S.gpg-agent.ssh";
-      # SSH_AUTH_SOCK = "";
+      # GSM_SKIP_SSH_AGENT_WORKAROUND = "1";
+      # SSH_AUTH_SOCK = "/run/user/1000/gnupg/S.gpg-agent.ssh";
+      SSH_AUTH_SOCK = "";
 
       # Not officially in the specification
       XDG_BIN_HOME = "$HOME/.local/bin";
@@ -53,11 +53,6 @@ in {
       enpass
     ];
   };
-  # Disable gnome-keyring ssh-agent
-  xdg.configFile."autostart/gnome-keyring-ssh.desktop".text = ''
-    ${lib.fileContents "${pkgs.gnome3.gnome-keyring}/etc/xdg/autostart/gnome-keyring-ssh.desktop"}
-    Hidden=true
-  '';
   xdg.systemDirs.data = [
     # show desktop entries
     "$HOME/.nix-profile/share"
@@ -132,20 +127,25 @@ in {
     # };
   };
 
-  home.shellAliases = {
-    "g" = "git";
-    "ll" = "ls -l";
-    "la" = "ls -la";
-    "hm" = "home-manager";
-  };
+  home.shellAliases = lib.mkMerge [
+    {
+      "l" = "ls";
+      "ll" = "ls -l";
+      "la" = "ls -la";
+      "pn" = "pnpm";
+    }
+    (lib.mkIf
+      config.programs.bat.enable
+      {"cat" = "bat -p";})
+  ];
 
   programs.gpg.enable = true;
   services.gnome-keyring.enable = true;
-  # xdg.configFile."autostart/gnome-keyring-ssh.desktop".text = ''
-  #   [Desktop Entry]
-  #   Type=Application
-  #   Hidden=true
-  # '';
+  services.gnome-keyring.components = [
+    "pkcs11"
+    "secrets"
+    # "ssh"
+  ];
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
@@ -155,10 +155,22 @@ in {
       then "gnome3"
       else "gtk2";
   };
+  # Disable gnome-keyring ssh-agent
+  xdg.configFile."autostart/gnome-keyring-ssh.desktop".text = ''
+    ${lib.fileContents "${pkgs.gnome3.gnome-keyring}/etc/xdg/autostart/gnome-keyring-ssh.desktop"}
+    Hidden=true
+  '';
 
   programs.atuin = {
     enable = true;
     flags = ["--disable-up-arrow"];
+  };
+
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "base16";
+    };
   };
 
   # Nicely reload system units when changing configs

@@ -44,7 +44,6 @@
   time.timeZone = "Europe/Madrid";
 
   environment.systemPackages = with pkgs; [
-    alejandra
     fd
     fzf
     gcc
@@ -54,15 +53,11 @@
     libgcc
     lshw
     lua-language-server
-    nil
-    nil
-    nixfmt
     pciutils
     pinentry
     pinentry-gnome
     pinentry-gtk2
     ripgrep
-    rnix-lsp
     sd
     stylua
     unzip
