@@ -14,7 +14,7 @@
 
   environment.systemPackages = with pkgs;
     (with gnome; [gnome-tweaks adwaita-icon-theme])
-    ++ (with gnomeExtensions; [appindicator dash-to-panel espresso]);
+    ++ (with gnomeExtensions; [appindicator dash-to-panel espresso night-theme-switcher]);
 
   environment.gnome.excludePackages = with pkgs;
   with pkgs.gnome; [

@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   imports = [
     ./gnome.nix
-    ./stylix.nix
     ../audio.nix
     ../fonts.nix
   ];

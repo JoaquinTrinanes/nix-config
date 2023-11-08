@@ -7,9 +7,6 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    stylix.url = "github:danth/stylix";
-    stylix.inputs.nixpkgs.follows = "nixpkgs";
-
     hardware.url = "github:nixos/nixos-hardware";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
@@ -25,7 +22,6 @@
     self,
     nixpkgs,
     home-manager,
-    stylix,
     ...
   } @ inputs: let
     inherit (self) outputs;

@@ -167,6 +167,16 @@ in {
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
+  home.pointerCursor = lib.mkIf hasGui rec {
+    gtk.enable = true;
+    x11 = {
+      enable = true;
+      defaultCursor = name;
+    };
+    name = "Vanilla-DMZ";
+    package = pkgs.vanilla-dmz;
+  };
+
   dconf.settings = lib.mkIf hasGui {
     "org/gnome/desktop/peripherals/touchpad" = {
       tap-to-click = true;
@@ -175,7 +185,13 @@ in {
     };
     "org/gnome/shell" = {
       favorite-apps = ["org.gnome.Nautilus.desktop" "firefox.desktop" "discord.desktop" "org.wezfurlong.wezterm.desktop"];
-      enabled-extensions = ["dash-to-panel@jderose9.github.com" "espresso@coadmunkee.github.com" "appindicatorsupport@rgcjonas.gmail.com"];
+      enabled-extensions = with pkgs.gnomeExtensions;
+        builtins.map (extension: extension.extensionUuid) [
+          dash-to-panel
+          espresso
+          appindicator
+          night-theme-switcher
+        ];
     };
     "org/gnome/desktop/interface" = {
       text-scaling-factor = 1.25;
