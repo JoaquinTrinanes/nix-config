@@ -15,6 +15,10 @@
       overlay use ${./files/scripts/aliases}
       overlay use ${./files/scripts/completions}
     '';
+
+    extraEnv = ''
+      register ${pkgs.nushellPlugins.formats}/bin/nu_plugin_formats
+    '';
   };
   programs.carapace.enable = true;
   xdg.configFile."nushell/scripts" = {
