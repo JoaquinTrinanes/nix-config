@@ -10,6 +10,8 @@
     inputs.nix-index-database.nixosModules.nix-index
   ];
 
+  environment.binsh = "${pkgs.dash}/bin/dash";
+
   programs.command-not-found.enable = false;
   programs.nix-index.enableBashIntegration = false;
   programs.nix-index.enableZshIntegration = false;
