@@ -11,7 +11,7 @@
     inherit (config.home) shellAliases;
     configFile.source = ./files/config.nu;
     envFile.source = ./files/env.nu;
-    extraConfig = ''
+    extraConfig = lib.mkAfter ''
       overlay use ${./files/scripts/aliases}
       overlay use ${./files/scripts/completions}
     '';
