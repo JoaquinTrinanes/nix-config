@@ -1,5 +1,5 @@
 {config, ...}: let
-  colors = config.colorScheme.colors;
+  inherit (config.colorScheme) colors;
 in {
   programs.nushell.extraConfig = with colors; ''
     export-env {
