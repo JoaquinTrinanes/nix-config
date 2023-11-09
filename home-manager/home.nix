@@ -173,7 +173,7 @@ in {
       enable = true;
       defaultCursor = name;
     };
-    name = "Vanilla-DMZ";
+    name = "DMZ-Black";
     package = pkgs.vanilla-dmz;
   };
 
