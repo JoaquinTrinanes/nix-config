@@ -5,6 +5,11 @@
     ../fonts.nix
   ];
 
+  networking.networkmanager = {
+    # wifi.backend = "iwd";
+    # dhcp = "dhcpcd";
+  };
+
   environment.systemPackages = with pkgs; [
     firefox
     discord
