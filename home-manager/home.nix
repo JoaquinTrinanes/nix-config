@@ -5,6 +5,7 @@
   osConfig,
   user,
   inputs,
+  outputs,
   ...
 }: let
   # safe access osConfig, as it's not set when using standalone home-manager
@@ -17,6 +18,7 @@ in {
       ./neovim
       ./nushell
       ./direnv
+      outputs.homeManagerModules.currentPath
       inputs.nix-colors.homeManagerModules.default
     ]
     ++ (lib.optionals hasGui [
