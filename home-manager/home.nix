@@ -23,6 +23,7 @@ in {
     ]
     ++ (lib.optionals hasGui [
       ./wezterm
+      ./firefox
     ]);
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
@@ -105,17 +106,6 @@ in {
         # format = "via [$symbol($state)($name)]($style) ";
       };
     };
-  };
-
-  programs.firefox = {
-    enable = hasGui;
-    package = pkgs.firefox-devedition;
-    # profiles."default" = {
-    #   isDefault = true;
-    #   settings = {
-    #     accessibility.typeaheadfind.enablesound = false;
-    #   };
-    # };
   };
 
   home.shellAliases = lib.mkMerge [
