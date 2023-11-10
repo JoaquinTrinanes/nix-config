@@ -122,6 +122,7 @@ in {
       "ll" = "ls -l";
       "la" = "ls -la";
       "pn" = "pnpm";
+      "hm" = "home-manager";
     }
     (lib.mkIf
       config.programs.bat.enable
