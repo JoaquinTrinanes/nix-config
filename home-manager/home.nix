@@ -31,9 +31,12 @@ in {
   home = {
     username = user.name;
     homeDirectory =
-      if pkgs.stdenv.isLinux
-      then "/home/${config.home.username}"
-      else "/Users/${config.home.username}";
+      osConfig.users.users.${user.name}.home
+      or (
+        if pkgs.stdenv.isLinux
+        then "/home/${config.home.username}"
+        else "/Users/${config.home.username}"
+      );
     sessionVariables = {
       NIXPKGS_ALLOW_UNFREE = 1;
 
