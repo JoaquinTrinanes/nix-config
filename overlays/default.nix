@@ -27,5 +27,7 @@ in rec {
 
   neovim-nightly = inputs.neovim-nightly-overlay.overlay;
 
-  default = lib.composeManyExtensions [additions modifications neovim-nightly];
+  nur = inputs.nur.overlay;
+
+  default = lib.composeManyExtensions [additions modifications neovim-nightly nur];
 }
