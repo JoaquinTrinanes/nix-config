@@ -1,7 +1,9 @@
 {
   inputs,
   outputs,
-}: {
+}: let
+  inherit (inputs.nixpkgs) lib;
+in rec {
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs final;
 
@@ -24,4 +26,6 @@
   };
 
   neovim-nightly = inputs.neovim-nightly-overlay.overlay;
+
+  default = lib.composeManyExtensions [additions modifications neovim-nightly];
 }

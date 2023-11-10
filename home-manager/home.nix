@@ -7,8 +7,9 @@
   inputs,
   ...
 }: let
-  hasGui = osConfig.services.xserver.enable;
-  hasGnome = osConfig.services.xserver.desktopManager.gnome.enable;
+  # safe access osConfig, as it's not set when using standalone home-manager
+  hasGui = osConfig.services.xserver.enable or true;
+  hasGnome = osConfig.services.xserver.desktopManager.gnome.enable or true;
 in {
   imports =
     [
@@ -31,10 +32,7 @@ in {
       then "/home/${config.home.username}"
       else "/Users/${config.home.username}";
     sessionVariables = {
-      # XDG_CACHE_HOME = "$HOME/.cache";
-      # XDG_CONFIG_HOME = "$HOME/.config";
-      # XDG_DATA_HOME = "$HOME/.local/share";
-      # XDG_STATE_HOME = "$HOME/.local/state";
+      NIXPKGS_ALLOW_UNFREE = 1;
 
       # fixes GPG agent not being used as SSH agent due to gnome-keyring
       # GSM_SKIP_SSH_AGENT_WORKAROUND = "1";
@@ -59,7 +57,7 @@ in {
 
   # Add stuff for your user as you see fit:
 
-  xdg.configFile."nix/config.nix".text = ''
+  xdg.configFile."nixpkgs/config.nix".text = ''
     { allowUnfree = true; }
   '';
 
@@ -177,57 +175,61 @@ in {
     package = pkgs.vanilla-dmz;
   };
 
-  dconf.settings = lib.mkIf hasGui {
-    "org/gnome/desktop/peripherals/touchpad" = {
-      tap-to-click = true;
-      two-finger-scrolling-enabled = true;
-      natural-scroll = false;
+  dconf.settings = with lib.hm.gvariant;
+    lib.mkIf hasGui {
+      "org/gnome/desktop/peripherals/touchpad" = {
+        tap-to-click = true;
+        two-finger-scrolling-enabled = true;
+        natural-scroll = false;
+      };
+      "org/gnome/shell" = {
+        favorite-apps = ["org.gnome.Nautilus.desktop" "firefox.desktop" "discord.desktop" "org.wezfurlong.wezterm.desktop"];
+        enabled-extensions = with pkgs.gnomeExtensions;
+          builtins.map (extension: extension.extensionUuid) [
+            dash-to-panel
+            espresso
+            appindicator
+            night-theme-switcher
+          ];
+      };
+      "org/gnome/desktop/interface" = {
+        text-scaling-factor = 1.25;
+        show-battery-percentage = true;
+        enable-hot-corners = false;
+      };
+      "org/gnome/mutter" = {
+        edge-tiling = true;
+      };
+      "org/gnome/shell/extensions/espresso" = {
+        show-notifications = false;
+      };
+      "org/gnome/desktop/wm/preferences" = {
+        button-layout = "appmenu:minimize,maximize,close";
+      };
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+        binding = "<Control><Alt>t";
+        command = "wezterm";
+        name = "Launch terminal";
+      };
+      "org/gnome/settings-daemon/plugins/media-keys" = {
+        custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
+      };
+      "org/gnome/desktop/wm/keybindings" = {
+        switch-windows = ["<Alt>Tab"];
+        switch-windows-backward = ["<Shift><Alt>Tab"];
+        switch-applications = ["<Super>Tab"];
+        switch-applications-backward = ["<Shift><Super>Tab"];
+      };
+      "org/gnome/desktop/input-sources" = {
+        sources = [(mkTuple ["xkb" "us"]) (mkTuple ["xkb" "es"])];
+      };
+      # "org/gnome/desktop/datetime" = {
+      #   automatic-timezone = true;
+      # };
+      # "org/gnome/system/location" = {
+      #   enabled = true;
+      # };
     };
-    "org/gnome/shell" = {
-      favorite-apps = ["org.gnome.Nautilus.desktop" "firefox.desktop" "discord.desktop" "org.wezfurlong.wezterm.desktop"];
-      enabled-extensions = with pkgs.gnomeExtensions;
-        builtins.map (extension: extension.extensionUuid) [
-          dash-to-panel
-          espresso
-          appindicator
-          night-theme-switcher
-        ];
-    };
-    "org/gnome/desktop/interface" = {
-      text-scaling-factor = 1.25;
-      show-battery-percentage = true;
-      enable-hot-corners = false;
-    };
-    "org/gnome/mutter" = {
-      edge-tiling = true;
-    };
-    "org/gnome/shell/extensions/espresso" = {
-      show-notifications = false;
-    };
-    "org/gnome/desktop/wm/preferences" = {
-      button-layout = "appmenu:minimize,maximize,close";
-    };
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-      binding = "<Control><Alt>t";
-      command = "wezterm";
-      name = "Launch terminal";
-    };
-    "org/gnome/settings-daemon/plugins/media-keys" = {
-      custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
-    };
-    "org/gnome/desktop/wm/keybindings" = {
-      switch-windows = ["<Alt>Tab"];
-      switch-windows-backward = ["<Shift><Alt>Tab"];
-      switch-applications = ["<Super>Tab"];
-      switch-applications-backward = ["<Shift><Super>Tab"];
-    };
-    # "org/gnome/desktop/datetime" = {
-    #   automatic-timezone = true;
-    # };
-    # "org/gnome/system/location" = {
-    #   enabled = true;
-    # };
-  };
 
   home.stateVersion = "23.05";
 }

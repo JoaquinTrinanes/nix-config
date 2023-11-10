@@ -18,15 +18,11 @@
   programs.nix-index.enableFishIntegration = false;
   programs.nix-index-database.comma.enable = true;
 
+  # console.keyMap = lib.mkDefault "us";
+
   system.stateVersion = "23.11";
   nixpkgs = {
-    overlays = with outputs.overlays; [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      additions
-      modifications
-      unstable-packages
-      neovim-nightly
-    ];
+    overlays = [outputs.overlays.default];
     config.allowUnfree = lib.mkDefault true;
   };
 

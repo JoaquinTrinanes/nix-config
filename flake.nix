@@ -71,15 +71,37 @@
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
-    # homeConfigurations = {
-    #   # FIXME replace with your username@hostname
-    #   "joaquin" = home-manager.lib.homeManagerConfiguration {
-    #     pkgs =
-    #       nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-    #     extraSpecialArgs = {inherit inputs outputs;};
-    #     # > Our main home-manager configuration file <
-    #     modules = [./home-manager/home.nix ./home-manager/theme.nix];
-    #   };
-    # };
+    homeConfigurations = let
+      pkgs =
+        nixpkgs.legacyPackages.x86_64-linux;
+      myLib = import ./lib {inherit (pkgs) lib;};
+      user = myLib.mkUser {
+        name = "joaquin";
+        email = "hi@joaquint.io";
+        firstName = "Joaquín";
+        lastName = "Triñanes";
+      };
+    in {
+      "joaquin" = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs = {
+          inherit inputs outputs user;
+          osConfig = {};
+        };
+        modules = [
+          ({
+            pkgs,
+            lib,
+            ...
+          }: {
+            nixpkgs = {
+              overlays = [outputs.overlays.default];
+              config.allowUnfree = lib.mkDefault true;
+            };
+          })
+          ./home-manager/home.nix
+        ];
+      };
+    };
   };
 }
