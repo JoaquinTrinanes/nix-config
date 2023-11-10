@@ -27,11 +27,6 @@
     inherit (self) outputs;
     supportedSystems = ["x86_64-linux"];
     forEachSystem = nixpkgs.lib.genAttrs supportedSystems;
-    mkNixosSystem = args:
-      nixpkgs.lib.nixosSystem (args
-        // {
-          modules = [./hosts/common/global] ++ args.modules;
-        });
   in {
     # Your custom packages
     # Acessible through 'nix build', 'nix shell', etc
@@ -58,13 +53,14 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      razer-blade-14 = mkNixosSystem {
+      razer-blade-14 = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs outputs;
           hostname = "razer-blade-14";
         };
         modules = [
           ./hosts/razer-blade-14
+          ./hosts/common/global
         ];
       };
     };
