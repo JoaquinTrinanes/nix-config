@@ -119,6 +119,8 @@ end)
 
 config.hide_tab_bar_if_only_one_tab = true
 
+config.enable_wayland = os.getenv("XDG_SESSION_TYPE") == "wayland"
+
 config.color_scheme = "nix-colors"
 config.font = wezterm.font_with_fallback({
 	{ family = "FiraCode Nerd Font", harfbuzz_features = { "ss05" } },
