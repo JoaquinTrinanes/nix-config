@@ -8,9 +8,10 @@ layout_laravel() {
 	mkdir -p "$bin_dir"
 	local scripts=(
 		composer
-		php
+		# php
 		artisan
 		tinker
+		# pint
 		# npm
 		# npx
 		# yarn
