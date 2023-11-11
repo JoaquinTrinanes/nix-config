@@ -3,19 +3,19 @@ local M = {
     "lewis6991/gitsigns.nvim",
     opts = {
       -- show columnsign at the left
-      sign_priority = 0,
+      -- sign_priority = 0,
       current_line_blame = true,
     },
   },
-  {
-    "folke/noice.nvim",
-    opts = {
-      ---@type NoicePresets
-      presets = {
-        lsp_doc_border = true,
-      },
-    },
-  },
+  -- {
+  --   "folke/noice.nvim",
+  --   opts = {
+  --     ---@type NoicePresets
+  --     presets = {
+  --       lsp_doc_border = true,
+  --     },
+  --   },
+  -- },
   {
     "telescope.nvim",
     dependencies = {
