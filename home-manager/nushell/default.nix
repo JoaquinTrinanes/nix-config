@@ -3,7 +3,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  myLib = import ../lib {inherit lib config;};
+in {
   imports = [./direnv.nix ./theme.nix];
   programs.nushell = {
     enable = lib.mkDefault true;
@@ -22,7 +24,7 @@
   };
   programs.carapace.enable = true;
   xdg.configFile."nushell/scripts" = {
-    source = ./files/scripts;
+    source = myLib.mkImpureLink ./files/scripts;
     recursive = true;
   };
 

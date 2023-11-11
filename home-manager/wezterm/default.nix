@@ -1,4 +1,10 @@
-{config, ...}: {
+{
+  config,
+  lib,
+  ...
+}: let
+  myLib = import ../lib {inherit lib config;};
+in {
   programs.wezterm = {
     enable = true;
     extraConfig = builtins.readFile ./files/wezterm.lua;
@@ -40,19 +46,9 @@
         };
       };
     };
-    # extraConfig =
-    #   ''
-    #     local config = wezterm.config_builder()
-    #   ''
-    #   + lib.optionalString hasWayland ''
-    #     config.enable_wayland = true
-    #   ''
-    #   + ''
-    #     return config
-    #   '';
   };
-  # xdg.configFile."wezterm" = {
-  #   source = ./files;
-  #   recursive = true;
-  # };
+  xdg.configFile."wezterm/wezterm.lua" = {
+    source = myLib.mkImpureLink ./files/wezterm.lua;
+    recursive = true;
+  };
 }
