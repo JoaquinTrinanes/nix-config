@@ -1,5 +1,5 @@
 {user, ...}: {
-  imports = [./aliases.nix ./color.nix];
+  imports = [./aliases.nix ./color.nix ./gpgsign.nix];
   programs.git = {
     enable = true;
     extraConfig = {
