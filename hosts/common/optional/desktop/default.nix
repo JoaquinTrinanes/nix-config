@@ -5,11 +5,6 @@
     ../fonts.nix
   ];
 
-  networking.networkmanager = {
-    # wifi.backend = "iwd";
-    # dhcp = "dhcpcd";
-  };
-
   environment.systemPackages = with pkgs; [
     firefox
     discord
@@ -20,8 +15,6 @@
   ];
   programs.dconf.enable = true;
   programs.firefox = {
-    # enable = true;
-    # package = pkgs.firefox-devedition;
     nativeMessagingHosts.packages = with pkgs; [enpass];
   };
 
