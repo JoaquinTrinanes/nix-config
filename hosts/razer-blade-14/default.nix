@@ -10,6 +10,7 @@
     ../common/optional/development
     ../common/optional/nh
     ../common/optional/gaming
+    ../common/optional/sops
     ./hardware-configuration.nix
   ];
   networking.hostName = hostname;
