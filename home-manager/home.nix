@@ -40,11 +40,6 @@ in {
     sessionVariables = {
       NIXPKGS_ALLOW_UNFREE = 1;
 
-      # fixes GPG agent not being used as SSH agent due to gnome-keyring
-      # GSM_SKIP_SSH_AGENT_WORKAROUND = "1";
-      # SSH_AUTH_SOCK = "/run/user/1000/gnupg/S.gpg-agent.ssh";
-      SSH_AUTH_SOCK = "";
-
       # Not officially in the specification
       XDG_BIN_HOME = "$HOME/.local/bin";
     };
@@ -52,13 +47,6 @@ in {
     packages = with pkgs; [
       enpass
     ];
-  };
-  xdg.systemDirs.data = [
-    # show desktop entries
-    "$HOME/.nix-profile/share"
-  ];
-  systemd.user.sessionVariables = {
-    SSH_AUTH_SOCK = "";
   };
 
   # Add stuff for your user as you see fit:
