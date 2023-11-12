@@ -112,7 +112,14 @@ in {
       {"cat" = "bat -p";})
   ];
 
-  programs.gpg.enable = true;
+  programs.gpg = {
+    enable = true;
+    settings = {
+      keyserver = "hkps://keys.openpgp.org";
+      default-recipient-self = true;
+      require-cross-certification = true;
+    };
+  };
   services.gnome-keyring.enable = true;
   services.gnome-keyring.components = [
     "pkcs11"
@@ -122,7 +129,7 @@ in {
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
-    sshKeys = ["3F9EFD3BDEA64344C9F1FF2B6230454F4BE7405F"];
+    sshKeys = ["0405AAB779EE75EB11E9B4F148AC62E32DB2CD11"];
     pinentryFlavor =
       if hasGnome
       then "gnome3"
