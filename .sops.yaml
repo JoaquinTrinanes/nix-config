@@ -1,0 +1,7 @@
+keys:
+  - &pgp E454CA2CA2678E14764142C20CA00349B2A549E2
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+      - pgp:
+          - *pgp
