@@ -69,6 +69,7 @@
     coreutils
     # uutils-coreutils-noprefix
     wget
+    sops
   ];
 
   programs.neovim = {
