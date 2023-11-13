@@ -13,12 +13,12 @@
   environment.binsh = "${pkgs.dash}/bin/dash";
 
   programs.command-not-found.enable = false;
-  programs.nix-index.enableBashIntegration = false;
-  programs.nix-index.enableZshIntegration = false;
-  programs.nix-index.enableFishIntegration = false;
+  programs.nix-index = {
+    enableBashIntegration = false;
+    enableZshIntegration = false;
+    enableFishIntegration = false;
+  };
   programs.nix-index-database.comma.enable = true;
-
-  # console.keyMap = lib.mkDefault "us";
 
   system.stateVersion = "23.11";
   nixpkgs = {
