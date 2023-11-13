@@ -46,16 +46,12 @@ in {
     sessionPath = [config.home.sessionVariables."XDG_BIN_HOME"];
     packages = with pkgs; [
       enpass
+      (writeShellScriptBin "nxs" ''
+        nixos-rebuild switch --flake "${config.my.currentPath}" $@
+      '')
     ];
   };
 
-  # Add stuff for your user as you see fit:
-
-  xdg.configFile."nixpkgs/config.nix".text = ''
-    { allowUnfree = true; }
-  '';
-
-  # Enable home-manager and git
   programs.home-manager.enable = true;
 
   programs.bash.enable = true;
@@ -99,18 +95,18 @@ in {
     };
   };
 
-  home.shellAliases = lib.mkMerge [
+  home.shellAliases =
     {
-      "l" = "ls";
-      "ll" = "ls -l";
-      "la" = "ls -la";
-      "pn" = "pnpm";
-      "hm" = "home-manager";
+      l = "ls";
+      ll = "ls -l";
+      la = "ls -la";
+      pn = "pnpm";
     }
-    (lib.mkIf
-      config.programs.bat.enable
-      {"cat" = "bat -p";})
-  ];
+    // lib.optionalAttrs config.programs.home-manager.enable {
+      hm = "home-manager";
+      hms = ''home-manager switch --flake "${config.my.currentPath}"'';
+    }
+    // lib.optionalAttrs config.programs.bat.enable {"cat" = "bat -p";};
 
   programs.gpg = {
     enable = true;
