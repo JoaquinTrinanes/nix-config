@@ -7,5 +7,9 @@
     nodePackages.pnpm
     rnix-lsp
     statix
+    scrcpy
   ];
+
+  # includes android-tools
+  programs.adb.enable = true;
 }

@@ -1,4 +1,9 @@
-{hostname, ...}: {
+{
+  hostname,
+  lib,
+  config,
+  ...
+}: {
   imports = [
     ../common/optional/desktop
     ../common/optional/home-manager.nix
@@ -21,7 +26,10 @@
       openssh.authorizedKeys.keys = [
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
-      extraGroups = ["wheel" "networkmanager" "docker"];
+      extraGroups =
+        ["wheel" "networkmanager"]
+        ++ lib.optionals config.programs.adb.enable ["adbusers"]
+        ++ lib.optionals config.virtualisation.docker.enable ["docker"];
     };
   };
 
