@@ -61,19 +61,13 @@ local M = {
       },
       setup = {
         eslint = function()
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            callback = function(event)
-              if not require("lazyvim.util").format.enabled() then
-                -- exit early if autoformat is not enabled
-                return
-              end
-
-              local client = vim.lsp.get_clients({ bufnr = event.buf, name = "eslint" })[1]
-              if client then
-                vim.cmd("EslintFixAll")
-              end
-            end,
-          })
+          require("lazyvim.util").lsp.on_attach(function(client)
+            if client.name == "eslint" then
+              client.server_capabilities.documentFormattingProvider = true
+            elseif client.name == "tsserver" then
+              client.server_capabilities.documentFormattingProvider = false
+            end
+          end)
         end,
       },
     },
@@ -85,7 +79,11 @@ local M = {
       local opts = _opts
       opts.ensure_installed = opts.ensure_installed or {}
 
-      vim.list_extend(opts.ensure_installed, { "taplo", "eslint-lsp", "intelephense", "pyright" })
+      vim.list_extend(opts.ensure_installed, {
+        "taplo",
+        "intelephense",
+        "pyright",
+      })
     end,
   },
   {
