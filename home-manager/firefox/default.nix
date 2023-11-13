@@ -9,6 +9,7 @@
     profiles = let
       settings = {
         "browser.aboutConfig.showWarning" = false;
+        "browser.translations.neverTranslateLanguages" = lib.concatStringsSep "," ["es" "gl"];
         "browser.display.use_system_colors" = true;
         "browser.topsites.contile.cachedTiles" = [];
         "accessibility.typeaheadfind.enablesound" = false;

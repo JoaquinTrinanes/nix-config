@@ -18,7 +18,7 @@ in {
   };
 
   xdg.configFile."nvim/lua" = {
-    source = myLib.mkImpureLink ./files/lua;
+    source = mkImpureLink ./files/lua;
     recursive = true;
   };
   xdg.configFile."nvim/neoconf.json" = {
