@@ -3,6 +3,7 @@
     ./gnome.nix
     ../audio.nix
     ../fonts.nix
+    ../printing.nix
   ];
 
   environment.systemPackages = with pkgs; [
