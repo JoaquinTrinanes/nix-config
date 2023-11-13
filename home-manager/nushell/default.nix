@@ -34,9 +34,9 @@ in {
   ];
 
   programs.bash.initExtra = lib.mkAfter ''
-    if [[ $(ps --no-header --pid=$PPID --format=comm) != "nu" && -z ''${BASH_EXECUTION_STRING} ]]; then
-    	shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION='''
-    	exec "${config.programs.nushell.package}/bin/nu" "$LOGIN_OPTION"
-    fi
+    if [[ ! $(ps T --no-header --format=comm | grep "^nu$") && -z $BASH_EXECUTION_STRING ]]; then
+        shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION='''
+        exec "${config.programs.nushell.package}/bin/nu" "$LOGIN_OPTION"
+        fi
   '';
 }
