@@ -1,4 +1,4 @@
-local classNameRegex = "[cC][lL][aA][sS][sS][nN][aA][mM][eE][sS]?"
+local classNameRegex = [[(?:(class[nN]ames?)|(CLASSNAMES?))]] -- "[cC][lL][aA][sS][sS][nN][aA][mM][eE][sS]?"
 local classNamePropNameRegex = "(?:" .. classNameRegex .. "|(?:enter|leave)(?:From|To)?)"
 local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
 
@@ -15,12 +15,6 @@ local M = {
         enabled = true,
       },
       servers = {
-        eslint = {
-          settings = {
-            -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
-            workingDirectory = { mode = "auto" },
-          },
-        },
         rust_analyzer = {
           settings = {
             ["rust-analyzer"] = {
@@ -50,11 +44,11 @@ local M = {
                   classNamePropNameRegex
                     .. [[\s*[:=]\s*]]
                     .. quotedStringRegex,
-                  --classNames={...} prop
-                  classNamePropNameRegex
-                    .. [[\s*[:=]\s*]]
-                    .. quotedStringRegex
-                    .. [[\s*}]],
+                  -- --classNames={...} prop
+                  -- classNamePropNameRegex
+                  --   .. [[\s*[:=]\s*]]
+                  --   .. quotedStringRegex
+                  --   .. [[\s*}]],
                   -- classNames(...)
                   { [[class[nN]ames\(([^)]*)\)]], quotedStringRegex },
                 },
