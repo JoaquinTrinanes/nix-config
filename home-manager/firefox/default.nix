@@ -9,7 +9,7 @@
     package = pkgs.firefox-devedition;
     profiles = let
       settings = {
-        "browser.aboutConfig.showWarning" = true;
+        "browser.aboutConfig.showWarning" = false;
         "browser.display.use_system_colors" = true;
         "browser.topsites.contile.cachedTiles" = [];
         "accessibility.typeaheadfind.enablesound" = false;
