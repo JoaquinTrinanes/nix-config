@@ -18,9 +18,13 @@ in {
       overlay use ${./files/scripts/completions}
     '';
 
-    extraEnv = ''
-      register ${pkgs.nushellPlugins.formats}/bin/nu_plugin_formats
-    '';
+    extraEnv = let
+      plugins = ["formats" "regex"];
+      pluginExpr = plugin: ''
+        register ${pkgs.nushellPlugins.${plugin}}/bin/nu_plugin_${plugin}
+      '';
+    in
+      lib.concatLines (builtins.map pluginExpr plugins);
   };
   programs.carapace.enable = true;
   xdg.configFile."nushell/scripts" = {
