@@ -5,7 +5,7 @@
 }: {
   programs.firefox = {
     enable = lib.mkDefault true;
-    package = pkgs.firefox-devedition;
+    package = lib.mkDefault pkgs.firefox-devedition;
     profiles = let
       settings = {
         "browser.aboutConfig.showWarning" = false;
@@ -16,8 +16,6 @@
         "extensions.activeThemeID" = "default-theme@mozilla.org";
         "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0";
         "general.platform.override" = "Win32";
-        "media.peerconnection.ice.default_address_only" = true;
-        "media.peerconnection.enabled" = false;
         "datareporting.healthreport.uploadEnabled" = false;
         "app.shield.optoutstudies.enabled" = false;
         "browser.crashReports.unsubmittedCheck.autoSubmit2" = false;
