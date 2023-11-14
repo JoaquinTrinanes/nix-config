@@ -1,9 +1,10 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: let
-  myLib = import ../lib {inherit lib config;};
+  myLib = import ../lib {inherit lib config pkgs;};
 in {
   programs.wezterm = {
     enable = true;

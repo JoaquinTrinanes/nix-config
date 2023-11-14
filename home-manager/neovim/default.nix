@@ -1,9 +1,10 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: let
-  myLib = import ../lib {inherit lib config;};
+  myLib = import ../lib {inherit lib config pkgs;};
   inherit (myLib) mkImpureLink;
 in {
   programs.neovim = {
