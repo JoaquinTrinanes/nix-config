@@ -11,7 +11,6 @@
     discord
     qbittorrent
     telegram-desktop
-    # xorg.libxcb.dev
     vlc
   ];
   programs.dconf.enable = true;
