@@ -18,6 +18,7 @@ in {
       ./neovim
       ./nushell
       ./direnv
+      ./wireplumber
       outputs.homeManagerModules.currentPath
       inputs.nix-colors.homeManagerModules.default
     ]
