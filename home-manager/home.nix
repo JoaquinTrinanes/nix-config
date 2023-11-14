@@ -109,6 +109,14 @@ in {
     }
     // lib.optionalAttrs config.programs.bat.enable {"cat" = "bat -p";};
 
+  programs.less = {
+    enable = true;
+    keys = ''
+      #env
+      LESS = -i -R -F
+    '';
+  };
+
   programs.gpg = {
     enable = true;
     settings = {
