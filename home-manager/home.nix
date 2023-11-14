@@ -38,12 +38,17 @@ in {
         then "/home/${config.home.username}"
         else "/Users/${config.home.username}"
       );
-    sessionVariables = {
-      NIXPKGS_ALLOW_UNFREE = 1;
+    sessionVariables =
+      {
+        NIXPKGS_ALLOW_UNFREE = 1;
 
-      # Not officially in the specification
-      XDG_BIN_HOME = "$HOME/.local/bin";
-    };
+        # Not officially in the specification
+        XDG_BIN_HOME = "$HOME/.local/bin";
+      }
+      // lib.optionalAttrs config.programs.bat.enable {
+        MANPAGER = "sh -c 'col -bx | bat -l man -p'";
+        MANROFFOPT = "-c";
+      };
     sessionPath = [config.home.sessionVariables."XDG_BIN_HOME"];
     packages = with pkgs; [
       enpass
