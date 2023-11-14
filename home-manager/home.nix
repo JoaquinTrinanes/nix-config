@@ -125,12 +125,7 @@ in {
       require-cross-certification = true;
     };
   };
-  services.gnome-keyring.enable = true;
-  services.gnome-keyring.components = [
-    "pkcs11"
-    "secrets"
-    # "ssh"
-  ];
+
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
