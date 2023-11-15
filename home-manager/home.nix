@@ -51,10 +51,15 @@ in {
         MANROFFOPT = "-c";
       };
     sessionPath = [config.home.sessionVariables."XDG_BIN_HOME"];
-    packages = with pkgs; [
+    packages = with pkgs; let
+      nixosRebuildWrapper = writeShellScriptBin "nx" ''
+        nixos-rebuild --flake "${config.my.currentPath}" $@
+      '';
+    in [
       enpass
+      nixosRebuildWrapper
       (writeShellScriptBin "nxs" ''
-        nixos-rebuild switch --flake "${config.my.currentPath}" $@
+        ${nixosRebuildWrapper}/bin/nx switch
       '')
     ];
   };
@@ -110,8 +115,8 @@ in {
       pn = "pnpm";
     }
     // lib.optionalAttrs config.programs.home-manager.enable {
-      hm = "home-manager";
-      hms = ''home-manager switch --flake "${config.my.currentPath}"'';
+      hm = ''home-manager --flake "${config.my.currentPath}"'';
+      hms = "hm switch";
     }
     // lib.optionalAttrs config.programs.bat.enable {"cat" = "bat -p";};
 
