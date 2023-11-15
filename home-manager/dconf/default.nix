@@ -3,7 +3,9 @@
   pkgs,
   ...
 }: {
-  dconf.settings = with lib.hm.gvariant; {
+  dconf.settings = let
+    inherit (lib.hm.gvariant) mkTuple;
+  in {
     "org/gnome/desktop/peripherals/touchpad" = {
       tap-to-click = true;
       two-finger-scrolling-enabled = true;

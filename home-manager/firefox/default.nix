@@ -17,6 +17,12 @@
         "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0";
         "general.platform.override" = "Win32";
         "datareporting.healthreport.uploadEnabled" = false;
+
+        # while recommended for privacy, this breaks p2p (google meet for example)
+        "media.peerconnection.ice.default_address_only" = false;
+        "media.peerconnection.enabled" = true;
+
+        # extracted from https://github.com/pyllyukko/user.js/blob/master/user.js
         "app.shield.optoutstudies.enabled" = false;
         "browser.crashReports.unsubmittedCheck.autoSubmit2" = false;
         "privacy.donottrackheader.enabled" = true;
