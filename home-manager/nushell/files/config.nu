@@ -44,15 +44,6 @@ let git_completer = {|spans: list<string>|
   }
 }
 
-let yadm_completer = {|spans: list<string>|
-  let add_aliases = (git config --get-regexp ^alias | lines | split column  ' ' name command | where command == "add" | get name | split column . _ alias | get alias)
-  if $spans.1 in $add_aliases {
-    do $git_completer ([git --git-dir (yadm introspect repo | str trim) --work-tree (pwd)] | append ($spans | drop nth 0))
-  } else {
-    do $git_completer $spans
-  }
-}
-
 let sudo_completer = {|spans: list<string>|
     do $env.config.completions.external.completer ($spans | skip 1)
 }
@@ -76,7 +67,6 @@ let external_completer = {|spans: list<string>|
       nu => $fish_completer
       sd => $fish_completer
       sudo => $sudo_completer
-      yadm => $yadm_completer
       _ => $default_completer
     } | do $in $spans | if (($in | is-empty) and ($fallback_completer != null))) { do $fallback_completer $spans } else { $in }
  }
