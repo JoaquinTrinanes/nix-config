@@ -38,4 +38,7 @@ in {
     source = ./files/lazyvim.json;
     recursive = true;
   };
+  xdg.configFile."nvim/filetype.lua" = {
+    source = ./files/filetype.lua;
+  };
 }
