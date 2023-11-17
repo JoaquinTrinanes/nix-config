@@ -18,14 +18,20 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     nur.url = "github:nix-community/NUR";
+
+    nushell-nightly.url = "github:nushell/nushell";
+    nushell-nightly.flake = false;
+
+    crane.url = "github:ipetkov/crane";
+    crane.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = {
+  outputs = inputs @ {
     self,
     nixpkgs,
     home-manager,
     ...
-  } @ inputs: let
+  }: let
     inherit (self) outputs;
     supportedSystems = ["x86_64-linux"];
     forEachSystem = nixpkgs.lib.genAttrs supportedSystems;
@@ -33,7 +39,15 @@
     # Your custom packages
     # Acessible through 'nix build', 'nix shell', etc
     packages = forEachSystem (
-      system: import ./pkgs nixpkgs.legacyPackages.${system}
+      system: let
+        pkgs = import nixpkgs {
+          inherit system;
+        };
+      in
+        import ./pkgs (pkgs.extend (final: prev: {
+          craneLib = inputs.crane.lib.${final.system};
+          inherit (inputs) nushell-nightly;
+        }))
     );
 
     # Formatter for your nix files, available through 'nix fmt'

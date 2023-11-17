@@ -1,4 +1,4 @@
-local classNameRegex = [[(?:(class[nN]ames?)|(CLASSNAMES?))]] -- "[cC][lL][aA][sS][sS][nN][aA][mM][eE][sS]?"
+local classNameRegex = [[(?:(?:[cC]lass[nN]ames?)|(?:CLASSNAMES?))]] -- "[cC][lL][aA][sS][sS][nN][aA][mM][eE][sS]?"
 local classNamePropNameRegex = "(?:" .. classNameRegex .. "|(?:enter|leave)(?:From|To)?)"
 local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
 
@@ -15,6 +15,7 @@ local M = {
         enabled = true,
       },
       servers = {
+        nushell = {},
         rust_analyzer = {
           settings = {
             ["rust-analyzer"] = {
