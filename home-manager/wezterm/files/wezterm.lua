@@ -25,7 +25,11 @@ end
 
 ---@param pane PaneObj
 local get_process_name = function(pane)
-	return string.gsub(pane:get_foreground_process_name(), "(.*[/\\])(.*)", "%2")
+	local process_name = pane:get_foreground_process_name()
+	if process_name == nil then
+		return nil
+	end
+	return string.gsub(process_name, "(.*[/\\])(.*)", "%2")
 end
 
 ---@param process string
