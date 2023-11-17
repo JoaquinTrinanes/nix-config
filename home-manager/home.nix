@@ -173,8 +173,9 @@ in {
       enable = true;
       defaultCursor = name;
     };
-    name = "DMZ-Black";
-    package = pkgs.vanilla-dmz;
+    name = "Adwaita";
+    package = pkgs.gnome.adwaita-icon-theme;
+    size = 16;
   };
 
   home.stateVersion = "23.05";
