@@ -34,7 +34,14 @@
     };
   };
 
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    wifi = {
+      scanRandMacAddress = true;
+      backend = "iwd";
+    };
+  };
+  services.resolved = {enable = true;};
 
   virtualisation.docker = {
     enable = true;
