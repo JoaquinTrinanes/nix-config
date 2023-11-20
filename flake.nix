@@ -19,101 +19,116 @@
 
     nur.url = "github:nix-community/NUR";
 
-    nushell-nightly.url = "github:nushell/nushell";
-    nushell-nightly.flake = false;
+    nushell-nightly-src.url = "github:nushell/nushell";
+    nushell-nightly-src.flake = false;
 
     crane.url = "github:ipetkov/crane";
     crane.inputs.nixpkgs.follows = "nixpkgs";
+
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   outputs = inputs @ {
     self,
     nixpkgs,
     home-manager,
+    flake-parts,
     ...
   }: let
     inherit (self) outputs;
-    supportedSystems = ["x86_64-linux"];
-    forEachSystem = nixpkgs.lib.genAttrs supportedSystems;
-  in {
-    # Your custom packages
-    # Acessible through 'nix build', 'nix shell', etc
-    packages = forEachSystem (
-      system: let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
-      in
-        import ./pkgs (pkgs.extend (final: prev: {
-          craneLib = inputs.crane.lib.${final.system};
-          inherit (inputs) nushell-nightly;
-        }))
-    );
-
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
-    formatter =
-      forEachSystem (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-    # Your custom packages and modifications, exported as overlays
-    overlays = import ./overlays {inherit inputs outputs;};
-
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
-    nixosModules = import ./modules/nixos;
-
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
-    homeManagerModules = import ./modules/home-manager;
-
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = {
-      razer-blade-14 = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs outputs;
-          hostname = "razer-blade-14";
-        };
-        modules = [
-          ./hosts/razer-blade-14
-          ./hosts/common/global
-        ];
+  in
+    flake-parts.lib.mkFlake {inherit inputs;} (let
+      overlays = [
+        outputs.overlays.default
+        (final: prev: {inherit inputs outputs;})
+        # (
+        #   final: prev: {
+        #     craneLib = inputs.crane.lib.${final.system};
+        #     inherit (inputs) nushell-nightly-src;
+        #   }
+        # )
+      ];
+      pkgsConfig = {
+        inherit overlays;
       };
-    };
-
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = let
-      pkgs =
-        nixpkgs.legacyPackages.x86_64-linux;
-      myLib = import ./lib {inherit (pkgs) lib;};
-      user = myLib.mkUser {
-        name = "joaquin";
-        email = "hi@joaquint.io";
-        firstName = "Joaquín";
-        lastName = "Triñanes";
-      };
+      pkgsForSystem = system: import nixpkgs ({inherit system;} // pkgsConfig);
     in {
-      "joaquin" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = {
-          inherit inputs outputs user;
-          osConfig = {};
-        };
-        modules = [
-          ({
-            pkgs,
-            lib,
-            ...
-          }: {
-            nixpkgs = {
-              overlays = [outputs.overlays.default];
-              config.allowUnfree = lib.mkDefault true;
-            };
-          })
-          ./home-manager/home.nix
-        ];
+      debug = true;
+      systems = ["x86_64-linux"];
+
+      perSystem = {
+        pkgs,
+        system,
+        ...
+      }: {
+        formatter = pkgs.alejandra;
+        packages = import ./pkgs pkgs;
+        _module.args.pkgs = pkgsForSystem system;
       };
-    };
-  };
+
+      flake = {
+        # Your custom packages and modifications, exported as overlays
+        overlays = import ./overlays {inherit inputs outputs;};
+
+        # Reusable nixos modules you might want to export
+        # These are usually stuff you would upstream into nixpkgs
+        nixosModules = import ./modules/nixos;
+
+        # Reusable home-manager modules you might want to export
+        # These are usually stuff you would upstream into home-manager
+        homeManagerModules = import ./modules/home-manager;
+
+        # NixOS configuration entrypoint
+        # Available through 'nixos-rebuild --flake .#your-hostname'
+        nixosConfigurations = {
+          razer-blade-14 = nixpkgs.lib.nixosSystem {
+            specialArgs = {
+              inherit inputs outputs;
+              hostname = "razer-blade-14";
+            };
+            modules = [
+              (_: {
+                nixpkgs = {
+                  inherit overlays;
+                  config.allowUnfree = true;
+                };
+              })
+              ./hosts/razer-blade-14
+              ./hosts/common/global
+            ];
+          };
+        };
+
+        # Standalone home-manager configuration entrypoint
+        # Available through 'home-manager --flake .#your-username@your-hostname'
+        homeConfigurations = let
+          pkgs = pkgsForSystem "x86_64-linux";
+          myLib = import ./lib {inherit (pkgs) lib;};
+          user = myLib.mkUser {
+            name = "joaquin";
+            email = "hi@joaquint.io";
+            firstName = "Joaquín";
+            lastName = "Triñanes";
+          };
+        in {
+          "joaquin" = home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            extraSpecialArgs = {
+              inherit inputs outputs user;
+              osConfig = {};
+            };
+            modules = [
+              ({
+                pkgs,
+                lib,
+                ...
+              }: {
+                nixpkgs.config.allowUnfree = true;
+              })
+              ./home-manager/home.nix
+            ];
+          };
+        };
+      };
+    });
 }

@@ -88,7 +88,12 @@
   # networking.interfaces."wlp2s0".useDHCP = true;
 
   services.tlp.enable = true;
-  services.tlp.settings = {RUNTIME_PM_ON_AC = "auto";};
+  services.tlp.settings = {
+    # TLP_ENABLE = 0;
+    RUNTIME_PM_ON_AC = "auto";
+    USB_AUTOSUSPEND = 0;
+    USB_EXCLUDE_BTUSB = 1;
+  };
   services.power-profiles-daemon.enable = false;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

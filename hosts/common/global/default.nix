@@ -3,7 +3,6 @@
   lib,
   config,
   inputs,
-  outputs,
   ...
 }: {
   imports = [
@@ -21,10 +20,6 @@
   programs.nix-index-database.comma.enable = true;
 
   system.stateVersion = "23.11";
-  nixpkgs = {
-    overlays = [outputs.overlays.default];
-    config.allowUnfree = lib.mkDefault true;
-  };
 
   # This will add each flake input as a registry
   # This will add each flake input as a registry
