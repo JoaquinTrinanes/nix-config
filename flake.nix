@@ -38,20 +38,12 @@
     inherit (self) outputs;
   in
     flake-parts.lib.mkFlake {inherit inputs;} (let
-      overlays = [
-        outputs.overlays.default
-        (final: prev: {inherit inputs outputs;})
-        # (
-        #   final: prev: {
-        #     craneLib = inputs.crane.lib.${final.system};
-        #     inherit (inputs) nushell-nightly-src;
-        #   }
-        # )
-      ];
-      pkgsConfig = {
-        inherit overlays;
-      };
-      pkgsForSystem = system: import nixpkgs ({inherit system;} // pkgsConfig);
+      overlays = [outputs.overlays.default];
+      pkgsForSystem = system:
+        import nixpkgs {
+          inherit system overlays;
+          nixpkgs.config.allowUnfree = true;
+        };
     in {
       debug = true;
       systems = ["x86_64-linux"];
@@ -62,7 +54,7 @@
         ...
       }: {
         formatter = pkgs.alejandra;
-        packages = import ./pkgs pkgs;
+        packages = import ./pkgs pkgs {inherit inputs outputs;};
         _module.args.pkgs = pkgsForSystem system;
       };
 
@@ -118,11 +110,7 @@
               osConfig = {};
             };
             modules = [
-              ({
-                pkgs,
-                lib,
-                ...
-              }: {
+              (_: {
                 nixpkgs.config.allowUnfree = true;
               })
               ./home-manager/home.nix

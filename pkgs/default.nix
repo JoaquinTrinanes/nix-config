@@ -1,9 +1,9 @@
 # Custom packages, that can be defined similarly to ones from nixpkgs
 # You can build them using 'nix build .#example'
-pkgs: let
-  inherit (pkgs) inputs outputs;
-in {
-  inherit pkgs;
+pkgs: {
+  inputs,
+  outputs,
+}: {
   # example = pkgs.callPackage ./example { };
   nushell-nightly = let
     craneLib = inputs.crane.lib.${pkgs.system};
