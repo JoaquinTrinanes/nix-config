@@ -44,6 +44,12 @@
           inherit system overlays;
           nixpkgs.config.allowUnfree = true;
         };
+      commonConfigModule = _: {
+        nixpkgs = {
+          inherit overlays;
+          config.allowUnfree = true;
+        };
+      };
     in {
       debug = true;
       systems = ["x86_64-linux"];
@@ -79,12 +85,7 @@
               hostname = "razer-blade-14";
             };
             modules = [
-              (_: {
-                nixpkgs = {
-                  inherit overlays;
-                  config.allowUnfree = true;
-                };
-              })
+              commonConfigModule
               ./hosts/razer-blade-14
               ./hosts/common/global
             ];
@@ -110,9 +111,7 @@
               osConfig = {};
             };
             modules = [
-              (_: {
-                nixpkgs.config.allowUnfree = true;
-              })
+              commonConfigModule
               ./home-manager/home.nix
             ];
           };
