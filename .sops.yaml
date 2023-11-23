@@ -1,7 +1,13 @@
 keys:
-  - &pgp E454CA2CA2678E14764142C20CA00349B2A549E2
+  # - &pgp E454CA2CA2678E14764142C20CA00349B2A549E2
+  # - &ssh ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII95dwUzUX98GxBzc13L/u/k+0rnZys6xDhNeEdkrsbq joaquin@razer-blade-14
+  - &age age1quy67nc45mn5d2af0td0trcamn4576ete2jzarpmvmvf4cjdm3gqhkf4kw
 creation_rules:
-  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+  - path_regex: secrets/[^/]+$
     key_groups:
-      - pgp:
-          - *pgp
+      # - pgp:
+      #     - *pgp
+      # - ssh:
+      #     - *ssh
+      - age:
+          - *age

@@ -11,6 +11,7 @@
     ../common/optional/nh
     ../common/optional/gaming
     ../common/optional/sops
+    ../common/optional/vpn
     ./hardware-configuration.nix
   ];
   networking.hostName = hostname;
