@@ -39,12 +39,7 @@
   in
     flake-parts.lib.mkFlake {inherit inputs;} (let
       overlays = [outputs.overlays.default];
-      pkgsForSystem = system:
-        import nixpkgs {
-          inherit system overlays;
-          nixpkgs.config.allowUnfree = true;
-        };
-      commonConfigModule = _: {
+      commonConfig = {
         nixpkgs = {
           inherit overlays;
           config.allowUnfree = true;
@@ -61,7 +56,10 @@
       }: {
         formatter = pkgs.alejandra;
         packages = import ./pkgs pkgs {inherit inputs outputs;};
-        _module.args.pkgs = pkgsForSystem system;
+        _module.args.pkgs = import nixpkgs ({
+            inherit system;
+          }
+          // commonConfig);
       };
 
       flake = {
@@ -85,7 +83,7 @@
               hostname = "razer-blade-14";
             };
             modules = [
-              commonConfigModule
+              commonConfig
               ./hosts/razer-blade-14
               ./hosts/common/global
             ];
@@ -95,7 +93,7 @@
         # Standalone home-manager configuration entrypoint
         # Available through 'home-manager --flake .#your-username@your-hostname'
         homeConfigurations = let
-          pkgs = pkgsForSystem "x86_64-linux";
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
           myLib = import ./lib {inherit (pkgs) lib;};
           user = myLib.mkUser {
             name = "joaquin";
@@ -111,7 +109,7 @@
               osConfig = {};
             };
             modules = [
-              commonConfigModule
+              commonConfig
               ./home-manager/home.nix
             ];
           };

@@ -47,5 +47,11 @@ in rec {
 
   nur = inputs.nur.overlay;
 
-  default = lib.composeManyExtensions [flake-inputs additions modifications neovim-nightly nur];
+  default = lib.composeManyExtensions [
+    # flake-inputs
+    additions
+    modifications
+    neovim-nightly
+    nur
+  ];
 }

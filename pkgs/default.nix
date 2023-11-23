@@ -7,11 +7,10 @@ pkgs: {
   # example = pkgs.callPackage ./example { };
   nushell-nightly = let
     craneLib = inputs.crane.lib.${pkgs.system};
-    inherit (inputs) nushell-nightly-src;
+    src = inputs.nushell-nightly-src;
   in
     pkgs.callPackage ./nushell-nightly {
-      src = nushell-nightly-src;
-      inherit craneLib;
+      inherit src craneLib;
       additionalFeatures = p: (p ++ ["extra" "dataframe"]);
     };
 }
