@@ -61,6 +61,9 @@ in {
       (writeShellScriptBin "nxs" ''
         ${nixosRebuildWrapper}/bin/nx switch
       '')
+      (writeShellScriptBin "nr" ''
+        nix run nixpkgs#$@
+      '')
     ];
   };
 

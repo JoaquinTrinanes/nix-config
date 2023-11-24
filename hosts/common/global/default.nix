@@ -55,11 +55,7 @@
     htop
     fd
     fzf
-    gcc
     git
-    gnumake
-    libcxx
-    libgcc
     lshw
     lua-language-server
     pciutils
@@ -73,10 +69,7 @@
     coreutils
     # uutils-coreutils-noprefix
     wget
-    wl-clipboard
   ];
-
-  # services.pcscd.enable = true;
 
   programs.neovim = {
     enable = true;
@@ -84,5 +77,4 @@
     viAlias = true;
     vimAlias = true;
   };
-  programs.nix-ld.enable = true;
 }

@@ -10,7 +10,7 @@
   xorg,
   nghttp2,
   libgit2,
-  doCheck ? false,
+  doCheck ? true,
   withDefaultFeatures ? true,
   additionalFeatures ? (p: p),
   testers,

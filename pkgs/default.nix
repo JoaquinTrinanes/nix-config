@@ -8,6 +8,7 @@ pkgs: {inputs}: {
   in
     pkgs.callPackage ./nushell-nightly {
       inherit src craneLib;
+      doCheck = false;
       additionalFeatures = p: (p ++ ["extra" "dataframe"]);
     };
 }
