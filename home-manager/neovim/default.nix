@@ -9,6 +9,7 @@
 in {
   programs.neovim = {
     enable = lib.mkDefault true;
+    extraPackages = with pkgs; [gcc gnumake git];
     defaultEditor = true;
     vimAlias = true;
     viAlias = true;
