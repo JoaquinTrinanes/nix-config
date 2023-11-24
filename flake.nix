@@ -53,17 +53,18 @@
         ...
       }: {
         formatter = pkgs.alejandra;
-        packages = import ./pkgs pkgs {inherit inputs;};
         _module.args.pkgs = import nixpkgs ({
             inherit system;
           }
           // commonConfig);
       };
 
-      flake = {
-        # Your custom packages and modifications, exported as overlays
-        overlays = import ./overlays {inherit inputs;};
+      imports = [
+        ./overlays
+        ./pkgs
+      ];
 
+      flake = {
         # Reusable nixos modules you might want to export
         # These are usually stuff you would upstream into nixpkgs
         nixosModules = import ./modules/nixos;
