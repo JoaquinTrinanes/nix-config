@@ -34,11 +34,9 @@
     home-manager,
     flake-parts,
     ...
-  }: let
-    inherit (self) outputs;
-  in
+  }:
     flake-parts.lib.mkFlake {inherit inputs;} (let
-      overlays = [outputs.overlays.default];
+      overlays = [self.overlays.default];
       commonConfig = {
         nixpkgs = {
           inherit overlays;
@@ -55,7 +53,7 @@
         ...
       }: {
         formatter = pkgs.alejandra;
-        packages = import ./pkgs pkgs {inherit inputs outputs;};
+        packages = import ./pkgs pkgs {inherit inputs;};
         _module.args.pkgs = import nixpkgs ({
             inherit system;
           }
@@ -64,7 +62,7 @@
 
       flake = {
         # Your custom packages and modifications, exported as overlays
-        overlays = import ./overlays {inherit inputs outputs;};
+        overlays = import ./overlays {inherit inputs;};
 
         # Reusable nixos modules you might want to export
         # These are usually stuff you would upstream into nixpkgs
@@ -79,7 +77,7 @@
         nixosConfigurations = {
           razer-blade-14 = nixpkgs.lib.nixosSystem {
             specialArgs = {
-              inherit inputs outputs;
+              inherit inputs self;
               hostname = "razer-blade-14";
             };
             modules = [
@@ -105,7 +103,7 @@
           "joaquin" = home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
             extraSpecialArgs = {
-              inherit inputs outputs user;
+              inherit inputs user self;
               osConfig = {};
             };
             modules = [

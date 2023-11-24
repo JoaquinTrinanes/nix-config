@@ -1,7 +1,7 @@
 {
   inputs,
-  outputs,
   lib,
+  self,
   ...
 }: let
   inherit ((import ../../../lib {inherit lib;})) mkUser;
@@ -19,6 +19,6 @@ in {
     users."${user.name}" = ../../../home-manager/home.nix;
     useUserPackages = true;
     useGlobalPkgs = true;
-    extraSpecialArgs = {inherit user inputs outputs;};
+    extraSpecialArgs = {inherit user inputs self;};
   };
 }

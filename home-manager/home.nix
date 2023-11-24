@@ -5,7 +5,7 @@
   osConfig,
   user,
   inputs,
-  outputs,
+  self,
   ...
 }: let
   # safe access osConfig, as it's not set when using standalone home-manager
@@ -20,7 +20,7 @@ in {
       ./dconf
       ./direnv
       ./wireplumber
-      outputs.homeManagerModules.currentPath
+      self.homeManagerModules.currentPath
       inputs.nix-colors.homeManagerModules.default
     ]
     ++ (lib.optionals hasGui [
