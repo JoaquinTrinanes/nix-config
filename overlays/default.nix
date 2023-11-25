@@ -35,13 +35,15 @@
     # For every flake input, aliases 'pkgs.inputs.${flake}' to
     # 'inputs.${flake}.packages.${pkgs.system}' or
     # 'inputs.${flake}.legacyPackages.${pkgs.system}'
+    # pkgs.stdenv.hostPlatform.system
     flake-inputs = final: _: {
       inputs =
         builtins.mapAttrs
         (
           _: flake: let
-            legacyPackages = (flake.legacyPackages or {}).${final.system} or {};
-            packages = (flake.packages or {}).${final.system} or {};
+            inherit (final.stdenv.hostPlatform) system;
+            legacyPackages = (flake.legacyPackages or {}).${system} or {};
+            packages = (flake.packages or {}).${system} or {};
           in
             if legacyPackages != {}
             then legacyPackages

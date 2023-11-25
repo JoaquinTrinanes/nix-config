@@ -4,7 +4,7 @@
   perSystem = {pkgs, ...}: {
     packages = {
       nushell-nightly = let
-        craneLib = inputs.crane.lib.${pkgs.system};
+        craneLib = inputs.crane.lib.${pkgs.stdenv.hostPlatform.system};
         src = inputs.nushell-nightly-src;
       in
         pkgs.callPackage ./nushell-nightly {

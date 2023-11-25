@@ -90,6 +90,17 @@
               ./hosts/common/global
             ];
           };
+          media-box = nixpkgs.lib.nixosSystem {
+            specialArgs = {
+              inherit inputs self;
+              hostname = "media-box";
+            };
+            modules = [
+              commonConfig
+              ./hosts/media-server
+              ./hosts/common/global
+            ];
+          };
         };
 
         # Standalone home-manager configuration entrypoint
