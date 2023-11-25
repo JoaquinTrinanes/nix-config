@@ -1,6 +1,6 @@
 {...}: {
   imports = [
     ./hardware-configuration.nix
-    ../common/optional/ssh
+    ../common/optional/ssh/server.nix
   ];
 }
