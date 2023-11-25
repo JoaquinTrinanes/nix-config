@@ -26,6 +26,9 @@
     crane.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
+
+    nh.url = "github:viperML/nh";
+    nh.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {

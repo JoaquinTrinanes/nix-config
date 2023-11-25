@@ -3,7 +3,9 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  cfg = config.my;
+in {
   options.my = with lib; {
     currentPath = mkOption {
       type = types.nullOr types.str;
@@ -16,10 +18,11 @@
   };
 
   config = {
+    home.sessionVariables = {FLAKE = cfg.currentPath;};
     home.activation = {
-      downloadRepo = lib.hm.dag.entryBefore ["writeBoundary"] (lib.optionalString (config.my.currentPath != null && config.my.dotfilesUrl != null) ''
-        if [ ! -e ${config.my.currentPath} ]; then
-          $DRY_RUN_CMD ${pkgs.git}/bin/git clone $VERBOSE_ARG ${config.my.dotfilesUrl} ${config.my.currentPath}
+      downloadRepo = lib.hm.dag.entryBefore ["writeBoundary"] (lib.optionalString (cfg.currentPath != null && cfg.dotfilesUrl != null) ''
+        if [ ! -e ${cfg.currentPath} ]; then
+          $DRY_RUN_CMD ${pkgs.git}/bin/git clone $VERBOSE_ARG ${cfg.dotfilesUrl} ${cfg.currentPath}
         fi
       '');
     };

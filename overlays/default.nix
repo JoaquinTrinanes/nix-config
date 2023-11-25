@@ -9,15 +9,15 @@
     # This one brings our custom packages from the 'pkgs' directory
     # additions = final: prev: config.flake.packages.${final.system} or {};
     additions = final: prev: withSystem prev.stdenv.hostPlatform.system ({config, ...}: config.packages);
-    # config.flake.packages.${final.system} or {};
-
-    # additions = final: prev: import ../pkgs final {inherit inputs;};
-    # additions = _: _: {};
 
     # This one contains whatever you want to overlay
     # You can change versions, add patches, set compilation flags, anything really.
     # https://nixos.wiki/wiki/Overlays
     modifications = final: prev: {
+      # nushell = prev.nushell-nightly;
+      # nushellFull = prev.nushell-nightly.override {
+      #   additionalFeatures = p: (p ++ ["extra" "dataframe"]);
+      # };
       # example = prev.example.overrideAttrs (oldAttrs: rec {
       # ...
       # });
@@ -50,16 +50,13 @@
         inputs;
     };
 
-    neovim-nightly = inputs.neovim-nightly-overlay.overlay;
-
-    nur = inputs.nur.overlay;
-
     default = lib.composeManyExtensions (with config.flake.overlays; [
       # flake-inputs
       additions
       modifications
-      neovim-nightly
-      nur
+      inputs.nh.overlays.default
+      inputs.neovim-nightly-overlay.overlay
+      inputs.nur.overlay
     ]);
   };
 }
