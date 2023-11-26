@@ -5,7 +5,7 @@
 in {
   systemd.tmpfiles.rules = [
     "d ${path} 0755 media - - -"
-    "d ${publicPath} 1755 media - - -"
+    "d ${publicPath} 1777 media - - -"
     "d ${privatePath} 0700 media - - -"
   ];
   services.avahi = {enable = true;};
