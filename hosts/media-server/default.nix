@@ -5,6 +5,8 @@ _: let
     ];
   };
 in {
+  networking.networkmanager.enable = true;
+
   imports = [
     ./hardware-configuration.nix
     ../common/optional/ssh/server.nix
@@ -14,6 +16,7 @@ in {
   users.users."alfred" =
     sshConfig
     // {
+      hashedPassword = "";
       isNormalUser = true;
     };
 }
