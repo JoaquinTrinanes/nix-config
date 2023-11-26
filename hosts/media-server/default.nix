@@ -1,4 +1,4 @@
-{pkgs, ...}: let
+{inputs, ...}: let
   sshConfig = {
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCutbKZk+mbku2/ndSociCACyV+Joc0QVYRfjxAHW79 openpgp:0x31C20393"
@@ -11,8 +11,10 @@ in {
   imports = [
     ./hardware-configuration.nix
     ../common/optional/ssh/server.nix
-    ../common/optional/jellyfin
-    ../common/optional/samba
+    ../common/optional/sops
+    inputs.selfhostblocks.nixosModules.x86_64-linux.default
+    # ../common/optional/jellyfin
+    # ../common/optional/samba
   ];
 
   virtualisation.oci-containers.containers = {

@@ -2,7 +2,7 @@
   description = "Your new nix config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -32,6 +32,10 @@
 
     nh.url = "github:viperML/nh";
     nh.inputs.nixpkgs.follows = "nixpkgs";
+
+    selfhostblocks.url = "github:ibizaman/selfhostblocks";
+    selfhostblocks.inputs.nixpkgs.follows = "nixpkgs";
+    selfhostblocks.inputs.sops-nix.follows = "sops-nix";
   };
 
   outputs = inputs @ {
