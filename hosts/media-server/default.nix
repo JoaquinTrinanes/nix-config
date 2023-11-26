@@ -17,6 +17,12 @@ in {
     # ../common/optional/samba
   ];
 
+  shb.ldap = {
+    enable = true;
+    domain = "homelab";
+    subdomain = "ldap";
+  };
+
   virtualisation.oci-containers.containers = {
     dashy = {
       image = "lissy93/dashy:2.1.1";
