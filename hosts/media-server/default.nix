@@ -17,13 +17,16 @@ in {
     # ../common/optional/samba
   ];
 
-  shb.ldap = {
+  shb.deluge = {
     enable = true;
-    domain = "homelab";
-    subdomain = "ldap";
-    dcdomain = "dc=homelab";
-    sopsFile = ./secrets.yaml;
   };
+  # shb.ldap = {
+  #   enable = true;
+  #   domain = "homelab";
+  #   subdomain = "ldap";
+  #   dcdomain = "dc=homelab";
+  #   sopsFile = ./secrets.yaml;
+  # };
 
   # virtualisation.oci-containers.containers = {
   #   dashy = {
