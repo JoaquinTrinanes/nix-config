@@ -6,15 +6,17 @@ _: let
   };
 in {
   networking.networkmanager.enable = true;
+  networking.firewall.allowPing = true;
 
   imports = [
     ./hardware-configuration.nix
     ../common/optional/ssh/server.nix
     ../common/optional/jellyfin
+    ../common/optional/samba
   ];
 
   users.users."root" = sshConfig;
-  users.users."alfred" =
+  users.users."media" =
     sshConfig
     // {
       hashedPassword = "";
