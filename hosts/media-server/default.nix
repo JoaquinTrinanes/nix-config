@@ -10,6 +10,7 @@ in {
   imports = [
     ./hardware-configuration.nix
     ../common/optional/ssh/server.nix
+    ../common/optional/jellyfin
   ];
 
   users.users."root" = sshConfig;
