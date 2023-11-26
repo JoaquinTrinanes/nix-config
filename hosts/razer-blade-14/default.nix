@@ -8,6 +8,7 @@
     ../common/optional/desktop
     ../common/optional/home-manager.nix
     ../common/optional/development
+    ../common/optional/nh
     ../common/optional/gaming
     ./hardware-configuration.nix
   ];
