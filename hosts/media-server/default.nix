@@ -26,6 +26,13 @@ in {
     };
   };
 
+  services.openvpn.servers = {
+    es23 = {
+      config = ''config /secrets/vpn/node-es-05.protonvpn.net.udp.ovpn '';
+      autoStart = true;
+    };
+  };
+
   users.users."root" = sshConfig;
   users.users."media" =
     sshConfig
