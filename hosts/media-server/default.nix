@@ -25,23 +25,23 @@ in {
     sopsFile = ./secrets.yaml;
   };
 
-  virtualisation.oci-containers.containers = {
-    dashy = {
-      image = "lissy93/dashy:2.1.1";
-      autoStart = true;
-      ports = ["80:80"];
-      volumes = [
-        "${./dashboard.yml}:/app/public/conf.yml"
-      ];
-    };
-  };
+  # virtualisation.oci-containers.containers = {
+  #   dashy = {
+  #     image = "lissy93/dashy:2.1.1";
+  #     autoStart = true;
+  #     ports = ["80:80"];
+  #     volumes = [
+  #       "${./dashboard.yml}:/app/public/conf.yml"
+  #     ];
+  #   };
+  # };
 
-  services.openvpn.servers = {
-    es23 = {
-      config = ''config /secrets/vpn/node-es-05.protonvpn.net.udp.ovpn '';
-      autoStart = true;
-    };
-  };
+  # services.openvpn.servers = {
+  #   es23 = {
+  #     config = ''config /secrets/vpn/node-es-05.protonvpn.net.udp.ovpn '';
+  #     autoStart = true;
+  #   };
+  # };
 
   users.users."root" = sshConfig;
   users.users."media" =
