@@ -21,6 +21,8 @@ in {
     enable = true;
     domain = "homelab";
     subdomain = "ldap";
+    dcdomain = "dc=homelab";
+    sopsFile = ./secrets.yaml;
   };
 
   virtualisation.oci-containers.containers = {
