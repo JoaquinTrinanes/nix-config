@@ -49,7 +49,7 @@
     ];
   };
 
-  time.timeZone = "Europe/Madrid";
+  time.timeZone = lib.mkDefault "Europe/Madrid";
 
   environment.systemPackages = with pkgs; [
     htop
@@ -60,8 +60,6 @@
     lua-language-server
     pciutils
     pinentry
-    pinentry-gnome
-    pinentry-gtk2
     ripgrep
     sd
     stylua
