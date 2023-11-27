@@ -16,6 +16,7 @@
         "extensions.activeThemeID" = "default-theme@mozilla.org";
         "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0";
         "general.platform.override" = "Win32";
+        "general.autoScroll" = true; # enable middle click scroll
         "datareporting.healthreport.uploadEnabled" = false;
 
         # while recommended for privacy, this breaks p2p (google meet for example)
