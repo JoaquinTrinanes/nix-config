@@ -19,6 +19,4 @@
   };
 
   xdg.portal.enable = true;
-
-  services.switcherooControl.enable = true;
 }
