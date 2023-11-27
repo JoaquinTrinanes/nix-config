@@ -1,9 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}: {
-  # sound
+{pkgs, ...}: {
   security.rtkit.enable = true;
   hardware.pulseaudio = {
     enable = false;
@@ -21,11 +16,8 @@
   hardware.bluetooth.settings = {
     General = {
       Enable = "Source,Sink,Media,Socket";
+      Experimental = true;
     };
   };
-  systemd.services.bluetooth.serviceConfig.ExecStart = lib.mkForce [
-    ""
-    "${pkgs.bluez}/libexec/bluetooth/bluetoothd -f /etc/bluetooth/main.conf --experimental"
-  ];
   environment.systemPackages = with pkgs; [pavucontrol];
 }
