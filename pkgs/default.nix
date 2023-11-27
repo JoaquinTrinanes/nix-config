@@ -1,17 +1,8 @@
 # Custom packages, that can be defined similarly to ones from nixpkgs
 # You can build them using 'nix build .#example'
-{inputs, ...}: {
-  perSystem = {pkgs, ...}: {
-    packages = {
-      nushell-nightly = let
-        craneLib = inputs.crane.lib.${pkgs.stdenv.hostPlatform.system};
-        src = inputs.nushell-nightly-src;
-      in
-        pkgs.callPackage ./nushell-nightly {
-          inherit src craneLib;
-          doCheck = false;
-          additionalFeatures = p: (p ++ ["extra" "dataframe"]);
-        };
-    };
+pkgs: {
+  nushell-nightly = pkgs.callPackage ./nushell-nightly {
+    additionalFeatures = p: (p ++ ["extra" "dataframe"]);
+    doCheck = false;
   };
 }

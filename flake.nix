@@ -22,9 +22,6 @@
     nushell-nightly-src.url = "github:nushell/nushell";
     nushell-nightly-src.flake = false;
 
-    crane.url = "github:ipetkov/crane";
-    crane.inputs.nixpkgs.follows = "nixpkgs";
-
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     nh.url = "github:viperML/nh";
@@ -55,6 +52,7 @@
         system,
         ...
       }: {
+        packages = import ./pkgs pkgs;
         formatter = pkgs.alejandra;
         _module.args.pkgs = import nixpkgs ({
             inherit system;
@@ -64,7 +62,6 @@
 
       imports = [
         ./overlays
-        ./pkgs
       ];
 
       flake = {
