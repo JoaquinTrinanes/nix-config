@@ -57,7 +57,6 @@
       additions
       modifications
       inputs.nh.overlays.default
-      inputs.neovim-nightly-overlay.overlay
       inputs.nur.overlay
     ]);
   };

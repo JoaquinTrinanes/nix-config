@@ -2,12 +2,15 @@
   lib,
   config,
   pkgs,
+  self,
   ...
 }: let
   myLib = import ../lib {inherit lib config pkgs;};
+  package = self.inputs.neovim-nightly-overlay.defaultPackage.${pkgs.stdenv.hostPlatform.system};
   inherit (myLib) mkImpureLink;
 in {
   programs.neovim = {
+    inherit package;
     enable = lib.mkDefault true;
     extraPackages = with pkgs; [gcc gnumake git];
     defaultEditor = true;
