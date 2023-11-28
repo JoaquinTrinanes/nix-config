@@ -1,5 +1,4 @@
 {
-  hostname,
   lib,
   config,
   ...
@@ -12,7 +11,6 @@
     ../common/optional/gaming
     ./hardware-configuration.nix
   ];
-  networking.hostName = hostname;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

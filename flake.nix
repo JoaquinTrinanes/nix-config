@@ -79,10 +79,10 @@
           razer-blade-14 = nixpkgs.lib.nixosSystem {
             specialArgs = {
               inherit inputs self;
-              hostname = "razer-blade-14";
             };
             modules = [
               commonConfig
+              {networking.hostName = "razer-blade-14";}
               ./hosts/razer-blade-14
               ./hosts/common/global
             ];
@@ -90,10 +90,10 @@
           media-box = nixpkgs.lib.nixosSystem {
             specialArgs = {
               inherit inputs self;
-              hostname = "media-box";
             };
             modules = [
               commonConfig
+              {networking.hostName = "media-box";}
               ./hosts/media-server
               ./hosts/common/global
             ];
