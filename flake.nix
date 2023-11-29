@@ -19,9 +19,6 @@
 
     nur.url = "github:nix-community/NUR";
 
-    nushell-nightly-src.url = "github:nushell/nushell";
-    nushell-nightly-src.flake = false;
-
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     nh.url = "github:viperML/nh";

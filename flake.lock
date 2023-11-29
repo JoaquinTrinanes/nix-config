@@ -391,22 +391,6 @@
         "type": "github"
       }
     },
-    "nushell-nightly-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1700926940,
-        "narHash": "sha256-80j+zLyeARjC5LXTVKgWj6gGsRR9+cswBUPsxkvgDmU=",
-        "owner": "nushell",
-        "repo": "nushell",
-        "rev": "1ff8c2d81dea68e90a6a61b68a50a2098b1d6a8a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nushell",
-        "repo": "nushell",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -417,8 +401,7 @@
         "nix-colors": "nix-colors",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
-        "nur": "nur",
-        "nushell-nightly-src": "nushell-nightly-src"
+        "nur": "nur"
       }
     },
     "systems": {
