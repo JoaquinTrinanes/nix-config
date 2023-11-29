@@ -28,6 +28,16 @@ local M = {
           -- return
           --           end
         },
+        ---@diagnostic disable-next-line: missing-fields
+        prettier = {
+          condition = function(ctx)
+            local eslint = require("lazyvim.util").lsp.get_clients({ name = "eslint", buf = ctx.buf })[1]
+            if eslint == nil then
+              return true
+            end
+            return not eslint.server_capabilities.documentFormattingProvider
+          end,
+        },
       },
     },
   },
