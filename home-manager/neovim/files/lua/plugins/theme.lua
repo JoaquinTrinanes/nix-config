@@ -1,13 +1,13 @@
 local M = {
   {
-    "shaunsingh/nord.nvim",
-    name = "nord",
-    config = function()
-      vim.g.nord_borders = true
-      vim.g.nord_contrast = true
-    end,
+    "catppuccin/nvim",
+    name = "catppuccin",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      flavour = "frappe",
+    },
   },
-  { "ellisonleao/gruvbox.nvim", name = "gruvbox" },
 }
 
 return M

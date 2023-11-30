@@ -6,7 +6,7 @@ local M = {
       formatters_by_ft = {
         toml = { "taplo" },
         php = { "pint" },
-        nix = { { "nix-flake-fmt", "alejandra", "nixfmt" } },
+        nix = { { "alejandra", "nixfmt" } },
         markdown = { "injected", "prettier" },
         ["_"] = {
           "trim_whitespace",
