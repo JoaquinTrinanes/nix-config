@@ -58,6 +58,13 @@ local M = {
       opts.sections.lualine_z = {}
     end,
   },
+  { "folke/flash.nvim", opts = {
+    modes = {
+      search = {
+        enabled = false,
+      },
+    },
+  } },
 }
 
 return M
