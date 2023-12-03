@@ -101,7 +101,6 @@
     lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
     modesetting.enable = false;
     powerManagement.enable = true;
     powerManagement.finegrained = true;
