@@ -13,13 +13,13 @@ in {
     inherit package;
     enable = lib.mkDefault true;
     extraPackages = with pkgs; [gcc gnumake git];
-    defaultEditor = true;
     vimAlias = true;
     viAlias = true;
     extraLuaConfig = ''
       require("config.lazy")
     '';
     withNodeJs = true;
+    extraLuaPackages = p: [p.jsregexp];
   };
 
   xdg.configFile."nvim/lua" = {
