@@ -8,6 +8,7 @@
     rnix-lsp
     statix
     scrcpy
+    file
   ];
 
   # includes android-tools
