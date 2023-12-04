@@ -103,10 +103,6 @@ in {
         nu_indicator = "";
         format = "([$indicator](style) )";
       };
-      nix_shell = {
-        impure_msg = "";
-        # format = "via [$symbol($state)($name)]($style) ";
-      };
     };
   };
 
