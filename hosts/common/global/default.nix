@@ -5,20 +5,7 @@
   inputs,
   ...
 }: {
-  imports = [
-    inputs.nix-index-database.nixosModules.nix-index
-  ];
-
-  environment.binsh = "${pkgs.dash}/bin/dash";
-
-  programs.command-not-found.enable = false;
-  programs.nix-index = {
-    enableBashIntegration = false;
-    enableZshIntegration = false;
-    enableFishIntegration = false;
-  };
-  programs.nix-index-database.comma.enable = true;
-
+  environment.binsh = lib.mkDefault "${pkgs.dash}/bin/dash";
   system.stateVersion = "23.11";
 
   # This will add each flake input as a registry

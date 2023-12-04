@@ -9,6 +9,7 @@
     ../common/optional/development
     ../common/optional/nh
     ../common/optional/gaming
+    ../common/optional/nix-index.nix
     ./hardware-configuration.nix
   ];
 
