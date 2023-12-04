@@ -20,6 +20,7 @@
     nur.url = "github:nix-community/NUR";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
 
     nh.url = "github:viperML/nh";
     nh.inputs.nixpkgs.follows = "nixpkgs";
@@ -33,10 +34,9 @@
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} (let
-      overlays = [self.overlays.default];
       commonConfig = {
         nixpkgs = {
-          inherit overlays;
+          overlays = [self.overlays.default];
           config.allowUnfree = true;
         };
       };

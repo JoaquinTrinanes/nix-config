@@ -53,11 +53,9 @@
     };
 
     default = lib.composeManyExtensions (with config.flake.overlays; [
-      # flake-inputs
       additions
-      modifications
-      inputs.nh.overlays.default
       inputs.nur.overlay
+      modifications
     ]);
   };
 }
