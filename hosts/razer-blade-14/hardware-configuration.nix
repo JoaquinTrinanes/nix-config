@@ -21,7 +21,9 @@
   boot.kernelModules = ["kvm-amd"];
   boot.supportedFilesystems = ["ntfs"];
   boot.extraModulePackages = [];
-  boot.kernelParams = ["acpi_backlight=native"];
+  boot.kernelParams = [
+    "acpi_backlight=native" # fixes brightness control
+  ];
 
   boot.initrd.luks.devices = {
     root = {
