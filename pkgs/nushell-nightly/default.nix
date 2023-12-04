@@ -9,7 +9,9 @@
   pkg-config,
   python3,
   xorg,
-  darwin,
+  Security,
+  Libsystem,
+  AppKit,
   nghttp2,
   libgit2,
   doCheck ? true,
@@ -25,8 +27,7 @@
     rev = "54398f9546ab3b7715e9f0fa6649e3510d44e626";
     hash = "sha256-rL5DpRX7FBzvIklji/ggEf0/qR3aH1BAE+XNKma4urg=";
   };
-  manifest = builtins.fromTOML (builtins.readFile "${src}/Cargo.toml");
-  inherit (manifest.package) version;
+  version = "nightly-${builtins.substring 0 7 src.rev}";
 in
   rustPlatform.buildRustPackage {
     pname = "nushell";
@@ -48,11 +49,11 @@ in
       [openssl zstd]
       ++ lib.optionals stdenv.isDarwin [
         zlib
-        darwin.apple_sdk.frameworks.Libsystem
-        darwin.apple_sdk.frameworks.Security
+        Libsystem
+        Security
       ]
       ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [xorg.libX11]
-      ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [darwin.apple_sdk.AppKit nghttp2 libgit2];
+      ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [AppKit nghttp2 libgit2];
 
     buildNoDefaultFeatures = !withDefaultFeatures;
     buildFeatures = additionalFeatures [];
