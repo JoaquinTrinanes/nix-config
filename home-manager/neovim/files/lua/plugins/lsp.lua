@@ -14,7 +14,17 @@ local M = {
       inlay_hints = {
         enabled = true,
       },
+      --- @type lspconfig.options
       servers = {
+        lua_ls = {
+          settings = {
+            Lua = {
+              diagnostics = {
+                disable = { "incomplete-signature-doc", "trailing-space", "missing-fields" },
+              },
+            },
+          },
+        },
         nushell = {},
         rust_analyzer = {
           settings = {
@@ -26,15 +36,15 @@ local M = {
               },
             },
           },
-          keys = {
-            {
-              "<leader>cE",
-              function()
-                require("rust-tools").expand_macro.expand_macro()
-              end,
-              desc = "Expand Macro (Rust)",
-            },
-          },
+          -- keys = {
+          --   {
+          --     "<leader>cE",
+          --     function()
+          --       require("rust-tools").expand_macro.expand_macro()
+          --     end,
+          --     desc = "Expand Macro (Rust)",
+          --   },
+          -- },
         },
         tailwindcss = {
           settings = {
@@ -45,11 +55,12 @@ local M = {
                   classNamePropNameRegex
                     .. [[\s*[:=]\s*]]
                     .. quotedStringRegex,
-                  -- --classNames={...} prop
-                  -- classNamePropNameRegex
-                  --   .. [[\s*[:=]\s*]]
-                  --   .. quotedStringRegex
-                  --   .. [[\s*}]],
+                  -- classNames={...} prop
+                  classNamePropNameRegex
+                    .. [[\s*[:=]\s*]]
+                    .. quotedStringRegex
+                    -- {
+                    .. [[\s*}]],
                   -- classNames(...)
                   { [[class[nN]ames\(([^)]*)\)]], quotedStringRegex },
                 },
@@ -57,6 +68,7 @@ local M = {
             },
           },
         },
+        prismals = {},
         nil_ls = { mason = false },
         -- rnix = { mason = false },
       },
@@ -73,7 +85,63 @@ local M = {
       },
     },
   },
-  { "folke/noice.nvim", opts = { lsp = { hover = { silent = true } } } },
+  {
+    "mfussenegger/nvim-lint",
+    opts = {
+      linters_by_ft = {
+        sh = { "shellcheck" },
+        nix = { "statix" },
+      },
+      linters = {
+        shellcheck = {
+          condition = function(ctx)
+            return ctx.filename:find(".env$") == nil
+          end,
+        },
+      },
+    },
+  },
+  {
+    "williamboman/mason.nvim",
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, {
+        "prettier",
+        "stylua",
+        "shfmt",
+      })
+    end,
+  },
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      lsp_fallback = "always",
+      ---@type table<string, conform.FormatterUnit[]>
+      formatters_by_ft = {
+        toml = { "taplo" },
+        php = { "pint" },
+        nix = { { "alejandra", "nixfmt" } },
+        markdown = {
+          -- "injected",
+          "prettier",
+        },
+        -- ["_"] = {
+        --   "trim_whitespace",
+        -- },
+      },
+      ---@type table<string, conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig>
+      formatters = {
+        prettier = {
+          condition = function(ctx)
+            local eslint = require("lazyvim.util").lsp.get_clients({ name = "eslint", buf = ctx.buf })[1]
+            if eslint == nil then
+              return true
+            end
+            return not eslint.server_capabilities.documentFormattingProvider
+          end,
+        },
+      },
+    },
+  },
   {
     "williamboman/mason.nvim",
     opts = function(_, _opts)
@@ -87,21 +155,9 @@ local M = {
       })
     end,
   },
+  { "folke/noice.nvim", opts = { lsp = { hover = { silent = true } } } },
   {
     "LhKipp/nvim-nu",
-    dependencies = {
-      -- {
-      --   "zioroboco/nu-ls.nvim",
-      --   ft = { "nu" },
-      --   config = function()
-      --     local ok, nls = pcall(require, "null-ls")
-      --     if not ok then
-      --       return
-      --     end
-      --     nls.register(require("nu-ls"))
-      --   end,
-      -- },
-    },
     event = "BufRead",
     build = ":TSInstall nu",
     opts = {
@@ -111,6 +167,7 @@ local M = {
     config = true,
   },
   { "imsnif/kdl.vim", ft = { "kdl" } },
+  { "prisma/vim-prisma", ft = { "prisma" } },
 }
 
 return M
