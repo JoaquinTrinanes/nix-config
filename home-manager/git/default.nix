@@ -36,10 +36,6 @@
       help.autocorrect = 1;
       rebase.autosquash = true;
       status.showUntrackedFiles = "normal"; # "all";
-      # credential.helper = "cache --timeout=3600";
-      # credential.helper = "${
-      #   pkgs.git.override {withLibsecret = true;}
-      # }/bin/git-credential-libsecret";
       init.defaultBranch = "main";
       user = {
         inherit (user) email;
@@ -81,10 +77,6 @@
       "Network Trash Folder"
       "Temporary Items"
       ".apdisk"
-
-      # direnv files
-      ".envrc"
-      ".direnv"
     ];
   };
 }
