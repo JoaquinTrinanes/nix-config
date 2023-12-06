@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }: let
   myLib = import ../lib {inherit lib config;};
@@ -9,7 +10,7 @@ in {
   imports = [./direnv.nix ./theme.nix];
   programs.nushell = {
     enable = lib.mkDefault true;
-    package = pkgs.nushellFull;
+    package = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}.nushellFull;
     inherit (config.home) shellAliases;
     configFile.source = ./files/config.nu;
     envFile.source = ./files/env.nu;

@@ -24,6 +24,8 @@
 
     nh.url = "github:viperML/nh";
     nh.inputs.nixpkgs.follows = "nixpkgs";
+
+    nushell-nightly.url = "github:JoaquinTrinanes/nushell-nightly-flake";
   };
 
   outputs = inputs @ {
