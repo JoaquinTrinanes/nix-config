@@ -27,7 +27,8 @@
 
   nix.settings = {
     # Enable flakes and new 'nix' command
-    experimental-features = ["nix-command" "flakes" "repl-flake" "no-url-literals"];
+    experimental-features = ["nix-command" "flakes" "no-url-literals"];
+    trusted-users = ["joaquin"];
     # Deduplicate and optimize nix store
     auto-optimise-store = true;
     substituters = ["https://nix-community.cachix.org" "https://cache.nixos.org" "https://nushell-nightly.cachix.org"];

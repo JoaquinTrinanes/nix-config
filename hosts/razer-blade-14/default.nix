@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: {
   imports = [
@@ -12,6 +13,8 @@
     ../common/optional/nix-index.nix
     ./hardware-configuration.nix
   ];
+
+  nix.package = pkgs.nixVersions.unstable;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
