@@ -22,9 +22,6 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
 
-    nh.url = "github:viperML/nh";
-    nh.inputs.nixpkgs.follows = "nixpkgs";
-
     nushell-nightly.url = "github:JoaquinTrinanes/nushell-nightly-flake";
   };
 

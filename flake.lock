@@ -231,26 +231,6 @@
         "type": "github"
       }
     },
-    "nh": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1701522423,
-        "narHash": "sha256-V5TQ/1loQnegDjfLh61DxBWEQZivYEBq2kQpT0fn2cQ=",
-        "owner": "viperML",
-        "repo": "nh",
-        "rev": "375c6cf57de3a839b7937358659bea526da27eae",
-        "type": "github"
-      },
-      "original": {
-        "owner": "viperML",
-        "repo": "nh",
-        "type": "github"
-      }
-    },
     "nix-colors": {
       "inputs": {
         "base16-schemes": "base16-schemes",
@@ -377,7 +357,6 @@
         "hardware": "hardware",
         "home-manager": "home-manager",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
-        "nh": "nh",
         "nix-colors": "nix-colors",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
