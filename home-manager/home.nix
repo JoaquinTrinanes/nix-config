@@ -49,7 +49,7 @@ in {
       };
     packages = with pkgs; let
       nixosRebuildWrapper = writeShellScriptBin "nx" ''
-        nixos-rebuild --flake "${config.my.currentPath}" $@
+        nixos-rebuild --flake "${config.currentPath.source}" $@
       '';
     in [
       enpass
@@ -110,7 +110,7 @@ in {
       pn = "pnpm";
     }
     // lib.optionalAttrs config.programs.home-manager.enable {
-      hm = ''home-manager --flake "${config.my.currentPath}"'';
+      hm = ''home-manager --flake "${config.currentPath.source}"'';
       hms = "hm switch";
     }
     // lib.optionalAttrs config.programs.bat.enable {"cat" = "bat -p";};

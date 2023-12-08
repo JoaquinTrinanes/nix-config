@@ -4,11 +4,13 @@
   pkgs,
   ...
 }: let
-  cfg = config.my;
+  cfg = config.currentPath;
+  inherit (lib) mkOption types mkEnableOption mkIf;
 in {
-  options.my = with lib; {
-    currentPath = mkOption {
-      type = types.nullOr types.str;
+  options.currentPath = {
+    enable = mkEnableOption "current path";
+    source = mkOption {
+      type = types.str;
       default = "${config.home.homeDirectory}/Documents/nix-config";
     };
     dotfilesUrl = mkOption {
@@ -17,12 +19,11 @@ in {
     };
   };
 
-  config = {
-    home.sessionVariables = {FLAKE = cfg.currentPath;};
-    home.activation = {
-      downloadRepo = lib.hm.dag.entryBefore ["writeBoundary"] (lib.optionalString (cfg.currentPath != null && cfg.dotfilesUrl != null) ''
-        if [ ! -e ${cfg.currentPath} ]; then
-          $DRY_RUN_CMD ${pkgs.git}/bin/git clone $VERBOSE_ARG ${cfg.dotfilesUrl} ${cfg.currentPath}
+  config = mkIf cfg.enable {
+    home.activation = mkIf (cfg.dotfilesUrl != null) {
+      downloadRepo = lib.hm.dag.entryBefore ["writeBoundary"] (lib.optionalString (cfg.source != null && cfg.dotfilesUrl != null) ''
+        if [ ! -e ${cfg.source} ]; then
+          $DRY_RUN_CMD ${pkgs.git}/bin/git clone $VERBOSE_ARG ${cfg.dotfilesUrl} ${cfg.source}
         fi
       '');
     };
