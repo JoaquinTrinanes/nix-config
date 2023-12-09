@@ -33,6 +33,7 @@
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} (let
+      inherit (nixpkgs) lib;
       mkUser = {
         name,
         email,
@@ -65,6 +66,11 @@
           config.allowUnfree = true;
         };
       };
+      pkgsForSystem = system:
+        import nixpkgs ({
+            inherit system;
+          }
+          // commonNixpkgsConfig.nixpkgs);
     in {
       debug = true;
       systems = ["x86_64-linux"];
@@ -76,10 +82,7 @@
       }: {
         packages = import ./pkgs pkgs;
         formatter = pkgs.alejandra;
-        _module.args.pkgs = import nixpkgs ({
-            inherit system;
-          }
-          // commonNixpkgsConfig);
+        _module.args.pkgs = pkgsForSystem system;
       };
 
       imports = [
@@ -98,7 +101,7 @@
         # NixOS configuration entrypoint
         # Available through 'nixos-rebuild --flake .#your-hostname'
         nixosConfigurations = {
-          razer-blade-14 = nixpkgs.lib.nixosSystem {
+          razer-blade-14 = lib.nixosSystem {
             specialArgs = {
               inherit inputs self;
             };
@@ -110,7 +113,7 @@
               ./hosts/common/global
             ];
           };
-          media-box = nixpkgs.lib.nixosSystem {
+          media-box = lib.nixosSystem {
             specialArgs = {
               inherit inputs self;
             };
@@ -126,21 +129,31 @@
         # Standalone home-manager configuration entrypoint
         # Available through 'home-manager --flake .#your-username@your-hostname'
         homeConfigurations = let
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
           user = users.joaquin;
-        in {
-          "joaquin" = home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            extraSpecialArgs = {
-              inherit inputs user self;
-              osConfig = null;
+          mkHomeConfig = path: {
+            pkgs,
+            osConfig ? null,
+          }:
+            home-manager.lib.homeManagerConfiguration {
+              inherit pkgs;
+              extraSpecialArgs = {
+                inherit inputs user self osConfig;
+              };
+              modules = [path];
             };
-            modules = [
-              commonNixpkgsConfig
-              ./home-manager/home.nix
-            ];
-          };
-        };
+        in
+          # Create user@hostname for all hosts, plus a standalone user with osConfig set to null
+          lib.mergeAttrs {
+            ${user.name} = mkHomeConfig ./home-manager/home.nix {pkgs = pkgsForSystem "x86_64-linux";};
+          }
+          (lib.mapAttrs' (
+              host: hostConfig:
+                lib.nameValuePair "${user.name}@${host}" (mkHomeConfig ./home-manager/home.nix {
+                  inherit (hostConfig) pkgs;
+                  osConfig = hostConfig.config;
+                })
+            )
+            self.nixosConfigurations);
       };
     });
 }

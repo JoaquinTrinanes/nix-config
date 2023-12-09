@@ -8,9 +8,9 @@
   self,
   ...
 }: let
-  # safe access osConfig, as it's not set when using standalone home-manager
-  hasGui = osConfig.services.xserver.enable or true;
-  hasGnome = osConfig.services.xserver.desktopManager.gnome.enable or true;
+  # safe access osConfig, as it's not set when using hostless home-manager
+  hasGui = osConfig.services.xserver.enable or false;
+  hasGnome = osConfig.services.xserver.desktopManager.gnome.enable or false;
 in {
   _module.args.myLib = import ./lib {inherit lib config;};
   imports =
