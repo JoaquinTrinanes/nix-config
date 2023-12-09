@@ -18,7 +18,7 @@ layout_laravel() {
 		# pnpm
 	)
 	for script in "${scripts[@]}"; do
-		echo "\"$base_dir/vendor/bin/sail\" \"$script\" \$@" >"$bin_dir/$script"
+		echo "\"$base_dir/vendor/bin/sail\" \"$script\" \"\$@\"" >"$bin_dir/$script"
 	done
 
 	chmod -R u+x $bin_dir

@@ -5,7 +5,7 @@
   inputs,
   ...
 }: {
-  environment.binsh = lib.mkDefault "${pkgs.dash}/bin/dash";
+  environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
   system.stateVersion = "23.11";
 
   # This will add each flake input as a registry

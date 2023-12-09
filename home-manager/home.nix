@@ -50,16 +50,16 @@ in {
       };
     packages = with pkgs; let
       nixosRebuildWrapper = writeShellScriptBin "nx" ''
-        nixos-rebuild --flake "${config.currentPath.source}" $@
+        nixos-rebuild --flake "${config.currentPath.source}" "$@"
       '';
     in [
       enpass
       nixosRebuildWrapper
       (writeShellScriptBin "nxs" ''
-        ${nixosRebuildWrapper}/bin/nx switch
+        ${lib.getExe nixosRebuildWrapper} switch
       '')
       (writeShellScriptBin "nr" ''
-        nix run nixpkgs#$@
+        nix run nixpkgs#"$@"
       '')
     ];
   };

@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }: {
   programs.direnv.enableNushellIntegration = lib.mkForce false;
@@ -10,7 +11,7 @@
     $env.config = ($env.config | update hooks.env_change ($env.config.hooks.env_change? | default [] PWD))
     $env.config = ($env.config | upsert hooks.pre_prompt ($env.config.hooks.pre_prompt? | default [] | append {||
 
-    let direnv = (${pkgs.direnv}/bin/direnv export json | from json | default {})
+    let direnv = (${lib.getExe config.programs.direnv.package} export json | from json | default {})
     if ($direnv | is-empty) {
         return
     }
