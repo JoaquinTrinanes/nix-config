@@ -81,7 +81,9 @@
         ...
       }: {
         packages = import ./pkgs pkgs;
-        formatter = pkgs.alejandra;
+        formatter = pkgs.writeShellScriptBin "alejandra" ''
+          exec ${lib.getExe pkgs.alejandra} --quiet "$@"
+        '';
         _module.args.pkgs = pkgsForSystem system;
       };
 
