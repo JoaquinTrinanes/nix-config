@@ -8,7 +8,7 @@
   inherit (lib) mkOption types mkEnableOption mkIf;
 in {
   options.currentPath = {
-    enable = mkEnableOption "current path";
+    enable = (mkEnableOption "current path") // {default = true;};
     source = mkOption {
       type = types.str;
       default = "${config.home.homeDirectory}/Documents/nix-config";
