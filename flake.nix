@@ -98,6 +98,8 @@
         # These are usually stuff you would upstream into home-manager
         homeManagerModules = import ./modules/home-manager;
 
+        flakeModules = import ./modules/flake;
+
         # NixOS configuration entrypoint
         # Available through 'nixos-rebuild --flake .#your-hostname'
         nixosConfigurations = {
