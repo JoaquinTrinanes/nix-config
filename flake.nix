@@ -2,7 +2,7 @@
   description = "Your new nix config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -33,7 +33,34 @@
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} (let
-      commonConfig = {
+      inherit (nixpkgs) lib;
+      mkUser = {
+        name,
+        email,
+        firstName ? name,
+        lastName ? null,
+        fullName ? (lib.concatStrings (lib.intersperse " " (lib.filter (x: x != null) [firstName lastName]))),
+      }: {
+        inherit name email firstName lastName fullName;
+      };
+      mkNixosHomeManagerModule = user: home: {myLib, ...}: {
+        imports = [inputs.home-manager.nixosModules.home-manager];
+        home-manager = {
+          users."${user.name}" = home;
+          useUserPackages = true;
+          useGlobalPkgs = true;
+          extraSpecialArgs = {inherit user inputs self;};
+        };
+      };
+      users = {
+        joaquin = mkUser {
+          name = "joaquin";
+          email = "hi@joaquint.io";
+          firstName = "Joaquín";
+          lastName = "Triñanes";
+        };
+      };
+      commonNixpkgsConfig = {
         nixpkgs = {
           overlays = [self.overlays.default];
           config.allowUnfree = true;
@@ -53,7 +80,7 @@
         _module.args.pkgs = import nixpkgs ({
             inherit system;
           }
-          // commonConfig);
+          // commonNixpkgsConfig);
       };
 
       imports = [
@@ -77,7 +104,8 @@
               inherit inputs self;
             };
             modules = [
-              commonConfig
+              (mkNixosHomeManagerModule users.joaquin ./home-manager/home.nix)
+              commonNixpkgsConfig
               {networking.hostName = "razer-blade-14";}
               ./hosts/razer-blade-14
               ./hosts/common/global
@@ -88,7 +116,7 @@
               inherit inputs self;
             };
             modules = [
-              commonConfig
+              commonNixpkgsConfig
               {networking.hostName = "media-box";}
               ./hosts/media-server
               ./hosts/common/global
@@ -100,22 +128,16 @@
         # Available through 'home-manager --flake .#your-username@your-hostname'
         homeConfigurations = let
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          myLib = import ./lib {inherit (pkgs) lib;};
-          user = myLib.mkUser {
-            name = "joaquin";
-            email = "hi@joaquint.io";
-            firstName = "Joaquín";
-            lastName = "Triñanes";
-          };
+          user = users.joaquin;
         in {
           "joaquin" = home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
             extraSpecialArgs = {
               inherit inputs user self;
-              osConfig = {};
+              osConfig = null;
             };
             modules = [
-              commonConfig
+              commonNixpkgsConfig
               ./home-manager/home.nix
             ];
           };

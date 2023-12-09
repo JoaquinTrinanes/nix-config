@@ -3,9 +3,9 @@
   config,
   pkgs,
   self,
+  myLib,
   ...
 }: let
-  myLib = import ../lib {inherit lib config pkgs;};
   package = self.inputs.neovim-nightly-overlay.defaultPackage.${pkgs.stdenv.hostPlatform.system};
   inherit (myLib) mkImpureLink;
 in {

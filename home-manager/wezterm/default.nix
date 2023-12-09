@@ -2,10 +2,9 @@
   config,
   lib,
   pkgs,
+  myLib,
   ...
-}: let
-  myLib = import ../lib {inherit lib config pkgs;};
-in {
+}: {
   programs.wezterm = {
     enable = true;
     extraConfig = builtins.readFile ./files/wezterm.lua;

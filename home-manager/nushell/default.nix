@@ -3,10 +3,9 @@
   pkgs,
   lib,
   inputs,
+  myLib,
   ...
-}: let
-  myLib = import ../lib {inherit lib config;};
-in {
+}: {
   imports = [./direnv.nix ./theme.nix];
   programs.nushell = {
     enable = lib.mkDefault true;

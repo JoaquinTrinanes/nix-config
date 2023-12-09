@@ -12,6 +12,7 @@
   hasGui = osConfig.services.xserver.enable or true;
   hasGnome = osConfig.services.xserver.desktopManager.gnome.enable or true;
 in {
+  _module.args.myLib = import ./lib {inherit lib config;};
   imports =
     [
       ./git
