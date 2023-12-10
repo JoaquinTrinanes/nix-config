@@ -12,7 +12,9 @@
     ./hardware-configuration.nix
   ];
 
-  nix.package = pkgs.nixVersions.unstable;
+  # use older nix while HM issue #4692 isn't fixed
+  nix.package = pkgs.nixVersions.nix_2_18;
+  # nix.package = pkgs.nixVersions.unstable;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
