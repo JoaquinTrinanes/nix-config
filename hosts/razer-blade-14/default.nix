@@ -48,7 +48,7 @@
 
   virtualisation.docker = {
     enable = true;
-    logDriver = "none";
+    logDriver = "local";
     # rootless.enable = true;
   };
 
