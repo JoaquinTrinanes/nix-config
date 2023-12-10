@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   config,
   ...
 }: {
@@ -10,23 +9,21 @@
     $env.config = ($env.config | update hooks ($env.config.hooks | default {} env_change))
     $env.config = ($env.config | update hooks.env_change ($env.config.hooks.env_change? | default [] PWD))
     $env.config = ($env.config | upsert hooks.pre_prompt ($env.config.hooks.pre_prompt? | default [] | append {||
+        let direnv = (${lib.getExe config.programs.direnv.package} export json | from json | default {})
+        if ($direnv | is-empty) {
+            return
+        }
 
-    let direnv = (${lib.getExe config.programs.direnv.package} export json | from json | default {})
-    if ($direnv | is-empty) {
-        return
-    }
-
-    $direnv
+        $direnv
         | items {|key, value|
-        {
+            {
                 key: $key
                 value: (if $key in $env.ENV_CONVERSIONS {
                     do ($env.ENV_CONVERSIONS | get $key | get from_string) $value
-                    } else {
-                        $value
-                    }
-        )
-        }
+                } else {
+                    $value
+                })
+            }
         } | transpose -ird | load-env
     }))
   '';
