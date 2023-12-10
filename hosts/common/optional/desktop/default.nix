@@ -10,7 +10,6 @@
     firefox
     discord
     qbittorrent
-    pinentry-gtk2
     telegram-desktop
     vlc
   ];

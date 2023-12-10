@@ -134,30 +134,16 @@
         # Available through 'home-manager --flake .#your-username@your-hostname'
         homeConfigurations = let
           user = users.joaquin;
-          mkHomeConfig = path: {
-            pkgs,
-            osConfig ? null,
-          }:
-            home-manager.lib.homeManagerConfiguration {
-              inherit pkgs;
-              extraSpecialArgs = {
-                inherit inputs user self osConfig;
-              };
-              modules = [path];
+          defaultConfig = {
+            pkgs = pkgsForSystem "x86_64-linux";
+            extraSpecialArgs = {
+              inherit inputs user self;
             };
-        in
-          # Create user@hostname for all hosts, plus a standalone user with osConfig set to null
-          lib.mergeAttrs {
-            ${user.name} = mkHomeConfig ./home-manager/home.nix {pkgs = pkgsForSystem "x86_64-linux";};
-          }
-          (lib.mapAttrs' (
-              host: hostConfig:
-                lib.nameValuePair "${user.name}@${host}" (mkHomeConfig ./home-manager/home.nix {
-                  inherit (hostConfig) pkgs;
-                  osConfig = hostConfig.config;
-                })
-            )
-            self.nixosConfigurations);
+            modules = [./home-manager/home.nix];
+          };
+        in {
+          ${user.name} = home-manager.lib.homeManagerConfiguration defaultConfig;
+        };
       };
     });
 }

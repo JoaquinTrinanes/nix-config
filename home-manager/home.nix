@@ -2,44 +2,33 @@
   config,
   pkgs,
   lib,
-  osConfig,
   user,
   inputs,
   self,
   ...
-}: let
-  # safe access osConfig, as it's not set when using hostless home-manager
-  hasGui = osConfig.services.xserver.enable or false;
-  hasGnome = osConfig.services.xserver.desktopManager.gnome.enable or false;
-in {
+}: {
   _module.args.myLib = import ./lib {inherit lib config;};
-  imports =
-    [
-      ./git
-      ./neovim
-      ./nushell
-      ./dconf
-      ./direnv
-      ./wireplumber
-      self.homeManagerModules.currentPath
-      inputs.nix-colors.homeManagerModules.default
-    ]
-    ++ (lib.optionals hasGui [
-      ./wezterm
-      ./firefox
-    ]);
+  imports = [
+    ./git
+    ./neovim
+    ./nushell
+    ./dconf
+    ./direnv
+    ./wireplumber
+    ./wezterm
+    ./firefox
+    self.homeManagerModules.currentPath
+    inputs.nix-colors.homeManagerModules.default
+  ];
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
   home = {
     username = user.name;
     homeDirectory =
-      osConfig.users.users.${user.name}.home
-      or (
-        if pkgs.stdenv.isLinux
-        then "/home/${config.home.username}"
-        else "/Users/${config.home.username}"
-      );
+      if pkgs.stdenv.isLinux
+      then "/home/${config.home.username}"
+      else "/Users/${config.home.username}";
     sessionVariables =
       {
         NIXPKGS_ALLOW_UNFREE = 1;
@@ -137,10 +126,7 @@ in {
     enable = true;
     enableSshSupport = true;
     sshKeys = ["0405AAB779EE75EB11E9B4F148AC62E32DB2CD11"];
-    pinentryFlavor =
-      if hasGnome
-      then "gnome3"
-      else "gtk2";
+    pinentryFlavor = "gnome3";
   };
   # Disable gnome-keyring ssh-agent
   xdg.configFile."autostart/gnome-keyring-ssh.desktop".text = ''
@@ -163,7 +149,7 @@ in {
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
-  home.pointerCursor = lib.mkIf hasGui rec {
+  home.pointerCursor = rec {
     gtk.enable = true;
     x11 = {
       enable = true;

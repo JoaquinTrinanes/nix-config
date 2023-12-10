@@ -6,7 +6,6 @@
 }: {
   imports = [
     ../common/optional/desktop
-    ../common/optional/home-manager.nix
     ../common/optional/development
     ../common/optional/gaming
     ../common/optional/nix-index.nix
