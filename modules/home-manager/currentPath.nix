@@ -23,7 +23,7 @@ in {
   config = mkIf cfg.enable {
     xdg.configFile."home-manager/flake.nix".source = myLib.mkImpureLink ../../flake.nix;
     home.activation = mkIf (cfg.dotfilesUrl != null) {
-      downloadRepo = lib.hm.dag.entryBefore ["writeBoundary"] (lib.optionalString (cfg.source != null && cfg.dotfilesUrl != null) ''
+      downloadRepo = lib.hm.dag.entryAfter ["writeBoundary"] (lib.optionalString (cfg.source != null && cfg.dotfilesUrl != null) ''
         if [ ! -e ${cfg.source} ]; then
           $DRY_RUN_CMD ${lib.getExe pkgs.git} clone $VERBOSE_ARG ${cfg.dotfilesUrl} ${cfg.source}
         fi

@@ -21,6 +21,10 @@
     inputs.nix-colors.homeManagerModules.default
   ];
 
+  systemd.user.tmpfiles.rules = [
+    "L+ %h/.config/home-manager/flake.nix - - - - ${config.currentPath.source}/flake.nix"
+  ];
+
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
   home = {
@@ -38,8 +42,9 @@
         MANROFFOPT = "-c";
       };
     packages = with pkgs; let
+      # this has to be a wrapper and not an alias to be able to call if with sudo
       nixosRebuildWrapper = writeShellScriptBin "nx" ''
-        nixos-rebuild --flake "${config.currentPath.source}" "$@"
+        nixos-rebuild "$@"
       '';
     in [
       enpass

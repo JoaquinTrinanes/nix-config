@@ -16,6 +16,10 @@
   nix.package = pkgs.nixVersions.nix_2_18;
   # nix.package = pkgs.nixVersions.unstable;
 
+  systemd.tmpfiles.rules = [
+    "L+ /etc/nixos/flake.nix - - - - ${config.users.users."joaquin".home}/Documents/nix-config/flake.nix"
+  ];
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
