@@ -14,7 +14,7 @@
     ../common/optional/hardware-acceleration/amdgpu.nix
   ];
   boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 10;
+  boot.loader.systemd-boot.configurationLimit = 1;
   boot.loader.timeout = 0;
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usbhid" "usb_storage"];
   boot.initrd.kernelModules = ["dm-snapshot"];
@@ -34,18 +34,6 @@
   };
 
   boot.loader.efi.efiSysMountPoint = "/efi";
-
-  # XBOOTLDR support
-  fileSystems = {
-    "/efi/EFI/Linux" = {
-      device = "/boot/EFI/Linux";
-      options = ["bind"];
-    };
-    "/efi/EFI/nixos" = {
-      device = "/boot/EFI/nixos";
-      options = ["bind"];
-    };
-  };
 
   fileSystems."/efi" = {
     device = "/dev/nvme0n1p1";
