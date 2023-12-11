@@ -21,10 +21,6 @@
     inputs.nix-colors.homeManagerModules.default
   ];
 
-  systemd.user.tmpfiles.rules = [
-    "L+ %h/.config/home-manager/flake.nix - - - - ${config.currentPath.source}/flake.nix"
-  ];
-
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
   home = {

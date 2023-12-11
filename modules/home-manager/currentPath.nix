@@ -21,6 +21,9 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.user.tmpfiles.rules = [
+      "L+ %h/.config/home-manager/flake.nix - - - - ${config.currentPath.source}/flake.nix"
+    ];
     xdg.configFile."home-manager/flake.nix".source = myLib.mkImpureLink ../../flake.nix;
     home.activation = mkIf (cfg.dotfilesUrl != null) {
       downloadRepo = lib.hm.dag.entryAfter ["writeBoundary"] (lib.optionalString (cfg.source != null && cfg.dotfilesUrl != null) ''
