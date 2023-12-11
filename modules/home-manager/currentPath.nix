@@ -2,6 +2,7 @@
   lib,
   config,
   pkgs,
+  myLib,
   ...
 }: let
   cfg = config.currentPath;
@@ -20,6 +21,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    xdg.configFile."home-manager/flake.nix".source = myLib.mkImpureLink ../../flake.nix;
     home.activation = mkIf (cfg.dotfilesUrl != null) {
       downloadRepo = lib.hm.dag.entryBefore ["writeBoundary"] (lib.optionalString (cfg.source != null && cfg.dotfilesUrl != null) ''
         if [ ! -e ${cfg.source} ]; then

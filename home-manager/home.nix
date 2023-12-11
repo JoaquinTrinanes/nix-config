@@ -100,8 +100,8 @@
       pn = "pnpm";
     }
     // lib.optionalAttrs config.programs.home-manager.enable {
-      hm = ''home-manager --flake "${config.currentPath.source}"'';
-      hms = "hm switch";
+      hm = "home-manager";
+      hms = "home-manager switch";
     }
     // lib.optionalAttrs config.programs.bat.enable {"cat" = "bat -p";};
 
