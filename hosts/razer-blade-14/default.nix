@@ -16,6 +16,8 @@
   nix.package = pkgs.nixVersions.nix_2_18;
   # nix.package = pkgs.nixVersions.unstable;
 
+  boot.tmp.cleanOnBoot = true;
+
   systemd.tmpfiles.rules = [
     "L+ /etc/nixos/flake.nix - - - - ${config.users.users."joaquin".home}/Documents/nix-config/flake.nix"
   ];
