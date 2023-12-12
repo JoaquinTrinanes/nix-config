@@ -6,7 +6,11 @@
   myLib,
   ...
 }: {
-  imports = [./direnv.nix ./theme.nix];
+  imports = [
+    ./direnv.nix
+    ./theme.nix
+    ./nix-your-shell.nix
+  ];
   programs.nushell = {
     enable = lib.mkDefault true;
     package = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}.nushellFull;
