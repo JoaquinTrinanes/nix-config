@@ -1,57 +1,60 @@
-{lib, ...}: let
+{
+  lib,
+  self,
+  inputs,
+  config,
+  ...
+}: let
   inherit (lib) mkOption types;
+  inherit (config) hosts users;
+  cfg = config.nix;
+  commonModules = [
+    {
+      nix.settings = {
+        trusted-public-keys = ["nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" "nushell-nightly.cachix.org-1:nLwXJzwwVmQ+fLKD6aH6rWDoTC73ry1ahMX9lU87nrc="];
+        substituters = ["https://nix-community.cachix.org" "https://nushell-nightly.cachix.org"];
+        experimental-features = ["nix-command" "flakes" "no-url-literals" "repl-flake"];
+        trusted-users = ["@wheel"];
+      };
+    }
+  ];
 in {
   _file = ./nix.nix;
 
-  options.nix = mkOption {
-    type = types.submodule ({config, ...}: {
-      options = {
-        experimental-features = mkOption {
-          type = types.listOf types.str;
-          default = ["nix-command" "flakes" "no-url-literals" "repl-flake"];
-        };
-        trusted-users = mkOption {
-          type = types.listOf types.str;
-          default = ["@wheel"];
-        };
-        auto-optimise-store = mkOption {
-          type = types.bool;
-          default = true;
-        };
-        binaryCaches = mkOption {
-          type = types.listOf (types.submodule (_: {
-            options = {
-              url = mkOption {type = types.str;};
-              publicKey = mkOption {type = types.str;};
-            };
-          }));
-          default = [
-            {
-              url = "https://nix-community.cachix.org";
-              publicKey = "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=";
-            }
-            {
-              url = "https://nushell-nightly.cachix.org";
-              publicKey = "nushell-nightly.cachix.org-1:nLwXJzwwVmQ+fLKD6aH6rWDoTC73ry1ahMX9lU87nrc=";
-            }
-          ];
-        };
-        keep-outputs = mkOption {
-          type = types.bool;
-          default = true;
-        };
-        substituters = mkOption {
-          type = types.listOf types.str;
-        };
-        trusted-public-keys = mkOption {
-          type = types.listOf types.str;
-        };
+  options.nix = {
+    specialArgs = mkOption {
+      type = types.submodule {
+        freeformType = types.anything;
       };
-      config = {
-        substituters = builtins.map (value: value.url) config.binaryCaches;
-        trusted-public-keys = builtins.map (value: value.publicKey) config.binaryCaches;
-      };
-    });
-    default = {};
+    };
+    stateVersion = mkOption {type = types.str;};
+  };
+
+  config = {
+    nix.stateVersion = "23.11";
+    homeManager = {
+      sharedModules =
+        commonModules
+        ++ [
+          {
+            home.stateVersion = cfg.stateVersion;
+          }
+        ];
+      standaloneModules = [({pkgs, ...}: {nix.package = pkgs.nixVersions.nix_2_18;})];
+    };
+    nixos.sharedModules =
+      commonModules
+      ++ [
+        ({pkgs, ...}: {
+          # use older nix while HM issue #4692 isn't fixed
+          # nix.package = pkgs.nixVersions.unstable;
+          nix.package = pkgs.nixVersions.nix_2_18;
+
+          system.stateVersion = cfg.stateVersion;
+        })
+      ];
+    nix = {
+      specialArgs = {inherit self inputs hosts users;};
+    };
   };
 }

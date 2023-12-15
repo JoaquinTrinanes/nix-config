@@ -1,22 +1,24 @@
 {
-  self,
   inputs,
   lib,
   config,
   ...
 }: let
   cfg = config.hosts;
-  users = config.users;
-  nixpkgs = config.nixpkgs;
+  inherit (config) users nixpkgs nix nixos;
   configs = builtins.mapAttrs (_: host: host.finalSystem) cfg;
   inherit (lib) types mkOption mkIf;
-  isHmEnabledForHost = user: hostName: user.homeManager.hosts.${hostName} == true;
+  isHmEnabledForHost = user: hostName: user.homeManager.enable; # && user.homeManager.hostOverrides.${hostName};
 in {
   _file = ./systems.nix;
 
   options = {
+    nixos.sharedModules = mkOption {
+      type = types.listOf types.deferredModule;
+      default = [];
+    };
     hosts = mkOption {
-      type = types.lazyAttrsOf (types.submodule ({
+      type = types.attrsOf (types.submodule ({
         name,
         config,
         ...
@@ -31,7 +33,7 @@ in {
             default = [];
           };
           system = mkOption {
-            type = types.enum inputs.nixpkgs.lib.systems.flakeExposed;
+            type = types.enum config.nixpkgs.lib.systems.flakeExposed;
           };
 
           finalModules = mkOption {
@@ -43,45 +45,45 @@ in {
             type = types.unspecified;
             readOnly = true;
           };
-
-          # finalPkgs = mkOption {
-          #   type = types.unspecified;
-          #   readOnly = true;
-          # };
         };
 
         config = {
           finalModules =
-            [
+            nixos.sharedModules
+            ++ [
               {inherit nixpkgs;}
               {nixpkgs.hostPlatform = config.system;}
-              {system.stateVersion = "23.11";}
               {networking.hostName = name;}
               ../hosts/common/global
             ]
             ++ config.modules
             ++ lib.mapAttrsToList (username: user: let
               isEnabled = isHmEnabledForHost user name;
+              # hostConfig = user.homeManager.hosts.${name};
             in
               mkIf isEnabled {
-                imports = lib.singleton (
+                imports = [
                   inputs.home-manager.nixosModules.home-manager
-                );
+                ];
                 home-manager = {
-                  users."${user.name}" = user.homeManager.path;
+                  users."${user.name}" = {
+                    imports =
+                      user.homeManager.finalModules
+                      # ++ (lib.optionals (lib.isList hostConfig) hostConfig)
+                      ++ [
+                        {home.stateVersion = nix.stateVersion;}
+                      ];
+                  };
                   useUserPackages = true;
                   useGlobalPkgs = true;
-                  extraSpecialArgs = {inherit user inputs self;};
+                  extraSpecialArgs = {inherit user;} // nix.specialArgs;
                 };
               })
             users;
 
           finalSystem = config.nixpkgs.lib.nixosSystem {
             modules = config.finalModules;
-            specialArgs = {
-              inherit inputs self users;
-              hosts = cfg;
-            };
+            specialArgs = nix.specialArgs;
           };
         };
       }));

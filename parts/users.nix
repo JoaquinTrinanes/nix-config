@@ -1,24 +1,13 @@
 {
-  self,
   lib,
   config,
   inputs,
   ...
 }: let
   pkgs = import inputs.nixpkgs ({system = "x86_64-linux";} // config.nixpkgs);
-  inherit (lib) types mkOption mkIf mapAttrs mkEnableOption;
+  inherit (lib) types mkOption mkEnableOption;
   cfg = config.users;
-  homeConfigurations = mapAttrs (_: user:
-    mkIf user.homeManager.enable
-    inputs.home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      modules = [user.homeManager.path];
-      extraSpecialArgs = {
-        inherit inputs user self;
-      };
-    })
-  cfg;
-  inherit (config) hosts;
+  inherit (config) nix homeManager;
 in {
   _file = ./users.nix;
 
@@ -50,34 +39,65 @@ in {
             default = builtins.concatStringsSep " " (builtins.filter (x: x != null) [config.firstName config.lastName]);
           };
           homeManager = mkOption {
-            type = types.submodule ({config, ...}: {
+            type = types.submodule ({
+              name,
+              config,
+              ...
+            }: {
               options = {
-                enable = mkEnableOption "home manager for this user";
-                path = mkOption {
-                  type = types.nullOr types.path;
-                  default = null;
+                enable = mkEnableOption "home manager for the ${name} user";
+                modules = mkOption {
+                  type = types.listOf types.deferredModule;
+                  default = [];
                 };
-                hosts = mkOption {
-                  default = {};
-                  type = types.submodule ({...}: {
-                    options = builtins.mapAttrs (hostName: hostConfig:
-                      mkOption {
-                        default = config.enable;
-                        type = types.oneOf [types.bool (types.listOf types.deferredModule)];
-                      })
-                    hosts;
-                  });
+                finalModules = mkOption {
+                  type = types.listOf types.deferredModule;
+                  readOnly = true;
                 };
+
+                # hostOverrides = lib.mapAttrs (username: user:
+                #   mkOption {
+                #     type = types.submodule ({
+                #       name,
+                #       config,
+                #       ...
+                #     }: {
+                #       options = {};
+                #     });
+                #   })
+                # cfg;
+              };
+              config = {
+                finalModules =
+                  homeManager.sharedModules
+                  ++ config.modules;
               };
             });
-            default = {enabled = false;};
+            # default = {enable = false;};
           };
         };
       }));
     };
+    homeManager = {
+      sharedModules = mkOption {
+        type = types.listOf types.deferredModule;
+        default = [];
+      };
+      standaloneModules = mkOption {
+        type = types.listOf types.deferredModule;
+        default = [];
+      };
+    };
   };
 
-  config.flake = {
-    inherit homeConfigurations;
-  };
+  config.flake.homeConfigurations = lib.mapAttrs (_: user: let
+    userHmConfig = user.homeManager;
+  in
+    inputs.home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = nix.specialArgs // {inherit user;};
+      modules =
+        userHmConfig.finalModules ++ homeManager.standaloneModules;
+    })
+  cfg;
 }

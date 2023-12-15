@@ -6,7 +6,6 @@
   ...
 }: {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
-  system.stateVersion = "23.11";
 
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
@@ -24,20 +23,6 @@
       value.source = value.flake;
     })
     config.nix.registry;
-
-  nix.settings = {
-    # Enable flakes and new 'nix' command
-    experimental-features = ["nix-command" "flakes" "no-url-literals"];
-    trusted-users = ["joaquin"];
-    # Deduplicate and optimize nix store
-    auto-optimise-store = true;
-    substituters = ["https://nix-community.cachix.org" "https://cache.nixos.org" "https://nushell-nightly.cachix.org"];
-    trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "nushell-nightly.cachix.org-1:nLwXJzwwVmQ+fLKD6aH6rWDoTC73ry1ahMX9lU87nrc="
-    ];
-    keep-outputs = true;
-  };
 
   time.timeZone = lib.mkDefault "Europe/Madrid";
 
