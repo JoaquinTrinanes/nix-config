@@ -2,4 +2,5 @@
 # You can build them using 'nix build .#example'
 pkgs: {
   # example: pkgs.callPackage ./example {};
+  autofirma = pkgs.callPackage ./autofirma {};
 }

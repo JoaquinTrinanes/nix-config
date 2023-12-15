@@ -12,6 +12,7 @@
     qbittorrent
     telegram-desktop
     vlc
+    autofirma
   ];
   programs.dconf.enable = true;
   programs.firefox = {
