@@ -34,43 +34,6 @@
   }:
     flake-parts.lib.mkFlake {inherit inputs;} (let
       inherit (nixpkgs) lib;
-      mkUser = {
-        name,
-        email,
-        firstName ? name,
-        lastName ? null,
-        fullName ? builtins.concatStringsSep " " (builtins.filter (x: x != null) [firstName lastName]),
-      }: {
-        inherit name email firstName lastName fullName;
-      };
-      mkNixosHomeManagerModule = user: home: {myLib, ...}: {
-        imports = [inputs.home-manager.nixosModules.home-manager];
-        home-manager = {
-          users."${user.name}" = home;
-          useUserPackages = true;
-          useGlobalPkgs = true;
-          extraSpecialArgs = {inherit user inputs self;};
-        };
-      };
-      users = {
-        joaquin = mkUser {
-          name = "joaquin";
-          email = "hi@joaquint.io";
-          firstName = "Joaquín";
-          lastName = "Triñanes";
-        };
-      };
-      commonNixpkgsConfig = {
-        nixpkgs = {
-          overlays = [self.overlays.default];
-          config.allowUnfree = true;
-        };
-      };
-      pkgsForSystem = system:
-        import nixpkgs ({
-            inherit system;
-          }
-          // commonNixpkgsConfig.nixpkgs);
     in {
       debug = true;
       systems = ["x86_64-linux"];
@@ -84,11 +47,13 @@
         formatter = pkgs.writeShellScriptBin "alejandra" ''
           exec ${lib.getExe pkgs.alejandra} --quiet "$@"
         '';
-        _module.args.pkgs = pkgsForSystem system;
       };
 
       imports = [
+        ./parts
         ./overlays
+        ./hosts/flake-module.nix
+        ./home-manager/flake-module.nix
       ];
 
       flake = {
@@ -100,50 +65,7 @@
         # These are usually stuff you would upstream into home-manager
         homeManagerModules = import ./modules/home-manager;
 
-        flakeModules = import ./modules/flake;
-
-        # NixOS configuration entrypoint
-        # Available through 'nixos-rebuild --flake .#your-hostname'
-        nixosConfigurations = {
-          razer-blade-14 = lib.nixosSystem {
-            specialArgs = {
-              inherit inputs self;
-            };
-            modules = [
-              (mkNixosHomeManagerModule users.joaquin ./home-manager/home.nix)
-              commonNixpkgsConfig
-              {networking.hostName = "razer-blade-14";}
-              ./hosts/razer-blade-14
-              ./hosts/common/global
-            ];
-          };
-          media-box = lib.nixosSystem {
-            specialArgs = {
-              inherit inputs self;
-            };
-            modules = [
-              commonNixpkgsConfig
-              {networking.hostName = "media-box";}
-              ./hosts/media-server
-              ./hosts/common/global
-            ];
-          };
-        };
-
-        # Standalone home-manager configuration entrypoint
-        # Available through 'home-manager --flake .#your-username@your-hostname'
-        homeConfigurations = let
-          user = users.joaquin;
-          defaultConfig = {
-            pkgs = pkgsForSystem "x86_64-linux";
-            extraSpecialArgs = {
-              inherit inputs user self;
-            };
-            modules = [./home-manager/home.nix];
-          };
-        in {
-          ${user.name} = home-manager.lib.homeManagerConfiguration defaultConfig;
-        };
+        # flakeModules = import ./modules/flake;
       };
     });
 }

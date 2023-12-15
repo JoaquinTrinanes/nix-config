@@ -1,7 +1,5 @@
 {
   inputs,
-  lib,
-  config,
   withSystem,
   ...
 }: {
@@ -51,11 +49,5 @@
         )
         inputs;
     };
-
-    default = lib.composeManyExtensions (with config.flake.overlays; [
-      additions
-      inputs.nur.overlay
-      modifications
-    ]);
   };
 }
