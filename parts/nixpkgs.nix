@@ -20,14 +20,21 @@ in {
         default = true;
       };
     };
+    finalConfig = mkOption {
+      type = types.attrs;
+      readOnly = true;
+    };
   };
 
   config = {
-    nixos.sharedModules = [{nixpkgs = cfg;}];
-    homeManager.standaloneModules = [{nixpkgs = cfg;}];
+    nixos.sharedModules = [{nixpkgs = cfg.finalConfig;}];
+    homeManager.standaloneModules = [{nixpkgs = cfg.finalConfig;}];
 
     perSystem = {system, ...}: {
-      _module.args.pkgs = import inputs.nixpkgs ({inherit system;} // cfg);
+      _module.args.pkgs = import inputs.nixpkgs {
+        inherit system;
+        inherit (cfg) overlays config;
+      };
     };
   };
 }
