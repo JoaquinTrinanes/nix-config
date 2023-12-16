@@ -4,7 +4,7 @@
   inputs,
   ...
 }: let
-  pkgs = import inputs.nixpkgs ({system = "x86_64-linux";} // config.nixpkgs);
+  pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
   inherit (lib) types mkOption mkEnableOption;
   cfg = config.users;
   inherit (config) nix homeManager;

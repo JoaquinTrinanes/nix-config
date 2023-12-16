@@ -52,8 +52,6 @@
       imports = [
         ./parts
         ./overlays
-        ./hosts/flake-module.nix
-        ./home-manager/flake-module.nix
       ];
 
       flake = {

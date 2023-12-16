@@ -1,11 +1,5 @@
-{
-  config,
-  lib,
-  ...
-}: let
-  hosts = lib.genAttrs (builtins.attrNames (config.hosts)) (host: host);
-in {
-  _file = ./flake-module.nix;
+_: {
+  _file = ./homeConfigurations.nix;
   users = {
     "joaquin" = {
       email = "hi@joaquint.io";
@@ -14,7 +8,7 @@ in {
       homeManager = {
         enable = true;
         modules = [
-          ./home.nix
+          ../home-manager/home.nix
         ];
         # hosts = {
         #   ${hosts.razer-blade-14} = [

@@ -5,7 +5,7 @@
   ...
 }: let
   cfg = config.hosts;
-  inherit (config) users nixpkgs nix nixos;
+  inherit (config) users nix nixos;
   configs = builtins.mapAttrs (_: host: host.finalSystem) cfg;
   inherit (lib) types mkOption mkIf;
   isHmEnabledForHost = user: hostName: user.homeManager.enable; # && user.homeManager.hostOverrides.${hostName};
@@ -51,7 +51,6 @@ in {
           finalModules =
             nixos.sharedModules
             ++ [
-              {inherit nixpkgs;}
               {nixpkgs.hostPlatform = config.system;}
               {networking.hostName = name;}
               ../hosts/common/global
@@ -70,9 +69,7 @@ in {
                     imports =
                       user.homeManager.finalModules
                       # ++ (lib.optionals (lib.isList hostConfig) hostConfig)
-                      ++ [
-                        {home.stateVersion = nix.stateVersion;}
-                      ];
+                      ;
                   };
                   useUserPackages = true;
                   useGlobalPkgs = true;

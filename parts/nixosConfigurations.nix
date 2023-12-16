@@ -1,15 +1,15 @@
 _: {
-  _file = ./flake-module.nix;
+  _file = ./nixosConfigurations.nix;
   hosts = {
     "razer-blade-14" = {
       system = "x86_64-linux";
       modules = [
-        ./razer-blade-14/default.nix
+        ../hosts/razer-blade-14/default.nix
       ];
     };
     "media-box" = {
       system = "x86_64-linux";
-      modules = [./media-server/default.nix];
+      modules = [../hosts/media-server/default.nix];
     };
   };
 }

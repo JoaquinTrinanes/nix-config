@@ -31,7 +31,11 @@ in {
     };
   };
 
-  config.perSystem = {system, ...}: {
-    _module.args.pkgs = import inputs.nixpkgs (cfg // {inherit system;});
+  config = {
+    nixos.sharedModules = [{nixpkgs = cfg;}];
+    homeManager.standaloneModules = [{nixpkgs = cfg;}];
+    perSystem = {system, ...}: {
+      _module.args.pkgs = import inputs.nixpkgs (cfg // {inherit system;});
+    };
   };
 }
