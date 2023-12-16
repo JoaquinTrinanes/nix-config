@@ -1,5 +1,4 @@
 {
-  self,
   config,
   lib,
   inputs,
@@ -18,7 +17,7 @@ in {
     };
     enabledOverlays = mkOption {
       type = types.functionTo (types.listOf types.unspecified);
-      default = o: [];
+      default = _: [];
     };
   };
 

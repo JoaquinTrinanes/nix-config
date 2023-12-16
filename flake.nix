@@ -1,6 +1,4 @@
 {
-  description = "Your new nix config";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";
 

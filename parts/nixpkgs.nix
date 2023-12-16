@@ -27,6 +27,7 @@ in {
   };
 
   config = {
+    nixpkgs.finalConfig = {inherit (cfg) overlays config;};
     nixos.sharedModules = [{nixpkgs = cfg.finalConfig;}];
     homeManager.standaloneModules = [{nixpkgs = cfg.finalConfig;}];
 
