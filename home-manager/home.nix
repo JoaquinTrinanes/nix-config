@@ -29,24 +29,26 @@
       if pkgs.stdenv.isLinux
       then "/home/${config.home.username}"
       else "/Users/${config.home.username}";
-    sessionVariables =
+    sessionVariables = lib.mkMerge [
       {
         NIXPKGS_ALLOW_UNFREE = 1;
       }
-      // lib.optionalAttrs config.programs.bat.enable {
+      (lib.mkIf config.programs.bat.enable {
         MANPAGER = "sh -c 'col -bx | bat -l man -p'";
         MANROFFOPT = "-c";
-      };
+      })
+    ];
+
     packages = with pkgs; let
       # this has to be a wrapper and not an alias to be able to call if with sudo
       nixosRebuildWrapper = writeShellScriptBin "nx" ''
-        nixos-rebuild "$@"
+        ${lib.getExe pkgs.nixos-rebuild} "$@"
       '';
     in [
       enpass
       nixosRebuildWrapper
       (writeShellScriptBin "nxs" ''
-        ${lib.getExe nixosRebuildWrapper} switch
+        ${lib.getExe nixosRebuildWrapper} switch "$@"
       '')
       (writeShellScriptBin "nr" ''
         nix run nixpkgs#"$@"
@@ -58,7 +60,12 @@
 
   programs.bash.enable = true;
 
-  programs.rtx.enable = true;
+  programs.rtx = {
+    enable = true;
+    enableBashIntegration = false;
+    enableZshIntegration = false;
+    enableFishIntegration = false;
+  };
 
   programs.zoxide = {
     enable = true;
@@ -71,10 +78,10 @@
     enable = true;
     settings = {
       add_newline = true;
-      continuation_prompt = "[:::](bright-black) ";
+      continuation_prompt = "::: ";
       character = {
-        success_symbol = "[➜](bold green)";
-        error_symbol = "[➜](bold blue)";
+        success_symbol = "[➜](bold fg:green)";
+        error_symbol = "[➜](bold fg:blue)";
       };
       aws.disabled = true;
       directory.truncation_length = 5;

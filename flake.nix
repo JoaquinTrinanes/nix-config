@@ -25,45 +25,14 @@
     nushell-nightly.url = "github:JoaquinTrinanes/nushell-nightly-flake";
   };
 
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    home-manager,
-    flake-parts,
-    ...
-  }:
-    flake-parts.lib.mkFlake {inherit inputs;} (let
-      inherit (nixpkgs) lib;
-    in {
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;}
+    {
       debug = true;
       systems = ["x86_64-linux"];
 
-      perSystem = {
-        pkgs,
-        system,
-        ...
-      }: {
-        packages = import ./pkgs pkgs;
-        formatter = pkgs.writeShellScriptBin "alejandra" ''
-          exec ${lib.getExe pkgs.alejandra} --quiet "$@"
-        '';
-      };
-
       imports = [
         ./parts
-        ./overlays
       ];
-
-      flake = {
-        # Reusable nixos modules you might want to export
-        # These are usually stuff you would upstream into nixpkgs
-        nixosModules = import ./modules/nixos;
-
-        # Reusable home-manager modules you might want to export
-        # These are usually stuff you would upstream into home-manager
-        homeManagerModules = import ./modules/home-manager;
-
-        # flakeModules = import ./modules/flake;
-      };
-    });
+    };
 }

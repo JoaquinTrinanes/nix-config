@@ -1,5 +1,4 @@
 {
-  self,
   lib,
   inputs,
   config,
@@ -13,15 +12,7 @@ in {
   options.nixpkgs = {
     overlays = mkOption {
       type = types.listOf types.unspecified;
-      default =
-        (builtins.attrValues {
-          inherit
-            (self.overlays)
-            additions
-            modifications
-            ;
-        })
-        ++ [inputs.nur.overlay];
+      default = [];
     };
     config = {
       allowUnfree = mkOption {
@@ -34,8 +25,9 @@ in {
   config = {
     nixos.sharedModules = [{nixpkgs = cfg;}];
     homeManager.standaloneModules = [{nixpkgs = cfg;}];
+
     perSystem = {system, ...}: {
-      _module.args.pkgs = import inputs.nixpkgs (cfg // {inherit system;});
+      _module.args.pkgs = import inputs.nixpkgs ({inherit system;} // cfg);
     };
   };
 }

@@ -5,7 +5,10 @@
     ./nix.nix
     ./nixpkgs.nix
 
-    ./systems.nix
+    ./misc.nix
+    ./overlays.nix
+
+    ./nixos.nix
     ./users.nix
 
     ./nixosConfigurations.nix

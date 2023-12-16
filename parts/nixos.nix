@@ -10,7 +10,7 @@
   inherit (lib) types mkOption mkIf;
   isHmEnabledForHost = user: hostName: user.homeManager.enable; # && user.homeManager.hostOverrides.${hostName};
 in {
-  _file = ./systems.nix;
+  _file = ./nixos.nix;
 
   options = {
     nixos.sharedModules = mkOption {

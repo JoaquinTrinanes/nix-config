@@ -3,10 +3,12 @@
   withSystem,
   ...
 }: {
-  flake.overlays = {
+  _file = ./default.nix;
+
+  config.overlays = {
     # This one brings our custom packages from the 'pkgs' directory
     # additions = final: prev: config.flake.packages.${final.system} or {};
-    additions = final: prev: withSystem prev.stdenv.hostPlatform.system ({config, ...}: config.packages);
+    additions = final: prev: withSystem prev.stdenv.hostPlatform.system ({self', ...}: self'.packages);
 
     # This one contains whatever you want to overlay
     # You can change versions, add patches, set compilation flags, anything really.
