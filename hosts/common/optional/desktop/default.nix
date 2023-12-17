@@ -1,6 +1,7 @@
 {
   pkgs,
   self,
+  lib,
   ...
 }: {
   imports = [
@@ -9,6 +10,8 @@
     ../fonts.nix
     ../printing.nix
   ];
+
+  time.timeZone = lib.mkDefault "Europe/Madrid";
 
   environment.systemPackages = builtins.attrValues {
     inherit

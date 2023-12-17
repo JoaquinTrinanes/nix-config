@@ -1,25 +1,29 @@
-{config, ...}: let
-  inherit (config.colorScheme) colors;
+{
+  config,
+  lib,
+  ...
+}: let
+  colors = lib.mapAttrs (_: color: "#${color}") config.colorScheme.colors;
 in {
   programs.nushell.extraConfig = with colors; ''
     export-env {
         let colors = {
-            base00: "#${base00}" # Default Background
-            base01: "#${base01}" # Lighter Background (Used for status bars, line number and folding marks)
-            base02: "#${base02}" # Selection Background
-            base03: "#${base03}" # Comments, Invisibles, Line Highlighting
-            base04: "#${base04}" # Dark Foreground (Used for status bars)
-            base05: "#${base05}" # Default Foreground, Caret, Delimiters, Operators
-            base06: "#${base06}" # Light Foreground (Not often used)
-            base07: "#${base07}" # Light Background (Not often used)
-            base08: "#${base08}" # Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-            base09: "#${base09}" # Integers, Boolean, Constants, XML Attributes, Markup Link Url
-            base0a: "#${base0A}" # Classes, Markup Bold, Search Text Background
-            base0b: "#${base0B}" # Strings, Inherited Class, Markup Code, Diff Inserted
-            base0c: "#${base0C}" # Support, Regular Expressions, Escape Characters, Markup Quotes
-            base0d: "#${base0D}" # Functions, Methods, Attribute IDs, Headings
-            base0e: "#${base0E}" # Keywords, Storage, Selector, Markup Italic, Diff Changed
-            base0f: "#${base0F}" # Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
+            base00: "${base00}" # Default Background
+            base01: "${base01}" # Lighter Background (Used for status bars, line number and folding marks)
+            base02: "${base02}" # Selection Background
+            base03: "${base03}" # Comments, Invisibles, Line Highlighting
+            base04: "${base04}" # Dark Foreground (Used for status bars)
+            base05: "${base05}" # Default Foreground, Caret, Delimiters, Operators
+            base06: "${base06}" # Light Foreground (Not often used)
+            base07: "${base07}" # Light Background (Not often used)
+            base08: "${base08}" # Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
+            base09: "${base09}" # Integers, Boolean, Constants, XML Attributes, Markup Link Url
+            base0a: "${base0A}" # Classes, Markup Bold, Search Text Background
+            base0b: "${base0B}" # Strings, Inherited Class, Markup Code, Diff Inserted
+            base0c: "${base0C}" # Support, Regular Expressions, Escape Characters, Markup Quotes
+            base0d: "${base0D}" # Functions, Methods, Attribute IDs, Headings
+            base0e: "${base0E}" # Keywords, Storage, Selector, Markup Italic, Diff Changed
+            base0f: "${base0F}" # Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
         }
 
         def menu [] {

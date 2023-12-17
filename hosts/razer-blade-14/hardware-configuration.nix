@@ -24,6 +24,7 @@
   boot.kernelParams = [
     "acpi_backlight=native" # fixes brightness control
   ];
+  boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.luks.devices = {
     root = {

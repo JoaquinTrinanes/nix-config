@@ -8,7 +8,8 @@
     ../common/optional/desktop
     ../common/optional/development
     ../common/optional/gaming
-    ../common/optional/nix-index.nix
+    ../common/optional/nix-index
+    ../common/optional/garbage-collect
     ./hardware-configuration.nix
   ];
 
@@ -18,12 +19,13 @@
 
   boot.tmp.cleanOnBoot = true;
 
+  nix.settings.trusted-users = ["@wheel"];
+
   systemd.tmpfiles.rules = [
     "L+ /etc/nixos/flake.nix - - - - ${config.users.users."joaquin".home}/Documents/nix-config/flake.nix"
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   users.users = {
     "joaquin" = {
@@ -32,9 +34,7 @@
       # Be sure to change it (using passwd) after rebooting!
       # initialPassword = "correcthorsebatterystaple";
       isNormalUser = true;
-      openssh.authorizedKeys.keys = [
-        # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
-      ];
+      openssh.authorizedKeys.keys = [];
       extraGroups =
         ["wheel" "networkmanager"]
         ++ lib.optionals config.programs.adb.enable ["adbusers"]

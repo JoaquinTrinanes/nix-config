@@ -3,6 +3,7 @@
   publicPath = "${path}/Public";
   privatePath = "${path}/Private";
 in {
+  # TODO: move this to media server config
   systemd.tmpfiles.rules = [
     "d ${path} 0755 media - - -"
     "d ${publicPath} 1777 media - - -"

@@ -24,7 +24,7 @@
     })
     config.nix.registry;
 
-  time.timeZone = lib.mkDefault "Europe/Madrid";
+  time.timeZone = lib.mkOptionDefault "UTC";
 
   environment.systemPackages = with pkgs; [
     htop

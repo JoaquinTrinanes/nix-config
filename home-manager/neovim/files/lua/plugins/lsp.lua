@@ -70,6 +70,7 @@ local M = {
         },
         prismals = {},
         nil_ls = { mason = false },
+        -- nixd = { mason = false },
         -- rnix = { mason = false },
       },
       setup = {
@@ -124,14 +125,14 @@ local M = {
           -- "injected",
           "prettier",
         },
-        -- ["_"] = {
-        --   "trim_whitespace",
-        -- },
+        ["_"] = {
+          "trim_whitespace",
+        },
       },
       ---@type table<string, conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig>
       formatters = {
         prettier = {
-          condition = function(ctx)
+          condition = function(self, ctx)
             local eslint = require("lazyvim.util").lsp.get_clients({ name = "eslint", buf = ctx.buf })[1]
             if eslint == nil then
               return true

@@ -7,6 +7,7 @@
 
     ./misc.nix
     ./overlays.nix
+    ./substituters.nix
 
     ./nixos.nix
     ./users.nix
