@@ -130,11 +130,13 @@ config.font = wezterm.font_with_fallback({
 	{ family = "FiraCode Nerd Font", harfbuzz_features = { "ss05" } },
 	"DejaVu Sans Mono",
 	{ family = "JoyPixels", assume_emoji_presentation = true },
-	{ family = "Symbols Nerd Font Mono", assume_emoji_presentation = true },
 	"Noto Sans Mono CJK HK",
 	"Noto Sans Mono CJK JP",
 	"Noto Sans Mono CJK SC",
 	"Noto Sans Mono CJK TC",
+	{ family = "Symbols Nerd Font Mono", assume_emoji_presentation = true },
+	"unscii",
+	"unscii:style=16-full",
 })
 
 -- test
