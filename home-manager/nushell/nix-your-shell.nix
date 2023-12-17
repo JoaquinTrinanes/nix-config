@@ -8,7 +8,7 @@
 in {
   programs.nushell.extraEnv = ''
     mkdir ${builtins.dirOf path}
-    ${lib.getExe pkgs.nix-your-shell} "nu" | save -f ${path}
+    ${lib.getExe pkgs.nix-your-shell} "nu" | str replace 'run-external' 'run-external --redirect-combine' --all | save -f ${path}
   '';
   programs.nushell.extraConfig = ''
     source ${path}

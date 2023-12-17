@@ -13,10 +13,6 @@
     ./hardware-configuration.nix
   ];
 
-  # use older nix while HM issue #4692 isn't fixed
-  nix.package = pkgs.nixVersions.nix_2_18;
-  # nix.package = pkgs.nixVersions.unstable;
-
   boot.tmp.cleanOnBoot = true;
 
   nix.settings.trusted-users = ["@wheel"];
