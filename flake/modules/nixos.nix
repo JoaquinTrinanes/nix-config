@@ -53,7 +53,7 @@ in {
             ++ [
               {nixpkgs.hostPlatform = config.system;}
               {networking.hostName = name;}
-              ../hosts/common/global
+              ../../hosts/common/global
             ]
             ++ config.modules
             ++ lib.mapAttrsToList (username: user: let

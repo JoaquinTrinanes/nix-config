@@ -1,5 +1,5 @@
 _: {
-  _file = ./homeConfigurations.nix;
+  _file = ./home.nix;
   users = {
     "joaquin" = {
       email = "hi@joaquint.io";
@@ -8,7 +8,7 @@ _: {
       homeManager = {
         enable = true;
         modules = [
-          ../home-manager/home.nix
+          ../../home
         ];
         # hosts = {
         #   ${hosts.razer-blade-14} = [

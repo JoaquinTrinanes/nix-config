@@ -10,6 +10,10 @@ in {
   _file = ./nixpkgs.nix;
 
   options.nixpkgs = {
+    # allowedUnfree = mkOption {
+    #   type = types.listOf types.str;
+    #   default = [];
+    # };
     overlays = mkOption {
       type = types.listOf types.unspecified;
       default = [];
@@ -27,7 +31,14 @@ in {
   };
 
   config = {
-    nixpkgs.finalConfig = {inherit (cfg) overlays config;};
+    nixpkgs.finalConfig = {
+      inherit (cfg) overlays config;
+      # config =
+      #   cfg.config
+      #   // {
+      #     allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) (cfg.allowedUnfree);
+      # };
+    };
     nixos.sharedModules = [{nixpkgs = cfg.finalConfig;}];
     homeManager.standaloneModules = [{nixpkgs = cfg.finalConfig;}];
 

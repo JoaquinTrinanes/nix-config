@@ -30,7 +30,7 @@
       systems = ["x86_64-linux"];
 
       imports = [
-        ./parts
+        ./flake
       ];
     };
 }

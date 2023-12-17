@@ -8,7 +8,7 @@
 in {
   _file = ./overlays.nix;
 
-  imports = [../overlays];
+  imports = [../../overlays];
 
   options = {
     overlays = mkOption {
