@@ -8,8 +8,6 @@
 in {
   _file = ./overlays.nix;
 
-  imports = [../../overlays];
-
   options = {
     overlays = mkOption {
       type = types.attrsOf types.unspecified;

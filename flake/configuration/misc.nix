@@ -1,4 +1,8 @@
-_: {
+{
+  self,
+  inputs,
+  ...
+}: {
   _file = ./misc.nix;
 
   config.perSystem = {
@@ -12,6 +16,8 @@ _: {
 
     packages = import ../../pkgs pkgs;
   };
+
+  config.overlays = import ../../overlays {inherit self inputs;};
 
   config.flake = {
     # Reusable nixos modules you might want to export
