@@ -115,7 +115,9 @@ local M = {
   {
     "stevearc/conform.nvim",
     opts = {
-      lsp_fallback = "always",
+      format = {
+        lsp_fallback = "always",
+      },
       ---@type table<string, conform.FormatterUnit[]>
       formatters_by_ft = {
         toml = { "taplo" },
