@@ -7,7 +7,7 @@ _: {
         ../../hosts/razer-blade-14/default.nix
       ];
     };
-    "media-box" = {
+    "media-server" = {
       system = "x86_64-linux";
       modules = [../../hosts/media-server/default.nix];
     };
