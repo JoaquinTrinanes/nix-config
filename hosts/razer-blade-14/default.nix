@@ -10,6 +10,7 @@
     ../common/optional/gaming
     ../common/optional/nix-index
     ../common/optional/garbage-collect
+    ../common/optional/tailscale
     ./hardware-configuration.nix
   ];
 

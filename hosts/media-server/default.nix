@@ -13,6 +13,7 @@ in {
     ../common/optional/ssh/server.nix
     ../common/optional/jellyfin
     ../common/optional/samba
+    ../common/optional/tailscale
   ];
 
   virtualisation.oci-containers.containers = {
