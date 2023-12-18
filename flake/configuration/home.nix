@@ -10,13 +10,11 @@ _: {
         modules = [
           ../../home
         ];
-        # hosts = {
-        #   ${hosts.razer-blade-14} = [
-        #     ({pkgs, ...}: {
-        #       home.packages = builtins.attrValues {inherit (pkgs) autofirma;};
-        #     })
-        #   ];
-        # };
+        hostOverrides = {
+          razer-blade-14 = osConfig: {
+            # programs.neovim.enable = osConfig.programs.firefox.enable;
+          };
+        };
       };
     };
   };

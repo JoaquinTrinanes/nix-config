@@ -7,7 +7,7 @@
   pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
   inherit (lib) types mkOption mkEnableOption;
   cfg = config.users;
-  inherit (config) nix homeManager;
+  inherit (config) nix homeManager hosts;
 in {
   _file = ./users.nix;
 
@@ -55,17 +55,12 @@ in {
                   readOnly = true;
                 };
 
-                # hostOverrides = lib.mapAttrs (username: user:
-                #   mkOption {
-                #     type = types.submodule ({
-                #       name,
-                #       config,
-                #       ...
-                #     }: {
-                #       options = {};
-                #     });
-                #   })
-                # cfg;
+                hostOverrides = lib.mapAttrs (host: override:
+                  mkOption {
+                    type = types.nullOr (types.functionTo types.deferredModule);
+                    default = null;
+                  })
+                hosts;
               };
               config = {
                 finalModules =
@@ -73,12 +68,12 @@ in {
                   ++ config.modules;
               };
             });
-            # default = {enable = false;};
           };
         };
       }));
     };
     homeManager = {
+      finalConfigurations = mkOption {readOnly = true;};
       sharedModules = mkOption {
         type = types.listOf types.deferredModule;
         default = [];
@@ -90,14 +85,35 @@ in {
     };
   };
 
-  config.flake.homeConfigurations = lib.mapAttrs (_: user: let
-    userHmConfig = user.homeManager;
-  in
-    inputs.home-manager.lib.homeManagerConfiguration {
+  config.homeManager.finalConfigurations = let
+    mkUserConfig = user: {
       inherit pkgs;
       extraSpecialArgs = nix.specialArgs // {inherit user;};
       modules =
-        userHmConfig.finalModules ++ homeManager.standaloneModules;
-    })
-  cfg;
+        user.homeManager.finalModules ++ homeManager.standaloneModules;
+    };
+    userConfigs =
+      lib.mapAttrs (_: user: (mkUserConfig user))
+      cfg;
+    userHostConfigs = user:
+      lib.mapAttrs' (
+        host: config: let
+          module = user.homeManager.hostOverrides.${host};
+        in
+          lib.nameValuePair "${user.name}@${host}"
+          (userConfigs.${user.name}
+            // {
+              modules =
+                userConfigs.${user.name}.modules
+                ++ [(module hosts.${host}.finalSystem.config)];
+            })
+      )
+      (lib.filterAttrs (_: v: v != null) user.homeManager.hostOverrides);
+    userConfigWithHosts = user: ((userHostConfigs user) // {${user.name} = userConfigs.${user.name};});
+    allUsersConfigs = lib.attrsets.mergeAttrsList (builtins.map userConfigWithHosts (lib.attrValues cfg));
+  in
+    lib.mapAttrs (_: userConfig: (inputs.home-manager.lib.homeManagerConfiguration userConfig))
+    allUsersConfigs;
+
+  config.flake.homeConfigurations = homeManager.finalConfigurations;
 }
