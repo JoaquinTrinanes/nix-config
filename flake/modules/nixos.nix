@@ -8,7 +8,7 @@
   inherit (config) users nix nixos;
   configs = builtins.mapAttrs (_: host: host.finalSystem) cfg;
   inherit (lib) types mkOption mkIf;
-  isHmEnabledForHost = user: hostName: user.homeManager.enable; # && user.homeManager.hostOverrides.${hostName} != null;
+  isHmEnabledForUserAndHost = user: hostName: user.homeManager.enable; # && user.homeManager.hostOverrides.${hostName} != null;
 in {
   _file = ./nixos.nix;
 
@@ -57,8 +57,11 @@ in {
             ]
             ++ config.modules
             ++ lib.mapAttrsToList (username: user: let
-              isEnabled = isHmEnabledForHost user name;
+              isEnabled = isHmEnabledForUserAndHost user name;
             in
+              # TODO: disable HM nixos module? Build time goes from 18sec to 11sec on avg
+              # It basically gains what it takes to run hm switch on it's own tho
+              # TODO: also add host overrides here
               mkIf isEnabled {
                 imports = [
                   inputs.home-manager.nixosModules.home-manager

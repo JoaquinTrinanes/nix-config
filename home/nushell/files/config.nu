@@ -16,7 +16,6 @@ let carapace_completer = {|spans: list<string>|
         }
     }
 
-
     carapace $spans.0 nushell $spans
     | from json
     | default []
