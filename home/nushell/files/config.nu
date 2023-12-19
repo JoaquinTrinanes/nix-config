@@ -381,16 +381,3 @@ $env.config = {
     ]
 }
 
-# const SCRIPTS_DIR = ($nu.default-config-dir | path join scripts)
-
-# export use ($SCRIPTS_DIR | path join aliases) *
-# export use ($SCRIPTS_DIR | path join completions) *
-# export use ($SCRIPTS_DIR | path join nix.nu) *
-
-# use theme.nu
-
-# use ($nu.default-config-dir | path join scripts) *
-
-# overlay use ($nu.default-config-dir | path join scripts aliases)
-# overlay use ($nu.default-config-dir | path join scripts completions)
-

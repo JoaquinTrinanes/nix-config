@@ -32,9 +32,6 @@ $env.NU_PLUGIN_DIRS = [
     # ($nu.config-path | path dirname | path join 'plugins')
 ]
 
-# def 'path home' [path?: string= ""] {
-#     $nu.home-path | path join $path
-# }
 
 export-env {
     load-env {
@@ -42,44 +39,3 @@ export-env {
         PROMPT_INDICATOR_VI_INSERT: ""
     }
 }
-
-
-# export-env {
-#     def-env add_to_path [path: string] {
-#         load-env {
-#             PATH: ($env.PATH | split row (char esep) | prepend $path | str join (char esep))
-#         }
-#     }
-#     let nupm_path = $env.XDG_DATA_HOME | path join nu nupm
-#     if not ($nupm_path | path exists) {
-#         ^git clone --depth=1 https://github.com/nushell/nupm.git $nupm_path
-#     }
-#     add_to_path ($nupm_path | path join plugins bin)
-#     load-env {
-#         NU_LIB_DIRS: ($env.NU_LIB_DIRS? | default [] | append $nupm_path)
-#         NUPM_HOME: $nupm_path
-#     }
-# }
-
-# export-env {
-#     def get_cache [name: string] {
-#         let cache = ($env.XDG_CACHE_HOME | path join $name)
-#         mkdir $cache
-#         $cache
-#     }
-#     let cache_dir = (get_cache "nu")
-#
-#     # starship
-#     starship init nu | save -f ($cache_dir | path join "starship.nu")
-#
-#     # zoxide
-#     zoxide init nushell --cmd j | save -f ($cache_dir | path join "zoxide.nu")
-#
-#     # atuin
-#     atuin init nu --disable-up-arrow | save -f ($cache_dir | path join "atuin.nu")
-#
-#     load-env {
-#         NU_LIB_DIRS: ($env.NU_LIB_DIRS? | default [] | append $cache_dir)
-#     }
-# }
-
