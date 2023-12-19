@@ -45,8 +45,5 @@
       };
     };
   };
-  xdg.configFile."wezterm/wezterm.lua" = {
-    source = myLib.mkImpureLink ./files/wezterm.lua;
-    recursive = true;
-  };
+  xdg.configFile."wezterm/wezterm.lua".source = myLib.mkImpureLink ./files/wezterm.lua;
 }

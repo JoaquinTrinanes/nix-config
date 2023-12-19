@@ -1,4 +1,4 @@
-_: {
+{
   _file = ./nixosConfigurations.nix;
   hosts = {
     "razer-blade-14" = {

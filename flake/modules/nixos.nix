@@ -8,7 +8,7 @@
   inherit (config) users nix nixos;
   configs = builtins.mapAttrs (_: host: host.finalSystem) cfg;
   inherit (lib) types mkOption mkIf;
-  isHmEnabledForUserAndHost = user: hostName: user.homeManager.enable; # && user.homeManager.hostOverrides.${hostName} != null;
+  isHmEnabledForUserAndHost = user: hostName: user.homeManager.enable && user.homeManager.hosts.${hostName};
 in {
   _file = ./nixos.nix;
 
@@ -69,7 +69,7 @@ in {
                 home-manager = {
                   users."${user.name}" = {
                     imports =
-                      user.homeManager.finalModules;
+                      user.homeManager.finalModules ++ lib.optional (user.homeManager.hostOverrides.${name} != null) (user.homeManager.hostOverrides.${name});
                   };
                   useUserPackages = true;
                   useGlobalPkgs = true;

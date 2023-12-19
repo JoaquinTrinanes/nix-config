@@ -4,7 +4,6 @@
   lib,
   user,
   inputs,
-  self,
   ...
 }: {
   _module.args.myLib = import ./lib {inherit lib config;};
@@ -17,7 +16,6 @@
     ./wireplumber
     ./wezterm
     ./firefox
-    self.homeManagerModules.currentPath
     inputs.nix-colors.homeManagerModules.default
   ];
 

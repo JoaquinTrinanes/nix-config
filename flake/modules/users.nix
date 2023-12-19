@@ -26,6 +26,7 @@ in {
           };
           email = mkOption {
             type = types.nullOr types.str;
+            default = null;
           };
           firstName = mkOption {
             type = types.nullOr types.str;
@@ -33,17 +34,15 @@ in {
           };
           lastName = mkOption {
             type = types.nullOr types.str;
+            default = null;
           };
           fullName = mkOption {
             type = types.str;
             default = builtins.concatStringsSep " " (builtins.filter (x: x != null) [config.firstName config.lastName]);
           };
           homeManager = mkOption {
-            type = types.submodule ({
-              name,
-              config,
-              ...
-            }: {
+            default = {};
+            type = types.submodule ({config, ...}: {
               options = {
                 enable = mkEnableOption "home manager for the ${name} user";
                 modules = mkOption {
@@ -55,10 +54,16 @@ in {
                   readOnly = true;
                 };
 
-                hostOverrides = lib.mapAttrs (host: override:
+                hostOverrides = lib.mapAttrs (_: _:
                   mkOption {
                     type = types.nullOr (types.functionTo types.deferredModule);
                     default = null;
+                  })
+                hosts;
+                hosts = lib.mapAttrs (_: _:
+                  mkOption {
+                    type = types.bool;
+                    default = false;
                   })
                 hosts;
               };
@@ -86,6 +91,7 @@ in {
   };
 
   config.homeManager.finalConfigurations = let
+    users = lib.filterAttrs (_: user: user.homeManager.enable) cfg;
     mkUserConfig = user: {
       inherit pkgs;
       extraSpecialArgs = nix.specialArgs // {inherit user;};
@@ -94,7 +100,7 @@ in {
     };
     userConfigs =
       lib.mapAttrs (_: user: (mkUserConfig user))
-      cfg;
+      users;
     userHostConfigs = user:
       lib.mapAttrs' (
         host: config: let
@@ -110,7 +116,7 @@ in {
       )
       (lib.filterAttrs (_: v: v != null) user.homeManager.hostOverrides);
     userConfigWithHosts = user: ((userHostConfigs user) // {${user.name} = userConfigs.${user.name};});
-    allUsersConfigs = lib.attrsets.mergeAttrsList (builtins.map userConfigWithHosts (lib.attrValues cfg));
+    allUsersConfigs = lib.attrsets.mergeAttrsList (builtins.map userConfigWithHosts (lib.attrValues users));
   in
     lib.mapAttrs (_: userConfig: (inputs.home-manager.lib.homeManagerConfiguration userConfig))
     allUsersConfigs;

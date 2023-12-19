@@ -8,8 +8,8 @@
     strStoreDir = toString ../..;
     relativePath = lib.removePrefix "${strStoreDir}/" path;
   in
-    if (config.currentPath.enable)
-    then lib.removeSuffix "/" "${config.currentPath.source}/${relativePath}"
+    if (config.impurePath.enable)
+    then lib.removeSuffix "/" "${config.impurePath.flakePath}/${relativePath}"
     else relativePath;
   mkImpureLink = path:
     config.lib.file.mkOutOfStoreSymlink (absPath path);

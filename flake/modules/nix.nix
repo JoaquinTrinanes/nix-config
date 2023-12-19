@@ -26,8 +26,8 @@ in {
 
   config = {
     homeManager = {
-      sharedModules = cfg.globalModules ++ [{home.stateVersion = cfg.stateVersion;}];
-      standaloneModules = [({pkgs, ...}: {nix.package = pkgs.nixVersions.nix_2_18;})];
+      sharedModules = cfg.globalModules ++ [{home.stateVersion = lib.mkDefault cfg.stateVersion;}];
+      standaloneModules = [({pkgs, ...}: {nix.package = lib.mkDefault pkgs.nixVersions.nix_2_18;})];
     };
     nixos.sharedModules =
       cfg.globalModules
@@ -37,7 +37,7 @@ in {
           # nix.package = pkgs.nixVersions.unstable;
           nix.package = pkgs.nixVersions.nix_2_18;
 
-          system.stateVersion = cfg.stateVersion;
+          system.stateVersion = lib.mkDefault cfg.stateVersion;
         })
       ];
     nix = {

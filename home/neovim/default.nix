@@ -27,9 +27,7 @@ in {
   };
   xdg.configFile."nvim/neoconf.json".source = mkImpureLink ./files/neoconf.json;
   xdg.configFile."nvim/lazy-lock.json".source = mkImpureLink ./files/lazy-lock.json;
-  xdg.configFile."nvim/lazyvim.json" = {
-    source = mkImpureLink ./files/lazyvim.json;
-  };
+  xdg.configFile."nvim/lazyvim.json".source = mkImpureLink ./files/lazyvim.json;
   xdg.configFile."nvim/.neoconf.json".source = ./files/.neoconf.json;
   xdg.configFile."nvim/ftplugin" = {
     source = ./files/ftplugin;
