@@ -70,7 +70,10 @@
     options = ["--cmd=j"];
   };
 
-  programs.ripgrep.enable = true;
+  programs.ripgrep = {
+    enable = true;
+    arguments = ["--smart-case"];
+  };
 
   programs.starship = {
     enable = true;
