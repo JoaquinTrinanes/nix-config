@@ -77,7 +77,10 @@
 
   programs.ripgrep = {
     enable = true;
-    arguments = ["--smart-case"];
+    arguments = [
+      "--smart-case"
+      "--auto-hybrid-regex"
+    ];
   };
 
   programs.starship = {
