@@ -53,14 +53,14 @@ local M = {
                 classRegex = {
                   -- classNames="...", classNames: "..."
                   classNamePropNameRegex
-                    .. [[\s*[:=]\s*]]
-                    .. quotedStringRegex,
+                  .. [[\s*[:=]\s*]]
+                  .. quotedStringRegex,
                   -- classNames={...} prop
                   classNamePropNameRegex
-                    .. [[\s*[:=]\s*]]
-                    .. quotedStringRegex
-                    -- {
-                    .. [[\s*}]],
+                  .. [[\s*[:=]\s*]]
+                  .. quotedStringRegex
+                  -- {
+                  .. [[\s*}]],
                   -- classNames(...)
                   { [[class[nN]ames\(([^)]*)\)]], quotedStringRegex },
                 },
@@ -158,7 +158,7 @@ local M = {
       })
     end,
   },
-  { "folke/noice.nvim", opts = { lsp = { hover = { silent = true } } } },
+  { "folke/noice.nvim",  opts = { lsp = { hover = { silent = true } } } },
   {
     "LhKipp/nvim-nu",
     event = "BufRead",
@@ -169,7 +169,7 @@ local M = {
     },
     config = true,
   },
-  { "imsnif/kdl.vim", ft = { "kdl" } },
+  { "imsnif/kdl.vim",    ft = { "kdl" } },
   { "prisma/vim-prisma", ft = { "prisma" } },
 }
 
