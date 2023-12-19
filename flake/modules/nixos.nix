@@ -40,7 +40,10 @@ in {
             type = types.listOf types.unspecified;
             readOnly = true;
           };
-
+          mainUser = mkOption {
+            type = types.str;
+            default = "root";
+          };
           finalSystem = mkOption {
             type = types.unspecified;
             readOnly = true;
@@ -48,6 +51,11 @@ in {
         };
 
         config = {
+          mainUser = let
+            normalUsers = lib.filterAttrs (_: u: u.isNormalUser) config.finalSystem.config.users.users;
+            userNames = lib.attrNames normalUsers;
+          in
+            mkIf (lib.length userNames == 1) (lib.mkDefault (lib.elemAt userNames 0));
           finalModules =
             nixos.sharedModules
             ++ [
@@ -59,9 +67,6 @@ in {
             ++ lib.mapAttrsToList (username: user: let
               isEnabled = isHmEnabledForUserAndHost user name;
             in
-              # TODO: disable HM nixos module? Build time goes from 18sec to 11sec on avg
-              # It basically gains what it takes to run hm switch on it's own tho
-              # TODO: also add host overrides here
               mkIf isEnabled {
                 imports = [
                   inputs.home-manager.nixosModules.home-manager
@@ -89,6 +94,19 @@ in {
   };
 
   config = {
+    homeManager.sharedModules = [
+      ({config, ...}: {
+        programs.ssh = {
+          enable = true;
+          matchBlocks =
+            lib.mapAttrs (name: hostConfig: {
+              hostname = hostConfig.finalSystem.config.networking.hostName;
+              user = hostConfig.mainUser;
+            })
+            cfg;
+        };
+      })
+    ];
     flake = {
       nixosConfigurations = configs;
     };
