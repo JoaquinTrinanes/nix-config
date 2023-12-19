@@ -5,4 +5,6 @@
     ./modules
     ./configuration
   ];
+
+  flake.flakeModules = {default = import ./modules;};
 }

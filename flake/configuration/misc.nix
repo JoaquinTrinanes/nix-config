@@ -1,11 +1,13 @@
 {
   self,
   inputs,
+  config,
+  lib,
   ...
 }: {
   _file = ./misc.nix;
 
-  config.perSystem = {
+  perSystem = {
     pkgs,
     lib,
     ...
@@ -17,9 +19,35 @@
     packages = import ../../pkgs pkgs;
   };
 
-  config.overlays = import ../../overlays {inherit self inputs;};
+  common = {
+    stateVersion = lib.mkDefault "23.11";
+    specialArgs = {
+      inherit self inputs;
+      inherit (config) hosts users;
+    };
+    modules = [
+      ({
+        pkgs,
+        lib,
+        ...
+      }: {
+        nix = {
+          # use older nix while HM issue #4692 isn't fixed
+          package = lib.mkDefault pkgs.nixVersions.nix_2_18;
+          # package = lib.mkDefault pkgs.nixVersions.unstable;
 
-  config.flake = {
+          settings = {
+            auto-optimise-store = true;
+            experimental-features = ["nix-command" "flakes" "repl-flake" "ca-derivations"];
+            keep-outputs = true;
+          };
+        };
+      })
+    ];
+  };
+
+  overlays = import ../../overlays {inherit self inputs;};
+  flake = {
     # Reusable nixos modules you might want to export
     # These are usually stuff you would upstream into nixpkgs
     nixosModules = import ../../modules/nixos;

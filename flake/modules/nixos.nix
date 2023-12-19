@@ -5,7 +5,7 @@
   ...
 }: let
   cfg = config.hosts;
-  inherit (config) users nix nixos;
+  inherit (config) users common nixos;
   configs = builtins.mapAttrs (_: host: host.finalSystem) cfg;
   inherit (lib) types mkOption mkIf;
   isHmEnabledForUserAndHost = user: hostName: user.homeManager.enable && user.homeManager.hosts.${hostName};
@@ -78,14 +78,14 @@ in {
                   };
                   useUserPackages = true;
                   useGlobalPkgs = true;
-                  extraSpecialArgs = {inherit user;} // nix.specialArgs;
+                  extraSpecialArgs = {inherit user;} // common.specialArgs;
                 };
               })
             users;
 
           finalSystem = config.nixpkgs.lib.nixosSystem {
             modules = config.finalModules;
-            specialArgs = nix.specialArgs;
+            inherit (common) specialArgs;
           };
         };
       }));
