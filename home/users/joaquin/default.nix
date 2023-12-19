@@ -31,10 +31,15 @@
       {
         NIXPKGS_ALLOW_UNFREE = 1;
       }
-      (lib.mkIf config.programs.bat.enable {
-        MANPAGER = "sh -c 'col -bx | bat -l man -p'";
-        MANROFFOPT = "-c";
+      (lib.mkIf config.programs.neovim.enable {
+        MANPAGER = "nvim +Man!";
+        # MANROFFOPT = "-c";
       })
+      # (lib.mkIf config.programs.bat.enable {
+      #   PAGER = "";
+      #   MANPAGER = "sh -c 'col -bx | bat -l man -p'";
+      #   # MANROFFOPT = "-c";
+      # })
     ];
 
     packages = with pkgs; let
@@ -118,7 +123,7 @@
     enable = true;
     keys = ''
       #env
-      LESS = -i -R -F
+      LESS = --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen
     '';
   };
 
