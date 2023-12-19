@@ -113,7 +113,7 @@
       la = "ls -la";
       pn = "pnpm";
     }
-    // lib.optionalAttrs config.programs.home-manager.enable {
+    // lib.optionalAttrs (config.programs.home-manager.enable && !config.submoduleSupport.enable) {
       hm = "home-manager";
       hms = "home-manager switch";
     }
