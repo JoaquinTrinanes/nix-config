@@ -45,7 +45,7 @@ in {
         {
           nix.settings = {
             auto-optimise-store = true;
-            experimental-features = ["nix-command" "flakes" "repl-flake"];
+            experimental-features = ["nix-command" "flakes" "repl-flake" "ca-derivations"];
             keep-outputs = true;
           };
         }
