@@ -8,7 +8,7 @@
       homeManager = {
         enable = true;
         modules = [
-          ../../home
+          ../../home/users/joaquin
         ];
         hosts = {razer-blade-14 = true;};
         hostOverrides = {

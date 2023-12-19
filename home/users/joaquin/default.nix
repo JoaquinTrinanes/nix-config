@@ -6,7 +6,7 @@
   inputs,
   ...
 }: {
-  _module.args.myLib = import ./lib {inherit lib config;};
+  _module.args.myLib = import ../../lib {inherit lib config;};
   imports = [
     ./git
     ./neovim
