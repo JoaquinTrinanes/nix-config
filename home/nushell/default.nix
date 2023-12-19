@@ -17,7 +17,7 @@
     inherit (config.home) shellAliases;
     configFile.source = ./files/config.nu;
     envFile.source = ./files/env.nu;
-    extraConfig = lib.mkAfter ''
+    extraConfig = lib.mkOrder 9999 ''
       overlay use ${./files/scripts/aliases}
       overlay use ${./files/scripts/completions}
     '';
@@ -44,7 +44,7 @@
   programs.bash.initExtra = lib.mkAfter ''
     if [[ ! $(ps T --no-header --format=comm | grep "^nu$") && -z $BASH_EXECUTION_STRING ]]; then
         shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION='''
-        exec "${config.programs.nushell.package}/bin/nu" "$LOGIN_OPTION"
+        exec "${lib.getExe config.programs.nushell.package}" "$LOGIN_OPTION"
         fi
   '';
 }
