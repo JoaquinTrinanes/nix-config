@@ -115,6 +115,13 @@
       ll = "ls -l";
       la = "ls -la";
       pn = "pnpm";
+
+      # docker compose
+      dc = "docker compose";
+      dcup = "docker compose up";
+      dcupd = "docker compose up -d";
+      dcdn = "docker compose down";
+      dcrm = "docker compose rm";
     }
     // lib.optionalAttrs (config.programs.home-manager.enable && !config.submoduleSupport.enable) {
       hm = "home-manager";
