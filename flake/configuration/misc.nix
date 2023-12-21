@@ -37,6 +37,11 @@
           # package = lib.mkDefault pkgs.nixVersions.unstable;
 
           settings = {
+            min-free = 128000000; # 128MB
+            max-free = 1000000000; # 1GB
+            connect-timeout = 5;
+            fallback = true;
+            log-lines = 10;
             auto-optimise-store = true;
             experimental-features = ["nix-command" "flakes" "repl-flake" "ca-derivations"];
             keep-outputs = true;
