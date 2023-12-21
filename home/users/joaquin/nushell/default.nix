@@ -7,7 +7,6 @@
   ...
 }: {
   imports = [
-    ./direnv.nix
     ./theme.nix
     ./nix-your-shell.nix
   ];

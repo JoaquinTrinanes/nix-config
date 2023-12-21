@@ -186,23 +186,7 @@ $env.config = {
     render_right_prompt_on_last_line: false # true or false to enable or disable right prompt to be rendered on last line of the prompt.
     use_kitty_protocol: true # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this
     hooks: {
-        # pre_prompt: [{||
-        #     let direnv = (direnv export json | from json | default {})
-        #     if ($direnv | is-empty) {
-        #         return
-        #     }
-        #     $direnv
-        #     | items {|key, value|
-        #         {
-        #             key: $key
-        #             value: (if $key in $env.ENV_CONVERSIONS {
-        #             do ($env.ENV_CONVERSIONS | get $key | get from_string) $value
-        #             } else {
-        #                 $value
-        #             })
-        #         }
-        #     } | transpose -ird | load-env
-        # }]
+        pre_prompt: []
         pre_execution: []
         env_change: {
             PWD: [
