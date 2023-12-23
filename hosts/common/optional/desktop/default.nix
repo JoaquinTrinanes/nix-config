@@ -8,7 +8,7 @@
     ./gnome.nix
     ../audio.nix
     ../fonts.nix
-    ../printing.nix
+    ../firefox
   ];
 
   time.timeZone = lib.mkDefault "Europe/Madrid";
