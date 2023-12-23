@@ -12,5 +12,13 @@ let
     "php-src-nix.cachix.org-1:3IMVbxfljrbI1NZjuML/2eHLsmHEXfzKGY0kEA20qWY="
   ];
 in {
-  nixos.sharedModules = [{nix.settings = {inherit substituters trusted-public-keys;};}];
+  nixos.sharedModules = [
+    {
+      nix.settings = {
+        # mkAfter ensures the nixos cache goes first
+        substituters = lib.mkAfter substituters;
+        trusted-public-keys = lib.mkAfter trusted-public-keys;
+      };
+    }
+  ];
 }
