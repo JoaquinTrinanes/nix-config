@@ -41,7 +41,7 @@
             max-free = 1000000000; # 1GB
             connect-timeout = 5;
             fallback = true;
-            log-lines = 10;
+            log-lines = 25;
             auto-optimise-store = true;
             experimental-features = ["nix-command" "flakes" "repl-flake" "ca-derivations"];
             keep-outputs = true;
