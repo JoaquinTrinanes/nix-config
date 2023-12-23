@@ -10,16 +10,33 @@
     ./theme.nix
     ./nix-your-shell.nix
   ];
+
   programs.nushell = {
     enable = lib.mkDefault true;
     package = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}.nushellFull;
     inherit (config.home) shellAliases;
     configFile.source = ./files/config.nu;
     envFile.source = ./files/env.nu;
-    extraConfig = lib.mkOrder 9999 ''
-      overlay use ${./files/scripts/aliases}
-      overlay use ${./files/scripts/completions}
-    '';
+    extraConfig = lib.mkMerge [
+      ''
+        # Parse text as nix expression
+        def "from nix" []: string -> any {
+            ${lib.getExe config.nix.package} eval --json --expr $in | from json
+        }
+
+        # Convert table data into a nix expression
+        def "to nix" [
+          --format(-f) # Format the result
+        ]: any -> string {
+          # print (is-terminal -o)
+            to json | ${lib.getExe config.nix.package} eval --expr $"builtins.fromJSON '''($in)'''" | if $format { ${lib.getExe pkgs.alejandra} -q - } else { $in }
+        }
+      ''
+      (lib.mkOrder 9999 ''
+        overlay use ${./files/scripts/completions}
+        # use ${./files/scripts/completions} *
+      '')
+    ];
 
     extraEnv = let
       plugins = ["formats" "regex"];

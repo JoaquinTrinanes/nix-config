@@ -1,4 +1,4 @@
-let
+{lib, ...}: let
   substituters = [
     "https://nix-community.cachix.org"
     "https://nushell-nightly.cachix.org"
@@ -17,7 +17,7 @@ in {
       nix.settings = {
         # mkAfter ensures the nixos cache goes first
         substituters = lib.mkAfter substituters;
-        trusted-public-keys = lib.mkAfter trusted-public-keys;
+        inherit trusted-public-keys;
       };
     }
   ];
