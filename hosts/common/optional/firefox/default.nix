@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: let
   cfg = config.programs.firefox;
@@ -12,7 +13,7 @@
   mkExtensionUrl = name: "https://addons.mozilla.org/firefox/downloads/latest/${name}/latest.xpi";
   mkExtension = {
     name,
-    installation_mode ? "normal_installed", # normal_installed, force_installed, blocked,
+    installation_mode ? "normal_installed", # normal_installed, force_installed, blocked, allowed
     install_url ? (mkExtensionUrl name),
     install_sources ? [],
     allowed_types ? ["extension" "theme" "dictionary" "locale"],
@@ -25,13 +26,23 @@ in {
   programs.firefox = {
     enable = mkDefault true;
     # package = mkDefault pkgs.firefox-devedition;
+    nativeMessagingHosts.packages = builtins.attrValues {inherit (pkgs) tridactyl-native;};
     preferencesStatus = mkDefault "locked";
     policies = {
-      ExtensionSettings = lib.genAttrs [
-        "addon@darkreader.org"
-        "uBlock0@raymondhill.net"
-        "CanvasBlocker@kkapsner.de"
-      ] (name: mkExtension {inherit name;});
+      ExtensionSettings =
+        (lib.genAttrs [
+          "addon@darkreader.org"
+          "uBlock0@raymondhill.net"
+          "CanvasBlocker@kkapsner.de"
+          "firefox-enpass@enpass.io"
+          # "tridactyl.vim.betas@cmcaine.co.uk"
+        ] (name: mkExtension {inherit name;}))
+        // {
+          "tridactyl.vim.betas@cmcaine.co.uk" = mkExtension {
+            name = "tridactyl.vim.betas@cmcaine.co.uk";
+            install_url = "https://tridactyl.cmcaine.co.uk/betas/tridactyl-latest.xpi";
+          };
+        };
       Preferences = lib.mapAttrs mkPreference {
         "browser.aboutConfig.showWarning" = false;
         "browser.translations.neverTranslateLanguages" = lib.concatStringsSep "," ["en" "es" "gl"];
