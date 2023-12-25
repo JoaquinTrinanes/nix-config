@@ -40,14 +40,23 @@
     };
   };
 
-  networking.networkmanager = {
-    enable = true;
-    wifi = {
-      scanRandMacAddress = true;
-      backend = "iwd";
+  networking = {
+    nameservers = ["1.1.1.1" "1.0.0.1"];
+    networkmanager = {
+      enable = true;
+      wifi = {
+        scanRandMacAddress = true;
+        backend = "iwd";
+      };
     };
   };
-  services.resolved = {enable = true;};
+  services.resolved = {
+    enable = true;
+    extraConfig = ''
+      DNSOverTLS=opportunistic
+      # DNSOverTLS=yes
+    '';
+  };
 
   virtualisation.docker = {
     enable = true;
