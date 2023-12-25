@@ -5,6 +5,10 @@
       email = "hi@joaquint.io";
       firstName = "Joaquín";
       lastName = "Triñanes";
+      sshPublicKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII95dwUzUX98GxBzc13L/u/k+0rnZys6xDhNeEdkrsbq joaquin@razer-blade-14"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCutbKZk+mbku2/ndSociCACyV+Joc0QVYRfjxAHW79 openpgp:0x31C20393"
+      ];
       homeManager = {
         enable = true;
         modules = [

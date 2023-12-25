@@ -12,5 +12,9 @@
     then lib.removeSuffix "/" "${config.impurePath.flakePath}/${relativePath}"
     else relativePath;
   mkImpureLink = path:
-    config.lib.file.mkOutOfStoreSymlink (absPath path);
+    config.lib.file.mkOutOfStoreSymlink (
+      if config.impurePath.enable
+      then (absPath path)
+      else path
+    );
 }

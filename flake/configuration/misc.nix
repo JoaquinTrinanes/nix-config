@@ -43,7 +43,12 @@
             fallback = true;
             log-lines = 25;
             auto-optimise-store = true;
-            experimental-features = ["nix-command" "flakes" "repl-flake" "ca-derivations"];
+            experimental-features = [
+              "nix-command"
+              "flakes"
+              "repl-flake"
+              "ca-derivations"
+            ];
             keep-outputs = true;
           };
         };

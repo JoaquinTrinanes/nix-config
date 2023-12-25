@@ -28,7 +28,6 @@
     "joaquin" = {
       # You can set an initial password for your user.
       # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
       # initialPassword = "correcthorsebatterystaple";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [];
@@ -53,15 +52,16 @@
   services.resolved = {
     enable = true;
     extraConfig = ''
-      DNSOverTLS=opportunistic
-      # DNSOverTLS=yes
+      # DNSOverTLS=opportunistic
+      DNSOverTLS=yes
     '';
   };
+  # override firefox's default DNS settings to force the local resolver
+  programs.firefox.policies.Preferences."network.trr.mode" = lib.mkForce 5;
 
   virtualisation.docker = {
     enable = true;
     logDriver = "local";
-    # rootless.enable = true;
   };
 
   services.switcherooControl.enable = true;

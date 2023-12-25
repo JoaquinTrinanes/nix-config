@@ -17,6 +17,7 @@
     inherit
       (pkgs)
       discord
+      ferdium
       qbittorrent
       telegram-desktop
       vlc

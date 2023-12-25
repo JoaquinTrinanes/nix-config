@@ -28,6 +28,10 @@ in {
             type = types.nullOr types.str;
             default = null;
           };
+          sshPublicKeys = mkOption {
+            type = types.listOf types.str;
+            default = [];
+          };
           firstName = mkOption {
             type = types.nullOr types.str;
             default = name;
