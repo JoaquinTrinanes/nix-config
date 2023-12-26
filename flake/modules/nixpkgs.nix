@@ -7,13 +7,9 @@
   inherit (lib) mkOption types;
   cfg = config.nixpkgs;
 in {
-  _file = ./nixpkgs.nix;
+  _file = ./.;
 
   options.nixpkgs = {
-    # allowedUnfree = mkOption {
-    #   type = types.listOf types.str;
-    #   default = [];
-    # };
     overlays = mkOption {
       type = types.listOf types.unspecified;
       default = [];

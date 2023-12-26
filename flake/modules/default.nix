@@ -1,5 +1,5 @@
 {
-  _file = ./default.nix;
+  _file = ./.;
 
   imports = [
     ./common.nix

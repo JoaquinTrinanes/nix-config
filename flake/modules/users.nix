@@ -9,7 +9,7 @@
   cfg = config.users;
   inherit (config) common homeManager hosts;
 in {
-  _file = ./users.nix;
+  _file = ./.;
 
   options = {
     users = mkOption {

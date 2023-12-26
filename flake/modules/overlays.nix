@@ -6,7 +6,7 @@
 }: let
   inherit (lib) mkOption types;
 in {
-  _file = ./overlays.nix;
+  _file = ./.;
 
   options = {
     overlays = mkOption {

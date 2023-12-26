@@ -1,5 +1,5 @@
 {self, ...}: {
-  _file = ./home.nix;
+  _file = ./.;
   users = {
     "joaquin" = {
       email = "hi@joaquint.io";

@@ -1,10 +1,6 @@
-{
-  inputs,
-  self,
-  ...
-}: {
+{inputs, ...}: {
   # This one brings our custom packages from the 'pkgs' directory
-  additions = final: prev: self.packages.${final.system};
+  additions = final: prev: import ../pkgs prev; # self.packages.${prev.stdenv.hostPlatform.system};
 
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.

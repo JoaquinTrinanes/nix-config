@@ -6,7 +6,7 @@
   inherit (lib) mkOption types;
   cfg = config.common;
 in {
-  _file = ./common.nix;
+  _file = ./.;
 
   options.common = {
     modules = mkOption {

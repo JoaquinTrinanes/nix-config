@@ -1,5 +1,5 @@
 {
-  _file = ./nixosConfigurations.nix;
+  _file = ./.;
   hosts = {
     "razer-blade-14" = {
       system = "x86_64-linux";
