@@ -56,7 +56,16 @@
     ];
   };
 
-  overlays = import ../../overlays {inherit self inputs;};
+  overlays = {
+    all = import ../../overlays {inherit inputs;};
+    enabled = o:
+      builtins.attrValues {
+        inherit
+          (o) #additions
+          modifications
+          ;
+      };
+  };
   flake = {
     # Reusable nixos modules you might want to export
     # These are usually stuff you would upstream into nixpkgs

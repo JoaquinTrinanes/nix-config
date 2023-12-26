@@ -21,7 +21,7 @@ in {
       };
     };
     finalConfig = mkOption {
-      type = types.attrsOf types.unspecified;
+      type = types.lazyAttrsOf types.unspecified;
       readOnly = true;
     };
   };
@@ -29,11 +29,6 @@ in {
   config = {
     nixpkgs.finalConfig = {
       inherit (cfg) overlays config;
-      # config =
-      #   cfg.config
-      #   // {
-      #     allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) (cfg.allowedUnfree);
-      # };
     };
     nixos.sharedModules = [{nixpkgs = cfg.finalConfig;}];
     homeManager.standaloneModules = [{nixpkgs = cfg.finalConfig;}];

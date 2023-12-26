@@ -13,7 +13,7 @@ in {
 
   options = {
     users = mkOption {
-      type = types.attrsOf (types.submodule ({
+      type = types.lazyAttrsOf (types.submodule ({
         name,
         config,
         ...

@@ -1,33 +1,32 @@
 {
   config,
   lib,
-  inputs,
   ...
 }: let
   inherit (lib) mkOption types;
+  cfg = config.overlays;
 in {
   _file = ./.;
 
-  options = {
-    overlays = mkOption {
-      type = types.attrsOf types.unspecified;
+  options.overlays = {
+    all = mkOption {
+      type = types.lazyAttrsOf types.unspecified;
       default = {};
     };
-    enabledOverlays = mkOption {
+    enabled = mkOption {
       type = types.functionTo (types.listOf types.unspecified);
       default = _: [];
+    };
+    final = mkOption {
+      type = types.listOf types.unspecified;
+      readOnly = true;
     };
   };
 
   config = {
-    nixpkgs.overlays = config.enabledOverlays config.overlays;
-    enabledOverlays = o:
-      (with o; [
-        # additions
-        modifications
-      ])
-      ++ [inputs.nur.overlay];
+    overlays.final = cfg.enabled cfg.all;
+    nixpkgs.overlays = cfg.final;
   };
 
-  config.flake.overlays = config.overlays;
+  config.flake.overlays = cfg.all;
 }
