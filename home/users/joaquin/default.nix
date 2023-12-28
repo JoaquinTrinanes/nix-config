@@ -16,6 +16,7 @@
     ./wireplumber
     ./wezterm
     ./firefox
+    ./password-store
     inputs.nix-colors.homeManagerModules.default
   ];
 

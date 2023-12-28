@@ -74,7 +74,7 @@ in {
                 home-manager = {
                   users."${user.name}" = {
                     imports =
-                      user.homeManager.finalModules ++ lib.optional (user.homeManager.hostOverrides.${name} != null) (user.homeManager.hostOverrides.${name});
+                      user.homeManager.finalModules ++ lib.optional (user.homeManager.hostOverrides.${name} != null) user.homeManager.hostOverrides.${name};
                   };
                   useUserPackages = true;
                   useGlobalPkgs = true;
