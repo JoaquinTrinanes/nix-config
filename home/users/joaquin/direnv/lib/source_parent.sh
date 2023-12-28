@@ -6,7 +6,7 @@ find_all_up() {
 		if [[ -f $TARGET ]]; then
 			FILES+=("$PWD/$TARGET")
 		fi
-		if [[ $PWD == / ]] || [[ $PWD == // ]] || [[ $PWD == $HOME ]]; then
+		if [[ "$PWD" == "/" ]] || [[ "$PWD" == "//" ]] || [[ "$PWD" == "$HOME" ]]; then
 			break
 		fi
 		cd ..
@@ -16,9 +16,10 @@ find_all_up() {
 }
 
 source_all_up() {
-	local UP_FILES=$(find_all_up "$@")
+	local UP_FILES
+	UP_FILES=$(find_all_up "$@")
 
-	for f in ${UP_FILES[@]}; do
-		source_env $f
+	for f in "${UP_FILES[@]}"; do
+		source_env "$f"
 	done
 }
