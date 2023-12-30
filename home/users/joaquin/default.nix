@@ -17,6 +17,7 @@
     ./wezterm
     ./firefox
     ./password-store
+    ./kitty
     inputs.nix-colors.homeManagerModules.default
   ];
 
@@ -43,21 +44,29 @@
       # })
     ];
 
-    packages = with pkgs; let
+    packages = let
       # this has to be a wrapper and not an alias to be able to call if with sudo
-      nixosRebuildWrapper = writeShellScriptBin "nx" ''
+      nx = pkgs.writeShellScriptBin "nx" ''
         ${lib.getExe pkgs.nixos-rebuild} "$@"
       '';
-    in [
-      enpass
-      nixosRebuildWrapper
-      (writeShellScriptBin "nxs" ''
-        ${lib.getExe nixosRebuildWrapper} switch "$@"
-      '')
-      (writeShellScriptBin "nr" ''
+      nxs = pkgs.writeShellScriptBin "nxs" ''
+        ${lib.getExe nx} switch "$@"
+      '';
+      nr = pkgs.writeShellScriptBin "nr" ''
         nix run nixpkgs#"$@"
-      '')
-    ];
+      '';
+    in
+      [
+        nx
+        nxs
+        nr
+      ]
+      ++ builtins.attrValues {
+        inherit
+          (pkgs)
+          enpass
+          ;
+      };
   };
 
   programs.home-manager.enable = true;
