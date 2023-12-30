@@ -8,7 +8,6 @@
 }: {
   imports = [
     ./theme.nix
-    ./nix-your-shell.nix
   ];
 
   programs.nushell = {
