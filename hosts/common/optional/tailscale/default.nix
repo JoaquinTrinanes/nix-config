@@ -1,6 +1,8 @@
-{
-  networking.search = ["tail87065.ts.net"];
+{lib, ...}: {
+  networking = {
+  };
   services.tailscale = {
     enable = true;
+    extraUpFlags = lib.mkDefault ["--shields-up"];
   };
 }

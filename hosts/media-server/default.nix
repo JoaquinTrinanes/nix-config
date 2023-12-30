@@ -16,16 +16,7 @@ in {
     ../common/optional/tailscale
   ];
 
-  virtualisation.oci-containers.containers = {
-    dashy = {
-      image = "lissy93/dashy:2.1.1";
-      autoStart = true;
-      ports = ["80:80"];
-      volumes = [
-        "${./dashboard.yml}:/app/public/conf.yml"
-      ];
-    };
-  };
+  services.tailscale.extraUpFlags = [];
 
   services.openvpn.servers = {
     es23 = {
