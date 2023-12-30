@@ -6,6 +6,11 @@ in {
   networking.networkmanager.enable = true;
   networking.firewall.allowPing = true;
 
+  boot.tmp = {
+    cleanOnBoot = true;
+    useTmpfs = true;
+  };
+
   imports = [
     ./hardware-configuration.nix
     ../common/optional/ssh/server.nix
