@@ -7,15 +7,6 @@ local M = {
       current_line_blame = true,
     },
   },
-  -- {
-  --   "folke/noice.nvim",
-  --   opts = {
-  --     ---@type NoicePresets
-  --     presets = {
-  --       lsp_doc_border = true,
-  --     },
-  --   },
-  -- },
   {
     "telescope.nvim",
     dependencies = {
@@ -58,10 +49,13 @@ local M = {
       opts.sections.lualine_z = {}
     end,
   },
-  { "folke/flash.nvim", opts = {
-    modes = {
-      search = {
-        enabled = false,
+  {
+    "folke/flash.nvim",
+    opts = {
+      modes = {
+        search = {
+          enabled = false,
+        },
       },
     },
   } },

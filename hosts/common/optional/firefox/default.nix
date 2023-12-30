@@ -63,13 +63,13 @@ in {
         "app.shield.optoutstudies.enabled" = false;
         "browser.crashReports.unsubmittedCheck.autoSubmit2" = false;
         "privacy.donottrackheader.enabled" = true;
-        "network.trr.mode" = 2;
+        "network.trr.mode" = 2; # 0 = off (default), 1 = <reserved>, 2 = first, 3 = only, 4 = <reserved>, 5 = off by choice
         "network.dns.echconfig.enabled" = true;
         "network.dns.http3_echconfig.enabled" = true;
         "browser.safebrowsing.malware.enabled" = false;
         "browser.safebrowsing.phishing.enabled" = false;
         "browser.safebrowsing.downloads.enabled" = false;
-        "browser.startup.page" = 3; # 0=blank, 1=home, 2=last visited page, 3=resume previous session
+        "browser.startup.page" = 3; # 0 = blank, 1 = home, 2 = last visited page, 3 = resume previous session
         "browser.newtabpage.activity-stream.showSponsored" = false;
         "browser.newtabpage.activity-stream.default.sites" = "";
         "extensions.getAddons.showPane" = false;
