@@ -6,6 +6,11 @@ local M = {
     priority = 1000,
     opts = {
       flavour = "frappe",
+      custom_highlights = function()
+        return {
+          LspSignatureActiveParameter = { style = { "bold" } },
+        }
+      end,
     },
   },
 }
