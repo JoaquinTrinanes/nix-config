@@ -98,6 +98,7 @@ in {
       ({config, ...}: {
         programs.ssh = {
           enable = true;
+          includes = ["config.local"];
           matchBlocks =
             lib.mapAttrs (name: hostConfig: {
               hostname = hostConfig.finalSystem.config.networking.hostName;
