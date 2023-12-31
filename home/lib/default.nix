@@ -17,4 +17,5 @@
       then (absPath path)
       else path
     );
+  getPassCommand = key: "${lib.getExe config.programs.password-store.package} ${lib.escapeShellArg key}";
 }

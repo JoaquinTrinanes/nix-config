@@ -6,7 +6,7 @@
   inputs,
   ...
 }: {
-  _module.args.myLib = import ../../lib {inherit lib config;};
+  _module.args.myLib = import ../../lib {inherit lib config pkgs;};
   imports = [
     ./git
     ./neovim
@@ -16,8 +16,8 @@
     ./wireplumber
     ./wezterm
     ./firefox
-    ./password-store
     ./kitty
+    ./age
     inputs.nix-colors.homeManagerModules.default
   ];
 
@@ -155,7 +155,6 @@
       require-cross-certification = true;
     };
   };
-
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
