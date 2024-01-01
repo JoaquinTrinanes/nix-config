@@ -17,9 +17,10 @@
     ./wezterm
     ./firefox
     ./kitty
-    ./age
     inputs.nix-colors.homeManagerModules.default
   ];
+
+  programs.password-store.enable = true;
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
