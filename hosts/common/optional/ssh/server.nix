@@ -1,9 +1,12 @@
 _: {
   services.openssh = {
     enable = true;
-    # require public key authentication for better security
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
-    #settings.PermitRootLogin = "yes";
+    settings = {
+      Protocol = 2;
+      PermitEmptyPasswords = false;
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      # PermitRootLogin = "yes";
+    };
   };
 }
