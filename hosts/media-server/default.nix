@@ -19,7 +19,7 @@ in {
     ../common/optional/tailscale
   ];
 
-  services.tailscale.extraUpFlags = [];
+  services.tailscale.extraUpFlags = lib.mkForce ["--ssh" "--advertise-tags=tag:server"];
 
   services.openvpn.servers = {
     es23 = {

@@ -14,6 +14,8 @@
     ./hardware-configuration.nix
   ];
 
+  services.tailscale.extraUpFlags = ["--advertise-tags=tag:desktop"];
+
   boot.tmp.cleanOnBoot = true;
 
   nix.settings.trusted-users = ["@wheel"];
