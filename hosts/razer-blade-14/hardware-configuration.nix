@@ -20,10 +20,6 @@
   boot.initrd.kernelModules = ["dm-snapshot"];
   boot.kernelModules = ["kvm-amd"];
   boot.supportedFilesystems = ["ntfs"];
-  boot.extraModulePackages = [];
-  boot.kernelParams = [
-    "acpi_backlight=native" # fixes brightness control
-  ];
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.luks.devices = {
@@ -91,17 +87,35 @@
   hardware.cpu.amd.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
 
+  services.xserver.videoDrivers = ["modesetting" "nvidia"];
+
+  boot.blacklistedKernelModules = ["nvidia"];
+  boot.kernelParams = lib.mkMerge [
+    [
+      "acpi_backlight=native" # fixes brightness control
+    ]
+    # last entries have priority
+    (
+      # Disabling nvidia.modesetting doesn't work if prime.offload is enabled
+      lib.mkIf (!config.hardware.nvidia.modesetting.enable)
+      (lib.mkAfter ["nvidia-drm.modeset=0"])
+    )
+  ];
+  environment.variables = {"__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";};
   hardware.nvidia = {
     modesetting.enable = false;
-    powerManagement.enable = true;
-    powerManagement.finegrained = true;
+    powerManagement = {
+      enable = true;
+      finegrained = true;
+    };
     nvidiaSettings = true;
     prime = {
+      reverseSync = {enable = true;};
       offload = {
         enable = true;
         enableOffloadCmd = true;
       };
-      amdgpuBusId = "PCI:64:00:0";
+      amdgpuBusId = "PCI:100:0:0"; # result of converting 64:0:0 to decimal
       nvidiaBusId = "PCI:1:0:0";
     };
   };
