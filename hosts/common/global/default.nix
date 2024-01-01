@@ -13,6 +13,10 @@
     (lib.mapAttrs (_: flake: {inherit flake;}))
     ((lib.filterAttrs (_: lib.isType "flake")) inputs);
 
+  environment.sessionVariables = lib.mkIf config.nixpkgs.config.allowUnfree {
+    NIXPKGS_ALLOW_UNFREE = toString 1;
+  };
+
   # This will additionally add your inputs to the system's legacy channels
   # Making legacy nix commands consistent as well, awesome!
   nix.nixPath = ["/etc/nix/path"];

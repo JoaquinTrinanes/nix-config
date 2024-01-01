@@ -29,20 +29,9 @@
       if pkgs.stdenv.isLinux
       then "/home/${config.home.username}"
       else "/Users/${config.home.username}";
-    sessionVariables = lib.mkMerge [
-      {
-        NIXPKGS_ALLOW_UNFREE = 1;
-      }
-      (lib.mkIf config.programs.neovim.enable {
-        MANPAGER = "nvim +Man!";
-        # MANROFFOPT = "-c";
-      })
-      # (lib.mkIf config.programs.bat.enable {
-      #   PAGER = "";
-      #   MANPAGER = "sh -c 'col -bx | bat -l man -p'";
-      #   # MANROFFOPT = "-c";
-      # })
-    ];
+    sessionVariables = lib.mkIf config.programs.neovim.enable {
+      MANPAGER = "nvim +Man!";
+    };
 
     packages = let
       # this has to be a wrapper and not an alias to be able to call if with sudo

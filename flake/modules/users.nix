@@ -107,9 +107,7 @@ in {
       users;
     userHostConfigs = user:
       lib.mapAttrs' (
-        host: config: let
-          module = user.homeManager.hostOverrides.${host};
-        in
+        host: module:
           lib.nameValuePair "${user.name}@${host}"
           (userConfigs.${user.name}
             // {
