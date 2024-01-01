@@ -103,12 +103,12 @@
   ];
   environment.variables = {"__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";};
   hardware.nvidia = {
+    nvidiaSettings = false;
     modesetting.enable = false;
     powerManagement = {
       enable = true;
       finegrained = true;
     };
-    nvidiaSettings = true;
     prime = {
       reverseSync = {enable = true;};
       offload = {
