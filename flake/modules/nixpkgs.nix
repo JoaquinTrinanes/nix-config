@@ -7,7 +7,7 @@
   inherit (lib) mkOption types;
   cfg = config.nixpkgs;
 in {
-  _file = ./.;
+  _file = ./nixpkgs.nix;
 
   options.nixpkgs = {
     overlays = mkOption {

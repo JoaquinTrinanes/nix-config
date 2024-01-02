@@ -5,7 +5,7 @@
   lib,
   ...
 }: {
-  _file = ./.;
+  _file = ./misc.nix;
 
   perSystem = {
     pkgs,

@@ -6,7 +6,7 @@
   inherit (lib) mkOption types;
   cfg = config.overlays;
 in {
-  _file = ./.;
+  _file = ./overlays.nix;
 
   options.overlays = {
     all = mkOption {
