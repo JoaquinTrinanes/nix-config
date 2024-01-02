@@ -12,6 +12,10 @@
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
     ../common/optional/hardware-acceleration/amdgpu.nix
+    {
+      boot.resumeDevice = "/dev/mapper/root";
+      boot.kernelParams = ["resume_offset=13078528"];
+    }
   ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.timeout = 0;
@@ -39,12 +43,6 @@
     device = "/dev/mapper/root";
     # device = "/dev/disk/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
     fsType = "ext4";
-  };
-
-  specialisation."hibernate".configuration = {
-    boot.resumeDevice = "/dev/mapper/root";
-
-    boot.kernelParams = ["resume_offset=13078528"];
   };
 
   swapDevices = [
