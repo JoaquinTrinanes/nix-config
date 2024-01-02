@@ -41,11 +41,16 @@
     fsType = "ext4";
   };
 
+  specialisation."hibernate".configuration = {
+    boot.resumeDevice = "/dev/mapper/root";
+
+    boot.kernelParams = ["resume_offset=13078528"];
+  };
+
   swapDevices = [
     {
       device = "/swapfile";
       size = 16 * 1024;
-      randomEncryption.enable = true;
     }
   ];
 
