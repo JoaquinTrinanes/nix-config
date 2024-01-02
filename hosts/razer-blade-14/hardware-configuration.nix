@@ -14,7 +14,6 @@
     ../common/optional/hardware-acceleration/amdgpu.nix
   ];
   boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 1;
   boot.loader.timeout = 0;
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usbhid" "usb_storage"];
   boot.initrd.kernelModules = ["dm-snapshot"];
@@ -22,23 +21,18 @@
   boot.supportedFilesystems = ["ntfs"];
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.luks.devices = {
-    root = {
-      # device = "/dev/disks/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
-      device = "/dev/mapper/vg-cryptroot";
-      preLVM = false;
-    };
+  boot.initrd.luks.devices."root" = {
+    # device = "/dev/disk/by-uuid/8c6ae37c-84b9-4d71-be13-b6b384097a5f";
+    device = "/dev/mapper/vg-cryptroot";
+    preLVM = false;
   };
 
   boot.loader.efi.efiSysMountPoint = "/efi";
 
   fileSystems."/efi" = {
-    device = "/dev/nvme0n1p1";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/nvme0n1p7";
-    fsType = "vfat";
+    device = "/dev/disk/by-label/ESP";
+    # device = "/dev/disk/by-uuid/984F-0AE3";
+    # device = "/dev/nvme0n1p3";
   };
 
   fileSystems."/" = {
