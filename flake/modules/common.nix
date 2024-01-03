@@ -15,7 +15,7 @@ in {
     };
     specialArgs = mkOption {
       type = types.submodule {
-        freeformType = types.anything;
+        freeformType = types.unspecified;
       };
     };
     stateVersion = mkOption {type = types.str;};
