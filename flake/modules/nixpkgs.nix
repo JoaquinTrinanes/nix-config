@@ -21,7 +21,7 @@ in {
       };
     };
     finalConfig = mkOption {
-      type = types.lazyAttrsOf types.unspecified;
+      type = types.attrsOf types.unspecified;
       readOnly = true;
     };
   };
