@@ -16,8 +16,10 @@ in {
     nixos.sharedModules = mkOption {
       type = types.listOf types.deferredModule;
       default = [];
+      description = "Modules shared across all nixos configurations";
     };
     hosts = mkOption {
+      description = "Host configurations";
       type = types.attrsOf (types.submodule ({
         name,
         config,
@@ -27,22 +29,19 @@ in {
           nixpkgs = mkOption {
             type = types.unspecified;
             default = inputs.nixpkgs;
+            description = "Instance of nixpkgs";
           };
           modules = mkOption {
             type = types.listOf types.deferredModule;
             default = [];
+            description = "Modules for this host";
           };
           system = mkOption {
             type = types.enum config.nixpkgs.lib.systems.flakeExposed;
           };
-
           finalModules = mkOption {
             type = types.listOf types.unspecified;
             readOnly = true;
-          };
-          mainUser = mkOption {
-            type = types.str;
-            default = "root";
           };
           finalSystem = mkOption {
             type = types.unspecified;
@@ -51,11 +50,6 @@ in {
         };
 
         config = {
-          mainUser = let
-            normalUsers = lib.filterAttrs (_: u: u.isNormalUser) config.finalSystem.config.users.users;
-            userNames = lib.attrNames normalUsers;
-          in
-            mkIf (lib.length userNames == 1) (lib.mkDefault (lib.elemAt userNames 0));
           finalModules =
             nixos.sharedModules
             ++ [
@@ -94,21 +88,6 @@ in {
   };
 
   config = {
-    my.homeManager.sharedModules = [
-      ({config, ...}: {
-        programs.ssh = {
-          enable = true;
-          includes = ["config.local"];
-          matchBlocks =
-            lib.mapAttrs (name: hostConfig: {
-              hostname = hostConfig.finalSystem.config.networking.hostName;
-              user = hostConfig.mainUser;
-            })
-            cfg;
-        };
-      })
-    ];
-
     flake = {
       nixosConfigurations = configs;
     };

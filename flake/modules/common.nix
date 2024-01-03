@@ -12,23 +12,31 @@ in {
     modules = mkOption {
       type = types.listOf types.deferredModule;
       default = [];
+      description = "Modules that are loaded in all hosts and home manager configurations";
     };
     specialArgs = mkOption {
       type = types.submodule {
         freeformType = types.unspecified;
       };
+      description = "Special args passed to all hosts and home manager configurations";
     };
-    stateVersion = mkOption {type = types.str;};
+    stateVersion = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Default state version";
+    };
   };
 
-  config = {
+  config = let
+    stateVersion = lib.mkIf (cfg.stateVersion != null) (lib.mkDefault cfg.stateVersion);
+  in {
     my.homeManager.sharedModules =
       cfg.modules
-      ++ [({lib, ...}: {home.stateVersion = lib.mkDefault cfg.stateVersion;})];
+      ++ [{home = {inherit stateVersion;};}];
     my.nixos.sharedModules =
       cfg.modules
       ++ [
-        ({lib, ...}: {system.stateVersion = lib.mkDefault cfg.stateVersion;})
+        {system = {inherit stateVersion;};}
       ];
   };
 }

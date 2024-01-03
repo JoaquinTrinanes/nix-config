@@ -4,6 +4,7 @@
   lib,
   user,
   inputs,
+  hosts,
   ...
 }: {
   _module.args.myLib = import ../../lib {inherit lib config pkgs;};
@@ -169,6 +170,13 @@
     enable = true;
     config = {
       theme = "base16";
+    };
+  };
+
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      ${hosts.media-server.networking.hostName} = {user = hosts.media-server.users.users.media.name;};
     };
   };
 

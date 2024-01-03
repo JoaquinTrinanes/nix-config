@@ -1,4 +1,4 @@
-{self, ...}: {
+{
   _file = ./home.nix;
 
   my.users = {
@@ -29,5 +29,7 @@
     };
   };
 
-  my.homeManager.sharedModules = [self.homeManagerModules.impurePath];
+  my.homeManager.sharedModules = [
+    ../../home/global
+  ];
 }

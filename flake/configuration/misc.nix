@@ -23,7 +23,8 @@
     stateVersion = lib.mkDefault "23.11";
     specialArgs = {
       inherit self inputs;
-      inherit (config.my) hosts users;
+      inherit (config.my) users;
+      hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.my.hosts;
     };
     modules = [
       ({
