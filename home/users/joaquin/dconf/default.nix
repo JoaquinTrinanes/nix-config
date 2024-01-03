@@ -35,6 +35,10 @@
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";
     };
+    "org/gnome/nautilus/preferences" = {
+      # Editable address bar
+      always-use-location-entry = true;
+    };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       binding = "<Control><Alt>t";
       command = "wezterm";
@@ -50,7 +54,14 @@
       switch-applications-backward = ["<Shift><Super>Tab"];
     };
     "org/gnome/desktop/input-sources" = {
+      show-all-sources = true;
       sources = [(mkTuple ["xkb" "us"]) (mkTuple ["xkb" "es"])];
+    };
+    "org/gnome/shell/extensions/dash-to-panel" = {
+      hide-overview-on-startup = true;
+      overview-click-to-exit = true;
+      trans-use-custom-opacity = true;
+      trans-panel-opacity = 0.2;
     };
     # "org/gnome/desktop/datetime" = {
     #   automatic-timezone = true;
