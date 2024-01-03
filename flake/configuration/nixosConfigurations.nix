@@ -1,6 +1,7 @@
 {
   _file = ./nixosConfigurations.nix;
-  hosts = {
+
+  my.hosts = {
     "razer-blade-14" = {
       system = "x86_64-linux";
       modules = [

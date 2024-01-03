@@ -4,11 +4,11 @@
   ...
 }: let
   inherit (lib) mkOption types;
-  cfg = config.common;
+  cfg = config.my.common;
 in {
   _file = ./common.nix;
 
-  options.common = {
+  options.my.common = {
     modules = mkOption {
       type = types.listOf types.deferredModule;
       default = [];
@@ -22,10 +22,10 @@ in {
   };
 
   config = {
-    homeManager.sharedModules =
+    my.homeManager.sharedModules =
       cfg.modules
       ++ [({lib, ...}: {home.stateVersion = lib.mkDefault cfg.stateVersion;})];
-    nixos.sharedModules =
+    my.nixos.sharedModules =
       cfg.modules
       ++ [
         ({lib, ...}: {system.stateVersion = lib.mkDefault cfg.stateVersion;})

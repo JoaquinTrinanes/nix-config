@@ -4,11 +4,11 @@
   ...
 }: let
   inherit (lib) mkOption types;
-  cfg = config.overlays;
+  cfg = config.my.overlays;
 in {
   _file = ./overlays.nix;
 
-  options.overlays = {
+  options.my.overlays = {
     all = mkOption {
       type = types.attrsOf types.unspecified;
       default = {};
@@ -23,7 +23,7 @@ in {
     };
   };
 
-  config = {
+  config.my = {
     overlays.final = cfg.enabled cfg.all;
     nixpkgs.overlays = cfg.final;
   };

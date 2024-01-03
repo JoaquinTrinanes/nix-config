@@ -19,11 +19,11 @@
     packages = import ../../pkgs pkgs;
   };
 
-  common = {
+  my.common = {
     stateVersion = lib.mkDefault "23.11";
     specialArgs = {
       inherit self inputs;
-      inherit (config) hosts users;
+      inherit (config.my) hosts users;
     };
     modules = [
       ({
@@ -56,7 +56,7 @@
     ];
   };
 
-  overlays = {
+  my.overlays = {
     all = import ../../overlays {inherit inputs;};
     enabled = o:
       builtins.attrValues {
@@ -66,6 +66,7 @@
           ;
       };
   };
+
   flake = {
     # Reusable nixos modules you might want to export
     # These are usually stuff you would upstream into nixpkgs

@@ -4,15 +4,15 @@
   config,
   ...
 }: let
-  cfg = config.hosts;
-  inherit (config) users common nixos;
+  cfg = config.my.hosts;
+  inherit (config.my) users common nixos;
   configs = builtins.mapAttrs (_: host: host.finalSystem) cfg;
   inherit (lib) types mkOption mkIf;
   isHmEnabledForUserAndHost = user: hostName: user.homeManager.enable && user.homeManager.hosts.${hostName}.enable or false;
 in {
   _file = ./nixos.nix;
 
-  options = {
+  options.my = {
     nixos.sharedModules = mkOption {
       type = types.listOf types.deferredModule;
       default = [];
@@ -94,7 +94,7 @@ in {
   };
 
   config = {
-    homeManager.sharedModules = [
+    my.homeManager.sharedModules = [
       ({config, ...}: {
         programs.ssh = {
           enable = true;
@@ -108,6 +108,7 @@ in {
         };
       })
     ];
+
     flake = {
       nixosConfigurations = configs;
     };

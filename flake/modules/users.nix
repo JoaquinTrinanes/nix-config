@@ -6,12 +6,12 @@
 }: let
   pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
   inherit (lib) types mkOption mkEnableOption;
-  cfg = config.users;
-  inherit (config) common homeManager;
+  cfg = config.my.users;
+  inherit (config.my) common homeManager;
 in {
   _file = ./users.nix;
 
-  options = {
+  options.my = {
     users = mkOption {
       type = types.attrsOf (types.submodule ({
         name,
@@ -93,7 +93,7 @@ in {
     };
   };
 
-  config.homeManager.finalConfigurations = let
+  config.my.homeManager.finalConfigurations = let
     users = lib.filterAttrs (_: user: user.homeManager.enable) cfg;
     mkUserConfig = user: {
       inherit pkgs;

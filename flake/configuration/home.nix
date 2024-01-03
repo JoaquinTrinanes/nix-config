@@ -1,6 +1,7 @@
 {self, ...}: {
   _file = ./home.nix;
-  users = {
+
+  my.users = {
     "joaquin" = {
       email = "hi@joaquint.io";
       firstName = "Joaquín";
@@ -27,5 +28,6 @@
       };
     };
   };
-  homeManager.sharedModules = [self.homeManagerModules.impurePath];
+
+  my.homeManager.sharedModules = [self.homeManagerModules.impurePath];
 }
