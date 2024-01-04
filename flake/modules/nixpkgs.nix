@@ -14,11 +14,17 @@ in {
       type = types.listOf types.unspecified;
       default = [];
     };
-    config = {
-      allowUnfree = mkOption {
-        type = types.bool;
-        default = true;
+    config = mkOption {
+      type = types.submodule {
+        freeformType = types.attrsOf types.unspecified;
+        options = {
+          allowUnfree = mkOption {
+            type = types.bool;
+            default = true;
+          };
+        };
       };
+      default = {};
     };
     finalConfig = mkOption {
       type = types.attrsOf types.unspecified;
