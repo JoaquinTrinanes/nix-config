@@ -95,12 +95,13 @@ in {
 
   config.my.homeManager.finalConfigurations = let
     users = lib.filterAttrs (_: user: user.homeManager.enable) cfg;
-    mkUserConfig = user: {
-      inherit pkgs;
-      extraSpecialArgs = common.specialArgs // {inherit user;};
-      modules =
-        user.homeManager.finalModules ++ homeManager.standaloneModules;
-    };
+    mkUserConfig = user:
+      inputs.home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs = common.specialArgs // {inherit user;};
+        modules =
+          user.homeManager.finalModules ++ homeManager.standaloneModules;
+      };
     userHostConfig = user: host: let
       userConfig = mkUserConfig user;
     in
