@@ -1,10 +1,17 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  self,
+  ...
+}: {
   imports = [./wayland.nix];
 
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
+    desktopManager.gnome.sessionPath = [
+      self.packages.${pkgs.system}.dynamic-gnome-wallpapers
+    ];
     libinput.touchpad = {
       tapping = true;
       scrollMethod = "twofinger";
