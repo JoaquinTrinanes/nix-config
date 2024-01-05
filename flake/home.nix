@@ -12,7 +12,7 @@
       homeManager = {
         enable = true;
         modules = [
-          ../../home/users/joaquin
+          ../home/users/joaquin
         ];
         hosts = {
           razer-blade-14 = {
@@ -30,6 +30,6 @@
   };
 
   my.homeManager.sharedModules = [
-    ../../home/global
+    ../home/global
   ];
 }

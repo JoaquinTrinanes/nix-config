@@ -16,7 +16,7 @@
       exec ${lib.getExe pkgs.alejandra} --quiet "$@"
     '';
 
-    packages = import ../../pkgs pkgs;
+    packages = import ../pkgs pkgs;
   };
 
   my.common = {
@@ -58,7 +58,7 @@
   };
 
   my.overlays = {
-    all = import ../../overlays {inherit inputs;};
+    all = import ../overlays {inherit inputs;};
     enabled = o:
       builtins.attrValues {
         inherit
@@ -75,6 +75,6 @@
 
     # Reusable home-manager modules you might want to export
     # These are usually stuff you would upstream into home-manager
-    homeManagerModules = import ../../modules/home-manager;
+    homeManagerModules = import ../modules/home-manager;
   };
 }
