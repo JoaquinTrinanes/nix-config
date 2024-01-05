@@ -1,4 +1,4 @@
-{lib, ...}: let
+let
   substituters = [
     "https://nix-community.cachix.org"
     "https://nushell-nightly.cachix.org"
@@ -15,14 +15,12 @@
     "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
     "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
   ];
+  substituterSettings.nix.settings = {
+    inherit substituters trusted-public-keys;
+  };
 in {
-  my.nixos.sharedModules = [
-    {
-      nix.settings = {
-        # mkAfter ensures the nixos cache goes first
-        substituters = lib.mkAfter substituters;
-        inherit trusted-public-keys;
-      };
-    }
-  ];
+  _file = ./substituters.nix;
+
+  my.nixos.sharedModules = [substituterSettings];
+  my.homeManager.standaloneModules = [substituterSettings];
 }
