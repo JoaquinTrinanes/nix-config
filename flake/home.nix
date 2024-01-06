@@ -18,7 +18,6 @@
           razer-blade-14 = {
             override = osConfig: {config, ...}: {
               impurePath = {
-                enable = true;
                 flakePath = "${config.home.homeDirectory}/Documents/nix-config";
                 repoUrl = "https://github.com/JoaquinTrinanes/nix-config.git";
               };

@@ -58,10 +58,8 @@ in {
               ../../hosts/common/global
             ]
             ++ config.modules
-            ++ lib.mapAttrsToList (username: user: let
-              isEnabled = isHmEnabledForUserAndHost user name;
-            in
-              mkIf isEnabled {
+            ++ lib.mapAttrsToList (username: user:
+              mkIf (isHmEnabledForUserAndHost user name) {
                 imports = [
                   inputs.home-manager.nixosModules.home-manager
                 ];

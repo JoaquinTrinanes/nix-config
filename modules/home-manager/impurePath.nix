@@ -9,7 +9,7 @@
   cfg = config.impurePath;
 in {
   options.impurePath = {
-    enable = mkEnableOption "impure flake path";
+    enable = mkEnableOption "impure flake path" // {default = cfg.flakePath != null;};
     flakePath = mkOption {
       type = types.nullOr types.str;
       default = null;

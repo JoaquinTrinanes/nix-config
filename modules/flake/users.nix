@@ -2,12 +2,12 @@
   lib,
   config,
   inputs,
+  withSystem,
   ...
 }: let
-  pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
   inherit (lib) types mkOption mkEnableOption;
   cfg = config.my.users;
-  inherit (config.my) common homeManager;
+  inherit (config.my) common homeManager hosts;
 in {
   _file = ./users.nix;
 
@@ -62,7 +62,9 @@ in {
                   type = types.attrsOf (types.submodule ({name, ...}: {
                     options = {
                       enable = mkEnableOption "home manager nixos module on the `${name}` host" // {default = config.enable;};
-                      override = mkOption {type = types.functionTo types.deferredModule;};
+                      override = mkOption {
+                        type = types.functionTo types.deferredModule;
+                      };
                     };
                   }));
                   default = {};
@@ -95,23 +97,42 @@ in {
 
   config.my.homeManager.finalConfigurations = let
     users = lib.filterAttrs (_: user: user.homeManager.enable) cfg;
-    mkUserConfig = user:
-      inputs.home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = common.specialArgs // {inherit user;};
-        modules =
-          user.homeManager.finalModules ++ homeManager.standaloneModules;
-      };
-    userHostConfig = user: host: let
+    mkUserConfig = user: {
+      extraSpecialArgs = common.specialArgs // {inherit user;};
+      modules =
+        user.homeManager.finalModules ++ homeManager.standaloneModules;
+    };
+    userHostConfig = user: {
+      hostConfig,
+      host,
+    }: let
       userConfig = mkUserConfig user;
     in
-      userConfig
-      // {
-        modules = userConfig.modules ++ [(host.override host.finalSystem.config)];
-      };
-    userFullConfig = user: {${user.name} = mkUserConfig user;} // (lib.mapAttrs' (hostName: host: lib.nameValuePair "${user.name}@${hostName}" (userHostConfig user host)) user.homeManager.hosts);
+      inputs.home-manager.lib.homeManagerConfiguration
+      (userConfig
+        // {
+          inherit (hostConfig) pkgs;
+          modules = userConfig.modules ++ [(host.override host.finalSystem.config)];
+        });
+    allUserConfigs = user:
+      {
+        ${user.name} = let
+          pkgs = withSystem "x86_64-linux" ({pkgs, ...}: pkgs);
+        in
+          inputs.home-manager.lib.homeManagerConfiguration
+          ((mkUserConfig user) // {inherit pkgs;});
+      }
+      // (lib.mapAttrs' (
+          hostName: host: (
+            lib.nameValuePair "${user.name}@${hostName}" (userHostConfig user {
+              inherit host;
+              hostConfig = hosts.${hostName}.finalSystem;
+            })
+          )
+        )
+        user.homeManager.hosts);
   in
-    lib.attrsets.mergeAttrsList (lib.mapAttrsToList (username: userFullConfig) users);
+    lib.attrsets.mergeAttrsList (lib.mapAttrsToList (username: allUserConfigs) users);
 
   config.flake.homeConfigurations = homeManager.finalConfigurations;
 }
