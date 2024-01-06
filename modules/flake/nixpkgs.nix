@@ -34,11 +34,10 @@ in {
 
   config = {
     perSystem = {system, ...}: {
-      _module.args.pkgs = import inputs.nixpkgs {
-        inherit system;
-        inherit (cfg) overlays;
-        config = cfg.finalConfig;
-      };
+      _module.args.pkgs = import inputs.nixpkgs (cfg.finalConfig
+        // {
+          inherit system;
+        });
     };
   };
 
