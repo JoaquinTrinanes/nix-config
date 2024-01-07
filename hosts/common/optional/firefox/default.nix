@@ -102,9 +102,11 @@ in {
       "browser.newtabpage.activity-stream.telemetry" = false;
       "browser.tabs.crashReporting.sendReport" = false;
 
-      "network.http.sendRefererHeader" = 0; # 0 = don't send any, 1 = send only on clicks, 2 = send on image requests as well
-      "network.http.referer.spoofSource" = true; # false=real referer, true=spoof referer (use target URI as referer)
-      "network.http.referer.trimmingPolicy" = true; # 0=full URI, 1=scheme+host+port+path, 2=scheme+host+port
+      "network.http.sendRefererHeader" = 2; # 1 = don't send any, 1 = send only on clicks, 2 = send on image requests as well
+
+      # smart referer takes care of this
+      "network.http.referer.spoofSource" = false; # false=real referer, true=spoof referer (use target URI as referer)
+      "network.http.referer.trimmingPolicy" = 2; # 0 = full URI, 1 = scheme+host+port+path, 2 = scheme+host+port
     };
     policies = {
       ExtensionSettings =
@@ -114,6 +116,7 @@ in {
           "CanvasBlocker@kkapsner.de"
           "firefox-enpass@enpass.io"
           "vpn@proton.ch"
+          "smart-referer@meh.paranoid.pk"
         ] (name: mkExtension {inherit name;}))
         // {
           "tridactyl.vim.betas@cmcaine.co.uk" = mkExtension {
