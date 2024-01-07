@@ -36,7 +36,7 @@ in {
     preferencesStatus = mkDefault "locked";
     # Preferences not allowed in policies
     autoConfig = lib.concatLines (lib.mapAttrsToList (name: value: mkAutoconfig name value {}) {
-      "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0";
+      "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:121.0) Gecko/20100101 Firefox/121.0";
       "general.platform.override" = "Win32";
 
       "app.normandy.enabled" = false;
@@ -45,7 +45,7 @@ in {
       "breakpad.reportURL" = "";
       "datareporting.healthreport.uploadEnabled" = false;
       "devtools.screenshot.audio.enabled" = false;
-      "privacy.donottrackheader.enabled" = true;
+      # "privacy.donottrackheader.enabled" = true;
 
       "toolkit.coverage.endpoint.base" = "";
       "toolkit.coverage.opt-out" = true;
@@ -58,6 +58,28 @@ in {
       "toolkit.telemetry.updatePing.enabled" = false;
       "toolkit.telemetry.firstShutdownPing.enabled" = false;
       "toolkit.telemetry.coverage.opt-out" = true;
+
+      "privacy.trackingprotection.enabled" = true;
+
+      "security.ssl3.deprecated.rsa_des_ede3_sha" = false;
+      "security.ssl3.dhe_rsa_aes_128_sha" = false;
+      "security.ssl3.dhe_rsa_aes_256_sha" = false;
+      "security.ssl3.ecdhe_ecdsa_aes_128_sha" = false;
+      "security.ssl3.ecdhe_ecdsa_aes_256_sha" = false;
+      "security.ssl3.ecdhe_rsa_aes_128_sha" = false;
+      "security.ssl3.ecdhe_rsa_aes_256_sha" = false;
+      "security.ssl3.rsa_aes_128_sha" = false;
+      "security.ssl3.rsa_aes_256_sha" = false;
+      "security.ssl3.rsa_aes_128_gcm_sha256" = false;
+      "security.ssl3.rsa_aes_256_gcm_sha384" = false;
+
+      # 1 = only base system fonts
+      # 2 = also fonts from optional language packs
+      # 3 = also user-installed fonts
+      # "layout.css.font-visibility.standard" = 1; # 3;
+      # "layout.css.font-visibility.trackingprotection" = 3;
+      # "layout.css.font-visibility.resistFingerprinting" = true;
+      # "layout.css.font-visibility.private" = 1; # 3;
     });
     preferences = {
       "browser.aboutConfig.showWarning" = false;
@@ -117,6 +139,7 @@ in {
           "firefox-enpass@enpass.io"
           "vpn@proton.ch"
           "smart-referer@meh.paranoid.pk"
+          "@amiunique-extension"
         ] (name: mkExtension {inherit name;}))
         // {
           "tridactyl.vim.betas@cmcaine.co.uk" = mkExtension {
