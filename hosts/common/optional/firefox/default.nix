@@ -18,25 +18,24 @@
     updates_disabled ? false,
     default_area ? "menupanel", # menupanel, navbar
   }: {inherit name installation_mode install_url install_sources allowed_types blocked_install_message restricted_domains updates_disabled default_area;};
-  mkAutoconfig = name: value: let
-    functionName =
-      {
-        locked = "lockPref";
-        default = "defaultPref";
-        user = "pref";
-        clear = "clearPref";
-      }
-      .${cfg.preferencesStatus};
-  in ''
-    ${functionName}("${name}", ${builtins.toJSON value});
-  '';
+  mkAutoconfig = let
+    statusFunctionName = {
+      locked = "lockPref";
+      default = "defaultPref";
+      user = "pref";
+      clear = "clearPref";
+    };
+  in
+    name: value: {status ? cfg.preferencesStatus}: ''
+      ${statusFunctionName.${status}}("${name}", ${builtins.toJSON value});
+    '';
 in {
   programs.firefox = {
     enable = mkDefault true;
     nativeMessagingHosts.packages = builtins.attrValues {inherit (pkgs) tridactyl-native;};
     preferencesStatus = mkDefault "locked";
     # Preferences not allowed in policies
-    autoConfig = lib.concatLines (lib.mapAttrsToList mkAutoconfig {
+    autoConfig = lib.concatLines (lib.mapAttrsToList (name: value: mkAutoconfig name value {}) {
       "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0";
       "general.platform.override" = "Win32";
 
