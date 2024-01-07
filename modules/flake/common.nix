@@ -15,10 +15,9 @@ in {
       description = "Modules that are loaded in all hosts and home manager configurations";
     };
     specialArgs = mkOption {
-      type = types.submodule {
-        freeformType = types.unspecified;
-      };
+      type = types.attrsOf types.unspecified;
       description = "Special args passed to all hosts and home manager configurations";
+      default = {};
     };
     stateVersion = mkOption {
       type = types.nullOr types.str;
