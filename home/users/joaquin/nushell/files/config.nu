@@ -1,22 +1,7 @@
 # Nushell Config File
 
 let carapace_completer = {|spans: list<string>|
-    def filter_carapace_error [] {
-        let input = $in
-        let length = $input | length
-
-        if ($input | length) != 2 {
-            return $input
-        }
-
-        if $input.0.value ends-with 'ERR' and $input.1.value ends-with '_' {
-            null
-        } else {
-            $input
-        }
-    }
-
-    carapace $spans.0 nushell $spans
+    carapace $spans.0 nushell ...$spans
     | from json
     | default []
     | filter_carapace_error
@@ -30,17 +15,6 @@ let fish_completer = {|spans: list<string>|
 
 let zoxide_completer = {|spans: list<string>|
   $spans | skip 1 | zoxide query -l $in | lines | where {|x| $x != $env.PWD}
-}
-
-let git_completer = {|spans: list<string>|
-  let aliases = (git config --get-regexp ^alias | lines | split column ' ' name command | update name {|x| $x.name | split row '.' | last })
-  let spans_after_alias = ($spans | update 1 ($aliases | where name == $spans.1 | if ($in | is-empty) { $spans.1 } else { $in.0.command | split words }) | flatten)
-
-  if ($spans_after_alias.1 in [checkout branch]) {
-    do $fish_completer $spans_after_alias
-  } else {
-    do $carapace_completer $spans_after_alias
-  }
 }
 
 let sudo_completer = {|spans: list<string>|
@@ -60,11 +34,7 @@ let external_completer = {|spans: list<string>|
 
     match $spans.0 {
       __zoxide_z | __zoxide_zi => $zoxide_completer
-      asdf => $fish_completer
-      git => $git_completer
       gpg => $fish_completer
-      nu => $fish_completer
-      sd => $fish_completer
       sudo => $sudo_completer
       _ => $default_completer
     } | do $in $spans | if (($in | is-empty) and ($fallback_completer != null))) { do $fallback_completer $spans } else { $in }
