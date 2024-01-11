@@ -5,9 +5,10 @@
   user,
   inputs,
   hosts,
+  self,
   ...
 }: {
-  _module.args.myLib = import ../../lib {inherit lib config pkgs;};
+  _module.args.myLib = import "${self}/home/lib" {inherit lib config pkgs self;};
   imports = [
     ./git
     ./neovim

@@ -1,11 +1,12 @@
 {
   lib,
   config,
+  self,
   ...
 }: rec {
   absPath = p: let
     path = toString p;
-    strStoreDir = toString ../..;
+    strStoreDir = toString self;
     relativePath = lib.removePrefix "${strStoreDir}/" path;
   in
     if config.impurePath.enable

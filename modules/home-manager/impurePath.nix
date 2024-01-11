@@ -3,6 +3,7 @@
   config,
   myLib,
   pkgs,
+  self,
   ...
 }: let
   inherit (lib) mkOption types mkEnableOption mkIf getExe;
@@ -21,7 +22,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    xdg.configFile."home-manager/flake.nix".source = myLib.mkImpureLink ../../flake.nix;
+    xdg.configFile."home-manager/flake.nix".source = myLib.mkImpureLink "${self}/flake.nix";
     home.activation = mkIf (cfg.repoUrl != null && cfg.flakePath != null) {
       downloadRepo = lib.hm.dag.entryAfter ["writeBoundary"] ''
         if [ ! -e ${cfg.flakePath} ]; then

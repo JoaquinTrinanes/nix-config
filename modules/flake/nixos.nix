@@ -2,6 +2,7 @@
   inputs,
   lib,
   config,
+  self,
   ...
 }: let
   cfg = config.my.hosts;
@@ -55,7 +56,7 @@ in {
             ++ [
               {nixpkgs.hostPlatform = config.system;}
               {networking.hostName = name;}
-              ../../hosts/common/global
+              "${self}/hosts/common/global"
             ]
             ++ config.modules
             ++ lib.mapAttrsToList (username: user:
