@@ -61,46 +61,6 @@ local has_mux = function(pane)
 	return is_vim or is_tmux or is_zellij
 end
 
----@param resize_or_move "resize" | "move"
----@param key string
-local function split_nav(resize_or_move, key)
-	local mods = resize_or_move == "resize" and "ALT" or "CTRL"
-	return {
-		key = key,
-		mods = mods,
-		action = wezterm.action_callback(function(win, pane)
-			if has_mux(pane) then
-				-- pass the keys through
-				win:perform_action({
-					SendKey = {
-						key = key,
-						-- zellij doesn't support Ctrl+j, so we override with Alt
-						mods = has_foreground_process("zellij", pane) and "ALT" or mods,
-					},
-				}, pane)
-			else
-				if resize_or_move == "resize" then
-					win:perform_action({ AdjustPaneSize = { direction_keys[key], 3 } }, pane)
-				else
-					win:perform_action({ ActivatePaneDirection = direction_keys[key] }, pane)
-				end
-			end
-		end),
-	}
-end
-
-local nav_bindings = {
-	split_nav("move", "h"),
-	split_nav("move", "j"),
-	split_nav("move", "k"),
-	split_nav("move", "l"),
-	-- resize panes
-	split_nav("resize", "h"),
-	split_nav("resize", "j"),
-	split_nav("resize", "k"),
-	split_nav("resize", "l"),
-}
-
 local zellij_only_map = function(key, mods, action, default)
 	return conditional_map(key, mods, action, function(_, pane)
 		return has_foreground_process("zellij", pane)
@@ -219,16 +179,17 @@ config.keys = {
 	},
 	{ key = "p", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCommandPalette },
 	{ key = "s", mods = "ALT", action = wezterm.action.CharSelect({ copy_on_select = true }) },
-	split_nav("move", "h"),
-	split_nav("move", "j"),
-	split_nav("move", "k"),
-	split_nav("move", "l"),
-	-- resize panes
-	split_nav("resize", "h"),
-	split_nav("resize", "j"),
-	split_nav("resize", "k"),
-	split_nav("resize", "l"),
-	-- table.unpack(nav_bindings),
 }
+
+local smart_splits = wezterm.plugin.require("https://github.com/mrjones2014/smart-splits.nvim")
+smart_splits.apply_to_config(config, {
+	-- directional keys to use in order of: left, down, up, right
+	direction_keys = { "h", "j", "k", "l" },
+	-- modifier keys to combine with direction_keys
+	modifiers = {
+		move = "CTRL", -- modifier to use for pane movement, e.g. CTRL+h to move left
+		resize = "ALT", -- modifier to use for pane resize, e.g. META+h to resize to the left
+	},
+})
 
 return config
