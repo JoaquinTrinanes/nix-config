@@ -310,11 +310,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1704934331,
-        "narHash": "sha256-goG5awSkDlmppQ2+I9GFhX0ZS3MIpiiv6Tg25LTLD/o=",
+        "lastModified": 1705193756,
+        "narHash": "sha256-P8dRwInGheKsohGffUeNRJRjH65+YdC2UNJJchQeUUo=",
         "owner": "JoaquinTrinanes",
         "repo": "nushell-nightly-flake",
-        "rev": "fb756559a8cca235d8f21fd8be8ec8d2f71f4065",
+        "rev": "050269123868bb5064c9a7220d41200a6c92fb49",
         "type": "github"
       },
       "original": {
