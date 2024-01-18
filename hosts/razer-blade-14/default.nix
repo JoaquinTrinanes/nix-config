@@ -11,6 +11,7 @@
     ../common/optional/nix-index
     ../common/optional/garbage-collect
     ../common/optional/tailscale
+    ../common/optional/yubikey
     ./hardware-configuration.nix
   ];
 

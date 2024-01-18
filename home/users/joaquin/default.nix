@@ -146,6 +146,9 @@
       default-recipient-self = true;
       require-cross-certification = true;
     };
+    scdaemonSettings = {
+      disable-ccid = true;
+    };
   };
   services.gpg-agent = {
     enable = true;
