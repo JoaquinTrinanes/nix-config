@@ -132,7 +132,6 @@ local M = {
           end,
         },
       })
-      vim.print(opts)
     end,
   },
   {
