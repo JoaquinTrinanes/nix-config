@@ -2,89 +2,138 @@ local classNameRegex = [[(?:(?:[cC]lass[nN]ames?)|(?:CLASSNAMES?))]] -- "[cC][lL
 local classNamePropNameRegex = "(?:" .. classNameRegex .. "|(?:enter|leave)(?:From|To)?)"
 local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
 
+local bufCache = {}
+
+local function merge_in_place(a, b)
+  if type(a) == "table" and type(b) == "table" then
+    for k, v in pairs(b) do
+      if type(v) == "table" and type(a[k] or false) == "table" then
+        merge_in_place(a[k], v)
+      else
+        a[k] = v
+      end
+    end
+  end
+  return a
+end
+
+local detachEslintIfIgnored = function(client, bufnr)
+  local Job = require("plenary.job")
+  local file = vim.api.nvim_buf_get_name(bufnr)
+  Job:new({
+    command = "eslint",
+    args = { "--format", "json", file },
+    detached = true,
+    on_stdout = function(_, data)
+      local response = vim.json.decode(data)
+      local error = ((response[1] or {}).messages[1] or {}).message
+      if error == nil then
+        return
+      end
+      local is_ignored = error:match("%-%-no%-ignore") ~= nil
+      if is_ignored then
+        vim.schedule(function()
+          vim.lsp.buf_detach_client(bufnr, client.id)
+        end)
+      end
+    end,
+  }):start()
+end
+
 local M = {
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      diagnostics = {
-        virtual_text = {
-          prefix = "icons",
-        },
-      },
-      inlay_hints = {
-        enabled = true,
-      },
-      --- @type lspconfig.options
-      servers = {
-        lua_ls = {
-          settings = {
-            Lua = {
-              diagnostics = {
-                disable = { "incomplete-signature-doc", "trailing-space", "missing-fields" },
-              },
-            },
+    opts = function(_, opts)
+      vim.api.nvim_create_autocmd("LspDetach", {
+        callback = function(e)
+          bufCache[e.buf] = {}
+        end,
+      })
+
+      merge_in_place(opts, {
+        diagnostics = {
+          virtual_text = {
+            prefix = "icons",
           },
         },
-        nushell = {},
-        rust_analyzer = {
-          settings = {
-            ["rust-analyzer"] = {
-              -- prevent locking cargo compilation
-              ---@diagnostic disable-next-line: assign-type-mismatch
-              checkOnSave = {
-                extraArgs = { "--target-dir", "/tmp/rust-analyzer-check" },
-              },
-            },
-          },
-          -- keys = {
-          --   {
-          --     "<leader>cE",
-          --     function()
-          --       require("rust-tools").expand_macro.expand_macro()
-          --     end,
-          --     desc = "Expand Macro (Rust)",
-          --   },
-          -- },
+        inlay_hints = {
+          enabled = true,
         },
-        tailwindcss = {
-          settings = {
-            tailwindCSS = {
-              experimental = {
-                classRegex = {
-                  -- classNames="...", classNames: "..."
-                  classNamePropNameRegex
-                  .. [[\s*[:=]\s*]]
-                  .. quotedStringRegex,
-                  -- classNames={...} prop
-                  classNamePropNameRegex
-                  .. [[\s*[:=]\s*]]
-                  .. quotedStringRegex
-                  -- {
-                  .. [[\s*}]],
-                  -- classNames(...)
-                  { [[class[nN]ames\(([^)]*)\)]], quotedStringRegex },
+        --- @type lspconfig.options
+        servers = {
+          lua_ls = {
+            settings = {
+              Lua = {
+                -- completion = { callSnippet = "Replace" },
+                diagnostics = {
+                  disable = { "incomplete-signature-doc", "trailing-space", "missing-fields" },
                 },
               },
             },
           },
+          nushell = {},
+          rust_analyzer = {
+            settings = {
+              ["rust-analyzer"] = {
+                -- prevent locking cargo compilation
+                ---@diagnostic disable-next-line: assign-type-mismatch
+                checkOnSave = {
+                  extraArgs = { "--target-dir", "/tmp/rust-analyzer-check" },
+                },
+              },
+            },
+            -- keys = {
+            --   {
+            --     "<leader>cE",
+            --     function()
+            --       require("rust-tools").expand_macro.expand_macro()
+            --     end,
+            --     desc = "Expand Macro (Rust)",
+            --   },
+            -- },
+          },
+          tailwindcss = {
+            settings = {
+              tailwindCSS = {
+                experimental = {
+                  classRegex = {
+                    -- classNames="...", classNames: "..."
+                    classNamePropNameRegex
+                      .. [[\s*[:=]\s*]]
+                      .. quotedStringRegex,
+                    -- classNames={...} prop
+                    classNamePropNameRegex
+                      .. [[\s*[:=]\s*]]
+                      .. quotedStringRegex
+                      -- {
+                      .. [[\s*}]],
+                    -- classNames(...)
+                    { [[class[nN]ames\(([^)]*)\)]], quotedStringRegex },
+                  },
+                },
+              },
+            },
+          },
+          prismals = {},
+          nil_ls = { mason = false },
+          -- nixd = { mason = false },
+          -- rnix = { mason = false },
         },
-        prismals = {},
-        nil_ls = { mason = false },
-        -- nixd = { mason = false },
-        -- rnix = { mason = false },
-      },
-      setup = {
-        eslint = function()
-          require("lazyvim.util").lsp.on_attach(function(client)
-            if client.name == "eslint" then
-              client.server_capabilities.documentFormattingProvider = true
-            elseif client.name == "tsserver" then
-              client.server_capabilities.documentFormattingProvider = false
-            end
-          end)
-        end,
-      },
-    },
+        setup = {
+          eslint = function()
+            require("lazyvim.util").lsp.on_attach(function(client, bufnr)
+              if client.name == "eslint" then
+                client.server_capabilities.documentFormattingProvider = true
+                detachEslintIfIgnored(client, bufnr)
+              elseif client.name == "tsserver" then
+                client.server_capabilities.documentFormattingProvider = false
+              end
+            end)
+          end,
+        },
+      })
+      vim.print(opts)
+    end,
   },
   {
     "mfussenegger/nvim-lint",
@@ -116,7 +165,8 @@ local M = {
     "stevearc/conform.nvim",
     opts = {
       format = {
-        lsp_fallback = "always",
+        -- lsp_fallback = "always",
+        lsp_fallback = true,
       },
       ---@type table<string, conform.FormatterUnit[]>
       formatters_by_ft = {
@@ -134,12 +184,37 @@ local M = {
       ---@type table<string, conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig>
       formatters = {
         prettier = {
+          --- @param ctx {filename: string, dirname: string, buf: number}
+          ---@diagnostic disable-next-line: unused-local
           condition = function(self, ctx)
-            local eslint = require("lazyvim.util").lsp.get_clients({ name = "eslint", buf = ctx.buf })[1]
-            if eslint == nil then
-              return true
+            local is_prettier_enabled = (bufCache[ctx.buf] or {})["is_prettier_enabled"]
+            if is_prettier_enabled ~= nil then
+              return is_prettier_enabled
             end
-            return not eslint.server_capabilities.documentFormattingProvider
+
+            local get_is_prettier_enabled = function()
+              local eslint = require("lazyvim.util").lsp.get_clients({ name = "eslint", buf = ctx.buf })[1]
+              if eslint == nil or not eslint.server_capabilities.documentFormattingProvider then
+                return true
+              end
+
+              local handle, err = io.popen("eslint --print-config " .. ctx.filename .. " --format json")
+              if handle == nil or err ~= nil then
+                return true
+              end
+              local response = handle:read("*a")
+              handle:close()
+              response = vim.json.decode(response)
+              local eslintPrettierConfig = (response.rules["prettier/prettier"] or {})[1] or "off"
+              return eslintPrettierConfig == "off"
+            end
+
+            is_prettier_enabled = get_is_prettier_enabled()
+
+            bufCache[ctx.buf] =
+              vim.tbl_extend("force", bufCache[ctx.buf] or {}, { is_prettier_enabled = is_prettier_enabled })
+
+            return is_prettier_enabled
           end,
         },
       },
