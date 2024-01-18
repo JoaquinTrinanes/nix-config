@@ -34,19 +34,16 @@
     fzf
     git
     lshw
-    lua-language-server
     pciutils
     pinentry
     ripgrep
     sd
-    stylua
     unzip
     coreutils
-    # uutils-coreutils-noprefix
     wget
   ];
 
-  programs.neovim = {
+  programs.neovim = lib.mkDefault {
     enable = true;
     defaultEditor = true;
     viAlias = true;

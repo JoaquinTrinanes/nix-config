@@ -156,10 +156,11 @@
   # Disable gnome-keyring ssh-agent
   xdg.configFile."autostart/gnome-keyring-ssh.desktop" = {
     enable = config.services.gpg-agent.enableSshSupport;
-    text = ''
-      ${lib.fileContents "${pkgs.gnome3.gnome-keyring}/etc/xdg/autostart/gnome-keyring-ssh.desktop"}
-      Hidden=true
-    '';
+    text =
+      (builtins.readFile "${pkgs.gnome3.gnome-keyring}/etc/xdg/autostart/gnome-keyring-ssh.desktop")
+      + ''
+        Hidden=true
+      '';
   };
 
   programs.atuin = {

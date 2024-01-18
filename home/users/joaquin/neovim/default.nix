@@ -11,7 +11,7 @@ in {
   programs.neovim = {
     inherit package;
     enable = lib.mkDefault true;
-    extraPackages = with pkgs; [gcc gnumake git];
+    extraPackages = with pkgs; [gcc gnumake git stylua lua-language-server];
     vimAlias = true;
     viAlias = true;
     extraLuaConfig = ''

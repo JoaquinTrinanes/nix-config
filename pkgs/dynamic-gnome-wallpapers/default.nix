@@ -32,7 +32,7 @@
 
       unpackPhase = ":";
 
-      buildInputs = [flavours];
+      nativeBuildInputs = [flavours];
 
       installPhase = ''
         runHook preInstall
