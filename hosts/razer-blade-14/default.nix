@@ -15,6 +15,8 @@
     ./hardware-configuration.nix
   ];
 
+  programs.firefox.package = pkgs.firefox-devedition;
+
   services.tailscale.extraUpFlags = ["--advertise-tags=tag:desktop"];
 
   boot.tmp.cleanOnBoot = true;
