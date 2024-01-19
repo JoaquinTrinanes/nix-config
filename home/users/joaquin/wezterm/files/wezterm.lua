@@ -95,8 +95,7 @@ config.font = wezterm.font_with_fallback({
 	"Noto Sans Mono CJK SC",
 	"Noto Sans Mono CJK TC",
 	{ family = "Symbols Nerd Font Mono", assume_emoji_presentation = true },
-	"unscii",
-	"unscii:style=16-full",
+	"unscii-16-full",
 })
 
 -- test

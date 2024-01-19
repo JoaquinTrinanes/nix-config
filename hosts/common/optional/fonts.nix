@@ -9,7 +9,10 @@
   fonts.fontconfig = {
     defaultFonts = {
       monospace = ["FiraCode Nerd Font"];
-      emoji = ["JoyPixels" "unscii:style=16-full"];
+      emoji = [
+        "JoyPixels"
+        "unscii-16-full"
+      ];
     };
     localConf = ''
       <match target="font">
