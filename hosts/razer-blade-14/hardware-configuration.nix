@@ -104,6 +104,7 @@
   ];
   environment.variables = {"__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";};
   hardware.nvidia = {
+    package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
     nvidiaSettings = false;
     modesetting.enable = false;
     powerManagement = {
@@ -112,10 +113,10 @@
     };
     prime = {
       reverseSync = {enable = true;};
-      offload = {
-        enable = true;
-        enableOffloadCmd = true;
-      };
+      # offload = {
+      #   enable = true;
+      #   enableOffloadCmd = true;
+      # };
       amdgpuBusId = "PCI:100:0:0"; # result of converting 64:0:0 to decimal
       nvidiaBusId = "PCI:1:0:0";
     };
