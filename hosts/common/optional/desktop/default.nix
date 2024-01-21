@@ -1,6 +1,5 @@
 {
   pkgs,
-  self,
   lib,
   ...
 }: {
@@ -9,6 +8,7 @@
     ../audio.nix
     ../fonts.nix
     ../firefox
+    ../autofirma
   ];
 
   time.timeZone = lib.mkDefault "Europe/Madrid";
