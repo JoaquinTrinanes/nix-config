@@ -17,7 +17,6 @@
     ./direnv
     ./wireplumber
     ./wezterm
-    ./firefox
     ./kitty
     inputs.nix-colors.homeManagerModules.default
   ];

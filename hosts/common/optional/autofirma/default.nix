@@ -5,7 +5,9 @@
   lib,
   ...
 }: let
-  autofirma = self.packages.${pkgs.stdenv.hostPlatform.system}.autofirma.override {firefox = config.programs.firefox.package;};
+  autofirma = self.packages.${pkgs.stdenv.hostPlatform.system}.autofirma.override {
+    firefox = config.programs.firefox.package;
+  };
 in {
   environment.systemPackages = [autofirma];
 

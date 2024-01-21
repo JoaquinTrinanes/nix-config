@@ -22,7 +22,6 @@
       telegram-desktop
       vlc
       ;
-    inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) autofirma;
   };
   programs.dconf.enable = true;
 
