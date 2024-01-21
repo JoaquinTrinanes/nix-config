@@ -55,10 +55,6 @@
     };
   };
 
-  hardware.openrazer = {
-    enable = true;
-    users = [config.users.users."joaquin".name];
-  };
 
   services.resolved = {
     enable = true;
