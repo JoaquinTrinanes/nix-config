@@ -13,13 +13,6 @@
     (lib.mapAttrs (_: flake: {inherit flake;}))
     ((lib.filterAttrs (_: lib.isType "flake")) inputs);
 
-  environment.sessionVariables = lib.mkIf config.nixpkgs.config.allowUnfree {
-    NIXPKGS_ALLOW_UNFREE = toString 1;
-  };
-
-  # This will additionally add your inputs to the system's legacy channels
-  # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = ["/etc/nix/path"];
   environment.etc =
     lib.mapAttrs'
     (name: value: {
@@ -27,6 +20,31 @@
       value.source = value.flake;
     })
     config.nix.registry;
+
+  # This will additionally add your inputs to the system's legacy channels
+  # Making legacy nix commands consistent as well, awesome!
+  nix.nixPath = ["/etc/nix/path"];
+
+  nix.channel.enable = lib.mkDefault false;
+  # Disabling channels makes nix.nixPath not work
+  nix.settings.nix-path = lib.mkIf (!config.nix.channel.enable) config.nix.nixPath;
+
+  # Cleanup channel files
+  systemd.tmpfiles.rules = lib.mkIf (!config.nix.channel.enable) [
+    "R /nix/var/nix/profiles/per-user/root/channels - - - - -"
+    "R /root/.nix-channels - - - - -"
+  ];
+  systemd.user.tmpfiles.rules = lib.mkIf (!config.nix.channel.enable) [
+    "R %h/.nix-defexpr - - - - -"
+    "R %h/.local/state/nix/profiles/channels - - - - -"
+    "R %h/.nix-channels - - - - -"
+  ];
+
+  environment.sessionVariables = lib.mkIf config.nixpkgs.config.allowUnfree {
+    NIXPKGS_ALLOW_UNFREE = toString 1;
+  };
+
+  networking.usePredictableInterfaceNames = lib.mkDefault true;
 
   environment.systemPackages = with pkgs; [
     htop
@@ -41,6 +59,7 @@
     unzip
     coreutils
     wget
+    ldns
   ];
 
   programs.neovim = lib.mkDefault {
