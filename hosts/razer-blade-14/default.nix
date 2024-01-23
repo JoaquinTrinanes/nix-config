@@ -5,13 +5,13 @@
   ...
 }: {
   imports = [
-    ../common/optional/desktop
-    ../common/optional/development
-    ../common/optional/gaming
-    ../common/optional/nix-index
-    ../common/optional/garbage-collect
-    ../common/optional/tailscale
-    ../common/optional/yubikey
+    ../common/desktop
+    ../common/development
+    ../common/gaming
+    ../common/nix-index
+    ../common/garbage-collect
+    ../common/tailscale
+    ../common/yubikey
     ./hardware-configuration.nix
   ];
 

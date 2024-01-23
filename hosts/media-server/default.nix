@@ -13,10 +13,11 @@ in {
 
   imports = [
     ./hardware-configuration.nix
-    ../common/optional/ssh/server.nix
-    ../common/optional/jellyfin
-    ../common/optional/samba
-    ../common/optional/tailscale
+    ../common/ssh/server.nix
+    ../common/jellyfin
+    ../common/samba
+    ../common/tailscale
+    ../common/home-assistant
   ];
 
   services.tailscale.extraUpFlags = lib.mkForce ["--ssh" "--advertise-tags=tag:server"];

@@ -11,7 +11,7 @@
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
-    ../common/optional/hardware-acceleration/amdgpu.nix
+    ../common/hardware-acceleration/amdgpu.nix
     {
       boot.resumeDevice = "/dev/mapper/root";
       boot.kernelParams = ["resume_offset=13078528"];
