@@ -8,7 +8,7 @@ local M = {
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      -- "hrsh7th/cmp-emoji",
+      -- {"hrsh7th/cmp-emoji"},
     },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
@@ -21,6 +21,7 @@ local M = {
       local luasnip = require("luasnip")
       local cmp = require("cmp")
 
+      opts.completion.completeopt = "menuone,noinsert,noselect"
       opts.mapping = vim.tbl_extend("force", opts.mapping, {
         ["<Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
@@ -45,6 +46,10 @@ local M = {
             fallback()
           end
         end, { "i", "s" }),
+        ["<CR>"] = cmp.mapping.confirm({
+          behavior = cmp.ConfirmBehavior.Replace,
+          select = false,
+        }),
       })
     end,
   },
