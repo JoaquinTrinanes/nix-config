@@ -64,7 +64,7 @@
 
   programs.bash.enable = true;
 
-  programs.rtx = {
+  programs.mise = {
     enable = true;
     enableBashIntegration = false;
     enableZshIntegration = false;
