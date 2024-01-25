@@ -1,17 +1,17 @@
 {
   lib,
   pkgs,
-  self,
+  inputs,
   myLib,
   ...
 }: let
-  package = self.inputs.neovim-nightly-overlay.defaultPackage.${pkgs.stdenv.hostPlatform.system};
+  package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
   inherit (myLib) mkImpureLink;
 in {
   programs.neovim = {
     inherit package;
     enable = lib.mkDefault true;
-    extraPackages = with pkgs; [gcc gnumake git stylua lua-language-server];
+    extraPackages = with pkgs; [gcc gnumake git stylua lua-language-server fzf ripgrep];
     vimAlias = true;
     viAlias = true;
     extraLuaConfig = ''
@@ -33,5 +33,5 @@ in {
     source = ./files/ftplugin;
     recursive = true;
   };
-  xdg.configFile."nvim/filetype.lua".source = ./files/filetype.lua;
+  xdg.configFile."nvim/filetype.lua".source = mkImpureLink ./files/filetype.lua;
 }
