@@ -49,8 +49,10 @@
               "flakes"
               "repl-flake"
               "ca-derivations"
+              "auto-allocate-uids"
             ];
             keep-outputs = true;
+            auto-allocate-uids = true;
           };
         };
       })
