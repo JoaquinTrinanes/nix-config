@@ -38,6 +38,7 @@
           # package = lib.mkDefault pkgs.nixVersions.unstable;
 
           settings = {
+            allowed-users = ["@wheel"];
             min-free = 128000000; # 128MB
             max-free = 1000000000; # 1GB
             connect-timeout = 5;
