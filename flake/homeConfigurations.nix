@@ -1,5 +1,5 @@
 {
-  _file = ./home.nix;
+  _file = ./homeConfigurations.nix;
 
   my.users = {
     "joaquin" = {
