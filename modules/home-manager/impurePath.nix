@@ -26,7 +26,7 @@ in {
     home.activation = mkIf (cfg.repoUrl != null && cfg.flakePath != null) {
       downloadRepo = lib.hm.dag.entryAfter ["writeBoundary"] ''
         if [ ! -e ${cfg.flakePath} ]; then
-          $DRY_RUN_CMD ${getExe pkgs.git} clone $VERBOSE_ARG ${cfg.repoUrl} ${cfg.flakePath}
+          run ${getExe pkgs.git} clone $VERBOSE_ARG ${cfg.repoUrl} ${cfg.flakePath}
         fi
       '';
     };
