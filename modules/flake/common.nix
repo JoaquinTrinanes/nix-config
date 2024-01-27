@@ -14,6 +14,12 @@ in {
       default = [];
       description = "Modules that are loaded in all hosts and home manager configurations";
     };
+    exclusiveModules = mkOption {
+      type = types.listOf types.deferredModule;
+      default = [];
+      description = "Modules that are loaded in either standalone home manager configurations or host configurations";
+    };
+
     specialArgs = mkOption {
       type = types.attrsOf types.unspecified;
       description = "Special args passed to all hosts and home manager configurations";
@@ -29,11 +35,16 @@ in {
   config = let
     stateVersion = lib.mkIf (cfg.stateVersion != null) (lib.mkDefault cfg.stateVersion);
   in {
-    my.homeManager.sharedModules =
-      cfg.modules
-      ++ [{home = {inherit stateVersion;};}];
+    my.homeManager = {
+      standaloneModules = cfg.exclusiveModules;
+      sharedModules =
+        cfg.modules
+        ++ [{home = {inherit stateVersion;};}];
+    };
+
     my.nixos.sharedModules =
       cfg.modules
+      ++ cfg.exclusiveModules
       ++ [
         {system = {inherit stateVersion;};}
       ];

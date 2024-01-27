@@ -31,4 +31,7 @@
   my.homeManager.sharedModules = [
     ../home/global
   ];
+  my.homeManager.standaloneModules = [
+    ../home/global/standalone.nix
+  ];
 }
