@@ -1,4 +1,8 @@
-{users, ...}: let
+{
+  users,
+  lib,
+  ...
+}: let
   sshConfig = {
     openssh.authorizedKeys.keys = users."joaquin".sshPublicKeys;
   };
@@ -20,13 +24,22 @@ in {
     ../common/home-assistant
   ];
 
+  services.logind.lidSwitch = "ignore";
+
   services.tailscale.extraUpFlags = lib.mkForce ["--ssh" "--advertise-tags=tag:server"];
 
-  services.openvpn.servers = {
-    es23 = {
-      config = ''config /secrets/vpn/node-es-05.protonvpn.net.udp.ovpn '';
-      autoStart = true;
-    };
+  systemd.sleep.extraConfig = ''
+    AllowSuspend=no
+    AllowHibernation=no
+    AllowSuspendThenHibernate=no
+    AllowHybridSleep=no
+  '';
+
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+    recommendedOptimisation = true;
   };
 
   users.users."root" = sshConfig;
