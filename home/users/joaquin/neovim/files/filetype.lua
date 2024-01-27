@@ -1,5 +1,7 @@
 vim.filetype.add({
-  extension = {},
-  filename = { ["flake.lock"] = "json" },
-  pattern = {},
+	extension = {},
+	filename = { ["flake.lock"] = "json", [".envrc"] = "sh" },
+	pattern = {
+		["%.env%.%a+"] = "sh",
+	},
 })
