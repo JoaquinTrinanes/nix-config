@@ -5,7 +5,9 @@ local M = {
   },
   {
     "hrsh7th/nvim-cmp",
-    dependencies = { "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
+    dependencies = {
+      { "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
+    },
     --- @param opts cmp.ConfigSchema
     opts = function(_, opts)
       local cmp_autopairs = require("nvim-autopairs.completion.cmp")
@@ -16,8 +18,8 @@ local M = {
       local prev_format = opts.formatting.format
       local max_menu_length = 15
 
-      opts.formatting.format = function(entry, _item)
-        local item = prev_format(entry, _item)
+      opts.formatting.format = function(entry, vim_item)
+        local item = prev_format(entry, vim_item)
         if entry.completion_item.detail ~= nil and entry.completion_item.detail ~= "" then
           item.menu = entry.completion_item.detail
           item.menu_hl_group = "Comment"

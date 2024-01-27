@@ -1,4 +1,40 @@
 local M = {
+  { "nvim-lua/plenary.nvim" },
+  {
+    "stevearc/oil.nvim",
+    event = "VimEnter",
+    opts = {
+      columns = {
+        -- "permissions",
+        "icon",
+        "size",
+        -- "mtime",
+      },
+      keymaps = {
+        -- ["w-"] = "actions.select-split",
+        -- ["w|"] = "actions.select-vsplit",
+        ["C-r"] = "actions.refresh",
+        ["<S-h>"] = "actions.toggle_hidden",
+
+        -- ["g?"] = "actions.show_help",
+        -- ["<CR>"] = "actions.select",
+        ["<C-s>"] = false, -- "actions.select_vsplit"
+        ["<C-h>"] = false, -- "actions.select_split"
+        -- ["<C-t>"] = "actions.select_tab",
+        -- ["<C-p>"] = "actions.preview",
+        ["<C-c>"] = false, -- "actions.close",
+        ["<C-l>"] = false, -- "actions.refresh",
+        -- ["-"] = "actions.parent",
+        -- ["_"] = "actions.open_cwd",
+        -- ["`"] = "actions.cd",
+        -- ["~"] = "actions.tcd",
+        -- ["gs"] = "actions.change_sort",
+        -- ["gx"] = "actions.open_external",
+        -- ["g."] = "actions.toggle_hidden",
+        -- ["g\\"] = "actions.toggle_trash",
+      },
+    },
+  },
   {
     "lewis6991/gitsigns.nvim",
     opts = {
@@ -58,6 +94,27 @@ local M = {
         },
       },
     },
+  },
+  {
+    "nvimdev/dashboard-nvim",
+    opts = function(_, opts)
+      local logo = [[
+        ⠀⠀⢀⣀⣠⣤⣤⣶⣶⣿⣷⣆⠀⠀⠀⠀
+⠀⠀⠀⢀⣤⣤⣶⣶⣾⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⡆⠀⠀⠀
+⠀⢀⣴⣿⣿⣿⣿⣿⣿⡿⠛⠉⠉⠀⠀⠀⣿⣿⣿⣿⣷⠀⠀⠀
+⣠⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⢤⣶⣾⠿⢿⣿⣿⣿⣿⣇⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠈⠉⠀⠀⠀⣿⣿⣿⣿⣿⡆⠀
+⢸⣿⣿⣿⣏⣿⣿⣿⣿⣿⣷⠀⠀⢠⣤⣶⣿⣿⣿⣿⣿⣿⣿⡀
+⠀⢿⣿⣿⣿⡸⣿⣿⣿⣿⣿⣇⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣧
+⠀⠸⣿⣿⣿⣷⢹⣿⣿⣿⣿⣿⣄⣀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⠀⢻⣿⣿⣿⡇⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⠀⠘⣿⣿⣿⣿⠘⠻⠿⢛⣛⣭⣽⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⠀⠀⢹⣿⣿⠏⠀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠋
+⠀⠀⠀⠈⣿⠏⠀⣰⣿⣿⣿⣿⣿⣿⠿⠟⠛⠋⠉⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢠⡿⠿⠛⠋⠉⠀⠀⠀⠀        ]]
+
+      opts.config.header = vim.split(logo, "\n")
+    end,
   },
 }
 

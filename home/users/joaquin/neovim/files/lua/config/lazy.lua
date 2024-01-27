@@ -12,7 +12,6 @@ require("lazy").setup({
     {
       "LazyVim/LazyVim",
       import = "lazyvim.plugins",
-      opts = { colorscheme = "catppuccin" },
     },
     { import = "plugins" },
   },
@@ -26,6 +25,7 @@ require("lazy").setup({
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
   checker = { enabled = false }, -- automatically check for plugin updates
+  change_detection = { notify = false },
   performance = {
     rtp = {
       -- disable some rtp plugins

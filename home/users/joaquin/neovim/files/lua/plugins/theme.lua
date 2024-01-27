@@ -1,11 +1,16 @@
 local M = {
   {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "catppuccin",
+    },
+  },
+  {
     "catppuccin/nvim",
     name = "catppuccin",
-    lazy = false,
-    priority = 1000,
     opts = {
       flavour = "frappe",
+      term_colors = true,
       custom_highlights = function()
         return {
           LspSignatureActiveParameter = { style = { "bold" } },

@@ -144,7 +144,8 @@ local M = {
       linters = {
         shellcheck = {
           condition = function(ctx)
-            return ctx.filename:find(".env$") == nil
+            local name = vim.fs.basename(ctx.filename)
+            return name ~= ".env" and name ~= ".envrc" and name:find("^%.env%.%a+") == nil
           end,
         },
       },
@@ -250,7 +251,32 @@ local M = {
   },
   { "imsnif/kdl.vim", ft = { "kdl" } },
   { "prisma/vim-prisma", ft = { "prisma" } },
-  { "nvim-treesitter/nvim-treesitter", opts = { ensure_installed = "all" } },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = "all",
+      disable = function()
+        -- return vim.b.large_buf
+        --   or vim.fn.strwidth(vim.fn.getline(".")) > 300
+        return vim.fn.getfsize(vim.fn.expand("%")) > 1024 * 1024
+      end,
+      -- is_supported = function()
+      --   if vim.fn.strwidth(vim.fn.getline(".")) > 300 or vim.fn.getfsize(vim.fn.expand("%")) > 1024 * 1024 then
+      --     return false
+      --   else
+      --     return true
+      --   end
+      -- end,
+    },
+  },
+  {
+    "LunarVim/bigfile.nvim",
+    lazy = false,
+    -- event = "BufReadPre",
+    opts = {
+      filesize = 1,
+    },
+  },
 }
 
 return M

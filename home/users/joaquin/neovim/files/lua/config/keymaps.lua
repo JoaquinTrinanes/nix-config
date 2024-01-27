@@ -14,6 +14,9 @@ end
 map("n", "x", [["_x]])
 map("n", "X", [["_X]])
 
+-- Ctrl-Backspace to delete previous word in insert mode
+map("i", "<C-BS>", "<C-W>")
+
 -- resizing splits
 map("n", "<A-h>", function()
   require("smart-splits").resize_left()
