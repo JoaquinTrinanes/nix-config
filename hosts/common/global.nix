@@ -47,19 +47,22 @@
   networking.usePredictableInterfaceNames = lib.mkDefault true;
 
   environment.systemPackages = with pkgs; [
-    htop
+    age
+    coreutils
     fd
     fzf
     git
+    htop
+    jc
+    ldns
     lshw
+    openssl
     pciutils
     pinentry
     ripgrep
     sd
     unzip
-    coreutils
     wget
-    ldns
   ];
 
   programs.neovim = lib.mkDefault {

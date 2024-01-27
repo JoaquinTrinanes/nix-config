@@ -11,6 +11,7 @@
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
+    inputs.hardware.nixosModules.common-pc-laptop
     ../common/hardware-acceleration/amdgpu.nix
     {
       boot.resumeDevice = "/dev/mapper/root";
@@ -83,26 +84,32 @@
   };
   services.power-profiles-daemon.enable = false;
 
+  # powerManagement = {
+  #   enable = true;
+  # };
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  # powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.amd.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   services.xserver.videoDrivers = ["modesetting" "nvidia"];
 
-  boot.blacklistedKernelModules = ["nvidia"];
+  # Disabling nvidia.modesetting doesn't work if prime.offload is enabled
   boot.kernelParams = lib.mkMerge [
-    [
-      "acpi_backlight=native" # fixes brightness control
-    ]
-    # last entries have priority
     (
-      # Disabling nvidia.modesetting doesn't work if prime.offload is enabled
       lib.mkIf (!config.hardware.nvidia.modesetting.enable)
+      # last entries have priority, and the modeset=1 needs to be overriden
       (lib.mkAfter ["nvidia-drm.modeset=0"])
     )
+    [
+      # suspend loop fix
+      "button.lid_init_state=open"
+    ]
   ];
+
   environment.variables = {"__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";};
+
   hardware.nvidia = {
     package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
     nvidiaSettings = false;
@@ -113,10 +120,10 @@
     };
     prime = {
       reverseSync = {enable = true;};
-      # offload = {
-      #   enable = true;
-      #   enableOffloadCmd = true;
-      # };
+      offload = {
+        enable = true;
+        enableOffloadCmd = true;
+      };
       amdgpuBusId = "PCI:100:0:0"; # result of converting 64:0:0 to decimal
       nvidiaBusId = "PCI:1:0:0";
     };

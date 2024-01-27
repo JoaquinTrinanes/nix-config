@@ -6,17 +6,42 @@
 # Note: The conversions happen *after* config.nu is loaded
 export-env {
     let esep_list_converter = {
-        from_string: { |s| $s | split row (char esep) }
-        to_string: { |v| $v | path expand -n | str join (char esep) }
+        from_string: {|s| $s | split row (char esep) }
+        to_string: {|v|
+            $v
+            # | path expand -n
+            | str join (char esep)
+        }
+    }
+
+    let space_list_converter = {
+        from_string: {|s| $s | split row (char space) }
+        to_string: {|v|
+            $v
+            # | path expand -n
+            | str join (char space)
+        }
     }
 
     $env.ENV_CONVERSIONS = {
-        "PATH": $esep_list_converter
-        "XDG_DATA_DIRS": $esep_list_converter
-        "Path": $esep_list_converter
         "DIRS_LIST": $esep_list_converter
+        "GIO_EXTRA_MODULES": $esep_list_converter
+        "GTK_PATH": $esep_list_converter
+        "INFOPATH": $esep_list_converter
+        "LIBEXEC_PATH": $esep_list_converter
+        "LS_COLORS": $esep_list_converter
         "NU_LIB_DIRS": $esep_list_converter
         "NU_PLUGIN_DIRS": $esep_list_converter
+        "PATH": $esep_list_converter
+        "Path": $esep_list_converter
+        "QTWEBKIT_PLUGIN_PATH": $esep_list_converter
+        "SESSION_MANAGER": $esep_list_converter
+        "TERMINFO_DIRS": $esep_list_converter
+        "XCURSOR_PATH": $esep_list_converter
+        "XDG_CONFIG_DIRS": $esep_list_converter
+        "XDG_DATA_DIRS": $esep_list_converter
+
+        "NIX_PROFILES": $space_list_converter
     }
 }
 

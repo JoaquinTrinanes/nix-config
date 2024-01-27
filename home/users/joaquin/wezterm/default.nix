@@ -14,7 +14,7 @@
       cursor_fg = base00;
       compose_cursor = base06;
       foreground = base05;
-      scrollbar_thumb = base01;
+      scrollbar_thumb = base03;
       selection_bg = base05;
       selection_fg = base00;
       split = base03;

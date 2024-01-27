@@ -9,7 +9,7 @@
   imports = [
     ./theme.nix
   ];
-
+  programs.carapace.enableNushellIntegration = false;
   programs.nushell = {
     enable = lib.mkDefault true;
     package = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}.nushellFull;

@@ -3,8 +3,7 @@
 let carapace_completer = {|spans: list<string>|
     carapace $spans.0 nushell ...$spans
     | from json
-    | default []
-    | filter_carapace_error
+    | if ($in | default [] | where value == $"($spans | last)ERR" | is-empty) { $in } else { null }
 }
 
 let fish_completer = {|spans: list<string>|
@@ -34,6 +33,7 @@ let external_completer = {|spans: list<string>|
 
     match $spans.0 {
       __zoxide_z | __zoxide_zi => $zoxide_completer
+      git => $fish_completer
       gpg => $fish_completer
       sudo => $sudo_completer
       _ => $default_completer

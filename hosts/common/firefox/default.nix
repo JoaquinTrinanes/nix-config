@@ -127,8 +127,8 @@ in {
       "network.http.sendRefererHeader" = 2; # 1 = don't send any, 1 = send only on clicks, 2 = send on image requests as well
 
       # smart referer takes care of this
-      "network.http.referer.spoofSource" = false; # false=real referer, true=spoof referer (use target URI as referer)
-      "network.http.referer.trimmingPolicy" = 2; # 0 = full URI, 1 = scheme+host+port+path, 2 = scheme+host+port
+      # "network.http.referer.spoofSource" = false; # false=real referer, true=spoof referer (use target URI as referer)
+      # "network.http.referer.trimmingPolicy" = 2; # 0 = full URI, 1 = scheme+host+port+path, 2 = scheme+host+port
     };
     policies = {
       ExtensionSettings =

@@ -105,7 +105,6 @@
       shell = {
         disabled = false;
         nu_indicator = "";
-        format = "([$indicator](style) )";
       };
     };
   };
@@ -143,7 +142,6 @@
     settings = {
       keyserver = "hkps://keys.openpgp.org";
       default-recipient-self = true;
-      require-cross-certification = true;
     };
     scdaemonSettings = {
       disable-ccid = true;

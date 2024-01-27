@@ -25,5 +25,7 @@
   };
   programs.dconf.enable = true;
 
+  nix.daemonCPUSchedPolicy = "idle";
+
   xdg.portal.enable = true;
 }

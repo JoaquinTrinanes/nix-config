@@ -178,6 +178,16 @@ config.keys = {
 	},
 	{ key = "p", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCommandPalette },
 	{ key = "s", mods = "ALT", action = wezterm.action.CharSelect({ copy_on_select = true }) },
+
+	split_nav("move", "h"),
+	split_nav("move", "j"),
+	split_nav("move", "k"),
+	split_nav("move", "l"),
+
+	split_nav("resize", "h"),
+	split_nav("resize", "j"),
+	split_nav("resize", "k"),
+	split_nav("resize", "l"),
 }
 
 local smart_splits = wezterm.plugin.require("https://github.com/mrjones2014/smart-splits.nvim")

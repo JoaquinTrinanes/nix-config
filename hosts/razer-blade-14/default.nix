@@ -31,21 +31,30 @@
 
   users.users = {
     "joaquin" = {
+      uid = 1000;
       # You can set an initial password for your user.
       # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
       # initialPassword = "correcthorsebatterystaple";
       isNormalUser = true;
-      openssh.authorizedKeys.keys = [];
+      openssh.authorizedKeys.keys = lib.mkForce [];
       extraGroups =
         ["wheel" "networkmanager"]
         ++ lib.optionals config.programs.adb.enable ["adbusers"]
         ++ lib.optionals config.services.printing.enable ["lp"]
-        ++ lib.optionals config.virtualisation.docker.enable ["docker"];
+        ++ lib.optionals config.virtualisation.docker.enable ["docker"]
+        ++ lib.optionals config.security.tpm2.enable ["tss"];
     };
   };
 
   networking = {
-    nameservers = ["1.1.1.1" "1.0.0.1"];
+    wireless.iwd.enable = true;
+    nftables = {enable = true;};
+    nameservers = [
+      "1.1.1.1"
+      "2606:4700:4700::1111"
+      "1.0.0.1"
+      "2606:4700:4700::1001"
+    ];
     networkmanager = {
       enable = true;
       wifi = {
@@ -57,11 +66,14 @@
 
 
   services.resolved = {
+    # dnssec = "allow-downgrade";
     enable = true;
-    extraConfig = ''
-      # DNSOverTLS=opportunistic
-      DNSOverTLS=yes
-    '';
+    # TODO: not sure if this is relevant
+    fallbackDns = [
+      # "127.0.0.1"
+      # "::1"
+    ];
+    dnsovertls = "opportunistic";
   };
   # override firefox's default DNS settings to force the local resolver
   programs.firefox.preferences."network.trr.mode" = lib.mkForce 5;
