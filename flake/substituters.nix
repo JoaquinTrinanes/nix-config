@@ -21,6 +21,5 @@ let
 in {
   _file = ./substituters.nix;
 
-  my.nixos.sharedModules = [substituterSettings];
-  my.homeManager.standaloneModules = [substituterSettings];
+  my.common.modules = [substituterSettings];
 }

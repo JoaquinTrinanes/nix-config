@@ -32,4 +32,17 @@
     # Disable recipient key ID in messages
     throw-keyids = true;
   };
+
+  xdg.configFile."Yubico/u2f_keys" = lib.mkIf (user.u2f != []) {
+    text = let
+      mkKey = {
+        keyHandle,
+        userKey,
+        coseType,
+        options,
+      }:
+        lib.concatStringsSep "," [keyHandle userKey coseType options];
+    in
+      lib.concatStringsSep ":" ([user.name] ++ map mkKey user.u2f);
+  };
 }

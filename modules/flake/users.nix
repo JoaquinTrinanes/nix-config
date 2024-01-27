@@ -32,6 +32,17 @@ in {
             type = types.listOf types.str;
             default = [];
           };
+          u2f = mkOption {
+            type = types.listOf (types.submodule ({...}: {
+              options = {
+                keyHandle = mkOption {type = types.str;};
+                userKey = mkOption {type = types.str;};
+                coseType = mkOption {type = types.str;};
+                options = mkOption {type = types.str;};
+              };
+            }));
+            default = [];
+          };
           firstName = mkOption {
             type = types.nullOr types.str;
             default = name;
