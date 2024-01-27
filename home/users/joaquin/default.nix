@@ -13,7 +13,7 @@
     ./git
     ./neovim
     ./nushell
-    ./dconf
+    ./gnome
     ./direnv
     ./wireplumber
     ./wezterm

@@ -1,33 +1,11 @@
-{
-  lib,
-  pkgs,
-  ...
-}: let
-  extensions = builtins.attrValues {
-    inherit
-      (pkgs.gnomeExtensions)
-      dash-to-panel
-      espresso
-      appindicator
-      night-theme-switcher
-      user-themes
-      blur-my-shell
-      ;
-  };
+{lib, ...}: let
   inherit (lib.hm.gvariant) mkTuple;
 in {
-  xdg.dataFile =
-    lib.listToAttrs (map (e: lib.nameValuePair "gnome-shell/extensions/${e.extensionUuid}" {source = "${e}/share/gnome-shell/extensions/${e.extensionUuid}";})
-      extensions);
-
-  home.packages =
-    builtins.attrValues {
-      inherit (pkgs.gnome) gnome-tweaks;
-      inherit (pkgs) paper-icon-theme;
-    }
-    ++ [(lib.mkIf config.gtk.enable config.gtk.theme.package)]
-    ++ extensions;
   dconf.settings = {
+    # "org/gnome/shell/extensions/user-theme" = {
+    #   inherit (config.gtk.theme) name;
+    #   # gtk-theme = name;
+    # };
     "org/gnome/desktop/peripherals/touchpad" = {
       tap-to-click = true;
       two-finger-scrolling-enabled = true;
@@ -35,17 +13,16 @@ in {
     };
     "org/gnome/shell" = {
       favorite-apps = ["org.gnome.Nautilus.desktop" "firefox-devedition.desktop" "discord.desktop" "org.wezfurlong.wezterm.desktop"];
-      disable-user-extensions = false;
-      enabled-extensions =
-        builtins.map
-        (extension: extension.extensionUuid)
-        extensions;
     };
     "org/gnome/desktop/interface" = {
       clock-format = "24h";
       text-scaling-factor = 1.25;
       show-battery-percentage = true;
       enable-hot-corners = false;
+      # gtk-theme = config.gtk.theme.name;
+    };
+    "org/gnome/TextEditor" = {
+      custom-font = "FiraCode Nerd Font 12";
     };
     "org/gnome/mutter" = {
       edge-tiling = true;
@@ -53,6 +30,10 @@ in {
     "org/gnome/shell/extensions/espresso" = {
       show-notifications = false;
     };
+    "org/gnome/shell/extensions/nightthemeswitcher/time" = {
+      location = mkTuple [42.876720 (-8.547082)];
+    };
+
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";
     };
