@@ -21,5 +21,5 @@ let
 in {
   _file = ./substituters.nix;
 
-  my.common.modules = [substituterSettings];
+  my.common.exclusiveModules = [substituterSettings];
 }
