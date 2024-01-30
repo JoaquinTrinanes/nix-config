@@ -1,4 +1,4 @@
-{
+{self, ...}: {
   _file = ./nixosConfigurations.nix;
 
   my.hosts = {
@@ -13,4 +13,6 @@
       modules = [../hosts/media-server/default.nix];
     };
   };
+
+  my.nixos.sharedModules = builtins.attrValues self.nixosModules;
 }

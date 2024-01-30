@@ -1,7 +1,8 @@
-{self, ...}: {
-  imports = [
-    self.homeManagerModules.impurePath
-  ];
+{
+  lib,
+  user,
+  ...
+}: {
   programs.ssh = {
     includes = ["config.local"];
   };

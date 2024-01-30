@@ -1,4 +1,4 @@
-{
+{self, ...}: {
   _file = ./homeConfigurations.nix;
 
   my.users = {
@@ -28,9 +28,7 @@
     };
   };
 
-  my.homeManager.sharedModules = [
-    ../home/global
-  ];
+  my.homeManager.sharedModules = [../home/global] ++ builtins.attrValues self.homeManagerModules;
   my.homeManager.standaloneModules = [
     ../home/global/standalone.nix
   ];
