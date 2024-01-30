@@ -106,32 +106,41 @@ in {
     };
   };
 
+  # TODO: changes in this file make standalone modules only be applied to "user" and
+  # not to "user@hostname". I guess this is what I want?
   config.my.homeManager.finalConfigurations = let
     users = lib.filterAttrs (_: user: user.homeManager.enable) cfg;
     mkUserConfig = user: {
       extraSpecialArgs = common.specialArgs // {inherit user;};
       modules =
-        user.homeManager.finalModules ++ homeManager.standaloneModules;
+        user.homeManager.finalModules;
     };
+    standaloneUserConfig = user: let
+      baseConfig = mkUserConfig user;
+    in
+      (mkUserConfig user) // {modules = baseConfig.modules ++ homeManager.standaloneModules;};
+
     userHostConfig = user: {
       hostConfig,
       host,
     }: let
-      userConfig = mkUserConfig user;
+      baseConfig = mkUserConfig user;
     in
       inputs.home-manager.lib.homeManagerConfiguration
-      (userConfig
-        // {
+      (
+        {
           inherit (hostConfig) pkgs;
-          modules = userConfig.modules ++ [(host.override host.finalSystem.config)];
-        });
+          modules = baseConfig.modules ++ [(host.override host.finalSystem.config)];
+        }
+        // baseConfig
+      );
     allUserConfigs = user:
       {
         ${user.name} = let
           pkgs = withSystem "x86_64-linux" ({pkgs, ...}: pkgs);
         in
           inputs.home-manager.lib.homeManagerConfiguration
-          ((mkUserConfig user) // {inherit pkgs;});
+          ({inherit pkgs;} // (standaloneUserConfig user));
       }
       // (lib.mapAttrs' (
           hostName: host: (
