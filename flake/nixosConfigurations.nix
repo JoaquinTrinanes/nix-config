@@ -17,6 +17,6 @@
   my.nixos.sharedModules =
     builtins.attrValues self.nixosModules
     ++ [
-      "${self}/hosts/common/global.nix"
+      ../hosts/common/global.nix
     ];
 }
