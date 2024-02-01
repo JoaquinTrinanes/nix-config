@@ -4,6 +4,16 @@ local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
 
 local bufCache = {}
 
+--- @param filename string
+local is_dotenv = function(filename)
+  local name = vim.fs.basename(filename)
+  if name == nil then
+    return false
+  end
+
+  return name == ".env" or name == ".envrc" or name:find("%.env%.[%w_.-]+") ~= nil -- name:find("^%.env%.%a+") == nil
+end
+
 local function merge_in_place(a, b)
   if type(a) == "table" and type(b) == "table" then
     for k, v in pairs(b) do
@@ -138,14 +148,21 @@ local M = {
     "mfussenegger/nvim-lint",
     opts = {
       linters_by_ft = {
-        sh = { "shellcheck" },
+        sh = {
+          "shellcheck",
+          -- "dotenv_linter",
+        },
         nix = { "statix" },
       },
       linters = {
+        dotenv_linter = {
+          condition = function(ctx)
+            return is_dotenv(ctx.filename)
+          end,
+        },
         shellcheck = {
           condition = function(ctx)
-            local name = vim.fs.basename(ctx.filename)
-            return name ~= ".env" and name ~= ".envrc" and name:find("^%.env%.%a+") == nil
+            return not is_dotenv(ctx.filename)
           end,
         },
       },
