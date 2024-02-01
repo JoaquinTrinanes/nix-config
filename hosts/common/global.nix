@@ -73,6 +73,7 @@
     git
     htop
     jc
+    jq
     ldns
     lshw
     openssl
