@@ -7,11 +7,30 @@
 }: {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
+  imports = [
+    # add nixpkgs-unstable HEAD to the registry
+    {
+      nix.registry.unstable = {
+        to = {
+          owner = "NixOS";
+          ref = "nixpkgs-unstable";
+          repo = "nixpkgs";
+          type = "github";
+        };
+      };
+    }
+  ];
+
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
   nix.registry =
     (lib.mapAttrs (_: flake: {inherit flake;}))
-    ((lib.filterAttrs (_: lib.isType "flake")) inputs);
+    ((lib.filterAttrs (_: lib.isType "flake"))
+      (inputs
+        // {
+          # alias p to nixpkgs
+          p = inputs.nixpkgs;
+        }));
 
   environment.etc =
     lib.mapAttrs'
@@ -19,7 +38,7 @@
       name = "nix/path/${name}";
       value.source = value.flake;
     })
-    config.nix.registry;
+    (lib.filterAttrs (_: x: lib.isType "flake" x.flake) config.nix.registry);
 
   # This will additionally add your inputs to the system's legacy channels
   # Making legacy nix commands consistent as well, awesome!
