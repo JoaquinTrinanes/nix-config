@@ -16,9 +16,10 @@ find_all_up() {
 }
 
 source_all_up() {
-	local UP_FILES
+	local -a UP_FILES
 	UP_FILES=$(find_all_up "$@")
 
+	if [ -z "$UP_FILES" ]; then return; fi
 	for f in "${UP_FILES[@]}"; do
 		source_env "$f"
 	done
