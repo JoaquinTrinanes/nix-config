@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  colors = lib.mapAttrs (_: color: "#${color}") config.colorScheme.colors;
+  colors = lib.mapAttrs (_: color: "#${color}") config.colorScheme.palette;
 in {
   programs.nushell.extraConfig = with colors; ''
     export-env {
