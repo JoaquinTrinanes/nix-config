@@ -26,14 +26,6 @@ in {
             base0f: "${base0F}" # Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
         }
 
-        def menu [] {
-            {
-                text: $colors.base05
-                description_text: $colors.base07
-                selected_text: { fg: $colors.base05 bg: $colors.base02 attr: b }
-            }
-        }
-
         def relative_luminance_helper [x: float] {
             if $x <= 0.03928 {
                 $x / 12.92
@@ -71,6 +63,8 @@ in {
             text: $colors.base05
             description_text: $colors.base07
             selected_text: { fg: $colors.base05 bg: $colors.base02 attr: b }
+            match_text: { attr: u }
+            selected_match_text: { attr: urb }
         }
 
         let bool = {|| if $in { $colors.base0d } else { $colors.base08 } }
@@ -142,6 +136,7 @@ in {
           }
 
       load-env {
+          colors: $colors
           config: (
               $env.config?
               | default {}
