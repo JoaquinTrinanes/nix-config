@@ -84,7 +84,7 @@ in {
 
         let theme = {
               separator: $colors.base03
-              leading_trailing_space_bg: $colors.base04
+              leading_trailing_space_bg: { bg: $colors.base04 }
               header: $colors.base0b
               date: {|| (date now) - $in |
                   if $in < 1hr {
