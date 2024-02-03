@@ -64,7 +64,7 @@ in {
             description_text: $colors.base07
             selected_text: { fg: $colors.base05 bg: $colors.base02 attr: b }
             match_text: { attr: u }
-            selected_match_text: { attr: urb }
+            selected_match_text: { bg: $colors.base02 attr: urb }
         }
 
         let bool = {|| if $in { $colors.base0d } else { $colors.base08 } }
