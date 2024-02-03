@@ -115,6 +115,8 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
+config.term = "wezterm"
+
 -- start maximized
 wezterm.on("gui-startup", function()
 	local tab, pane, window = wezterm.mux.spawn_window({})
