@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  colors = lib.mapAttrs (_: color: "#${color}") config.colorScheme.palette;
+  colors = lib.mapAttrs (_: color: "#${color}") config.colors.colorScheme.palette;
   theme = with colors; {
     background = base00;
     foreground = base05;

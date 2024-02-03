@@ -18,12 +18,11 @@
     ./wireplumber
     ./wezterm
     ./kitty
+    ./colors
     inputs.nix-colors.homeManagerModules.default
   ];
 
   programs.password-store.enable = true;
-
-  colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
   home = {
     username = user.name;

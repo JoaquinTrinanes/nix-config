@@ -19,4 +19,16 @@
       else path
     );
   getPassCommand = key: "${lib.getExe config.programs.password-store.package} ${lib.escapeShellArg key}";
+  getThemeVariant = variant: let
+    current = config.colors.colorScheme;
+    alternate = config.colors.colorSchemeAlternate;
+  in
+    if current.variant == variant
+    then current
+    else if alternate != null
+    then alternate
+    else current;
+
+  darkTheme = getThemeVariant "dark";
+  lightTheme = getThemeVariant "light";
 }

@@ -1,12 +1,6 @@
-{
-  config,
-  myLib,
-  ...
-}: {
-  programs.wezterm = {
-    enable = true;
-    extraConfig = builtins.readFile ./files/wezterm.lua;
-    colorSchemes."nix-colors" = with config.colorScheme.palette; {
+{myLib, ...}: let
+  mkWeztermColors = scheme:
+    with scheme.palette; {
       ansi = [base00 base08 base0B base0A base0D base0E base0C base05];
       brights = [base03 base08 base0B base0A base0D base0E base0C base07];
       background = base00;
@@ -44,6 +38,12 @@
         };
       };
     };
+in {
+  programs.wezterm = {
+    enable = true;
+    extraConfig = builtins.readFile ./files/wezterm.lua;
+    colorSchemes."dark" = mkWeztermColors myLib.darkTheme;
+    colorSchemes."light" = mkWeztermColors myLib.lightTheme;
   };
   xdg.configFile."wezterm/wezterm.lua".source = myLib.mkImpureLink ./files/wezterm.lua;
 }

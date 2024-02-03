@@ -23,6 +23,23 @@ local conditional_map = function(key, mods, action, get_should_execute, default)
 	}
 end
 
+-- wezterm.gui is not available to the mux server, so take care to
+-- do something reasonable when this config is evaluated by the mux
+local function get_appearance()
+	if wezterm.gui then
+		return wezterm.gui.get_appearance()
+	end
+	return "Dark"
+end
+
+local function scheme_for_appearance(appearance)
+	if appearance:find("Dark") then
+		return "dark"
+	else
+		return "light"
+	end
+end
+
 ---@param pane PaneObj
 local get_process_name = function(pane)
 	local process_name = pane:get_foreground_process_name()
@@ -125,7 +142,7 @@ config.hide_tab_bar_if_only_one_tab = true
 
 config.enable_wayland = os.getenv("XDG_SESSION_TYPE") == "wayland"
 
-config.color_scheme = "nix-colors"
+config.color_scheme = scheme_for_appearance(get_appearance())
 config.font = wezterm.font_with_fallback({
 	{ family = "FiraCode Nerd Font", harfbuzz_features = { "ss05" } },
 	"DejaVu Sans Mono",
