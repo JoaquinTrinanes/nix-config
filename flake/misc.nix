@@ -26,12 +26,8 @@
       inherit (config.my) users;
       hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.my.hosts;
     };
-    modules = [
-      ({
-        pkgs,
-        lib,
-        ...
-      }: {
+    exclusiveModules = [
+      ({pkgs, ...}: {
         nix = {
           # use older nix while HM issue #4692 isn't fixed
           package = lib.mkDefault pkgs.nixVersions.nix_2_18;

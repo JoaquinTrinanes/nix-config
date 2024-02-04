@@ -1,4 +1,4 @@
-let
+{lib, ...}: let
   substituters = [
     "https://nix-community.cachix.org"
     "https://nushell-nightly.cachix.org"
@@ -16,7 +16,8 @@ let
     "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
   ];
   substituterSettings.nix.settings = {
-    inherit substituters trusted-public-keys;
+    substituters = lib.mkAfter substituters;
+    inherit trusted-public-keys;
   };
 in {
   _file = ./substituters.nix;
