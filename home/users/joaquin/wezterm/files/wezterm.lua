@@ -116,6 +116,7 @@ if wezterm.config_builder then
 end
 
 config.term = "wezterm"
+config.front_end = "OpenGL"
 
 -- start maximized
 wezterm.on("gui-startup", function()
