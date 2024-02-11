@@ -38,7 +38,7 @@
 
   boot.loader.efi.efiSysMountPoint = "/efi";
 
-  fileSystems."/efi" = {
+  fileSystems.${config.boot.loader.efi.efiSysMountPoint} = {
     device = "/dev/disk/by-label/ESP";
     # device = "/dev/disk/by-uuid/984F-0AE3";
     # device = "/dev/nvme0n1p3";

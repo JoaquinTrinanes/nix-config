@@ -24,7 +24,8 @@
 
   boot.initrd.luks.devices."luks-8cd4a7b7-cfaf-4aa9-b523-23abd20b65b8".device = "/dev/disk/by-uuid/8cd4a7b7-cfaf-4aa9-b523-23abd20b65b8";
 
-  fileSystems."/boot" = {
+  boot.loader.efi.efiSysMountPoint = "/boot";
+  fileSystems.${config.boot.loader.efi.efiSysMountPoint} = {
     device = "/dev/disk/by-uuid/5553-7C4C";
     fsType = "vfat";
   };
