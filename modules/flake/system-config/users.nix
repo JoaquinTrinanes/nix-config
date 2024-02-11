@@ -39,6 +39,7 @@
                 enable = mkEnableOption "home manager nixos module on the `${name}` host" // {default = config.enable;};
                 override = mkOption {
                   type = types.functionTo types.deferredModule;
+                  default = _osConfig: {};
                 };
               };
             }));
