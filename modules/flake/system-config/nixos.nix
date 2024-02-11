@@ -57,14 +57,14 @@ in {
             ]
             ++ config.modules
             ++ lib.mapAttrsToList (username: user:
-              mkIf user.homeManager.hosts.${name}.enable {
+              mkIf (user.homeManager.hosts.${name}.enable or false) {
                 imports = [
                   inputs.home-manager.nixosModules.home-manager
                 ];
                 home-manager = {
                   users."${user.name}" = {
                     imports =
-                      user.homeManager.finalModules ++ lib.optional user.homeManager.hosts.${name}.enable user.homeManager.hosts.${name}.override;
+                      user.homeManager.finalModules ++ user.homeManager.hosts.${name}.override;
                   };
                   useUserPackages = true;
                   useGlobalPkgs = true;
