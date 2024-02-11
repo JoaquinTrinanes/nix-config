@@ -1,3 +1,2 @@
 {
-  system-config = ./system-config;
 }

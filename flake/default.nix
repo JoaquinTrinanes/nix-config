@@ -6,6 +6,7 @@ in {
   imports =
     builtins.attrValues flakeModules
     ++ [
+      ../parts
       ./homeConfigurations.nix
       ./misc.nix
       ./nixosConfigurations.nix
