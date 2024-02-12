@@ -18,6 +18,7 @@
     ./wireplumber
     ./wezterm
     ./kitty
+    ./carapace
     inputs.nix-colors.homeManagerModules.default
   ];
 
