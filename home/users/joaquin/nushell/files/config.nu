@@ -97,6 +97,7 @@ $env.config = {
         quick: true  # set this to false to prevent auto-selecting completions when only one remains
         partial: true  # set this to false to prevent partial filling of the prompt
         algorithm: "prefix"  # prefix or fuzzy
+        use_ls_colors: true
         external: {
             # enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up my be very slow
             max_results: 100 # setting it lower can improve completion performance at the cost of omitting some options
@@ -224,6 +225,53 @@ $env.config = {
                 | each { |it| {value: $it.name description: $it.usage} }
             }
         }
+        {
+            name: abbr_menu
+            only_buffer_difference: false
+            marker: "👀 "
+            type: {
+                layout: columnar
+                columns: 1
+                col_width: 20
+                col_padding: 2
+            }
+            source: { |buffer, position|
+                scope aliases
+                | where name == $buffer
+                | each { |it| {value: $it.expansion }}
+            }
+        }
+        {
+            name: ide_completion_menu
+            only_buffer_difference: false
+            marker: "| "
+            type: {
+                layout: ide
+                min_completion_width: 0,
+                max_completion_width: 50,
+                # max_completion_height: 10, # will be limited by the available lines in the terminal
+                padding: 0,
+                border: false,
+                cursor_offset: 0,
+                description_mode: "prefer_right"
+                min_description_width: 0
+                max_description_width: 50
+                max_description_height: 10
+                description_offset: 1
+                # If true, the cursor pos will be corrected, so the suggestions match up with the typed text
+                #
+                # C:\> str
+                #      str join
+                #      str trim
+                #      str split
+                correct_cursor_pos: false
+            }
+            # style: {
+            #     # selected_text: {attr: r}
+            #     # match_text: {attr: u}
+            #     # selected_match_text: {attr: ur}
+            # }
+        }
     ] | each {|menu| $menu | upsert style {}})
     keybindings: [
        # fix shift+backspace not working with the kitty keyboard protocol
@@ -276,25 +324,43 @@ $env.config = {
                 ]
             }
         }
+        # {
+        #     name: kill-line
+        #     modifier: control
+        #     keycode: char_c
+        #     mode: [emacs, vi_normal, vi_insert]
+        #     event: [
+        #         { edit: CutFromStart }
+        #         { edit: CutToEnd }
+        #     ]
+        # }
         {
-            name: unix-line-discard
-            modifier: control
-            keycode: char_u
-            mode: [emacs, vi_normal, vi_insert]
-            event: {
-                until: [
-                    { edit: cutfromlinestart }
-                ]
-            }
+            name: copy_selection
+            modifier: control_shift
+            keycode: char_c
+            mode: emacs
+            event: null # { edit: copyselection }
         }
         {
-            name: kill-line
+            name: abbr
             modifier: control
-            keycode: char_k
+            keycode: space
             mode: [emacs, vi_normal, vi_insert]
+            event: [
+                { send: menu name: abbr_menu }
+                { edit: insertchar, value: ' '}
+            ]
+        }
+        {
+            name: ide_completion_menu
+            modifier: control
+            keycode: char_n
+            mode: [emacs vi_normal vi_insert]
             event: {
                 until: [
-                    { edit: cuttolineend }
+                    { send: menu name: ide_completion_menu }
+                    { send: menunext }
+                    { edit: complete }
                 ]
             }
         }
