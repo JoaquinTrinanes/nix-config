@@ -50,6 +50,7 @@
             ];
             keep-outputs = true;
             auto-allocate-uids = true;
+            narinfo-cache-negative-ttl = 0;
           };
         };
       })
