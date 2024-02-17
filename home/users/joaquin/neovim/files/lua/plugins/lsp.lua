@@ -28,8 +28,13 @@ local function merge_in_place(a, b)
 end
 
 local detachEslintIfIgnored = function(client, bufnr)
+  local ok, is_exe = pcall(vim.fn.executable, "eslint")
+  if not ok or is_exe == 0 then
+    return
+  end
   local Job = require("plenary.job")
   local file = vim.api.nvim_buf_get_name(bufnr)
+
   Job:new({
     command = "eslint",
     args = { "--format", "json", file },
@@ -74,14 +79,12 @@ local M = {
           lua_ls = {
             settings = {
               Lua = {
-                -- completion = { callSnippet = "Replace" },
                 diagnostics = {
                   disable = { "incomplete-signature-doc", "trailing-space", "missing-fields" },
                 },
               },
             },
           },
-          nushell = {},
           rust_analyzer = {
             settings = {
               ["rust-analyzer"] = {
