@@ -4,7 +4,6 @@
   lib,
   user,
   inputs,
-  hosts,
   self,
   ...
 }: {
