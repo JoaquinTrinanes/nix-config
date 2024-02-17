@@ -59,4 +59,32 @@ in {
     recursive = true;
   };
   xdg.configFile."nvim/filetype.lua".source = mkImpureLink ./files/filetype.lua;
+
+  xdg.configFile."tridactyl/tridactylrc".text = let
+    ytRegex = "${lib.escapeRegex "youtube.com/watch?"}v=.*";
+  in
+    /*
+    vim
+    */
+    ''
+      " delete previously set local options
+      sanitise tridactyllocal
+
+      set newtab about:blank
+
+      set modeindicator false
+
+      " blacklistadd ${ytRegex}
+      unbindurl ${ytRegex} j
+      unbindurl ${ytRegex} k
+      unbindurl ${ytRegex} l
+      unbindurl ${ytRegex} t
+      unbindurl ${ytRegex} f
+      unbindurl ${ytRegex} <Space>
+
+      seturl localhost superignore true
+
+      " Whether to allow pages (not necessarily github) to override /, which is a default Firefox binding.
+      " set leavegithubalone true
+    '';
 }
