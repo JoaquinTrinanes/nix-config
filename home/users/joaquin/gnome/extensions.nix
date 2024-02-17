@@ -28,6 +28,4 @@ in {
         extensions;
     };
   };
-
-  # home.packages = extensions;
 }
