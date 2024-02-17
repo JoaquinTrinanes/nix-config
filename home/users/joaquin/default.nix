@@ -110,6 +110,13 @@
     };
   };
 
+  xdg.configFile."pnpm/rc".source = let
+    keyValue = pkgs.formats.keyValue {};
+  in
+    keyValue.generate "rc" {
+      update-notifier = false;
+    };
+
   home.shellAliases =
     {
       l = "ls";
