@@ -175,6 +175,13 @@
   programs.atuin = {
     enable = true;
     flags = ["--disable-up-arrow"];
+    settings = {
+      # keymap_mode = "vim-normal";
+      # https://docs.rs/regex/latest/regex/#syntax
+      history_filter = ["^\\s+"];
+      # number of context lines to show when scrolling by pages
+      scroll_context_lines = 3;
+    };
   };
 
   programs.bat = {
