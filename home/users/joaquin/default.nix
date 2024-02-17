@@ -193,9 +193,9 @@
 
   programs.ssh = {
     enable = true;
-    matchBlocks = {
-      ${hosts.media-server.networking.hostName} = {user = hosts.media-server.users.users.media.name;};
-    };
+    extraConfig = ''
+      SetEnv TERM="xterm-256color"
+    '';
   };
 
   # Nicely reload system units when changing configs
