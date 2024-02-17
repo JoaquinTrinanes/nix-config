@@ -2,7 +2,7 @@ local M = {
   { "nvim-lua/plenary.nvim" },
   {
     "stevearc/oil.nvim",
-    event = "VimEnter",
+    event = "VeryLazy",
     opts = {
       columns = {
         -- "permissions",
@@ -115,6 +115,37 @@ local M = {
 
       opts.config.header = vim.split(logo, "\n")
     end,
+  },
+  {
+    "echasnovski/mini.indentscope",
+    opts = {
+      -- options = { try_as_border = true },
+      draw = { animation = require("mini.indentscope").gen_animation.none() },
+    },
+  },
+  {
+    "LunarVim/bigfile.nvim",
+    event = { "FileReadPre", "BufReadPre", "User FileOpened" },
+    opts = {
+      filesize = 10, -- in MB
+      features = {
+        "indent_blankline",
+        "illuminate",
+        "lsp",
+        "treesitter",
+        "syntax",
+        "matchparen",
+        "vimopts",
+        "filetype",
+        {
+          name = "mini.indentscope",
+          opts = { defer = false },
+          disable = function()
+            vim.b.miniindentscope_disable = true
+          end,
+        },
+      },
+    },
   },
 }
 

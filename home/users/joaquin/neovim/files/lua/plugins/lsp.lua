@@ -173,11 +173,20 @@ local M = {
   {
     "williamboman/mason.nvim",
     opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "prettier",
-        "stylua",
-        "shfmt",
-      })
+      opts.ensure_installed = opts.ensure_installed or {}
+
+      local servers_to_skip = {
+        "marksman",
+      }
+
+      opts.ensure_installed = vim.tbl_filter(function(server)
+        return not vim.list_contains(servers_to_skip, server)
+      end, opts.ensure_installed)
+      -- vim.list_extend(opts.ensure_installed, {
+      --   "prettier",
+      --   "stylua",
+      --   "shfmt",
+      -- })
     end,
   },
   {
@@ -192,6 +201,7 @@ local M = {
         toml = { "taplo" },
         php = { "pint" },
         nix = { { "alejandra", "nixfmt" } },
+        blade = { "prettier" },
         markdown = {
           -- "injected",
           "prettier",
@@ -240,19 +250,6 @@ local M = {
     },
   },
   {
-    "williamboman/mason.nvim",
-    opts = function(_, _opts)
-      local opts = _opts
-      opts.ensure_installed = opts.ensure_installed or {}
-
-      vim.list_extend(opts.ensure_installed, {
-        "taplo",
-        "intelephense",
-        "pyright",
-      })
-    end,
-  },
-  {
     "folke/noice.nvim",
     opts = {
       lsp = { hover = { silent = true } },
@@ -272,29 +269,19 @@ local M = {
   { "prisma/vim-prisma", ft = { "prisma" } },
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = "all",
-      disable = function()
-        -- return vim.b.large_buf
-        --   or vim.fn.strwidth(vim.fn.getline(".")) > 300
-        return vim.fn.getfsize(vim.fn.expand("%")) > 1024 * 1024
-      end,
-      -- is_supported = function()
-      --   if vim.fn.strwidth(vim.fn.getline(".")) > 300 or vim.fn.getfsize(vim.fn.expand("%")) > 1024 * 1024 then
-      --     return false
-      --   else
-      --     return true
-      --   end
-      -- end,
-    },
-  },
-  {
-    "LunarVim/bigfile.nvim",
-    lazy = false,
-    -- event = "BufReadPre",
-    opts = {
-      filesize = 1,
-    },
+    opts = function(_, opts)
+      opts.ensure_installed = "all"
+
+      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+      parser_config["blade"] = {
+        install_info = {
+          url = "https://github.com/EmranMR/tree-sitter-blade",
+          files = { "src/parser.c" },
+          branch = "main",
+        },
+        filetype = "blade",
+      }
+    end,
   },
 }
 
