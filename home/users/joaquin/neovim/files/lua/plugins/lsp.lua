@@ -126,6 +126,8 @@ local M = {
           },
           prismals = {},
           nil_ls = { mason = false },
+          nushell = { mason = false },
+          marksman = { mason = false },
           -- nixd = { mason = false },
           -- rnix = { mason = false },
         },

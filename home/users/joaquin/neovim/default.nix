@@ -11,7 +11,32 @@ in {
   programs.neovim = {
     inherit package;
     enable = lib.mkDefault true;
-    extraPackages = with pkgs; [gcc gnumake git stylua lua-language-server fzf ripgrep];
+    extraPackages = builtins.attrValues {
+      inherit
+        (pkgs)
+        black
+        dotenv-linter
+        fzf
+        gcc
+        git
+        gnumake
+        icu
+        lua-language-server
+        marksman
+        ripgrep
+        shellcheck
+        shfmt
+        stylua
+        taplo
+        yaml-language-server
+        ;
+      inherit
+        (pkgs.nodePackages)
+        pyright
+        prettier
+        typescript-language-server
+        ;
+    };
     vimAlias = true;
     viAlias = true;
     extraLuaConfig = ''
