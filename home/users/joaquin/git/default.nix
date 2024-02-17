@@ -53,6 +53,7 @@
 
     ignores = [
       "*.swp"
+      ".env"
 
       # Mac
       ".DS_Store"
