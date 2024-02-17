@@ -1,10 +1,39 @@
 # Nushell Config File
 
+let carapace_completer = {|spans|
+  carapace $spans.0 nushell ...$spans
+  | from json
+}
+
 let fish_completer = {|spans: list<string>|
     fish --command $'complete "--do-complete=($spans | str join " ")"'
     | $"value(char tab)description(char newline)" + $in
     | from tsv --flexible --no-infer
 }
+
+let default_completer = $carapace_completer
+let fallback_completer = $fish_completer
+
+let external_completer = {|spans: list<string>|
+    let expanded_alias = scope aliases | where name == $spans.0 | get -i 0.expansion
+    let spans = if $expanded_alias != null {
+      $spans | skip 1 | prepend ($expanded_alias | split row ' ')
+    } else {
+        $spans
+    }
+
+    match $spans.0 {
+      git => $fish_completer
+      gpg => $fish_completer
+      _ => $default_completer
+    }
+    | do $in $spans
+    | if (($in | is-empty) and ($fallback_completer != null)) {
+        do $fallback_completer $spans
+    } else {
+        $in
+    }
+ }
 
 # The default config record. This is where much of your global configuration is setup.
 $env.config = {
@@ -99,9 +128,9 @@ $env.config = {
         algorithm: "prefix"  # prefix or fuzzy
         use_ls_colors: true
         external: {
-            # enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up my be very slow
+            enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up my be very slow
             max_results: 100 # setting it lower can improve completion performance at the cost of omitting some options
-            # completer: $external_completer
+            completer: $external_completer
         }
     }
     filesize: {
