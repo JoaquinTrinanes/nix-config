@@ -260,7 +260,7 @@ local M = {
   },
   {
     "LhKipp/nvim-nu",
-    event = "BufRead",
+    ft = { "nu" },
     build = ":TSInstall nu",
     opts = {
       use_lsp_features = false,
