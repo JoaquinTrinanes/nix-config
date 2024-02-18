@@ -57,28 +57,31 @@ in {
       size = 16;
     };
     keybindings = {
-      "ctrl+j" = "kitten pass_keys.py neighboring_window bottom ctrl+j";
-      "ctrl+k" = "kitten pass_keys.py neighboring_window top    ctrl+k";
-      "ctrl+h" = "kitten pass_keys.py neighboring_window left   ctrl+h";
-      "ctrl+l" = "kitten pass_keys.py neighboring_window right  ctrl+l";
+      "ctrl+j" = "kitten pass_keys.py neighboring_window bottom ctrl+j  \"^.* - nvim$\"";
+      "ctrl+k" = "kitten pass_keys.py neighboring_window top    ctrl+k \"^.* - nvim$\"";
+      "ctrl+h" = "kitten pass_keys.py neighboring_window left   ctrl+h \"^.* - nvim$\"";
+      "ctrl+l" = "kitten pass_keys.py neighboring_window right  ctrl+l \"^.* - nvim$\"";
 
       # the 3 here is the resize amount, adjust as needed
-      "alt+j" = "kitten pass_keys.py relative_resize down  3 alt+j";
-      "alt+k" = "kitten pass_keys.py relative_resize up    3 alt+k";
-      "alt+h" = "kitten pass_keys.py relative_resize left  3 alt+h";
-      "alt+l" = "kitten pass_keys.py relative_resize right 3 alt+l";
+      "alt+j" = "kitten pass_keys.py relative_resize down  3 alt+j \"^.* - nvim$\"";
+      "alt+k" = "kitten pass_keys.py relative_resize up    3 alt+k \"^.* - nvim$\"";
+      "alt+h" = "kitten pass_keys.py relative_resize left  3 alt+h \"^.* - nvim$\"";
+      "alt+l" = "kitten pass_keys.py relative_resize right 3 alt+l \"^.* - nvim$\"";
 
       "ctrl+alt+-" = "launch --location=hsplit";
       "ctrl+alt+\\" = "launch --location=vsplit";
+      "ctrl+alt+|" = "launch --location=vsplit";
+      "ctrl+shift+l" = "kitty_shell window";
     };
-    settings =
+    settings = lib.mkMerge [
       {
         bold_font = "FiraCode Nerd Font SemBd";
         bold_italic_font = "FiraCode Nerd Font SemBd";
         disable_ligatures = "cursor";
         enable_audio_bell = false;
       }
-      // theme;
+      theme
+    ];
   };
   xdg.configFile."kitty/pass_keys.py".source = "${smart-splits-nvim}/kitty/pass_keys.py";
   xdg.configFile."kitty/relative_resize.py".source = "${smart-splits-nvim}/kitty/relative_resize.py";
