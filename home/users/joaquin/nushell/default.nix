@@ -4,6 +4,7 @@
   lib,
   inputs,
   myLib,
+  self,
   ...
 }: let
   nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
@@ -37,26 +38,29 @@ in {
     inherit (config.home) shellAliases;
     configFile.source = ./files/config.nu;
     envFile.source = ./files/env.nu;
-    extraConfig = lib.mkMerge [
-      ''
-        # Parse text as nix expression
-        def "from nix" []: string -> any {
-            ${lib.getExe config.nix.package} eval --json --expr $in | from json
-        }
+    extraConfig = let
+      nix = lib.getExe config.nix.package;
+      formatter = lib.getExe self.formatter.${pkgs.stdenv.hostPlatform.system};
+    in
+      lib.mkMerge [
+        ''
+          # Parse text as nix expression
+          def "from nix" []: string -> any {
+              ${nix} eval --json --expr $in | from json
+          }
 
-        # Convert table data into a nix expression
-        def "to nix" [
-          --format(-f) # Format the result
-        ]: any -> string {
-          # print (is-terminal -o)
-            to json | ${lib.getExe config.nix.package} eval --expr $"builtins.fromJSON '''($in)'''" | if $format { ${lib.getExe pkgs.alejandra} -q - } else { $in }
-        }
-      ''
-      (lib.mkOrder 9999 ''
-        overlay use ${./files/scripts/completions}
-        # use ${./files/scripts/completions} *
-      '')
-    ];
+          # Convert table data into a nix expression
+          def "to nix" [
+              --format(-f) # Format the result
+          ]: any -> string {
+              to json | ${nix} eval --expr $"builtins.fromJSON '''($in)'''" | if $format { ${formatter} - | ${lib.getExe pkgs.bat} --paging=never --style=plain -l nix } else { $in }
+          }
+        ''
+        (lib.mkOrder 9999 ''
+          overlay use ${./files/scripts/completions}
+          # use ${./files/scripts/completions} *
+        '')
+      ];
   };
   programs.carapace.enable = true;
   xdg.configFile."nushell/scripts" = {
