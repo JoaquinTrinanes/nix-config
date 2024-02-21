@@ -5,14 +5,35 @@
   inputs,
   myLib,
   ...
-}: {
+}: let
+  nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
+  plugins = builtins.attrValues {
+    inherit (pkgs.nushellPlugins) regex;
+    inherit (nushellNightlyPkgs) nu_plugin_formats;
+  };
+  pluginBinFromPkg = plugin: let
+    name = plugin.pname;
+    matches = lib.strings.match "^nushell_plugin_(.*)" name;
+  in
+    if (matches == null)
+    then (lib.getExe plugin)
+    else "${plugin}/bin/nu_plugin_${toString matches}";
+  pluginExprs = map (plugin: "register ${pluginBinFromPkg plugin}") plugins;
+  pluginFile =
+    pkgs.runCommandNoCCLocal "plugin.nu" {
+      nativeBuildInputs = [config.programs.nushell.package];
+    } ''
+      touch $out
+      nu --no-config-file --no-history --no-std-lib --plugin-config $out --commands '${lib.concatStringsSep ";" pluginExprs}'
+    '';
+in {
   imports = [
     ./theme.nix
   ];
   programs.carapace.enableNushellIntegration = false;
   programs.nushell = {
     enable = lib.mkDefault true;
-    package = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}.nushellFull;
+    package = nushellNightlyPkgs.nushellFull;
     inherit (config.home) shellAliases;
     configFile.source = ./files/config.nu;
     envFile.source = ./files/env.nu;
@@ -36,14 +57,6 @@
         # use ${./files/scripts/completions} *
       '')
     ];
-
-    extraEnv = let
-      plugins = ["formats" "regex"];
-      pluginExpr = plugin: ''
-        register ${pkgs.nushellPlugins.${plugin}}/bin/nu_plugin_${plugin}
-      '';
-    in
-      lib.concatLines (builtins.map pluginExpr plugins);
   };
   programs.carapace.enable = true;
   xdg.configFile."nushell/scripts" = {
@@ -51,6 +64,7 @@
     recursive = true;
   };
 
+  xdg.configFile."nushell/plugin.nu".source = pluginFile;
   home.packages = with pkgs; [
     # for completions
     fish
