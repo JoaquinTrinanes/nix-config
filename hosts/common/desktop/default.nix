@@ -5,8 +5,8 @@
 }: {
   imports = [
     ./gnome.nix
-    ../audio.nix
-    ../fonts.nix
+    ../audio
+    ../fonts
     ../firefox
     ../autofirma
   ];
