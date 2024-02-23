@@ -4,6 +4,9 @@
       "rulesCustomizations": [
         { "rule": "prettier/prettier", "severity": "off" }
       ]
+    },
+    "intelephense": {
+      "intelephense.files.maxSize": 10000000
     }
   }
 }
