@@ -24,8 +24,8 @@
     pkgs.runCommandNoCCLocal "plugin.nu" {
       nativeBuildInputs = [config.programs.nushell.package];
     } ''
-      touch $out
-      nu --no-config-file --no-history --no-std-lib --plugin-config $out --commands '${lib.concatStringsSep ";" pluginExprs}'
+      touch $out {config,env}.nu
+      nu --config config.nu --env-config env.nu --plugin-config $out --no-history --no-std-lib  --commands '${lib.concatStringsSep ";" pluginExprs}; echo $nu.plugin-path'
     '';
 in {
   imports = [
