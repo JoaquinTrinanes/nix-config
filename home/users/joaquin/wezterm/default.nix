@@ -46,4 +46,6 @@
     };
   };
   xdg.configFile."wezterm/wezterm.lua".source = myLib.mkImpureLink ./files/wezterm.lua;
+  xdg.configFile."wezterm/types".source = ./files/types;
+  xdg.configFile."wezterm/.luarc.json".source = ./files/.luarc.json;
 }

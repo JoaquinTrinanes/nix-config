@@ -89,18 +89,6 @@ local function split_nav(resize_or_move, key)
 	}
 end
 
-local nav_bindings = {
-	split_nav("move", "h"),
-	split_nav("move", "j"),
-	split_nav("move", "k"),
-	split_nav("move", "l"),
-	-- resize panes
-	split_nav("resize", "h"),
-	split_nav("resize", "j"),
-	split_nav("resize", "k"),
-	split_nav("resize", "l"),
-}
-
 local zellij_only_map = function(key, mods, action, default)
 	return conditional_map(key, mods, action, function(_, pane)
 		return has_foreground_process("zellij", pane)
@@ -123,8 +111,6 @@ wezterm.on("gui-startup", function()
 	local tab, pane, window = wezterm.mux.spawn_window({})
 	window:gui_window():maximize()
 end)
-
-config.hide_tab_bar_if_only_one_tab = true
 
 config.enable_wayland = os.getenv("XDG_SESSION_TYPE") == "wayland"
 
@@ -171,8 +157,14 @@ config.font = wezterm.font_with_fallback({
 -- 	},
 -- }
 
-config.font_size = 16
+config.tab_max_width = 999999
+
+-- config.window_decorations = "INTEGRATED_BUTTONS | RESIZE | TITLE"
+config.window_decorations = "RESIZE|TITLE"
+config.hide_tab_bar_if_only_one_tab = false -- true
 config.use_fancy_tab_bar = false
+
+config.font_size = 16
 config.default_cursor_style = "SteadyBar"
 config.cursor_blink_rate = 0
 config.enable_scroll_bar = true
