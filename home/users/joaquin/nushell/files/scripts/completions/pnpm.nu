@@ -52,13 +52,22 @@ def 'nu-complete pnpm package binaries' [] {
 
 
 def 'nu-complete pnpm' [] {
-    let normal_completions = (do $env.config.completions.external.completer [pnpm ''])
+    let original_completions = with-env {
+        COMP_CWORD: 1
+        COMP_LINE: 'pnpm '
+        COMP_POINT: 3
+    } {
+        pnpm completion -- pnpm | lines | each {|it| $"($it) " } | wrap value
+    }
+    let external_completions = (do $env.config.completions.external.completer [pnpm ''])
     let script_completions = (
         nu-complete pnpm user scripts
-        | append (nu-complete pnpm package binaries)
-        | filter {|x| not ($x.value in ($normal_completions | get value)) }
     )
-    $normal_completions | append $script_completions | sort-by value
+    [
+        ...$external_completions
+        ...$script_completions
+        ...$original_completions
+    ] | uniq-by value | sort-by value
 }
 
 export extern rm [
