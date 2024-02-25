@@ -14,6 +14,9 @@ end
 map("n", "x", [["_x]])
 map("n", "X", [["_X]])
 
+map("n", "Q", "@qj")
+map("x", "Q", ":norm @q<CR>")
+
 -- Ctrl-Backspace to delete previous word in insert mode
 map("i", "<C-BS>", "<C-W>")
 
