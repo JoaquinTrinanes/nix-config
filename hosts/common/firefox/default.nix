@@ -131,16 +131,25 @@ in {
       # "network.http.referer.trimmingPolicy" = 2; # 0 = full URI, 1 = scheme+host+port+path, 2 = scheme+host+port
     };
     policies = {
-      ExtensionSettings =
-        (lib.genAttrs [
-          "addon@darkreader.org"
-          "uBlock0@raymondhill.net"
+      ExtensionSettings = let
+        pinnedExtensions = [
           "CanvasBlocker@kkapsner.de"
+          "addon@darkreader.org"
           "firefox-enpass@enpass.io"
-          "vpn@proton.ch"
           "smart-referer@meh.paranoid.pk"
-          "@amiunique-extension"
-        ] (name: mkExtension {inherit name;}))
+          "uBlock0@raymondhill.net"
+          "vpn@proton.ch"
+          # "tab-array@menhera.org"
+          # "{aecec67f-0d10-4fa7-b7c7-609a2db280cf}" # violent monkey
+        ];
+        hiddenExtensions = [];
+      in
+        (lib.genAttrs hiddenExtensions (name: mkExtension {inherit name;}))
+        // lib.genAttrs pinnedExtensions (name:
+          mkExtension {
+            inherit name;
+            default_area = "navbar";
+          })
         // {
           "tridactyl.vim.betas@cmcaine.co.uk" = mkExtension {
             name = "tridactyl.vim.betas@cmcaine.co.uk";
@@ -148,6 +157,7 @@ in {
           };
         };
       SearchEngines = {
+        Default = "DuckDuckGo";
         Remove = ["amazon@search.mozilla.org" "bing@search.mozilla.org"];
       };
       DisableFeedbackCommands = true;
