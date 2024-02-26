@@ -1,5 +1,6 @@
 local M = {
   { "nvim-lua/plenary.nvim" },
+  { "RRethy/vim-illuminate", opts = { filetypes_denylist = { "nu" } } },
   {
     "stevearc/oil.nvim",
     event = "VeryLazy",

@@ -79,6 +79,7 @@ in {
         bold_italic_font = "FiraCode Nerd Font SemBd";
         disable_ligatures = "cursor";
         enable_audio_bell = false;
+        touch_scroll_multiplier = 5;
       }
       theme
     ];
