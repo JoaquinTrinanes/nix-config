@@ -21,6 +21,7 @@ in {
         git
         gnumake
         icu
+        lazygit
         lua-language-server
         marksman
         ripgrep
