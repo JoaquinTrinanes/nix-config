@@ -39,7 +39,7 @@
             max-free = 1000000000; # 1GB
             connect-timeout = 5;
             fallback = true;
-            log-lines = 25;
+            log-lines = 50;
             auto-optimise-store = true;
             experimental-features = [
               "nix-command"
