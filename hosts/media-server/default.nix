@@ -42,11 +42,27 @@ in {
     recommendedOptimisation = true;
   };
 
+  services.deluge = {
+    enable = true;
+    # openFirewall = true;
+    web = {
+      enable = true;
+      openFirewall = true;
+      # port = 8112;
+    };
+  };
+
   users.users."root" = sshConfig;
-  users.users."media" =
+  users.users."media" = {
+    isSystemUser = true;
+    group = "media";
+  };
+  users.groups.media = {};
+  users.users."joaquin" =
     sshConfig
     // {
-      hashedPassword = "";
+      uid = 1000;
       isNormalUser = true;
+      extraGroups = ["wheel"];
     };
 }
