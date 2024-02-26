@@ -7,6 +7,5 @@
     yubioath-flutter
     yubikey-personalization
     yubikey-personalization-gui
-    pcscliteWithPolkit.out # fix pcscd, nixpkgs #280826
   ];
 }
