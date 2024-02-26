@@ -1,5 +1,4 @@
 {pkgs, ...}: {
-  # imports = [./firefox-pkcs11.nix];
   services.pcscd.enable = true;
   services.udev.packages = [pkgs.yubikey-personalization];
 
