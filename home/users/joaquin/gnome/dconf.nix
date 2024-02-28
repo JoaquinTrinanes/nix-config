@@ -15,6 +15,7 @@ in {
       favorite-apps = ["org.gnome.Nautilus.desktop" "firefox-devedition.desktop" "discord.desktop" "org.wezfurlong.wezterm.desktop"];
     };
     "org/gnome/desktop/interface" = {
+      clock-show-weekday = true;
       clock-format = "24h";
       text-scaling-factor = 1.25;
       show-battery-percentage = true;
