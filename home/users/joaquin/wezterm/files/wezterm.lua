@@ -114,7 +114,7 @@ end)
 
 config.enable_wayland = os.getenv("XDG_SESSION_TYPE") == "wayland"
 
-config.color_scheme = "nix-colors"
+config.color_scheme = "base16"
 config.font = wezterm.font_with_fallback({
 	{ family = "FiraCode Nerd Font", harfbuzz_features = { "ss05" } },
 	"DejaVu Sans Mono",

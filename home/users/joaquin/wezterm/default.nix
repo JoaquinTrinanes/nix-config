@@ -6,7 +6,7 @@
   programs.wezterm = {
     enable = true;
     extraConfig = builtins.readFile ./files/wezterm.lua;
-    colorSchemes."nix-colors" = with config.colorScheme.palette; {
+    colorSchemes."base16" = with config.colorScheme.palette; {
       ansi = [base00 base08 base0B base0A base0D base0E base0C base05];
       brights = [base03 base08 base0B base0A base0D base0E base0C base07];
       background = base00;
