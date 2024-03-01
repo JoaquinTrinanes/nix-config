@@ -7,7 +7,7 @@
   self,
   ...
 }: {
-  _module.args.myLib = import "${self}/home/lib" {inherit lib config pkgs self;};
+  _module.args.myLib = import "${self}/home/lib" {inherit lib config pkgs self inputs;};
   imports = [
     ./git
     ./neovim
