@@ -1,7 +1,7 @@
 {self, ...}: {
   _file = ./homeConfigurations.nix;
 
-  my.users = {
+  system-parts.users = {
     "joaquin" = {
       email = "hi@joaquint.io";
       firstName = "Joaquín";
@@ -28,8 +28,8 @@
     };
   };
 
-  my.homeManager.sharedModules = [../home/global] ++ builtins.attrValues self.homeManagerModules;
-  my.homeManager.standaloneModules = [
+  system-parts.homeManager.sharedModules = [../home/global] ++ builtins.attrValues self.homeManagerModules;
+  system-parts.homeManager.standaloneModules = [
     ../home/global/standalone.nix
   ];
 }

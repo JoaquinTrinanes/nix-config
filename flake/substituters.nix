@@ -20,5 +20,5 @@
 in {
   _file = ./substituters.nix;
 
-  my.common.exclusiveModules = [substituterSettings];
+  system-parts.common.exclusiveModules = [substituterSettings];
 }

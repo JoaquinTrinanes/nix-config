@@ -4,14 +4,14 @@
   config,
   ...
 }: let
-  cfg = config.my.hosts;
-  inherit (config.my) users common nixos;
+  cfg = config.system-parts.hosts;
+  inherit (config.system-parts) users common nixos;
   configs = builtins.mapAttrs (_: host: host.finalSystem) cfg;
   inherit (lib) types mkOption mkIf;
 in {
   _file = ./nixos.nix;
 
-  options.my = {
+  options.system-parts = {
     nixos.sharedModules = mkOption {
       type = types.listOf types.deferredModule;
       default = [];

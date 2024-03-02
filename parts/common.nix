@@ -4,11 +4,11 @@
   ...
 }: let
   inherit (lib) mkOption types;
-  cfg = config.my.common;
+  cfg = config.system-parts.common;
 in {
   _file = ./common.nix;
 
-  options.my.common = {
+  options.system-parts.common = {
     modules = mkOption {
       type = types.listOf types.deferredModule;
       default = [];
@@ -35,14 +35,14 @@ in {
   config = let
     stateVersion = lib.mkIf (cfg.stateVersion != null) (lib.mkDefault cfg.stateVersion);
   in {
-    my.homeManager = {
+    system-parts.homeManager = {
       standaloneModules = cfg.exclusiveModules;
       sharedModules =
         cfg.modules
         ++ [{home = {inherit stateVersion;};}];
     };
 
-    my.nixos.sharedModules =
+    system-parts.nixos.sharedModules =
       cfg.modules
       ++ cfg.exclusiveModules
       ++ [

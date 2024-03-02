@@ -5,11 +5,11 @@
   ...
 }: let
   inherit (lib) mkOption types;
-  cfg = config.my.nixpkgs;
+  cfg = config.system-parts.nixpkgs;
 in {
   _file = ./nixpkgs.nix;
 
-  options.my.nixpkgs = {
+  options.system-parts.nixpkgs = {
     overlays = mkOption {
       type = types.listOf types.unspecified;
       default = [];
@@ -42,9 +42,9 @@ in {
   };
 
   config = {
-    my.nixpkgs.finalConfig = {
+    system-parts.nixpkgs.finalConfig = {
       inherit (cfg) overlays config;
     };
-    my.common.exclusiveModules = [{nixpkgs = cfg.finalConfig;}];
+    system-parts.common.exclusiveModules = [{nixpkgs = cfg.finalConfig;}];
   };
 }

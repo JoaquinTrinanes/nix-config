@@ -1,7 +1,7 @@
 {self, ...}: {
   _file = ./nixosConfigurations.nix;
 
-  my.hosts = {
+  system-parts.hosts = {
     "razer-blade-14" = {
       system = "x86_64-linux";
       modules = [
@@ -14,7 +14,7 @@
     };
   };
 
-  my.nixos.sharedModules =
+  system-parts.nixos.sharedModules =
     builtins.attrValues self.nixosModules
     ++ [
       ../hosts/common/global.nix

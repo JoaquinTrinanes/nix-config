@@ -6,8 +6,8 @@
   ...
 }: let
   inherit (lib) types mkOption mkEnableOption;
-  cfg = config.my.users;
-  inherit (config.my) common homeManager hosts;
+  cfg = config.system-parts.users;
+  inherit (config.system-parts) common homeManager hosts;
   u2fKeyType = types.submodule {
     options = {
       keyHandle = mkOption {type = types.str;};
@@ -136,7 +136,7 @@
 in {
   _file = ./users.nix;
 
-  options.my = {
+  options.system-parts = {
     users = mkOption {
       # TODO: set this option for home manager, remove it from specialArgs
       type = types.attrsOf userType;
@@ -150,12 +150,12 @@ in {
           sharedModules = mkOption {
             type = types.listOf types.deferredModule;
             default = [];
-            description = "List of modules that will be loaded in all home manager configurations";
+            description = "Modules that will be loaded in all home manager configurations";
           };
           standaloneModules = mkOption {
             type = types.listOf types.deferredModule;
             default = [];
-            description = "List of modules that will only be loaded in standalone home manager configurations";
+            description = "Modules that will only be loaded in standalone home manager configurations";
           };
         };
 

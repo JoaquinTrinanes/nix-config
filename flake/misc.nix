@@ -19,12 +19,12 @@
     packages = import ../pkgs pkgs;
   };
 
-  my.common = {
+  system-parts.common = {
     stateVersion = lib.mkDefault "23.11";
     specialArgs = {
       inherit self inputs;
-      inherit (config.my) users;
-      hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.my.hosts;
+      inherit (config.system-parts) users;
+      hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.system-parts.hosts;
     };
     exclusiveModules = [
       ({pkgs, ...}: {
@@ -57,7 +57,7 @@
     ];
   };
 
-  my.overlays = {
+  system-parts.overlays = {
     all = import ../overlays {inherit inputs;};
     enabled = o:
       builtins.attrValues {
