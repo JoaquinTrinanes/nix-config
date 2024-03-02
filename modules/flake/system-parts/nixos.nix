@@ -12,7 +12,7 @@ in {
   _file = ./nixos.nix;
 
   options.system-parts = {
-    nixos.sharedModules = mkOption {
+    nixos.modules = mkOption {
       type = types.listOf types.deferredModule;
       default = [];
       description = "Modules shared across all nixos configurations";
@@ -50,7 +50,7 @@ in {
 
         config = {
           finalModules =
-            nixos.sharedModules
+            nixos.modules
             ++ [
               {nixpkgs.hostPlatform = config.system;}
               {networking.hostName = name;}

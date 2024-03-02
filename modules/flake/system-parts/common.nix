@@ -37,12 +37,12 @@ in {
   in {
     system-parts.homeManager = {
       standaloneModules = cfg.exclusiveModules;
-      sharedModules =
+      modules =
         cfg.modules
         ++ [{home = {inherit stateVersion;};}];
     };
 
-    system-parts.nixos.sharedModules =
+    system-parts.nixos.modules =
       cfg.modules
       ++ cfg.exclusiveModules
       ++ [

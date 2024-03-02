@@ -28,7 +28,7 @@
     };
   };
 
-  system-parts.homeManager.sharedModules = [../home/global] ++ builtins.attrValues self.homeManagerModules;
+  system-parts.homeManager.modules = [../home/global] ++ builtins.attrValues self.homeManagerModules;
   system-parts.homeManager.standaloneModules = [
     ../home/global/standalone.nix
   ];

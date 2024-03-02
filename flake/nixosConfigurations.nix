@@ -14,7 +14,7 @@
     };
   };
 
-  system-parts.nixos.sharedModules =
+  system-parts.nixos.modules =
     builtins.attrValues self.nixosModules
     ++ [
       ../hosts/common/global.nix

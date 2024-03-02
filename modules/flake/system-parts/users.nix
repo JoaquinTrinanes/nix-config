@@ -52,7 +52,7 @@
         };
         config = {
           finalModules =
-            homeManager.sharedModules
+            homeManager.modules
             ++ config.modules;
 
           finalConfigurations = let
@@ -147,7 +147,7 @@ in {
       type = types.submodule ({lib, ...}: {
         options = {
           finalConfigurations = mkOption {readOnly = true;};
-          sharedModules = mkOption {
+          modules = mkOption {
             type = types.listOf types.deferredModule;
             default = [];
             description = "Modules that will be loaded in all home manager configurations";
