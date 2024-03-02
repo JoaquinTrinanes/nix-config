@@ -1,2 +1,3 @@
 {
+  system-parts = ./system-parts;
 }

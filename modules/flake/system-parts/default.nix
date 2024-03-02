@@ -6,6 +6,5 @@
     ./common.nix
     ./nixpkgs.nix
     ./overlays.nix
-    # ./nix.nix
   ];
 }
