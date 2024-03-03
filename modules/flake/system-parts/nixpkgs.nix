@@ -34,10 +34,9 @@ in {
 
   config = {
     perSystem = {system, ...}: {
-      _module.args.pkgs = import inputs.nixpkgs (cfg.finalConfig
-        // {
-          inherit system;
-        });
+      _module.args.pkgs = import inputs.nixpkgs (lib.recursiveUpdate cfg.finalConfig {
+        inherit system;
+      });
     };
   };
 

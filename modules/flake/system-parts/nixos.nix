@@ -57,7 +57,7 @@
               };
               useUserPackages = true;
               useGlobalPkgs = true;
-              extraSpecialArgs = {inherit user;} // common.specialArgs;
+              extraSpecialArgs = lib.recursiveUpdate common.specialArgs {inherit user;};
             };
           })
         users;

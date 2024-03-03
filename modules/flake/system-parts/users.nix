@@ -57,12 +57,10 @@
             extraSpecialArgs = common.specialArgs;
             modules = config.finalModules;
           };
-          standaloneConfig =
-            baseConfig
-            // {
-              modules = baseConfig.modules ++ homeManager.standaloneModules;
-              pkgs = withSystem "x86_64-linux" ({pkgs, ...}: pkgs);
-            };
+          standaloneConfig = lib.recursiveUpdate baseConfig {
+            modules = baseConfig.modules ++ homeManager.standaloneModules;
+            pkgs = withSystem "x86_64-linux" ({pkgs, ...}: pkgs);
+          };
           hostConfigs =
             lib.mapAttrs' (
               hostName: {
@@ -72,8 +70,8 @@
                 host = hosts.${hostName}.finalSystem;
               in
                 lib.nameValuePair "${user.name}@${hostName}"
-                (lib.mkIf enable (baseConfig
-                  // {
+                (lib.mkIf enable (lib.recursiveUpdate baseConfig
+                  {
                     inherit (host) pkgs;
                     modules =
                       baseConfig.modules
