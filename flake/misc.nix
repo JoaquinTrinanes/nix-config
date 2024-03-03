@@ -21,10 +21,16 @@
 
   system-parts.common = {
     stateVersion = lib.mkDefault "23.11";
+    modules = [
+      {
+        _module.args = {
+          inherit (config.system-parts) users;
+          hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.system-parts.hosts;
+        };
+      }
+    ];
     specialArgs = {
       inherit self inputs;
-      inherit (config.system-parts) users;
-      hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.system-parts.hosts;
     };
     exclusiveModules = [
       ({pkgs, ...}: {

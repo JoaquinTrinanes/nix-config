@@ -16,85 +16,80 @@
       options = mkOption {type = types.str;};
     };
   };
-  mkHomeManagerOption = user: let
-    username = user.name;
-  in
-    mkOption {
-      default = {};
-      type = types.submodule ({config, ...}: {
-        options = {
-          enable = mkEnableOption "home manager for the ${username} user";
-          modules = mkOption {
-            type = types.listOf types.deferredModule;
-            default = [];
-          };
-          finalModules = mkOption {
-            type = types.listOf types.deferredModule;
-            readOnly = true;
-          };
-
-          hosts = mkOption {
-            type = types.attrsOf (types.submodule ({name, ...}: {
-              options = {
-                enable = mkEnableOption "home manager nixos module on the `${name}` host" // {default = config.enable;};
-                override = mkOption {
-                  type = types.functionTo types.deferredModule;
-                  default = _osConfig: {};
-                };
-              };
-            }));
-            default = {};
-          };
-          finalConfigurations = mkOption {
-            readOnly = true;
-            type = types.attrsOf types.unspecified;
-          };
+  mkHomeManagerUserConfigType = user:
+    types.submodule ({config, ...}: {
+      options = {
+        enable = mkEnableOption "home manager for the ${user.name} user";
+        modules = mkOption {
+          type = types.listOf types.deferredModule;
+          default = [];
         };
-        config = {
-          finalModules =
-            homeManager.modules
-            ++ config.modules;
+        finalModules = mkOption {
+          type = types.listOf types.deferredModule;
+          readOnly = true;
+        };
 
-          finalConfigurations = let
-            baseConfig = {
-              # TODO: user as an option instead of arg
-              extraSpecialArgs = common.specialArgs // {inherit user;};
-              modules = config.finalModules;
+        hosts = mkOption {
+          type = types.attrsOf (types.submodule ({name, ...}: {
+            options = {
+              enable = mkEnableOption "home manager nixos module on the `${name}` host" // {default = config.enable;};
+              override = mkOption {
+                type = types.functionTo types.deferredModule;
+                default = _osConfig: {};
+              };
             };
-            standaloneConfig =
-              baseConfig
-              // {
-                modules = baseConfig.modules ++ homeManager.standaloneModules;
-                pkgs = withSystem "x86_64-linux" ({pkgs, ...}: pkgs);
-              };
-            hostConfigs =
-              lib.mapAttrs' (
-                hostName: {
-                  enable,
-                  override,
-                }: let
-                  host = hosts.${hostName}.finalSystem;
-                in
-                  lib.nameValuePair "${username}@${hostName}"
-                  (lib.mkIf enable (baseConfig
-                    // {
-                      inherit (host) pkgs;
-                      modules =
-                        baseConfig.modules
-                        ++ [(override host.config)];
-                    }))
-              )
-              user.homeManager.hosts;
-          in
-            lib.mkMerge [
-              (lib.mkIf config.enable {
-                ${username} = standaloneConfig;
-              })
-              hostConfigs
-            ];
+          }));
+          default = {};
         };
-      });
-    };
+        finalConfigurations = mkOption {
+          readOnly = true;
+          type = types.attrsOf types.unspecified;
+        };
+      };
+      config = {
+        finalModules =
+          homeManager.modules
+          ++ config.modules
+          ++ [{_module.args = {inherit user;};}];
+
+        finalConfigurations = let
+          baseConfig = {
+            extraSpecialArgs = common.specialArgs;
+            modules = config.finalModules;
+          };
+          standaloneConfig =
+            baseConfig
+            // {
+              modules = baseConfig.modules ++ homeManager.standaloneModules;
+              pkgs = withSystem "x86_64-linux" ({pkgs, ...}: pkgs);
+            };
+          hostConfigs =
+            lib.mapAttrs' (
+              hostName: {
+                enable,
+                override,
+              }: let
+                host = hosts.${hostName}.finalSystem;
+              in
+                lib.nameValuePair "${user.name}@${hostName}"
+                (lib.mkIf enable (baseConfig
+                  // {
+                    inherit (host) pkgs;
+                    modules =
+                      baseConfig.modules
+                      ++ [(override host.config)];
+                  }))
+            )
+            user.homeManager.hosts;
+        in
+          lib.mkMerge [
+            (lib.mkIf config.enable {
+              ${user.name} = standaloneConfig;
+            })
+            hostConfigs
+          ];
+      };
+    });
   userType = types.submodule ({
     name,
     config,
@@ -104,7 +99,6 @@
       name = mkOption {
         type = types.str;
         default = name;
-        readOnly = true;
       };
       email = mkOption {
         type = types.nullOr types.str;
@@ -130,7 +124,10 @@
         type = types.str;
         default = builtins.concatStringsSep " " (builtins.filter (x: x != null) [config.firstName config.lastName]);
       };
-      homeManager = mkHomeManagerOption config;
+      homeManager = mkOption {
+        type = mkHomeManagerUserConfigType config;
+        default = {};
+      };
     };
   });
 in {
@@ -138,10 +135,7 @@ in {
 
   options.system-parts = {
     users = mkOption {
-      # TODO: set this option for home manager, remove it from specialArgs
       type = types.attrsOf userType;
-      # TODO: might be valuable to set some fields in the config. And make the whole thing optional?
-      readOnly = true;
     };
     homeManager = mkOption {
       type = types.submodule ({lib, ...}: {
