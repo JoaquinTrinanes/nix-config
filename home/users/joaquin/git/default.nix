@@ -1,4 +1,8 @@
-{user, ...}: {
+{
+  user,
+  lib,
+  ...
+}: {
   imports = [./aliases.nix ./color.nix ./sign.nix];
   programs.git = {
     enable = true;
@@ -38,7 +42,7 @@
       status.showUntrackedFiles = "normal"; # "all";
       init.defaultBranch = "main";
       user = {
-        inherit (user) email;
+        email = lib.mkIf (user.email != null) user.email;
         name = user.fullName;
       };
     };
