@@ -19,7 +19,7 @@
   mkHomeManagerUserConfigType = user:
     types.submodule ({config, ...}: {
       options = {
-        enable = mkEnableOption "home manager for the ${user.name} user";
+        enable = (mkEnableOption "home manager for the ${user.name} user") // {default = true;};
         modules = mkOption {
           type = types.listOf types.deferredModule;
           default = [];
@@ -134,6 +134,7 @@ in {
   options.system-parts = {
     users = mkOption {
       type = types.attrsOf userType;
+      default = {};
     };
     homeManager = mkOption {
       type = types.submodule ({lib, ...}: {
