@@ -27,6 +27,7 @@ in {
     };
     "org/gnome/mutter" = {
       edge-tiling = true;
+      experimental-features = ["scale-monitor-framebuffer"];
     };
     "org/gnome/shell/extensions/espresso" = {
       show-notifications = false;
