@@ -13,7 +13,7 @@
     default-preference-list = "SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed";
     default-recipient-self = true;
     fixed-list-mode = true;
-    keyid-format = "0xlong";
+    keyid-format = "long";
     keyserver = "hkps://keys.openpgp.org";
     list-options = "show-uid-validity";
     no-comments = true;
