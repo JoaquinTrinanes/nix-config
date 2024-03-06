@@ -47,10 +47,12 @@
         };
       };
       config = {
-        finalModules =
+        finalModules = lib.mkMerge [
           homeManager.modules
-          ++ config.modules
-          ++ [{_module.args = {inherit user;};}];
+          config.modules
+          [{_module.args = {inherit user;};}]
+          (lib.mkIf (homeManager.perUser != null) [(homeManager.perUser user)])
+        ];
 
         finalConfigurations = let
           baseConfig = {
@@ -139,6 +141,11 @@ in {
     homeManager = mkOption {
       type = types.submodule ({lib, ...}: {
         options = {
+          perUser = mkOption {
+            type = types.nullOr (types.functionTo types.deferredModule);
+            description = "Function that takes a user as an argument and returns a home manager module.";
+            default = null;
+          };
           finalConfigurations = mkOption {readOnly = true;};
           modules = mkOption {
             type = types.listOf types.deferredModule;
