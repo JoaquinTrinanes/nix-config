@@ -1,8 +1,18 @@
 {
   lib,
   user,
+  pkgs,
   ...
 }: {
+  home = {
+    username = lib.mkDefault user.name;
+    homeDirectory = lib.mkDefault (
+      if pkgs.stdenv.isLinux
+      then "/home/${user.name}"
+      else "/Users/${user.name}"
+    );
+  };
+
   programs.ssh = {
     includes = ["config.local"];
   };

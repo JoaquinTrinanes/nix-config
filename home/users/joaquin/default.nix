@@ -2,7 +2,6 @@
   config,
   pkgs,
   lib,
-  user,
   inputs,
   self,
   ...
@@ -26,11 +25,6 @@
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
   home = {
-    username = user.name;
-    homeDirectory =
-      if pkgs.stdenv.isLinux
-      then "/home/${config.home.username}"
-      else "/Users/${config.home.username}";
     sessionVariables = lib.mkIf config.programs.neovim.enable {
       MANPAGER = "nvim +Man!";
     };
