@@ -27,9 +27,11 @@
       };
     };
   };
-
-  system-parts.homeManager.modules = [../home/global] ++ builtins.attrValues self.homeManagerModules;
-  system-parts.homeManager.standaloneModules = [
-    ../home/global/standalone.nix
-  ];
+  system-parts.homeManager = {
+    perUser = user: {_module.args = {inherit user;};};
+    modules = [../home/global] ++ builtins.attrValues self.homeManagerModules;
+    standaloneModules = [
+      ../home/global/standalone.nix
+    ];
+  };
 }

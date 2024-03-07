@@ -50,7 +50,6 @@
         finalModules = lib.mkMerge [
           homeManager.modules
           config.modules
-          [{_module.args = {inherit user;};}]
           (lib.mkIf (homeManager.perUser != null) [(homeManager.perUser user)])
         ];
 
