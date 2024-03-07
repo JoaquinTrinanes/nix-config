@@ -16,6 +16,10 @@
       options = mkOption {type = types.str;};
     };
   };
+  specialArgsOption = mkOption {
+    type = types.attrsOf types.unspecified;
+    default = {};
+  };
   mkHomeManagerUserConfigType = user:
     types.submodule ({config, ...}: {
       options = {
@@ -28,11 +32,11 @@
           type = types.listOf types.deferredModule;
           readOnly = true;
         };
-
+        specialArgs = specialArgsOption;
         hosts = mkOption {
           type = types.attrsOf (types.submodule ({name, ...}: {
             options = {
-              enable = mkEnableOption "home manager nixos module on the `${name}` host" // {default = config.enable;};
+              enable = (mkEnableOption "home manager nixos module on the `${name}` host") // {default = config.enable;};
               override = mkOption {
                 type = types.functionTo types.deferredModule;
                 default = _osConfig: {};
@@ -54,8 +58,14 @@
         ];
 
         finalConfigurations = let
-          baseConfig = {
-            extraSpecialArgs = common.specialArgs;
+          baseConfig = let
+            recursiveUpdateList = lib.foldl (a: b: lib.recursiveUpdate a b) {};
+          in {
+            extraSpecialArgs = recursiveUpdateList [
+              common.specialArgs
+              homeManager.specialArgs
+              config.specialArgs
+            ];
             modules = config.finalModules;
           };
           standaloneConfig = lib.recursiveUpdate baseConfig {
@@ -145,6 +155,7 @@ in {
             description = "Function that takes a user as an argument and returns a home manager module.";
             default = null;
           };
+          specialArgs = specialArgsOption;
           finalConfigurations = mkOption {readOnly = true;};
           modules = mkOption {
             type = types.listOf types.deferredModule;
