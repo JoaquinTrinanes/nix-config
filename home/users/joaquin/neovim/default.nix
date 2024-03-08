@@ -70,10 +70,11 @@ in {
     ''
       " delete previously set local options
       sanitise tridactyllocal
+      " sanitise commandline
 
       set newtab about:blank
 
-      set modeindicator false
+      " set modeindicator false
 
       " blacklistadd ${ytRegex}
       unbindurl ${ytRegex} j
@@ -83,9 +84,13 @@ in {
       unbindurl ${ytRegex} f
       unbindurl ${ytRegex} <Space>
 
-      seturl localhost superignore true
+      seturl ${ytRegex} modeindicator false
+
+      " seturl localhost superignore true
 
       " Whether to allow pages (not necessarily github) to override /, which is a default Firefox binding.
       " set leavegithubalone true
     '';
+
+  programs.git.ignores = [".lazy.lua"];
 }
