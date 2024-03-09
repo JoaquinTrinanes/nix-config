@@ -57,6 +57,7 @@
             keep-outputs = lib.mkDefault true;
             auto-allocate-uids = lib.mkDefault true;
             narinfo-cache-negative-ttl = lib.mkDefault 0;
+            use-xdg-base-directories = lib.mkDefault true;
           };
         };
       })
