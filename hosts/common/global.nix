@@ -10,7 +10,7 @@
   #   (lib.filterAttrs (_: lib.isType "flake"))
   #   (lib.mapAttrs (_: flake: {inherit flake;}))
   # ];
-  extraRegistryEntries = {unstable = "nixpkgs-unstable";};
+  extraNixpkgsAliases = {unstable = "nixpkgs-unstable";};
 in {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
@@ -23,40 +23,19 @@ in {
           type = "github";
         };
       })
-      extraRegistryEntries)
-    # {
-    #   # Add nixpkgs-unstable HEAD to the registry
-    #   unstable = {
-    #     to = {
-    #       owner = "NixOS";
-    #       ref = "nixpkgs-unstable";
-    #       repo = "nixpkgs";
-    #       type = "github";
-    #     };
-    #   };
-    # }
+      extraNixpkgsAliases)
     (lib.mapAttrs (_: input: {flake = input;}) flakeInputs)
   ];
 
-  environment.etc."nix/path".source = pkgs.linkFarm "nixPath" (
-    flakeInputs
-    // (lib.mapAttrs (
-        name: value:
-          pkgs.writeTextFile {
-            inherit name;
-            text = "channel:${value}";
-          }
-      )
-      extraRegistryEntries)
-  );
-  # environment.etc."nix/path".source = pkgs.linkFarm "nixPath" (lib.mapAttrs (_: value: value.flake) registryInputs);
+  environment.etc."nix/path".source = pkgs.linkFarm "nixPath" flakeInputs;
 
-  nix.nixPath = [
-    "/etc/nix/path"
-    # Adding unstable to the registry won't affect NIX_PATH as it's not a flake, so we set it to follow the channel
-    # TODO: this based on extraRegistryEntries or find a way to add it to NIX_PATH as a file
-    "unstable=channel:nixpkgs-unstable"
-  ];
+  nix.nixPath =
+    [
+      "/etc/nix/path"
+    ]
+    ++
+    # TODO: ideally find a way to add it to /etc/nix/path as a file
+    lib.mapAttrsToList (name: value: "${name}=channel:${value}") extraNixpkgsAliases;
 
   nix.channel.enable = lib.mkDefault false;
   # Disabling channels makes nix.nixPath not work
