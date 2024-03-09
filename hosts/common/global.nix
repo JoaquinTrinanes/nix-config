@@ -4,45 +4,59 @@
   config,
   inputs,
   ...
-}: {
+}: let
+  flakeInputs = lib.filterAttrs (_: lib.isType "flake") (inputs // {p = inputs.nixpkgs;});
+  # registryInputs = lib.pipe (inputs // {p = inputs.nixpkgs;}) [
+  #   (lib.filterAttrs (_: lib.isType "flake"))
+  #   (lib.mapAttrs (_: flake: {inherit flake;}))
+  # ];
+  extraRegistryEntries = {unstable = "nixpkgs-unstable";};
+in {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
-  imports = [
-    # add nixpkgs-unstable HEAD to the registry
-    {
-      nix.registry.unstable = {
+  nix.registry = lib.mkMerge [
+    (lib.mapAttrs (_: value: {
         to = {
           owner = "NixOS";
-          ref = "nixpkgs-unstable";
+          ref = value;
           repo = "nixpkgs";
           type = "github";
         };
-      };
-    }
+      })
+      extraRegistryEntries)
+    # {
+    #   # Add nixpkgs-unstable HEAD to the registry
+    #   unstable = {
+    #     to = {
+    #       owner = "NixOS";
+    #       ref = "nixpkgs-unstable";
+    #       repo = "nixpkgs";
+    #       type = "github";
+    #     };
+    #   };
+    # }
+    (lib.mapAttrs (_: input: {flake = input;}) flakeInputs)
   ];
 
-  # This will add each flake input as a registry
-  # To make nix3 commands consistent with your flake
-  nix.registry =
-    (lib.mapAttrs (_: flake: {inherit flake;}))
-    ((lib.filterAttrs (_: lib.isType "flake"))
-      (inputs
-        // {
-          # alias p to nixpkgs
-          p = inputs.nixpkgs;
-        }));
+  environment.etc."nix/path".source = pkgs.linkFarm "nixPath" (
+    flakeInputs
+    // (lib.mapAttrs (
+        name: value:
+          pkgs.writeTextFile {
+            inherit name;
+            text = "channel:${value}";
+          }
+      )
+      extraRegistryEntries)
+  );
+  # environment.etc."nix/path".source = pkgs.linkFarm "nixPath" (lib.mapAttrs (_: value: value.flake) registryInputs);
 
-  environment.etc =
-    lib.mapAttrs'
-    (name: value: {
-      name = "nix/path/${name}";
-      value.source = value.flake;
-    })
-    (lib.filterAttrs (_: x: lib.isType "flake" x.flake) config.nix.registry);
-
-  # This will additionally add your inputs to the system's legacy channels
-  # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = ["/etc/nix/path"];
+  nix.nixPath = [
+    "/etc/nix/path"
+    # Adding unstable to the registry won't affect NIX_PATH as it's not a flake, so we set it to follow the channel
+    # TODO: this based on extraRegistryEntries or find a way to add it to NIX_PATH as a file
+    "unstable=channel:nixpkgs-unstable"
+  ];
 
   nix.channel.enable = lib.mkDefault false;
   # Disabling channels makes nix.nixPath not work
@@ -67,6 +81,7 @@
 
   environment.systemPackages = with pkgs; [
     age
+    age-plugin-yubikey
     coreutils
     fd
     fzf
@@ -81,6 +96,7 @@
     pinentry
     ripgrep
     sd
+    srm
     unzip
     wget
   ];
