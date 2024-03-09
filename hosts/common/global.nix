@@ -6,10 +6,6 @@
   ...
 }: let
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") (inputs // {p = inputs.nixpkgs;});
-  # registryInputs = lib.pipe (inputs // {p = inputs.nixpkgs;}) [
-  #   (lib.filterAttrs (_: lib.isType "flake"))
-  #   (lib.mapAttrs (_: flake: {inherit flake;}))
-  # ];
   extraNixpkgsAliases = {unstable = "nixpkgs-unstable";};
 in {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
@@ -30,9 +26,7 @@ in {
   environment.etc."nix/path".source = pkgs.linkFarm "nixPath" flakeInputs;
 
   nix.nixPath =
-    [
-      "/etc/nix/path"
-    ]
+    ["/etc/nix/path"]
     ++
     # TODO: ideally find a way to add it to /etc/nix/path as a file
     lib.mapAttrsToList (name: value: "${name}=channel:${value}") extraNixpkgsAliases;
@@ -41,16 +35,20 @@ in {
   # Disabling channels makes nix.nixPath not work
   nix.settings.nix-path = lib.mkIf (!config.nix.channel.enable) config.nix.nixPath;
 
-  # Cleanup channel files
-  systemd.tmpfiles.rules = lib.mkIf (!config.nix.channel.enable) [
-    "R /nix/var/nix/profiles/per-user/root/channels - - - - -"
-    "R /root/.nix-channels - - - - -"
-  ];
-  systemd.user.tmpfiles.rules = lib.mkIf (!config.nix.channel.enable) [
-    "R %h/.nix-defexpr - - - - -"
-    "R %h/.local/state/nix/profiles/channels - - - - -"
-    "R %h/.nix-channels - - - - -"
-  ];
+  # Cleanup channel + $HOME files
+  systemd = let
+    deleteFile = f: "R ${f} - - - - -";
+    channelsFiles = lib.flatten (map (p: ["%h/.nix-${p}" "%h/.local/state/nix/${p}"]) ["channels" "defexpr"]);
+    commonFiles = lib.optionals (!config.nix.channel.enable) channelsFiles ++ lib.optionals (config.nix.settings.use-xdg-base-directories or false) ["%h/.nix-profile"];
+    rules = map deleteFile commonFiles;
+  in {
+    tmpfiles.rules =
+      rules
+      ++ lib.optionals (!config.nix.channel.enable) [
+        (deleteFile "/nix/var/nix/profiles/per-user/root/channels")
+      ];
+    user.tmpfiles.rules = rules;
+  };
 
   environment.sessionVariables = lib.mkIf config.nixpkgs.config.allowUnfree {
     NIXPKGS_ALLOW_UNFREE = toString 1;
