@@ -40,13 +40,13 @@
           # package = lib.mkDefault pkgs.nixVersions.unstable;
 
           settings = {
-            allowed-users = ["@wheel"];
-            min-free = 128000000; # 128MB
-            max-free = 1000000000; # 1GB
-            connect-timeout = 5;
-            fallback = true;
-            log-lines = 50;
-            auto-optimise-store = true;
+            allowed-users = lib.mkDefault ["@wheel"];
+            min-free = lib.mkDefault 128000000; # 128MB
+            max-free = lib.mkDefault 1000000000; # 1GB
+            connect-timeout = lib.mkDefault 5;
+            fallback = lib.mkDefault true;
+            log-lines = lib.mkDefault 50;
+            auto-optimise-store = lib.mkDefault true;
             experimental-features = [
               "nix-command"
               "flakes"
@@ -54,33 +54,30 @@
               "ca-derivations"
               "auto-allocate-uids"
             ];
-            keep-outputs = true;
-            auto-allocate-uids = true;
-            narinfo-cache-negative-ttl = 0;
+            keep-outputs = lib.mkDefault true;
+            auto-allocate-uids = lib.mkDefault true;
+            narinfo-cache-negative-ttl = lib.mkDefault 0;
           };
         };
       })
     ];
   };
 
-  system-parts.overlays = {
-    all = import ../overlays {inherit inputs;};
-    enabled = o:
-      builtins.attrValues {
-        inherit
-          (o) #additions
-          modifications
-          ;
-      };
+  system-parts = {
+    overlays = {
+      all = import ../overlays {inherit inputs;};
+      enabled = o:
+        builtins.attrValues {
+          inherit
+            (o) #additions
+            modifications
+            ;
+        };
+    };
   };
 
   flake = {
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
     nixosModules = import ../modules/nixos;
-
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
     homeManagerModules = import ../modules/home-manager;
   };
 }
