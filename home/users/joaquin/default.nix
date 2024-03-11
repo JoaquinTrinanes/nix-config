@@ -30,7 +30,7 @@
     };
 
     packages = let
-      # this has to be a wrapper and not an alias to be able to call if with sudo
+      # this has to be a wrapper and not an alias to be able to call it with sudo
       nx = pkgs.writeShellScriptBin "nx" ''
         ${lib.getExe pkgs.nixos-rebuild} "$@"
       '';
