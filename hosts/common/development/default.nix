@@ -1,14 +1,17 @@
 {pkgs, ...}: {
   environment.systemPackages = with pkgs; [
+    # corepack
+    # file
     alejandra
     dbeaver
+    git-extras
+    git-standup
     nil
     nixfmt
     nodePackages.pnpm
-    rnix-lsp
-    statix
     scrcpy
-    file
+    statix
+    yarn-berry
   ];
 
   # includes android-tools

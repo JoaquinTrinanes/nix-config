@@ -131,8 +131,8 @@ local M = {
           nil_ls = { mason = false },
           nushell = { mason = false },
           marksman = { mason = false },
+          intelephense = {},
           -- nixd = { mason = false },
-          -- rnix = { mason = false },
         },
         setup = {
           eslint = function()
