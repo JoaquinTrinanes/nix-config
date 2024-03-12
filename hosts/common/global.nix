@@ -35,20 +35,26 @@ in {
   # Disabling channels makes nix.nixPath not work
   nix.settings.nix-path = lib.mkIf (!config.nix.channel.enable) config.nix.nixPath;
 
-  # Cleanup channel + $HOME files
-  systemd = let
-    deleteFile = f: "R ${f} - - - - -";
-    channelsFiles = lib.flatten (map (p: ["%h/.nix-${p}" "%h/.local/state/nix/${p}"]) ["channels" "defexpr"]);
-    commonFiles = lib.optionals (!config.nix.channel.enable) channelsFiles ++ lib.optionals (config.nix.settings.use-xdg-base-directories or false) ["%h/.nix-profile"];
-    rules = map deleteFile commonFiles;
-  in {
-    tmpfiles.rules =
-      rules
-      ++ lib.optionals (!config.nix.channel.enable) [
-        (deleteFile "/nix/var/nix/profiles/per-user/root/channels")
-      ];
-    user.tmpfiles.rules = rules;
-  };
+  systemd = lib.mkMerge [
+    # Cleanup channel + $HOME files
+    (let
+      deleteFile = f: "R ${f} - - - - -";
+      channelsFiles = lib.flatten (map (p: ["%h/.nix-${p}" "%h/.local/state/nix/${p}"]) ["channels" "defexpr"]);
+      commonFiles = lib.optionals (!config.nix.channel.enable) channelsFiles ++ lib.optionals (config.nix.settings.use-xdg-base-directories or false) ["%h/.nix-profile"];
+      rules = map deleteFile commonFiles;
+    in {
+      tmpfiles.rules =
+        rules
+        ++ lib.optionals (!config.nix.channel.enable) [
+          (deleteFile "/nix/var/nix/profiles/per-user/root/channels")
+        ];
+      user.tmpfiles.rules = rules;
+    })
+    (lib.mkIf config.networking.networkmanager.enable {
+      network.wait-online.enable = lib.mkDefault false;
+      services.NetworkManager-wait-online.enable = lib.mkDefault false;
+    })
+  ];
 
   environment.sessionVariables = lib.mkIf config.nixpkgs.config.allowUnfree {
     NIXPKGS_ALLOW_UNFREE = toString 1;
