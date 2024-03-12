@@ -7,8 +7,6 @@
   inherit (lib) mkOption types;
   cfg = config.system-parts.nixpkgs;
 in {
-  _file = ./nixpkgs.nix;
-
   options.system-parts.nixpkgs = {
     overlays = mkOption {
       type = types.listOf types.unspecified;

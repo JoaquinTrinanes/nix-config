@@ -1,6 +1,4 @@
 {self, ...}: {
-  _file = ./nixosConfigurations.nix;
-
   system-parts.hosts = {
     "razer-blade-14" = {
       system = "x86_64-linux";

@@ -1,6 +1,4 @@
 {self, ...}: {
-  _file = ./homeConfigurations.nix;
-
   system-parts.users = {
     "joaquin" = {
       email = "hi@joaquint.io";

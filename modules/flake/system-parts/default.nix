@@ -1,5 +1,4 @@
 {
-  _file = ./default.nix;
   imports = [
     ./nixos.nix
     ./users.nix

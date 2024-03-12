@@ -6,8 +6,6 @@
   inherit (lib) mkOption types;
   cfg = config.system-parts.overlays;
 in {
-  _file = ./overlays.nix;
-
   options.system-parts.overlays = {
     all = mkOption {
       type = types.attrsOf types.unspecified;

@@ -140,8 +140,6 @@
     };
   });
 in {
-  _file = ./users.nix;
-
   options.system-parts = {
     users = mkOption {
       type = types.attrsOf userType;

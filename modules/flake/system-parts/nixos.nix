@@ -69,8 +69,6 @@
     };
   });
 in {
-  _file = ./nixos.nix;
-
   options.system-parts = {
     nixos.modules = mkOption {
       type = types.listOf types.deferredModule;

@@ -18,7 +18,5 @@
     inherit trusted-public-keys;
   };
 in {
-  _file = ./substituters.nix;
-
   system-parts.common.exclusiveModules = [substituterSettings];
 }

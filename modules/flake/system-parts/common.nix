@@ -6,8 +6,6 @@
   inherit (lib) mkOption types;
   cfg = config.system-parts.common;
 in {
-  _file = ./common.nix;
-
   options.system-parts.common = {
     modules = mkOption {
       type = types.listOf types.deferredModule;
