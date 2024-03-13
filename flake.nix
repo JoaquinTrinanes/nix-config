@@ -21,7 +21,7 @@ rec {
 
     nushell-nightly.url = "github:JoaquinTrinanes/nushell-nightly-flake";
 
-    wrapper-manager. url = "github:viperML/wrapper-manager";
+    wrapper-manager.url = "github:viperML/wrapper-manager";
     wrapper-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
