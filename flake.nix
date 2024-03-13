@@ -1,4 +1,4 @@
-{
+rec {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
@@ -47,6 +47,7 @@
 
       imports = [
         ./flake
+        {system-parts.flake-nix-config = nixConfig;}
       ];
     };
 }
