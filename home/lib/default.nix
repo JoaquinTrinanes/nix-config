@@ -18,7 +18,7 @@
     config.lib.file.mkOutOfStoreSymlink (
       if config.impurePath.enable
       then (absPath path)
-      else path
+      else lib.warn "impurePath is disabled, symlinks will point to store files" path
     );
   getPassCommand = key: "${lib.getExe config.programs.password-store.package} ${lib.escapeShellArg key}";
   mkWrapper = name: options: let
