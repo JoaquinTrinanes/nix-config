@@ -104,6 +104,7 @@
     config,
     ...
   }: {
+    freeformType = types.attrsOf types.unspecified;
     options = {
       name = mkOption {
         type = types.str;
@@ -118,6 +119,7 @@
         default = [];
       };
       u2f = mkOption {
+        # nix shell nixpkgs#pam_u2f --command pamu2fcfg
         type = types.listOf u2fKeyType;
         default = [];
       };
