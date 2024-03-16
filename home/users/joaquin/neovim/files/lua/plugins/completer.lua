@@ -6,13 +6,13 @@ local M = {
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      { "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
+      -- { "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
     },
     --- @param opts cmp.ConfigSchema
     opts = function(_, opts)
-      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-      local cmp = require("cmp")
-      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+      -- local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+      -- local cmp = require("cmp")
+      -- cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
       opts.experimental.ghost_text = true
 
       local prev_format = opts.formatting.format
