@@ -1,4 +1,6 @@
-layout_laravel() {
+#!/usr/bin/env bash
+
+layout_laravel_sail() {
 	layout php
 
 	lib_dir="$(direnv_layout_dir)/laravel_sail"
