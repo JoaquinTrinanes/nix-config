@@ -74,6 +74,7 @@ local M = {
         inlay_hints = {
           enabled = true,
         },
+        -- codelens = { enabled = vim.fn.has("nvim-0.10") },
         --- @type lspconfig.options
         servers = {
           lua_ls = {
@@ -84,26 +85,6 @@ local M = {
                 },
               },
             },
-          },
-          rust_analyzer = {
-            settings = {
-              ["rust-analyzer"] = {
-                -- prevent locking cargo compilation
-                ---@diagnostic disable-next-line: assign-type-mismatch
-                checkOnSave = {
-                  extraArgs = { "--target-dir", "/tmp/rust-analyzer-check" },
-                },
-              },
-            },
-            -- keys = {
-            --   {
-            --     "<leader>cE",
-            --     function()
-            --       require("rust-tools").expand_macro.expand_macro()
-            --     end,
-            --     desc = "Expand Macro (Rust)",
-            --   },
-            -- },
           },
           tailwindcss = {
             settings = {
