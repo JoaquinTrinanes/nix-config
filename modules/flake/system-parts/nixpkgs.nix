@@ -32,13 +32,12 @@ in {
 
   config = {
     perSystem = {system, ...}: {
-      _module.args.pkgs = import inputs.nixpkgs (lib.recursiveUpdate cfg.finalConfig {
-        inherit system;
-      });
+      _module.args.pkgs = import inputs.nixpkgs (lib.recursiveUpdate {
+          inherit system;
+        }
+        cfg.finalConfig);
     };
-  };
 
-  config = {
     system-parts.nixpkgs.finalConfig = {
       inherit (cfg) overlays config;
     };

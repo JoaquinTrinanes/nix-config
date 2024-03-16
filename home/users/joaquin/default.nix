@@ -4,9 +4,11 @@
   lib,
   inputs,
   self,
+  myLib,
   ...
 }: {
   _module.args.myLib = import "${self}/home/lib" {inherit lib config pkgs self inputs;};
+
   imports = [
     ./git
     ./neovim
@@ -57,6 +59,13 @@
   programs.home-manager.enable = true;
 
   programs.bash.enable = true;
+
+  programs.bash.initExtra = lib.mkIf (config.home.shellAliases != {}) (lib.mkAfter (lib.concatLines ([
+      ''
+        source ${lib.getExe pkgs.complete-alias}
+      ''
+    ]
+    ++ map (alias: "complete -F _complete_alias ${alias}") (builtins.attrNames config.home.shellAliases))));
 
   programs.mise = {
     enable = true;
@@ -117,7 +126,6 @@
       la = "ls -la";
       pn = "pnpm";
 
-      # docker compose
       dc = "docker compose";
       dcup = "docker compose up";
       dcupd = "docker compose up -d";
@@ -153,7 +161,6 @@
     enableSshSupport = true;
     sshKeys = ["0405AAB779EE75EB11E9B4F148AC62E32DB2CD11"];
     pinentryFlavor = "gnome3";
-    enableNushellIntegration = false;
   };
   # Disable gnome-keyring ssh-agent
   xdg.configFile."autostart/gnome-keyring-ssh.desktop" = {
