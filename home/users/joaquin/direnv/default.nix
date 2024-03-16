@@ -9,6 +9,10 @@
     stdlib = ''
       dotenv_if_exists
       source_up_if_exists
+      ${lib.optionalString config.programs.direnv.nix-direnv.enable ''
+        # manually rebuild flake
+        nix_direnv_manual_reload
+      ''}
     '';
     config = {
       # bash_path = "";
