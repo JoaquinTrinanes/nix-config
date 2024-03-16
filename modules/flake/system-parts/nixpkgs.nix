@@ -13,15 +13,7 @@ in {
       default = [];
     };
     config = mkOption {
-      type = types.submodule {
-        freeformType = types.attrsOf types.unspecified;
-        options = {
-          allowUnfree = mkOption {
-            type = types.bool;
-            default = false;
-          };
-        };
-      };
+      type = types.attrsOf types.unspecified;
       default = {};
     };
     finalConfig = mkOption {
