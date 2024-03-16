@@ -35,6 +35,10 @@
         type = types.unspecified;
         readOnly = true;
       };
+      specialArgs = mkOption {
+        type = types.attrsOf types.unspecified;
+        default = {};
+      };
     };
 
     config = {
@@ -57,7 +61,7 @@
               };
               useUserPackages = true;
               useGlobalPkgs = true;
-              extraSpecialArgs = lib.recursiveUpdate common.specialArgs {inherit user;};
+              extraSpecialArgs = lib.recursiveUpdate common.specialArgs config.specialArgs;
             };
           })
         users;
