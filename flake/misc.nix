@@ -65,13 +65,7 @@
     };
     overlays = {
       all = import ../overlays {inherit inputs;};
-      enabled = o:
-        builtins.attrValues {
-          inherit
-            (o) #additions
-            modifications
-            ;
-        };
+      enabled = _: [];
     };
   };
 
