@@ -6,13 +6,15 @@
 }: {
   programs.direnv = {
     enable = true;
+    # manually activated to allow calling 'nix_direnv_manual_reload' globally
+    nix-direnv.enable = false;
+
     stdlib = ''
       dotenv_if_exists
       source_up_if_exists
-      ${lib.optionalString config.programs.direnv.nix-direnv.enable ''
-        # manually rebuild flake
-        nix_direnv_manual_reload
-      ''}
+
+      source ${config.programs.direnv.nix-direnv.package}/share/nix-direnv/direnvrc
+      nix_direnv_manual_reload
     '';
     config = {
       # bash_path = "";
@@ -32,7 +34,6 @@
       #   exact = [];
       # };
     };
-    nix-direnv.enable = true;
   };
 
   xdg.configFile."direnv/lib/mise.sh".source = let
