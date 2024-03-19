@@ -23,6 +23,9 @@ rec {
 
     wrapper-manager.url = "github:viperML/wrapper-manager";
     wrapper-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    autofirma-nix.url = "github:nilp0inter/autofirma-nix";
+    autofirma-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {

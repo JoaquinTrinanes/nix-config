@@ -8,9 +8,8 @@
     ../audio
     ../fonts
     ../firefox
+    ../autofirma
   ];
-
-  programs.autofirma.enable = true;
 
   time.timeZone = lib.mkDefault "Europe/Madrid";
 
