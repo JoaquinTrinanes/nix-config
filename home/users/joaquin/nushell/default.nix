@@ -8,25 +8,7 @@
   ...
 }: let
   nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
-  plugins = builtins.attrValues {
-    inherit (pkgs.nushellPlugins) regex;
-    inherit (nushellNightlyPkgs) nu_plugin_formats;
-  };
-  pluginBinFromPkg = plugin: let
-    name = plugin.pname;
-    matches = lib.strings.match "^nushell_plugin_(.*)" name;
-  in
-    if (matches == null)
-    then (lib.getExe plugin)
-    else "${plugin}/bin/nu_plugin_${toString matches}";
-  pluginExprs = map (plugin: "register ${pluginBinFromPkg plugin}") plugins;
-  pluginFile =
-    pkgs.runCommandNoCCLocal "plugin.nu" {
-      nativeBuildInputs = [config.programs.nushell.package];
-    } ''
-      touch $out {config,env}.nu
-      nu --config config.nu --env-config env.nu --plugin-config $out --no-history --no-std-lib  --commands '${lib.concatStringsSep ";" pluginExprs}; echo $nu.plugin-path'
-    '';
+  scriptsDir = myLib.mkImpureLink ./files/scripts;
 in {
   imports = [
     ./theme.nix
@@ -57,27 +39,42 @@ in {
           }
         ''
         (lib.mkOrder 9999 ''
-          overlay use ${./files/scripts/completions}
-          # use ${./files/scripts/completions} *
+          use ${scriptsDir} *
+          overlay use ${scriptsDir}/completions
         '')
       ];
   };
-  programs.carapace.enable = true;
-  xdg.configFile."nushell/scripts" = {
-    source = myLib.mkImpureLink ./files/scripts;
-    recursive = true;
-  };
 
-  xdg.configFile."nushell/plugin.nu".source = pluginFile;
-  home.packages = with pkgs; [
-    # for completions
-    fish
-  ];
 
-  programs.bash.initExtra = lib.mkAfter ''
+  xdg.configFile."nushell/plugin.nu".source = let
+    plugins = builtins.attrValues {
+      # inherit (pkgs.nushellPlugins) regex;
+      inherit (nushellNightlyPkgs) nu_plugin_formats;
+    };
+    pluginBinFromPkg = plugin: let
+      name = plugin.pname;
+      matches = lib.strings.match "^nushell_plugin_(.*)" name;
+    in
+      if (matches == null)
+      then (lib.getExe plugin)
+      else "${plugin}/bin/nu_plugin_${toString matches}";
+    pluginExprs = map (plugin: "register ${pluginBinFromPkg plugin}") plugins;
+    pluginFile =
+      pkgs.runCommandNoCCLocal "plugin.nu" {
+        nativeBuildInputs = [config.programs.nushell.package];
+      } ''
+        touch $out {config,env}.nu
+        nu --config config.nu --env-config env.nu --plugin-config $out --no-history --no-std-lib  --commands '${lib.concatStringsSep ";" pluginExprs}; echo $nu.plugin-path'
+      '';
+  in
+    pluginFile;
+
+  # just before mkAfter, so we can skip unneeded bash interactive initialization
+  # programs.bash.initExtra = lib.mkBefore ''
+  programs.bash.initExtra = lib.mkOrder 1499 ''
     if [[ ! $(ps T --no-header --format=comm | grep "^nu$") && -z $BASH_EXECUTION_STRING ]]; then
         shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION='''
         exec "${lib.getExe config.programs.nushell.package}" "$LOGIN_OPTION"
-        fi
+    fi
   '';
 }
