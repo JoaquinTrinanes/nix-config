@@ -55,7 +55,7 @@
     ]);
 
   environment.systemPackages = builtins.attrValues {
-    inherit (pkgs) pinentry-gnome;
+    inherit (pkgs) pinentry-gnome3;
     inherit (pkgs.gnome) gnome-tweaks adwaita-icon-theme;
     inherit
       (pkgs.gnomeExtensions)
