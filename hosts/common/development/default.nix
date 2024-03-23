@@ -8,7 +8,7 @@
     git-extras
     git-standup
     nil
-    nixfmt
+    nixfmt-rfc-style
     nodePackages.pnpm
     scrcpy
     statix

@@ -184,7 +184,7 @@ local M = {
       formatters_by_ft = {
         toml = { "taplo" },
         php = { "pint" },
-        nix = { { "alejandra", "nixfmt" } },
+        nix = { { "nixfmt", "alejandra" } },
         blade = { "prettier" },
         markdown = {
           -- "injected",
