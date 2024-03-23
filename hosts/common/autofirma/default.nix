@@ -3,8 +3,9 @@
   config,
   lib,
   ...
-}: {
-  imports = [inputs.autofirma-nix.nixosModules.autofirma];
+}:
+{
+  imports = [ inputs.autofirma-nix.nixosModules.autofirma ];
   programs.autofirma = {
     enable = true;
     firefoxIntegration.enable = false;

@@ -1,8 +1,10 @@
-{lib, ...}: let
+{ lib, ... }:
+let
   inherit (lib) mkOption types;
-in {
+in
+{
   options.system-parts.flake-config = mkOption {
     type = types.attrsOf types.unspecified;
-    default = {};
+    default = { };
   };
 }

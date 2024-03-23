@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   fonts.packages = with pkgs; [
     fira-code-nerdfont
     dejavu_fonts
@@ -8,7 +9,7 @@
   ];
   fonts.fontconfig = {
     defaultFonts = {
-      monospace = ["FiraCode Nerd Font"];
+      monospace = [ "FiraCode Nerd Font" ];
       emoji = [
         "JoyPixels"
         "unscii-16-full"

@@ -1,9 +1,10 @@
+{ user, lib, ... }:
 {
-  user,
-  lib,
-  ...
-}: {
-  imports = [./aliases.nix ./color.nix ./sign.nix];
+  imports = [
+    ./aliases.nix
+    ./color.nix
+    ./sign.nix
+  ];
   programs.git = {
     enable = true;
     extraConfig = {

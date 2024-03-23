@@ -1,3 +1,6 @@
 {
-  imports = [./dconf.nix ./extensions.nix];
+  imports = [
+    ./dconf.nix
+    ./extensions.nix
+  ];
 }

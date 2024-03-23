@@ -1,15 +1,19 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   path = "/mnt/media";
   publicPath = "${path}/Public";
   privatePath = "${path}/Private";
-in {
+in
+{
   # TODO: move this to media server config
   systemd.tmpfiles.rules = [
     "d ${path} 0755 media - - -"
     "d ${publicPath} 1777 media - - -"
     "d ${privatePath} 0700 media - - -"
   ];
-  services.avahi = {enable = true;};
+  services.avahi = {
+    enable = true;
+  };
   services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
   services.samba = {
     enable = true;

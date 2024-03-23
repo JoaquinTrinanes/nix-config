@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   colors = lib.mapAttrs (_: color: "#${color}") config.colorScheme.palette;
   theme = with colors; {
     background = base00;
@@ -49,7 +50,8 @@
     color21 = base06;
   };
   inherit (pkgs.vimPlugins) smart-splits-nvim;
-in {
+in
+{
   programs.kitty = {
     enable = true;
     font = {

@@ -1,6 +1,11 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   services.pcscd.enable = true;
-  services.udev.packages = [pkgs.yubikey-personalization];
+  services.udev.packages = [ pkgs.yubikey-personalization ];
+
+  # security.pam.yubico = {
+  #   id = "26724220";
+  # };
 
   security.tpm2 = {
     enable = true;

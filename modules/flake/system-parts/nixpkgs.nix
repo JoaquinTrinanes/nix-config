@@ -3,18 +3,20 @@
   inputs,
   config,
   ...
-}: let
+}:
+let
   inherit (lib) mkOption types;
   cfg = config.system-parts.nixpkgs;
-in {
+in
+{
   options.system-parts.nixpkgs = {
     overlays = mkOption {
       type = types.listOf types.unspecified;
-      default = [];
+      default = [ ];
     };
     config = mkOption {
       type = types.attrsOf types.unspecified;
-      default = {};
+      default = { };
     };
     finalConfig = mkOption {
       type = types.attrsOf types.unspecified;
@@ -23,16 +25,15 @@ in {
   };
 
   config = {
-    perSystem = {system, ...}: {
-      _module.args.pkgs = import inputs.nixpkgs (lib.recursiveUpdate {
-          inherit system;
-        }
-        cfg.finalConfig);
-    };
+    perSystem =
+      { system, ... }:
+      {
+        _module.args.pkgs = import inputs.nixpkgs (lib.recursiveUpdate { inherit system; } cfg.finalConfig);
+      };
 
     system-parts.nixpkgs.finalConfig = {
       inherit (cfg) overlays config;
     };
-    system-parts.common.exclusiveModules = [{nixpkgs = cfg.finalConfig;}];
+    system-parts.common.exclusiveModules = [ { nixpkgs = cfg.finalConfig; } ];
   };
 }

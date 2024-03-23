@@ -1,8 +1,5 @@
+{ pkgs, lib, ... }:
 {
-  pkgs,
-  lib,
-  ...
-}: {
   imports = [
     ./gnome.nix
     ../audio
@@ -26,8 +23,7 @@
   };
 
   environment.systemPackages = builtins.attrValues {
-    inherit
-      (pkgs)
+    inherit (pkgs)
       discord
       ferdium
       protonvpn-gui

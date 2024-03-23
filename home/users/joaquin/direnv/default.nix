@@ -3,7 +3,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   programs.direnv = {
     enable = true;
     # manually activated to allow calling 'nix_direnv_manual_reload' globally
@@ -36,14 +37,14 @@
     };
   };
 
-  xdg.configFile."direnv/lib/mise.sh".source = let
-    mise_activate_file =
-      pkgs.runCommandNoCCLocal "use_mise.sh" {
-        nativeBuildInputs = [config.programs.mise.package];
-      } ''
-        mise direnv activate > $out
-      '';
-  in
+  xdg.configFile."direnv/lib/mise.sh".source =
+    let
+      mise_activate_file =
+        pkgs.runCommandNoCCLocal "use_mise.sh" { nativeBuildInputs = [ config.programs.mise.package ]; }
+          ''
+            mise direnv activate > $out
+          '';
+    in
     lib.mkIf config.programs.mise.enable mise_activate_file;
 
   xdg.configFile."direnv/lib/laravel.sh".source = ./lib/laravel.sh;

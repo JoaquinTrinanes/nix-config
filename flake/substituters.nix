@@ -1,8 +1,5 @@
-{
-  lib,
-  config,
-  ...
-}: let
+{ lib, config, ... }:
+let
   inherit (config.system-parts) flake-nix-config;
   substituterSettings.nix.settings = lib.mkMerge [
     {
@@ -20,6 +17,7 @@
       ];
     }
   ];
-in {
-  system-parts.common.exclusiveModules = [substituterSettings];
+in
+{
+  system-parts.common.exclusiveModules = [ substituterSettings ];
 }

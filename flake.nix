@@ -42,15 +42,15 @@ rec {
     ];
   };
 
-  outputs = inputs:
-    inputs.flake-parts.lib.mkFlake {inherit inputs;}
-    {
+  outputs =
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       debug = true;
-      systems = ["x86_64-linux"];
+      systems = [ "x86_64-linux" ];
 
       imports = [
         ./flake
-        {system-parts.flake-nix-config = nixConfig;}
+        { system-parts.flake-nix-config = nixConfig; }
       ];
     };
 }

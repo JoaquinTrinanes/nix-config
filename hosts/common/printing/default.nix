@@ -1,8 +1,5 @@
+{ pkgs, lib, ... }:
 {
-  pkgs,
-  lib,
-  ...
-}: {
   imports = [
     {
       # users.users."cups".extraGroups = ["lp"];

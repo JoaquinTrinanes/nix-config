@@ -1,13 +1,28 @@
+{ config, myLib, ... }:
 {
-  config,
-  myLib,
-  ...
-}: {
   programs.wezterm = {
     enable = true;
     colorSchemes."base16" = with config.colorScheme.palette; {
-      ansi = [base00 base08 base0B base0A base0D base0E base0C base05];
-      brights = [base03 base08 base0B base0A base0D base0E base0C base07];
+      ansi = [
+        base00
+        base08
+        base0B
+        base0A
+        base0D
+        base0E
+        base0C
+        base05
+      ];
+      brights = [
+        base03
+        base08
+        base0B
+        base0A
+        base0D
+        base0E
+        base0C
+        base07
+      ];
       background = base00;
       cursor_bg = base05;
       cursor_fg = base00;

@@ -1,19 +1,17 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{ config, lib, ... }:
+let
   inherit (lib) mkOption types;
   cfg = config.system-parts.overlays;
-in {
+in
+{
   options.system-parts.overlays = {
     all = mkOption {
       type = types.attrsOf types.unspecified;
-      default = {};
+      default = { };
     };
     enabled = mkOption {
       type = types.functionTo (types.listOf types.unspecified);
-      default = _: [];
+      default = _: [ ];
     };
     final = mkOption {
       type = types.listOf types.unspecified;

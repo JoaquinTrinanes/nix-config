@@ -3,89 +3,121 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.programs.firefox;
   inherit (lib) mkDefault;
   mkExtensionUrl = name: "https://addons.mozilla.org/firefox/downloads/latest/${name}/latest.xpi";
-  mkExtension = {
-    name,
-    installation_mode ? "normal_installed", # normal_installed, force_installed, blocked, allowed
-    install_url ? (mkExtensionUrl name),
-    install_sources ? [],
-    allowed_types ? ["extension" "theme" "dictionary" "locale"],
-    blocked_install_message ? null,
-    restricted_domains ? [],
-    updates_disabled ? false,
-    default_area ? "menupanel", # menupanel, navbar
-  }: {inherit name installation_mode install_url install_sources allowed_types blocked_install_message restricted_domains updates_disabled default_area;};
-  mkAutoconfig = let
-    statusFunctionName = {
-      locked = "lockPref";
-      default = "defaultPref";
-      user = "pref";
-      clear = "clearPref";
+  mkExtension =
+    {
+      name,
+      installation_mode ? "normal_installed", # normal_installed, force_installed, blocked, allowed
+      install_url ? (mkExtensionUrl name),
+      install_sources ? [ ],
+      allowed_types ? [
+        "extension"
+        "theme"
+        "dictionary"
+        "locale"
+      ],
+      blocked_install_message ? null,
+      restricted_domains ? [ ],
+      updates_disabled ? false,
+      default_area ? "menupanel", # menupanel, navbar
+    }:
+    {
+      inherit
+        name
+        installation_mode
+        install_url
+        install_sources
+        allowed_types
+        blocked_install_message
+        restricted_domains
+        updates_disabled
+        default_area
+        ;
     };
-  in
-    name: value: {status ? cfg.preferencesStatus}: ''
+  mkAutoconfig =
+    let
+      statusFunctionName = {
+        locked = "lockPref";
+        default = "defaultPref";
+        user = "pref";
+        clear = "clearPref";
+      };
+    in
+    name: value:
+    {
+      status ? cfg.preferencesStatus,
+    }:
+    ''
       ${statusFunctionName.${status}}("${name}", ${builtins.toJSON value});
     '';
-in {
+in
+{
   programs.firefox = {
     enable = mkDefault true;
-    nativeMessagingHosts.packages = builtins.attrValues {inherit (pkgs) tridactyl-native;};
+    nativeMessagingHosts.packages = builtins.attrValues { inherit (pkgs) tridactyl-native; };
     preferencesStatus = mkDefault "locked";
     # Preferences not allowed in policies
-    autoConfig = lib.concatLines (lib.mapAttrsToList (name: value: mkAutoconfig name value {}) {
-      "media.ffmpeg.vaapi.enabled" = true;
-      "gfx.webrender.all" = true;
-      "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:121.0) Gecko/20100101 Firefox/121.0";
-      "general.platform.override" = "Win32";
+    autoConfig = lib.concatLines (
+      lib.mapAttrsToList (name: value: mkAutoconfig name value { }) {
+        "media.ffmpeg.vaapi.enabled" = true;
+        "gfx.webrender.all" = true;
+        "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:121.0) Gecko/20100101 Firefox/121.0";
+        "general.platform.override" = "Win32";
 
-      "app.normandy.enabled" = false;
-      "app.normandy.api_url" = "";
-      "app.shield.optoutstudies.enabled" = false;
-      "breakpad.reportURL" = "";
-      "datareporting.healthreport.uploadEnabled" = false;
-      "devtools.screenshot.audio.enabled" = false;
-      # "privacy.donottrackheader.enabled" = true;
+        "app.normandy.enabled" = false;
+        "app.normandy.api_url" = "";
+        "app.shield.optoutstudies.enabled" = false;
+        "breakpad.reportURL" = "";
+        "datareporting.healthreport.uploadEnabled" = false;
+        "devtools.screenshot.audio.enabled" = false;
+        # "privacy.donottrackheader.enabled" = true;
 
-      "toolkit.coverage.endpoint.base" = "";
-      "toolkit.coverage.opt-out" = true;
-      "toolkit.telemetry.archive.enabled" = false;
-      "toolkit.telemetry.bhrPing.enabled" = false;
-      "toolkit.telemetry.unified" = false;
-      "toolkit.telemetry.server" = "data:,";
-      "toolkit.telemetry.newProfilePing.enabled" = false;
-      "toolkit.telemetry.shutdownPingSender.enabled" = false;
-      "toolkit.telemetry.updatePing.enabled" = false;
-      "toolkit.telemetry.firstShutdownPing.enabled" = false;
-      "toolkit.telemetry.coverage.opt-out" = true;
+        "toolkit.coverage.endpoint.base" = "";
+        "toolkit.coverage.opt-out" = true;
+        "toolkit.telemetry.archive.enabled" = false;
+        "toolkit.telemetry.bhrPing.enabled" = false;
+        "toolkit.telemetry.unified" = false;
+        "toolkit.telemetry.server" = "data:,";
+        "toolkit.telemetry.newProfilePing.enabled" = false;
+        "toolkit.telemetry.shutdownPingSender.enabled" = false;
+        "toolkit.telemetry.updatePing.enabled" = false;
+        "toolkit.telemetry.firstShutdownPing.enabled" = false;
+        "toolkit.telemetry.coverage.opt-out" = true;
 
-      "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.enabled" = true;
 
-      "security.ssl3.deprecated.rsa_des_ede3_sha" = false;
-      "security.ssl3.dhe_rsa_aes_128_sha" = false;
-      "security.ssl3.dhe_rsa_aes_256_sha" = false;
-      "security.ssl3.ecdhe_ecdsa_aes_128_sha" = false;
-      "security.ssl3.ecdhe_ecdsa_aes_256_sha" = false;
-      "security.ssl3.ecdhe_rsa_aes_128_sha" = false;
-      "security.ssl3.ecdhe_rsa_aes_256_sha" = false;
-      "security.ssl3.rsa_aes_128_sha" = false;
-      "security.ssl3.rsa_aes_256_sha" = false;
-      "security.ssl3.rsa_aes_128_gcm_sha256" = false;
-      "security.ssl3.rsa_aes_256_gcm_sha384" = false;
+        "security.ssl3.deprecated.rsa_des_ede3_sha" = false;
+        "security.ssl3.dhe_rsa_aes_128_sha" = false;
+        "security.ssl3.dhe_rsa_aes_256_sha" = false;
+        "security.ssl3.ecdhe_ecdsa_aes_128_sha" = false;
+        "security.ssl3.ecdhe_ecdsa_aes_256_sha" = false;
+        "security.ssl3.ecdhe_rsa_aes_128_sha" = false;
+        "security.ssl3.ecdhe_rsa_aes_256_sha" = false;
+        "security.ssl3.rsa_aes_128_sha" = false;
+        "security.ssl3.rsa_aes_256_sha" = false;
+        "security.ssl3.rsa_aes_128_gcm_sha256" = false;
+        "security.ssl3.rsa_aes_256_gcm_sha384" = false;
 
-      # 1 = only base system fonts
-      # 2 = also fonts from optional language packs
-      # 3 = also user-installed fonts
-      # "layout.css.font-visibility.standard" = 1; # 3;
-      # "layout.css.font-visibility.trackingprotection" = 3;
-      # "layout.css.font-visibility.resistFingerprinting" = true;
-      # "layout.css.font-visibility.private" = 1; # 3;
-    });
+        # 1 = only base system fonts
+        # 2 = also fonts from optional language packs
+        # 3 = also user-installed fonts
+        # "layout.css.font-visibility.standard" = 1; # 3;
+        # "layout.css.font-visibility.trackingprotection" = 3;
+        # "layout.css.font-visibility.resistFingerprinting" = true;
+        # "layout.css.font-visibility.private" = 1; # 3;
+      }
+    );
     preferences = {
       "browser.aboutConfig.showWarning" = false;
-      "browser.translations.neverTranslateLanguages" = lib.concatStringsSep "," ["en" "es" "gl"];
+      "browser.translations.neverTranslateLanguages" = lib.concatStringsSep "," [
+        "en"
+        "es"
+        "gl"
+      ];
       "browser.display.use_system_colors" = true;
       "accessibility.typeaheadfind.enablesound" = false;
       "extensions.activeThemeID" = "default-theme@mozilla.org"; # responsive to light and dark mode changes, and not always the default
@@ -135,27 +167,30 @@ in {
       # "network.http.referer.trimmingPolicy" = 2; # 0 = full URI, 1 = scheme+host+port+path, 2 = scheme+host+port
     };
     policies = {
-      ExtensionSettings = let
-        pinnedExtensions = [
-          "CanvasBlocker@kkapsner.de"
-          "addon@darkreader.org"
-          "firefox-enpass@enpass.io"
-          "smart-referer@meh.paranoid.pk"
-          "uBlock0@raymondhill.net"
-          "vpn@proton.ch"
-          # "tab-array@menhera.org"
-          # "{aecec67f-0d10-4fa7-b7c7-609a2db280cf}" # violent monkey
-        ];
-        hiddenExtensions = [
-          "{9a41dee2-b924-4161-a971-7fb35c053a4a}" # enhanced-h264ify.
-        ];
-      in
-        (lib.genAttrs hiddenExtensions (name: mkExtension {inherit name;}))
-        // lib.genAttrs pinnedExtensions (name:
+      ExtensionSettings =
+        let
+          pinnedExtensions = [
+            "CanvasBlocker@kkapsner.de"
+            "addon@darkreader.org"
+            "firefox-enpass@enpass.io"
+            "smart-referer@meh.paranoid.pk"
+            "uBlock0@raymondhill.net"
+            "vpn@proton.ch"
+            # "tab-array@menhera.org"
+            # "{aecec67f-0d10-4fa7-b7c7-609a2db280cf}" # violent monkey
+          ];
+          hiddenExtensions = [
+            "{9a41dee2-b924-4161-a971-7fb35c053a4a}" # enhanced-h264ify.
+          ];
+        in
+        (lib.genAttrs hiddenExtensions (name: mkExtension { inherit name; }))
+        // lib.genAttrs pinnedExtensions (
+          name:
           mkExtension {
             inherit name;
             default_area = "navbar";
-          })
+          }
+        )
         // {
           "tridactyl.vim.betas@cmcaine.co.uk" = mkExtension {
             name = "tridactyl.vim.betas@cmcaine.co.uk";
@@ -164,7 +199,10 @@ in {
         };
       SearchEngines = {
         Default = "DuckDuckGo";
-        Remove = ["amazon@search.mozilla.org" "bing@search.mozilla.org"];
+        Remove = [
+          "amazon@search.mozilla.org"
+          "bing@search.mozilla.org"
+        ];
       };
       DisableFeedbackCommands = true;
       DisableFirefoxStudies = true;
@@ -180,5 +218,18 @@ in {
         MoreFromMozilla = false;
       };
     };
+  };
+
+  xdg.mime.defaultApplications = {
+    "x-scheme-handler/http" = "firefox-devedition.desktop";
+    "x-scheme-handler/https" = "firefox-devedition.desktop";
+    "x-scheme-handler/chrome" = "firefox-devedition.desktop";
+    "text/html" = "firefox-devedition.desktop";
+    "application/x-extension-htm" = "firefox-devedition.desktop";
+    "application/x-extension-html" = "firefox-devedition.desktop";
+    "application/x-extension-shtml" = "firefox-devedition.desktop";
+    "application/xhtml+xml" = "firefox-devedition.desktop";
+    "application/x-extension-xhtml" = "firefox-devedition.desktop";
+    "application/x-extension-xht" = "firefox-devedition.desktop";
   };
 }

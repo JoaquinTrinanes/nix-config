@@ -1,12 +1,10 @@
-{
-  users,
-  lib,
-  ...
-}: let
+{ users, lib, ... }:
+let
   sshConfig = {
     openssh.authorizedKeys.keys = users."joaquin".sshPublicKeys;
   };
-in {
+in
+{
   networking.networkmanager.enable = true;
   networking.firewall.allowPing = true;
 
@@ -26,7 +24,10 @@ in {
 
   services.logind.lidSwitch = "ignore";
 
-  services.tailscale.extraUpFlags = lib.mkForce ["--ssh" "--advertise-tags=tag:server"];
+  services.tailscale.extraUpFlags = lib.mkForce [
+    "--ssh"
+    "--advertise-tags=tag:server"
+  ];
 
   systemd.sleep.extraConfig = ''
     AllowSuspend=no
@@ -57,12 +58,10 @@ in {
     isSystemUser = true;
     group = "media";
   };
-  users.groups.media = {};
-  users.users."joaquin" =
-    sshConfig
-    // {
-      uid = 1000;
-      isNormalUser = true;
-      extraGroups = ["wheel"];
-    };
+  users.groups.media = { };
+  users.users."joaquin" = sshConfig // {
+    uid = 1000;
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+  };
 }

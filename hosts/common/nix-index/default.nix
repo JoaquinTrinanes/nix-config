@@ -1,9 +1,6 @@
+{ inputs, lib, ... }:
 {
-  inputs,
-  lib,
-  ...
-}: {
-  imports = [inputs.nix-index-database.nixosModules.nix-index];
+  imports = [ inputs.nix-index-database.nixosModules.nix-index ];
   programs.nix-index = {
     enableBashIntegration = false;
     enableZshIntegration = false;

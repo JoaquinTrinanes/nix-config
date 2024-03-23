@@ -4,16 +4,17 @@
   inputs,
   myLib,
   ...
-}: let
+}:
+let
   package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
   inherit (myLib) mkImpureLink;
-in {
+in
+{
   programs.neovim = {
     inherit package;
     enable = lib.mkDefault true;
     extraPackages = builtins.attrValues {
-      inherit
-        (pkgs)
+      inherit (pkgs)
         black
         dotenv-linter
         fzf
@@ -31,12 +32,7 @@ in {
         taplo
         yaml-language-server
         ;
-      inherit
-        (pkgs.nodePackages)
-        pyright
-        prettier
-        typescript-language-server
-        ;
+      inherit (pkgs.nodePackages) pyright prettier typescript-language-server;
     };
     vimAlias = true;
     viAlias = true;
@@ -44,7 +40,7 @@ in {
       require("config.lazy")
     '';
     withNodeJs = true;
-    extraLuaPackages = p: [p.jsregexp];
+    extraLuaPackages = p: [ p.jsregexp ];
   };
 
   xdg.configFile."nvim/lua" = {
@@ -61,12 +57,11 @@ in {
   };
   xdg.configFile."nvim/filetype.lua".source = mkImpureLink ./files/filetype.lua;
 
-  xdg.configFile."tridactyl/tridactylrc".text = let
-    ytRegex = "${lib.escapeRegex "youtube.com/watch?"}v=.*";
-  in
-    /*
-    vim
-    */
+  xdg.configFile."tridactyl/tridactylrc".text =
+    let
+      ytRegex = "${lib.escapeRegex "youtube.com/watch?"}v=.*";
+    in
+    # vim
     ''
       " delete previously set local options
       sanitise tridactyllocal
@@ -92,5 +87,5 @@ in {
       " set leavegithubalone true
     '';
 
-  programs.git.ignores = [".lazy.lua"];
+  programs.git.ignores = [ ".lazy.lua" ];
 }

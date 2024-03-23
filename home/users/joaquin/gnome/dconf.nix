@@ -1,6 +1,8 @@
-{lib, ...}: let
+{ lib, ... }:
+let
   inherit (lib.hm.gvariant) mkTuple;
-in {
+in
+{
   dconf.settings = {
     # "org/gnome/shell/extensions/user-theme" = {
     #   inherit (config.gtk.theme) name;
@@ -12,7 +14,12 @@ in {
       natural-scroll = false;
     };
     "org/gnome/shell" = {
-      favorite-apps = ["org.gnome.Nautilus.desktop" "firefox-devedition.desktop" "discord.desktop" "org.wezfurlong.wezterm.desktop"];
+      favorite-apps = [
+        "org.gnome.Nautilus.desktop"
+        "firefox-devedition.desktop"
+        "discord.desktop"
+        "org.wezfurlong.wezterm.desktop"
+      ];
     };
     "org/gnome/desktop/interface" = {
       clock-show-weekday = true;
@@ -27,13 +34,16 @@ in {
     };
     "org/gnome/mutter" = {
       edge-tiling = true;
-      experimental-features = ["scale-monitor-framebuffer"];
+      experimental-features = [ "scale-monitor-framebuffer" ];
     };
     "org/gnome/shell/extensions/espresso" = {
       show-notifications = false;
     };
     "org/gnome/shell/extensions/nightthemeswitcher/time" = {
-      location = mkTuple [42.876720 (-8.547082)];
+      location = mkTuple [
+        42.87672
+        (-8.547082)
+      ];
     };
 
     "org/gnome/desktop/wm/preferences" = {
@@ -49,17 +59,28 @@ in {
       name = "Launch terminal";
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
-      custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
+      custom-keybindings = [
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+      ];
     };
     "org/gnome/desktop/wm/keybindings" = {
-      switch-windows = ["<Alt>Tab"];
-      switch-windows-backward = ["<Shift><Alt>Tab"];
-      switch-applications = ["<Super>Tab"];
-      switch-applications-backward = ["<Shift><Super>Tab"];
+      switch-windows = [ "<Alt>Tab" ];
+      switch-windows-backward = [ "<Shift><Alt>Tab" ];
+      switch-applications = [ "<Super>Tab" ];
+      switch-applications-backward = [ "<Shift><Super>Tab" ];
     };
     "org/gnome/desktop/input-sources" = {
       show-all-sources = true;
-      sources = [(mkTuple ["xkb" "us"]) (mkTuple ["xkb" "es"])];
+      sources = [
+        (mkTuple [
+          "xkb"
+          "us"
+        ])
+        (mkTuple [
+          "xkb"
+          "es"
+        ])
+      ];
     };
     "org/gnome/shell/extensions/dash-to-panel" = {
       hide-overview-on-startup = true;

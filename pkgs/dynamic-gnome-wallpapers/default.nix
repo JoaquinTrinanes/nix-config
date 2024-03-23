@@ -5,34 +5,35 @@
   symlinkJoin,
   flavours,
   fetchFromGitHub,
-}: let
-  mkLightDarkWallpaper = name: {
-    light,
-    dark,
-  }: let
-    parsedName = lib.replaceStrings [" "] ["-"] name;
-    bgProps = ''
-      <?xml version=\"1.0\"?>
-      <!DOCTYPE wallpapers SYSTEM \"gnome-wp-list.dtd\">
-      <wallpapers>
-        <wallpaper deleted=\"false\">
-          <name>${name}</name>
-          <filename>@out@/share/backgrounds/gnome/${parsedName}-l.png</filename>
-          <filename-dark>@out@/share/backgrounds/gnome/${parsedName}-d.png</filename-dark>
-          <options>zoom</options>
-          <shade_type>solid</shade_type>
-          <pcolor>@primary_color@</pcolor>
-          <scolor>@secondary_color@</scolor>
-        </wallpaper>
-      </wallpapers>
-    '';
-  in
+}:
+let
+  mkLightDarkWallpaper =
+    name:
+    { light, dark }:
+    let
+      parsedName = lib.replaceStrings [ " " ] [ "-" ] name;
+      bgProps = ''
+        <?xml version=\"1.0\"?>
+        <!DOCTYPE wallpapers SYSTEM \"gnome-wp-list.dtd\">
+        <wallpapers>
+          <wallpaper deleted=\"false\">
+            <name>${name}</name>
+            <filename>@out@/share/backgrounds/gnome/${parsedName}-l.png</filename>
+            <filename-dark>@out@/share/backgrounds/gnome/${parsedName}-d.png</filename-dark>
+            <options>zoom</options>
+            <shade_type>solid</shade_type>
+            <pcolor>@primary_color@</pcolor>
+            <scolor>@secondary_color@</scolor>
+          </wallpaper>
+        </wallpapers>
+      '';
+    in
     stdenv.mkDerivation {
       inherit name;
 
       unpackPhase = ":";
 
-      nativeBuildInputs = [flavours];
+      nativeBuildInputs = [ flavours ];
 
       installPhase = ''
         runHook preInstall
@@ -67,34 +68,30 @@
       };
     };
   };
-  dynamicWallpapers =
-    stdenv.mkDerivation
-    {
-      name = "Linux_Dynamic_Wallpapers";
-      src = fetchFromGitHub {
-        repo = "Linux_Dynamic_Wallpapers";
-        owner = "saint-13";
-        rev = "45128514ae51c6647ab3e427dda2de40c74a40e5";
-        hash = "sha256-gmGtu28QfUP4zTfQm1WBAokQaZEoTJ2jL/Qk4BUNrhU=";
-      };
-
-      installPhase = ''
-        runHook preInstall
-
-        mkdir -p $out/share/backgrounds/Dynamic_Wallpapers
-        mkdir -p $out/share/gnome-background-properties
-
-        substituteInPlace Dynamic_Wallpapers/*.xml xml/*.xml --replace /usr $out
-        cp -r Dynamic_Wallpapers/* $out/share/backgrounds/Dynamic_Wallpapers
-        cp xml/* $out/share/gnome-background-properties
-
-        runHook postInstall
-      '';
+  dynamicWallpapers = stdenv.mkDerivation {
+    name = "Linux_Dynamic_Wallpapers";
+    src = fetchFromGitHub {
+      repo = "Linux_Dynamic_Wallpapers";
+      owner = "saint-13";
+      rev = "45128514ae51c6647ab3e427dda2de40c74a40e5";
+      hash = "sha256-gmGtu28QfUP4zTfQm1WBAokQaZEoTJ2jL/Qk4BUNrhU=";
     };
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share/backgrounds/Dynamic_Wallpapers
+      mkdir -p $out/share/gnome-background-properties
+
+      substituteInPlace Dynamic_Wallpapers/*.xml xml/*.xml --replace /usr $out
+      cp -r Dynamic_Wallpapers/* $out/share/backgrounds/Dynamic_Wallpapers
+      cp xml/* $out/share/gnome-background-properties
+
+      runHook postInstall
+    '';
+  };
 in
-  symlinkJoin {
-    name = "dynamic-gnome-wallpapers";
-    paths =
-      lightDarkWallpapers
-      ++ [dynamicWallpapers];
-  }
+symlinkJoin {
+  name = "dynamic-gnome-wallpapers";
+  paths = lightDarkWallpapers ++ [ dynamicWallpapers ];
+}

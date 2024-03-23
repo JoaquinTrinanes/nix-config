@@ -5,12 +5,22 @@
   pkgs,
   self,
   ...
-}: let
-  inherit (lib) mkOption types mkEnableOption mkIf getExe;
+}:
+let
+  inherit (lib)
+    mkOption
+    types
+    mkEnableOption
+    mkIf
+    getExe
+    ;
   cfg = config.impurePath;
-in {
+in
+{
   options.impurePath = {
-    enable = mkEnableOption "impure flake path" // {default = cfg.flakePath != null;};
+    enable = mkEnableOption "impure flake path" // {
+      default = cfg.flakePath != null;
+    };
     flakePath = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -24,7 +34,7 @@ in {
   config = mkIf cfg.enable {
     xdg.configFile."home-manager/flake.nix".source = myLib.mkImpureLink "${self}/flake.nix";
     home.activation = mkIf (cfg.repoUrl != null && cfg.flakePath != null) {
-      downloadRepo = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      downloadRepo = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         if [ ! -e ${cfg.flakePath} ]; then
           run ${getExe pkgs.git} clone $VERBOSE_ARG ${cfg.repoUrl} ${cfg.flakePath}
         fi

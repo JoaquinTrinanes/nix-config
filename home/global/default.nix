@@ -3,18 +3,17 @@
   user,
   pkgs,
   ...
-}: {
+}:
+{
   home = {
     username = lib.mkDefault user.name;
     homeDirectory = lib.mkDefault (
-      if pkgs.stdenv.isLinux
-      then "/home/${user.name}"
-      else "/Users/${user.name}"
+      if pkgs.stdenv.isLinux then "/home/${user.name}" else "/Users/${user.name}"
     );
   };
 
   programs.ssh = {
-    includes = ["config.local"];
+    includes = [ "config.local" ];
   };
 
   programs.gpg.settings = {
@@ -44,16 +43,23 @@
     throw-keyids = true;
   };
 
-  xdg.configFile."Yubico/u2f_keys" = lib.mkIf (user.u2f != []) {
-    text = let
-      mkKey = {
-        keyHandle,
-        userKey,
-        coseType,
-        options,
-      }:
-        lib.concatStringsSep "," [keyHandle userKey coseType options];
-    in
-      lib.concatStringsSep ":" ([user.name] ++ map mkKey user.u2f);
+  xdg.configFile."Yubico/u2f_keys" = lib.mkIf (user.u2f != [ ]) {
+    text =
+      let
+        mkKey =
+          {
+            keyHandle,
+            userKey,
+            coseType,
+            options,
+          }:
+          lib.concatStringsSep "," [
+            keyHandle
+            userKey
+            coseType
+            options
+          ];
+      in
+      lib.concatStringsSep ":" ([ user.name ] ++ map mkKey user.u2f);
   };
 }

@@ -17,6 +17,6 @@ _: {
       local = "yellow";
       remote = "green";
     };
-    branch = {};
+    branch = { };
   };
 }

@@ -1,6 +1,10 @@
 _: {
   programs.git.extraConfig = {
-    commit = {gpgsign = true;};
-    tag = {gpgsign = true;};
+    commit = {
+      gpgsign = true;
+    };
+    tag = {
+      gpgsign = true;
+    };
   };
 }

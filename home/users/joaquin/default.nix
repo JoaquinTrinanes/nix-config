@@ -6,8 +6,17 @@
   self,
   myLib,
   ...
-}: {
-  _module.args.myLib = import "${self}/home/lib" {inherit lib config pkgs self inputs;};
+}:
+{
+  _module.args.myLib = import "${self}/home/lib" {
+    inherit
+      lib
+      config
+      pkgs
+      self
+      inputs
+      ;
+  };
 
   imports = [
     ./git
@@ -22,59 +31,76 @@
     inputs.nix-colors.homeManagerModules.default
   ];
 
+  programs.jujutsu = {
+    enable = true;
+    settings = {
+      user = {
+        inherit (config.programs.git.iniContent.user) name email;
+      };
+    };
+    package = myLib.mkWrapper "jujutsu" {
+      basePackage = pkgs.jujutsu;
+      env."JJ_CONFIG" = {
+        value = config.home.file.".jjconfig.toml".source;
+        force = false;
+      };
+    };
+  };
+  home.file.".jjconfig.toml".enable = false;
+
   programs.password-store.enable = true;
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
   home = {
-    sessionVariables = lib.mkIf config.programs.neovim.enable {
-      MANPAGER = "nvim +Man!";
-    };
+    sessionVariables = lib.mkIf config.programs.neovim.enable { MANPAGER = "nvim +Man!"; };
 
-    packages = let
-      # this has to be a wrapper and not an alias to be able to call it with sudo
-      nx = pkgs.writeShellScriptBin "nx" ''
-        ${lib.getExe pkgs.nixos-rebuild} "$@"
-      '';
-      nxs = pkgs.writeShellScriptBin "nxs" ''
-        ${lib.getExe nx} switch "$@"
-      '';
-      nr = pkgs.writeShellScriptBin "nr" ''
-        nix run nixpkgs#"$@"
-      '';
-      less = myLib.mkWrapper "less" {
-        basePackage = pkgs.less;
-        flags = [
-          "--ignore-case"
-          "--RAW-CONTROL-CHARS"
-          "--quit-if-one-screen"
-        ];
-      };
-    in
+    packages =
+      let
+        # this has to be a wrapper and not an alias to be able to call it with sudo
+        nx = pkgs.writeShellScriptBin "nx" ''
+          ${lib.getExe pkgs.nixos-rebuild} "$@"
+        '';
+        nxs = pkgs.writeShellScriptBin "nxs" ''
+          ${lib.getExe nx} switch "$@"
+        '';
+        nr = pkgs.writeShellScriptBin "nr" ''
+          nix run nixpkgs#"$@"
+        '';
+        less = myLib.mkWrapper "less" {
+          basePackage = pkgs.less;
+          flags = [
+            "--ignore-case"
+            "--RAW-CONTROL-CHARS"
+            "--quit-if-one-screen"
+          ];
+        };
+      in
       [
         less
         nx
         nxs
         nr
       ]
-      ++ builtins.attrValues {
-        inherit
-          (pkgs)
-          enpass
-          ;
-      };
+      ++ builtins.attrValues { inherit (pkgs) enpass; };
   };
 
   programs.home-manager.enable = true;
 
   programs.bash.enable = true;
 
-  programs.bash.initExtra = lib.mkIf (config.home.shellAliases != {}) (lib.mkAfter (lib.concatLines ([
-      ''
-        source ${lib.getExe pkgs.complete-alias}
-      ''
-    ]
-    ++ map (alias: "complete -F _complete_alias ${alias}") (builtins.attrNames config.home.shellAliases))));
+  programs.bash.initExtra = lib.mkIf (config.home.shellAliases != { }) (
+    lib.mkAfter (
+      lib.concatLines (
+        [
+          ''
+            source ${lib.getExe pkgs.complete-alias}
+          ''
+        ]
+        ++ map (alias: "complete -F _complete_alias ${alias}") (builtins.attrNames config.home.shellAliases)
+      )
+    )
+  );
 
   programs.mise = {
     enable = true;
@@ -85,7 +111,7 @@
 
   programs.zoxide = {
     enable = true;
-    options = ["--cmd=j"];
+    options = [ "--cmd=j" ];
   };
 
   programs.ripgrep = {
@@ -121,12 +147,11 @@
     };
   };
 
-  xdg.configFile."pnpm/rc".source = let
-    keyValue = pkgs.formats.keyValue {};
-  in
-    keyValue.generate "rc" {
-      update-notifier = false;
-    };
+  xdg.configFile."pnpm/rc".source =
+    let
+      keyValue = pkgs.formats.keyValue { };
+    in
+    keyValue.generate "rc" { update-notifier = false; };
 
   home.shellAliases =
     {
@@ -145,7 +170,7 @@
       hm = "home-manager";
       hms = "home-manager switch";
     }
-    // lib.optionalAttrs config.programs.bat.enable {"cat" = "bat -p";};
+    // lib.optionalAttrs config.programs.bat.enable { "cat" = "bat -p"; };
 
   programs.gpg = {
     enable = true;
@@ -160,7 +185,7 @@
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
-    sshKeys = ["0405AAB779EE75EB11E9B4F148AC62E32DB2CD11"];
+    sshKeys = [ "0405AAB779EE75EB11E9B4F148AC62E32DB2CD11" ];
     pinentryPackage = pkgs.pinentry-gnome3;
   };
   # Disable gnome-keyring ssh-agent
@@ -175,11 +200,11 @@
 
   programs.atuin = {
     enable = true;
-    flags = ["--disable-up-arrow"];
+    flags = [ "--disable-up-arrow" ];
     settings = {
       # keymap_mode = "vim-normal";
       # https://docs.rs/regex/latest/regex/#syntax
-      history_filter = ["^\\s+"];
+      history_filter = [ "^\\s+" ];
       # number of context lines to show when scrolling by pages
       scroll_context_lines = 3;
     };
@@ -212,4 +237,20 @@
     package = pkgs.gnome.adwaita-icon-theme;
     size = 16;
   };
+
+  # xdg.configFile."Proton/VPN/settings.json".text = builtins.toJSON {
+  #   dns_custom_ips = [];
+  #   features = {
+  #     moderate_nat = false;
+  #     netshield = 0; # 0 = disabled, 1 = block malware, 2 = block ads, trackers and malware
+  #     port_forwarding = false;
+  #     vpn_accelerator = true;
+  #   };
+  #   killswitch = 0; # 0, 1
+  #   protocol = "openvpn-udp"; # openvpn-udp, openvpn-tcp
+  # };
+  # xdg.configFile."Proton/VPN/app-config.json".text = builtins.toJSON {
+  #   connect_at_app_startup = null;
+  #   tray_pinned_servers = ["ES" "US"];
+  # };
 }

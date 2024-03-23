@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   security.rtkit.enable = true;
   hardware.pulseaudio = {
     enable = false;
@@ -19,5 +20,5 @@
       Experimental = true;
     };
   };
-  environment.systemPackages = with pkgs; [pavucontrol];
+  environment.systemPackages = with pkgs; [ pavucontrol ];
 }

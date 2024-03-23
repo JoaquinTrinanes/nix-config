@@ -1,11 +1,7 @@
-{
-  pkgs,
-  lib,
-  ...
-}: let
+{ pkgs, lib, ... }:
+let
   extensions = builtins.attrValues {
-    inherit
-      (pkgs.gnomeExtensions)
+    inherit (pkgs.gnomeExtensions)
       dash-to-panel
       espresso
       appindicator
@@ -15,17 +11,20 @@
       color-picker
       ;
   };
-in {
-  xdg.dataFile =
-    lib.listToAttrs (map (e: lib.nameValuePair "gnome-shell/extensions/${e.extensionUuid}" {source = "${e}/share/gnome-shell/extensions/${e.extensionUuid}";})
-      extensions);
+in
+{
+  xdg.dataFile = lib.listToAttrs (
+    map (
+      e:
+      lib.nameValuePair "gnome-shell/extensions/${e.extensionUuid}" {
+        source = "${e}/share/gnome-shell/extensions/${e.extensionUuid}";
+      }
+    ) extensions
+  );
   dconf.settings = {
     "org/gnome/shell" = {
       disable-user-extensions = false;
-      enabled-extensions =
-        builtins.map
-        (extension: extension.extensionUuid)
-        extensions;
+      enabled-extensions = builtins.map (extension: extension.extensionUuid) extensions;
     };
   };
 }

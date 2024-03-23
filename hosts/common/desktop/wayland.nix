@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   services.xserver.displayManager.gdm.wayland = true;
 
   environment.systemPackages = with pkgs; [
@@ -14,9 +15,7 @@
 
   xdg = {
     portal = {
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-      ];
+      extraPortals = with pkgs; [ xdg-desktop-portal-wlr ];
     };
   };
 }

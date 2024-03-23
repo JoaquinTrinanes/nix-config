@@ -1,6 +1,8 @@
-{lib, ...}: let
+{ lib, ... }:
+let
   inherit (lib) mkOption types;
-in {
+in
+{
   options.system-parts.flake-nix-config = mkOption {
     type = types.submodule {
       freeformType = types.attrsOf types.unspecified;
@@ -17,6 +19,6 @@ in {
         };
       };
     };
-    default = {};
+    default = { };
   };
 }

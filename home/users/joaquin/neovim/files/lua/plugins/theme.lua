@@ -29,6 +29,13 @@ local M = {
           SpellBad = {
             sp = colors.subtext0,
           },
+          -- Colorblind-friendliness
+          -- DiffAdd = {
+          --   bg = "#acd6fc",
+          -- },
+          -- diffRemoved = {
+          --   bg = "#e7a100",
+          -- },
         }
       end,
     },

@@ -3,7 +3,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     ../common/desktop
     ../common/development
@@ -17,15 +18,17 @@
 
   programs.firefox.package = pkgs.firefox-devedition;
 
-  services.tailscale.extraUpFlags = ["--advertise-tags=tag:desktop"];
+  services.tailscale.extraUpFlags = [ "--advertise-tags=tag:desktop" ];
 
   boot.tmp.cleanOnBoot = true;
   boot.tmp.useTmpfs = true;
 
-  nix.settings.trusted-users = ["@wheel"];
+  nix.settings.trusted-users = [ "@wheel" ];
 
   systemd.tmpfiles.rules = [
-    "L+ /etc/nixos/flake.nix - - - - ${config.users.users."joaquin".home}/Documents/nix-config/flake.nix"
+    "L+ /etc/nixos/flake.nix - - - - ${
+      config.users.users."joaquin".home
+    }/Documents/nix-config/flake.nix"
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -37,19 +40,24 @@
       # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
       # initialPassword = "correcthorsebatterystaple";
       isNormalUser = true;
-      openssh.authorizedKeys.keys = lib.mkForce [];
+      openssh.authorizedKeys.keys = lib.mkForce [ ];
       extraGroups =
-        ["wheel" "networkmanager"]
-        ++ lib.optionals config.programs.adb.enable ["adbusers"]
-        ++ lib.optionals config.services.printing.enable ["lp"]
-        ++ lib.optionals config.virtualisation.docker.enable ["docker"]
-        ++ lib.optionals config.security.tpm2.enable ["tss"];
+        [
+          "wheel"
+          "networkmanager"
+        ]
+        ++ lib.optionals config.programs.adb.enable [ "adbusers" ]
+        ++ lib.optionals config.services.printing.enable [ "lp" ]
+        ++ lib.optionals config.virtualisation.docker.enable [ "docker" ]
+        ++ lib.optionals config.security.tpm2.enable [ "tss" ];
     };
   };
 
   networking = {
     wireless.iwd.enable = true;
-    nftables = {enable = true;};
+    nftables = {
+      enable = true;
+    };
     nameservers = [
       "1.1.1.1"
       "2606:4700:4700::1111"
@@ -65,7 +73,8 @@
     };
   };
 
-
+  # TODO: probably not the issue
+  services.avahi.enable = false;
   services.resolved = {
     # dnssec = "allow-downgrade";
     enable = true;

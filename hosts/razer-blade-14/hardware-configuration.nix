@@ -5,7 +5,8 @@
   modulesPath,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     inputs.hardware.nixosModules.common-cpu-amd
@@ -15,7 +16,7 @@
     ../common/hardware-acceleration/amdgpu.nix
     {
       boot.resumeDevice = "/dev/mapper/root";
-      boot.kernelParams = ["resume_offset=13078528"];
+      boot.kernelParams = [ "resume_offset=13078528" ];
       systemd.tmpfiles.rules = [
         # Writing 0 causes the size of hibernation images to be minimum
         "w /sys/power/image_size - - - - 0"
@@ -24,10 +25,16 @@
   ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.timeout = 0;
-  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usbhid" "usb_storage"];
-  boot.initrd.kernelModules = ["dm-snapshot"];
-  boot.kernelModules = ["kvm-amd"];
-  boot.supportedFilesystems = ["ntfs"];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "thunderbolt"
+    "usbhid"
+    "usb_storage"
+  ];
+  boot.initrd.kernelModules = [ "dm-snapshot" ];
+  boot.kernelModules = [ "kvm-amd" ];
+  boot.supportedFilesystems = [ "ntfs" ];
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.luks.devices."root" = {
@@ -90,17 +97,18 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   # powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  hardware.cpu.amd.updateMicrocode =
-    lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-  services.xserver.videoDrivers = ["modesetting" "nvidia"];
+  services.xserver.videoDrivers = [
+    "modesetting"
+    "nvidia"
+  ];
 
   # Disabling nvidia.modesetting doesn't work if prime.offload is enabled
   boot.kernelParams = lib.mkMerge [
-    (
-      lib.mkIf (!config.hardware.nvidia.modesetting.enable)
+    (lib.mkIf (!config.hardware.nvidia.modesetting.enable)
       # last entries have priority, and the modeset=1 needs to be overriden
-      (lib.mkAfter ["nvidia-drm.modeset=0"])
+      (lib.mkAfter [ "nvidia-drm.modeset=0" ])
     )
     [
       # suspend loop fix
@@ -108,7 +116,9 @@
     ]
   ];
 
-  environment.variables = {"__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";};
+  environment.variables = {
+    "__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
+  };
 
   hardware.nvidia = {
     package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
@@ -119,7 +129,9 @@
       finegrained = true;
     };
     prime = {
-      reverseSync = {enable = true;};
+      reverseSync = {
+        enable = true;
+      };
       offload = {
         enable = true;
         enableOffloadCmd = true;
