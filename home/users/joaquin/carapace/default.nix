@@ -8,9 +8,6 @@
 in {
   programs.carapace.enable = true;
   programs.carapace.aliases = {
-    vi = "nvim";
-    vim = "nvim";
-    sail = ["docker" "compose"];
   };
   xdg.configFile."carapace/bridges.yaml".source = yaml.generate "bridges.yaml" {
     git = "fish";
