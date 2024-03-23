@@ -4,6 +4,8 @@ local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
 
 local bufCache = {}
 
+local nix_fmt_path = nil
+
 --- @param filename string
 local is_dotenv = function(filename)
   local name = vim.fs.basename(filename)
@@ -242,8 +244,6 @@ local M = {
           end,
           ---@diagnostic disable-next-line: unused-local
           command = function(self, ctx)
-            local nix_fmt_path = (bufCache[ctx.buf] or {}).nix_fmt_path
-
             if nix_fmt_path == nil then
               local handle, err = io.popen(
                 "nix eval --no-write-lock-file --no-update-lock-file --no-warn-dirty --impure --json .#formatter --apply '(x: (import <nixpkgs> {}).lib.getExe x.${builtins.currentSystem})'"
@@ -259,8 +259,10 @@ local M = {
               end
 
               local ok, path = pcall(vim.json.decode, response)
+              if not ok then
+                path = ""
+              end
 
-              bufCache[ctx.buf] = vim.tbl_extend("force", bufCache[ctx.buf] or {}, { nix_fmt_path = ok and path or "" })
               nix_fmt_path = path
             end
 
