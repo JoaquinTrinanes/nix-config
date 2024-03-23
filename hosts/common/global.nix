@@ -6,7 +6,10 @@
   ...
 }: let
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") (inputs // {p = inputs.nixpkgs;});
-  extraNixpkgsAliases = {unstable = "nixpkgs-unstable";};
+  extraNixpkgsAliases = {
+    unstable = "nixpkgs-unstable";
+    nixpkgs-head = "master";
+  };
 in {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
