@@ -2,7 +2,7 @@
   inherit (lib) mkOption types;
 in {
   options.system-parts.flake-nix-config = mkOption {
-    type = types.submodule ({config, ...}: {
+    type = types.submodule {
       freeformType = types.attrsOf types.unspecified;
 
       options = {
@@ -16,7 +16,7 @@ in {
           default = null;
         };
       };
-    });
+    };
     default = {};
   };
 }
