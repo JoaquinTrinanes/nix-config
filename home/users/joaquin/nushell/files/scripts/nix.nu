@@ -10,14 +10,3 @@
 #     ^nix profile list --json $args | from json
 # }
 
-export def "from nix" []: string -> any {
-  nix eval --json --expr $in | from json
-}
-
-export def "to nix" [
---format(-f) # format the output
-]: any -> string {
-  to json
-  | nix eval --expr $"builtins.fromJSON ''($in)''"
-  | if $format { nix run `nixpkgs#alejandra` -- -q } else {}
-}

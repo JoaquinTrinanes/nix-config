@@ -45,17 +45,16 @@ export-env {
     }
 }
 
-# Directories to search for scripts when calling source or use
-$env.NU_LIB_DIRS = [
-    ($nu.default-config-dir | path join 'scripts')
-]
+# $env.NU_LIB_DIRS = [
+#     ($nu.default-config-dir | path join 'scripts')
+# ]
 
 # Directories to search for plugin binaries when calling register
 #
 # By default, <nushell-config-dir>/plugins is added
-$env.NU_PLUGIN_DIRS = [
-    # ($nu.config-path | path dirname | path join 'plugins')
-]
+# $env.NU_PLUGIN_DIRS = [
+#     # ($nu.config-path | path dirname | path join 'plugins')
+# ]
 
 
 export-env {
