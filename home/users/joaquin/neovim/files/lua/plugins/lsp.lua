@@ -184,7 +184,7 @@ local M = {
       formatters_by_ft = {
         toml = { "taplo" },
         php = { "pint" },
-        nix = { { "nixfmt", "alejandra" } },
+        nix = { { "nix_fmt", "nixfmt", "alejandra" } },
         blade = { "prettier" },
         markdown = {
           -- "injected",
@@ -229,6 +229,47 @@ local M = {
 
             return is_prettier_enabled
           end,
+        },
+        nix_fmt = {
+          --- @param ctx {filename: string, dirname: string, buf: number}
+          ---@diagnostic disable-next-line: unused-local
+          condition = function(self, ctx)
+            ---@diagnostic disable-next-line: param-type-mismatch
+            local command = self.command(self, ctx)
+            local has_nix_fmt = command ~= nil and command ~= ""
+
+            return has_nix_fmt
+          end,
+          ---@diagnostic disable-next-line: unused-local
+          command = function(self, ctx)
+            local nix_fmt_path = (bufCache[ctx.buf] or {}).nix_fmt_path
+
+            if nix_fmt_path == nil then
+              local handle, err = io.popen(
+                "nix eval --no-write-lock-file --no-update-lock-file --no-warn-dirty --impure --json .#formatter --apply '(x: (import <nixpkgs> {}).lib.getExe x.${builtins.currentSystem})'"
+              )
+              if handle == nil or err ~= nil then
+                return ""
+              end
+              local response = handle:read("*a")
+              handle:close()
+
+              if not response then
+                return response
+              end
+
+              local ok, path = pcall(vim.json.decode, response)
+
+              bufCache[ctx.buf] = vim.tbl_extend("force", bufCache[ctx.buf] or {}, { nix_fmt_path = ok and path or "" })
+              nix_fmt_path = path
+            end
+
+            return nix_fmt_path
+          end,
+          args = { "$FILENAME" },
+          stdin = false,
+          cwd = require("conform.util").root_file({ "flake.nix" }),
+          require_cwd = true,
         },
       },
     },
