@@ -3,7 +3,6 @@
   environment.systemPackages = with pkgs; [
     # corepack
     # file
-    alejandra
     dbeaver
     git-extras
     git-standup
