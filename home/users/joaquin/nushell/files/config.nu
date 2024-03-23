@@ -3,10 +3,11 @@
 let carapace_completer = {|spans|
   carapace $spans.0 nushell ...$spans
   | from json
+  | if ($in | default [] | where value == $"($spans | last)ERR" | is-empty) { $in } else { null }
 }
 
 let fish_completer = {|spans: list<string>|
-    fish --command $'complete "--do-complete=($spans | str join " ")"'
+    @fish@ --command $'complete "--do-complete=($spans | str join " ")"'
     | $"value(char tab)description(char newline)" + $in
     | from tsv --flexible --no-infer
 }

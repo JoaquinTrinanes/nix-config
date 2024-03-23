@@ -14,11 +14,18 @@ in {
     ./theme.nix
   ];
   programs.carapace.enableNushellIntegration = false;
+
   programs.nushell = {
     enable = lib.mkDefault true;
     package = nushellNightlyPkgs.nushellFull;
     inherit (config.home) shellAliases;
-    configFile.source = ./files/config.nu;
+
+    # TODO: this causes IFD because the nushell module reads the source
+    configFile.source = pkgs.substituteAll {
+      src = ./files/config.nu;
+      fish = lib.getExe pkgs.fish;
+    };
+    environmentVariables = {"NU_LIB_DIRS" = toString scriptsDir;};
     envFile.source = ./files/env.nu;
     extraConfig = let
       nix = lib.getExe config.nix.package;
@@ -44,7 +51,6 @@ in {
         '')
       ];
   };
-
 
   xdg.configFile."nushell/plugin.nu".source = let
     plugins = builtins.attrValues {
