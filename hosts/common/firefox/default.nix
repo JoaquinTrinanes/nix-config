@@ -36,6 +36,8 @@ in {
     preferencesStatus = mkDefault "locked";
     # Preferences not allowed in policies
     autoConfig = lib.concatLines (lib.mapAttrsToList (name: value: mkAutoconfig name value {}) {
+      "media.ffmpeg.vaapi.enabled" = true;
+      "gfx.webrender.all" = true;
       "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:121.0) Gecko/20100101 Firefox/121.0";
       "general.platform.override" = "Win32";
 
@@ -91,6 +93,8 @@ in {
 
       "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
+      "dom.security.https_only_mode" = true;
+
       # avoid random sounds
       "media.autoplay.default" = 1; # 0 = Allowed, 1 = Blocked, 2 = Prompt
       "media.autoplay.allow-muted" = false;
@@ -142,7 +146,9 @@ in {
           # "tab-array@menhera.org"
           # "{aecec67f-0d10-4fa7-b7c7-609a2db280cf}" # violent monkey
         ];
-        hiddenExtensions = [];
+        hiddenExtensions = [
+          "{9a41dee2-b924-4161-a971-7fb35c053a4a}" # enhanced-h264ify.
+        ];
       in
         (lib.genAttrs hiddenExtensions (name: mkExtension {inherit name;}))
         // lib.genAttrs pinnedExtensions (name:
