@@ -42,8 +42,17 @@
       nr = pkgs.writeShellScriptBin "nr" ''
         nix run nixpkgs#"$@"
       '';
+      less = myLib.mkWrapper "less" {
+        basePackage = pkgs.less;
+        flags = [
+          "--ignore-case"
+          "--RAW-CONTROL-CHARS"
+          "--quit-if-one-screen"
+        ];
+      };
     in
       [
+        less
         nx
         nxs
         nr
@@ -137,14 +146,6 @@
       hms = "home-manager switch";
     }
     // lib.optionalAttrs config.programs.bat.enable {"cat" = "bat -p";};
-
-  programs.less = {
-    enable = true;
-    keys = ''
-      #env
-      LESS = --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen
-    '';
-  };
 
   programs.gpg = {
     enable = true;
