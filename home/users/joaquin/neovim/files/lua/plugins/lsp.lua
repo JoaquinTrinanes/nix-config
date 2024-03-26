@@ -213,7 +213,7 @@ local M = {
                 return true
               end
 
-              local handle, err = io.popen("eslint --print-config " .. ctx.filename .. " --format json")
+              local handle, err = io.popen("eslint --print-config " .. ctx.filename .. " --format json 2>&1")
               if handle == nil or err ~= nil then
                 return true
               end
@@ -246,7 +246,7 @@ local M = {
           command = function(self, ctx)
             if nix_fmt_path == nil then
               local handle, err = io.popen(
-                "nix eval --no-write-lock-file --no-update-lock-file --no-warn-dirty --impure --json .#formatter --apply '(x: (import <nixpkgs> {}).lib.getExe x.${builtins.currentSystem})'"
+                "nix eval --quiet --no-write-lock-file --no-update-lock-file --no-warn-dirty --impure --json .#formatter --apply '(x: (import <nixpkgs> {}).lib.getExe x.${builtins.currentSystem})' 2>&1"
               )
               if handle == nil or err ~= nil then
                 return ""
