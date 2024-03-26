@@ -57,10 +57,7 @@ in
 
   xdg.configFile."nushell/plugin.nu".source =
     let
-      plugins = builtins.attrValues {
-        # inherit (pkgs.nushellPlugins) regex;
-        inherit (nushellNightlyPkgs) nu_plugin_formats;
-      };
+      plugins = builtins.attrValues { inherit (nushellNightlyPkgs) nu_plugin_formats; };
       pluginBinFromPkg =
         plugin:
         let
