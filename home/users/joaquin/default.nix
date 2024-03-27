@@ -35,7 +35,8 @@
     enable = true;
     settings = {
       user = {
-        inherit (config.programs.git.iniContent.user) name email;
+        name = config.programs.git.userName;
+        email = config.programs.git.userEmail;
       };
     };
     package = myLib.mkWrapper "jujutsu" {

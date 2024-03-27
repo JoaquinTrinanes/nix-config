@@ -7,6 +7,8 @@
   ];
   programs.git = {
     enable = true;
+    userName = user.fullName;
+    userEmail = lib.mkIf (user.email != null) user.email;
     extraConfig = {
       core = {
         filemode = false;
@@ -42,10 +44,6 @@
       rebase.autosquash = true;
       status.showUntrackedFiles = "normal"; # "all";
       init.defaultBranch = "main";
-      user = {
-        email = lib.mkIf (user.email != null) user.email;
-        name = user.fullName;
-      };
     };
     includes = [
       {
