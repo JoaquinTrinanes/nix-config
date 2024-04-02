@@ -114,6 +114,16 @@
       # suspend loop fix
       "button.lid_init_state=open"
     ]
+    [
+      # try to fix semi-random soft locks
+      "rcu_nocbs=0-15" # https://bugs.launchpad.net/linux/+bug/1690085/comments/69
+
+      # https://bugzilla.kernel.org/show_bug.cgi?id=196481
+      # https://wiki.gentoo.org/wiki/Ryzen#Soft_freezes_on_1st_gen_Ryzen_7
+      "processor.max_cstate=5"
+      "idle=nowait"
+      # "pci=nomsi,noaer" # noaer comes from the gentoo wiki # one of these two makes the system unbootable
+    ]
   ];
 
   environment.variables = {
