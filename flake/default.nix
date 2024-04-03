@@ -3,9 +3,9 @@ let
 in
 {
   imports = builtins.attrValues flakeModules ++ [
-    ./homeConfigurations.nix
+    ./home-configurations.nix
     ./misc.nix
-    ./nixosConfigurations.nix
+    ./nixos-configurations.nix
     ./substituters.nix
   ];
 
