@@ -95,7 +95,6 @@ in
     lshw
     openssl
     pciutils
-    pinentry
     ripgrep
     sd
     srm

@@ -4,7 +4,9 @@
 
   services.xserver = {
     desktopManager.gnome.enable = true;
-    desktopManager.gnome.sessionPath = [ self.packages.${pkgs.system}.dynamic-gnome-wallpapers ];
+    desktopManager.gnome.sessionPath = [
+      self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers
+    ];
   };
   programs.dconf.enable = true;
   services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];

@@ -40,7 +40,7 @@
   xdg.configFile."direnv/lib/mise.sh".source =
     let
       mise_activate_file =
-        pkgs.runCommandNoCCLocal "use_mise.sh" { nativeBuildInputs = [ config.programs.mise.package ]; }
+        pkgs.runCommandLocal "use_mise.sh" { nativeBuildInputs = [ config.programs.mise.package ]; }
           ''
             mise direnv activate > $out
           '';
