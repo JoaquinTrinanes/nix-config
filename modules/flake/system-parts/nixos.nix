@@ -5,14 +5,18 @@
   ...
 }:
 let
-  cfg = config.system-parts.hosts;
-  inherit (config.system-parts) users common nixos;
-  configs = builtins.mapAttrs (_: host: host.finalSystem) cfg;
+  cfg = config.system-parts.nixos;
+  inherit (config.system-parts) users common;
+  configs = builtins.mapAttrs (_: host: host.finalSystem) cfg.hosts;
   inherit (lib) types mkOption mkIf;
   hostType = types.submodule (
     { name, config, ... }:
     {
       options = {
+        name = mkOption {
+          type = types.str;
+          default = name;
+        };
         nixpkgs = mkOption {
           type = types.unspecified;
           default = inputs.nixpkgs;
@@ -40,12 +44,13 @@ let
 
       config = {
         finalModules =
-          nixos.modules
+          cfg.modules
           ++ [
-            { nixpkgs.hostPlatform = config.system; }
-            { networking.hostName = name; }
+            { nixpkgs.hostPlatform = lib.mkDefault config.system; }
+            { networking.hostName = lib.mkDefault config.name; }
           ]
           ++ config.modules
+          ++ [ (cfg.perHost config) ]
           ++ lib.mapAttrsToList (
             username: user:
             mkIf (user.homeManager.hosts.${name}.enable or false) {
@@ -72,11 +77,16 @@ let
   );
 in
 {
-  options.system-parts = {
-    nixos.modules = mkOption {
+  options.system-parts.nixos = {
+    modules = mkOption {
       type = types.listOf types.deferredModule;
       default = [ ];
       description = "Modules shared across all nixos configurations";
+    };
+    perHost = mkOption {
+      type = types.nullOr (types.functionTo types.deferredModule);
+      description = "Function that takes a host as an argument and returns a nixos module.";
+      default = _: { };
     };
     hosts = mkOption {
       description = "Host configurations";

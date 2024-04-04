@@ -22,7 +22,7 @@
         {
           _module.args = {
             inherit (config.system-parts) users;
-            hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.system-parts.hosts;
+            hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.system-parts.nixos.hosts;
           };
         }
       ];

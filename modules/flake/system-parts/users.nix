@@ -8,7 +8,7 @@
 let
   inherit (lib) types mkOption mkEnableOption;
   cfg = config.system-parts.users;
-  inherit (config.system-parts) common homeManager hosts;
+  inherit (config.system-parts) common homeManager nixos;
   u2fKeyType = types.submodule {
     options = {
       keyHandle = mkOption { type = types.str; };
@@ -92,7 +92,7 @@ let
                 hostName:
                 { enable, override }:
                 let
-                  host = hosts.${hostName}.finalSystem;
+                  host = nixos.hosts.${hostName}.finalSystem;
                 in
                 lib.nameValuePair "${user.name}@${hostName}" (
                   lib.mkIf enable (
