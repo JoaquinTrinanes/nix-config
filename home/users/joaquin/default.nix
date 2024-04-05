@@ -186,7 +186,6 @@
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
-    sshKeys = [ "0405AAB779EE75EB11E9B4F148AC62E32DB2CD11" ];
     pinentryPackage = pkgs.pinentry-gnome3;
   };
   # Disable gnome-keyring ssh-agent
