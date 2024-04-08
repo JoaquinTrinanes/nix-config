@@ -6,12 +6,12 @@
   ...
 }:
 {
+  imports = [ ../pkgs ];
+
   perSystem =
     { pkgs, lib, ... }:
     {
       formatter = pkgs.nixfmt-rfc-style;
-
-      packages = import ../pkgs pkgs;
     };
 
   system-parts = {

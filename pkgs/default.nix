@@ -1,3 +1,9 @@
-# Custom packages, that can be defined similarly to ones from nixpkgs
-# You can build them using 'nix build .#example'
-pkgs: { dynamic-gnome-wallpapers = pkgs.callPackage ./dynamic-gnome-wallpapers { }; }
+{
+  perSystem =
+    { pkgs, ... }:
+    {
+      packages = {
+        dynamic-gnome-wallpapers = pkgs.callPackage ./dynamic-gnome-wallpapers { };
+      };
+    };
+}

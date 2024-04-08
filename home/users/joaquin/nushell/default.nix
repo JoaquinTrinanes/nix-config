@@ -76,7 +76,6 @@ in
     pluginFile;
 
   # just before mkAfter, so we can skip unneeded bash interactive initialization
-  # programs.bash.initExtra = lib.mkBefore ''
   programs.bash.initExtra = lib.mkOrder 1499 ''
     if [[ ! $(ps T --no-header --format=comm | grep "^nu$") && -z $BASH_EXECUTION_STRING ]]; then
         shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION='''

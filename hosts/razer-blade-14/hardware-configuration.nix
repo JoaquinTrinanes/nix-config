@@ -82,12 +82,14 @@
   # networking.interfaces."enp101s0f3u1".useDHCP = true;
   # networking.interfaces."wlp2s0".useDHCP = true;
 
-  services.tlp.enable = true;
-  services.tlp.settings = {
-    # TLP_ENABLE = 0;
-    RUNTIME_PM_ON_AC = "auto";
-    USB_AUTOSUSPEND = 0;
-    USB_EXCLUDE_BTUSB = 1;
+  services.tlp = {
+    enable = true;
+    settings = {
+      # TLP_ENABLE = 0;
+      RUNTIME_PM_ON_AC = "auto";
+      USB_AUTOSUSPEND = 0;
+      USB_EXCLUDE_BTUSB = 1;
+    };
   };
   services.power-profiles-daemon.enable = false;
 
