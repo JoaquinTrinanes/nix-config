@@ -25,7 +25,6 @@
   environment.systemPackages = builtins.attrValues {
     inherit (pkgs)
       discord
-      ferdium
       protonvpn-gui
       qbittorrent
       telegram-desktop
