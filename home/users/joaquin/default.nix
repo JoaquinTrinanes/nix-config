@@ -39,7 +39,7 @@
         email = config.programs.git.userEmail;
       };
     };
-    package = myLib.mkWrapper "jujutsu" {
+    package = myLib.mkWrapper {
       basePackage = pkgs.jujutsu;
       env."JJ_CONFIG" = {
         value = config.home.file.".jjconfig.toml".source;
@@ -68,7 +68,7 @@
         nr = pkgs.writeShellScriptBin "nr" ''
           nix run nixpkgs#"$@"
         '';
-        less = myLib.mkWrapper "less" {
+        less = myLib.mkWrapper {
           basePackage = pkgs.less;
           flags = [
             "--ignore-case"

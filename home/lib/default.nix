@@ -4,7 +4,6 @@
   inputs,
   self,
   pkgs,
-  ...
 }:
 rec {
   absPath =
@@ -29,8 +28,12 @@ rec {
   getPassCommand =
     key: "${lib.getExe config.programs.password-store.package} ${lib.escapeShellArg key}";
   mkWrapper =
-    name: options:
+    {
+      name ? args.basePackage.name or args.basePackage.pname,
+      ...
+    }@args:
     let
+      options = lib.attrsets.removeAttrs args [ "name" ];
       inherit (inputs) wrapper-manager;
     in
     wrapper-manager.lib.build {
