@@ -10,6 +10,11 @@ let
 in
 {
   options.system-parts.nixpkgs = {
+    input = mkOption {
+      default = inputs.nixpkgs;
+      defaultText = lib.literalExpression "inputs.nixpkgs";
+      type = types.nullOr (types.addCheck (types.attrsOf types.unspecified) (types.isType "flake"));
+    };
     overlays = mkOption {
       type = types.listOf types.unspecified;
       default = [ ];
@@ -28,7 +33,9 @@ in
     perSystem =
       { system, ... }:
       {
-        _module.args.pkgs = import inputs.nixpkgs (lib.recursiveUpdate { inherit system; } cfg.finalConfig);
+        _module.args.pkgs = lib.mkIf (cfg.input != null) (
+          lib.mkDefault (import cfg.input (lib.recursiveUpdate { inherit system; } cfg.finalConfig))
+        );
       };
 
     system-parts.nixpkgs.finalConfig = {
