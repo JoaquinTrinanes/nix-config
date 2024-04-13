@@ -8,6 +8,14 @@
   ...
 }:
 let
+  configDir =
+    if pkgs.stdenv.isDarwin then
+      "Library/Application Support/nushell"
+    else
+      "${config.xdg.configHome}/nushell";
+  configFile = "${configDir}/config.nu";
+  envFile = "${configDir}/env.nu";
+
   nushellPkg =
     let
       nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
@@ -39,6 +47,10 @@ let
       flags = [
         "--plugin-config"
         pluginFile
+        "--config"
+        config.home.file."${configFile}".source
+        "--env-config"
+        config.home.file."${envFile}".source
       ];
     };
   scriptsDir = myLib.mkImpureLink ./files/scripts;
@@ -46,6 +58,10 @@ in
 {
   imports = [ ./theme.nix ];
   programs.carapace.enableNushellIntegration = false;
+
+  # config file are added to the wrapper
+  home.file."${configFile}".enable = false;
+  home.file."${envFile}".enable = false;
 
   programs.nushell = {
     enable = lib.mkDefault true;
