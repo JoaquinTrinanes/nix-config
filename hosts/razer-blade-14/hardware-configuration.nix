@@ -9,7 +9,7 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    inputs.hardware.nixosModules.common-cpu-amd
+    inputs.hardware.nixosModules.common-cpu-amd-pstate
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
     inputs.hardware.nixosModules.common-pc-laptop
@@ -78,9 +78,11 @@
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces."enp101s0f3u1".useDHCP = true;
-  # networking.interfaces."wlp2s0".useDHCP = true;
+  networking.useDHCP = false;
+  networking.interfaces."enp101s0f3u1".useDHCP = true;
+  networking.interfaces."wlan0".useDHCP = true;
+
+  networking.usePredictableInterfaceNames = true;
 
   services.tlp = {
     enable = true;
@@ -93,9 +95,9 @@
   };
   services.power-profiles-daemon.enable = false;
 
-  # powerManagement = {
-  #   enable = true;
-  # };
+  powerManagement = {
+    enable = true;
+  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   # powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
@@ -123,7 +125,7 @@
       # https://bugzilla.kernel.org/show_bug.cgi?id=196481
       # https://wiki.gentoo.org/wiki/Ryzen#Soft_freezes_on_1st_gen_Ryzen_7
       "processor.max_cstate=5"
-      "idle=nowait"
+      # "idle=nowait" # malformed early option 'idle'
       # "pci=nomsi,noaer" # noaer comes from the gentoo wiki # one of these two makes the system unbootable
     ]
   ];
