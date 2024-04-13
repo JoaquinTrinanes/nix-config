@@ -22,6 +22,7 @@ in
       ];
     };
     "org/gnome/desktop/interface" = {
+      icon-theme = "Adwaita";
       clock-show-weekday = true;
       clock-format = "24h";
       text-scaling-factor = 1.25;
