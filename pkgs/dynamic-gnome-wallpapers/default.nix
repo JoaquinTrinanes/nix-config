@@ -42,6 +42,8 @@ let
     stdenv.mkDerivation (result: {
       inherit name;
 
+      strictDeps = true;
+
       unpackPhase = ":";
 
       nativeBuildInputs = [ flavours ];
@@ -100,6 +102,7 @@ let
     };
   };
   dynamicWallpapers = stdenv.mkDerivation {
+    strictDeps = true;
     name = "Linux_Dynamic_Wallpapers";
     src = fetchFromGitHub {
       repo = "Linux_Dynamic_Wallpapers";
