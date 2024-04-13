@@ -13,6 +13,7 @@
     ../common/garbage-collect
     ../common/tailscale
     ../common/yubikey
+    ../common/printing
     ./hardware-configuration.nix
   ];
 
