@@ -58,13 +58,6 @@
 
     packages =
       let
-        # this has to be a wrapper and not an alias to be able to call it with sudo
-        nx = pkgs.writeShellScriptBin "nx" ''
-          ${lib.getExe pkgs.nixos-rebuild} "$@"
-        '';
-        nxs = pkgs.writeShellScriptBin "nxs" ''
-          ${lib.getExe nx} switch "$@"
-        '';
         nr = pkgs.writeShellScriptBin "nr" ''
           nix run nixpkgs#"$@"
         '';
@@ -79,8 +72,6 @@
       in
       [
         less
-        nx
-        nxs
         nr
       ]
       ++ builtins.attrValues { inherit (pkgs) enpass; };
@@ -166,6 +157,9 @@
       dcupd = "docker compose up -d";
       dcdn = "docker compose down";
       dcrm = "docker compose rm";
+
+      nx = "nixos-rebuild --use-remote-sudo";
+      nxs = "nx switch";
     }
     // lib.optionalAttrs (config.programs.home-manager.enable && !config.submoduleSupport.enable) {
       hm = "home-manager";
