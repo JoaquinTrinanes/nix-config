@@ -29,15 +29,36 @@ rec {
     key: "${lib.getExe config.programs.password-store.package} ${lib.escapeShellArg key}";
   mkWrapper =
     {
-      name ? args.basePackage.name or args.basePackage.pname,
+      basePackage,
+      name ? basePackage.name or basePackage.pname,
       ...
     }@args:
     let
       options = lib.attrsets.removeAttrs args [ "name" ];
       inherit (inputs) wrapper-manager;
+      wrapper = wrapper-manager.lib.build {
+        inherit pkgs;
+        modules = [ { wrappers.${name} = options; } ];
+      };
     in
-    wrapper-manager.lib.build {
-      inherit pkgs;
-      modules = [ { wrappers.${name} = options; } ];
-    };
+    wrapper.overrideAttrs (
+      final: prev:
+      lib.recursiveUpdate
+        (lib.filterAttrs (
+          name: value:
+          lib.elem name [
+            "pname"
+            "name"
+            "version"
+            "passthru"
+            "meta"
+          ]
+        ) basePackage)
+        {
+          meta = {
+            outputsToInstall = [ "out" ];
+            outputs = [ "out" ];
+          };
+        }
+    );
 }
