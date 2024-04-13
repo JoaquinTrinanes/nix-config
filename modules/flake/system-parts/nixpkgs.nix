@@ -11,8 +11,8 @@ in
 {
   options.system-parts.nixpkgs = {
     input = mkOption {
-      default = inputs.nixpkgs;
-      defaultText = lib.literalExpression "inputs.nixpkgs";
+      default = inputs.nixpkgs or null;
+      defaultText = lib.literalExpression "inputs.nixpkgs or null";
       type = types.nullOr (types.addCheck (types.attrsOf types.unspecified) (types.isType "flake"));
     };
     overlays = mkOption {
