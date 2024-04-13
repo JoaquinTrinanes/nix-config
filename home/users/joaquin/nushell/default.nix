@@ -8,7 +8,39 @@
   ...
 }:
 let
-  nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
+  nushellPkg =
+    let
+      nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
+      nuUnwrapped = nushellNightlyPkgs.nushellFull;
+      pluginFile =
+        let
+          plugins = builtins.attrValues { inherit (nushellNightlyPkgs) nu_plugin_formats; };
+          pluginBinFromPkg =
+            plugin:
+            let
+              name = plugin.pname;
+              matches = lib.strings.match "^nushell_plugin_(.*)" name;
+            in
+            if (matches == null) then (lib.getExe plugin) else "${plugin}/bin/nu_plugin_${toString matches}";
+          pluginExprs = map (plugin: "register ${pluginBinFromPkg plugin}") plugins;
+        in
+        pkgs.runCommandLocal "plugin.nu" { nativeBuildInputs = [ nuUnwrapped ]; } ''
+          touch $out {config,env}.nu
+          nu --config config.nu \
+          --env-config env.nu \
+          --plugin-config $out \
+          --no-history \
+          --no-std-lib \
+          --commands '${lib.concatStringsSep ";" pluginExprs}; echo $nu.plugin-path'
+        '';
+    in
+    myLib.mkWrapper {
+      basePackage = nuUnwrapped;
+      flags = [
+        "--plugin-config"
+        pluginFile
+      ];
+    };
   scriptsDir = myLib.mkImpureLink ./files/scripts;
 in
 {
@@ -17,7 +49,7 @@ in
 
   programs.nushell = {
     enable = lib.mkDefault true;
-    package = nushellNightlyPkgs.nushellFull;
+    package = nushellPkg;
     inherit (config.home) shellAliases;
 
     # TODO: this causes IFD because the nushell module reads the source
@@ -54,26 +86,6 @@ in
         '')
       ];
   };
-
-  xdg.configFile."nushell/plugin.nu".source =
-    let
-      plugins = builtins.attrValues { inherit (nushellNightlyPkgs) nu_plugin_formats; };
-      pluginBinFromPkg =
-        plugin:
-        let
-          name = plugin.pname;
-          matches = lib.strings.match "^nushell_plugin_(.*)" name;
-        in
-        if (matches == null) then (lib.getExe plugin) else "${plugin}/bin/nu_plugin_${toString matches}";
-      pluginExprs = map (plugin: "register ${pluginBinFromPkg plugin}") plugins;
-      pluginFile =
-        pkgs.runCommandLocal "plugin.nu" { nativeBuildInputs = [ config.programs.nushell.package ]; }
-          ''
-            touch $out {config,env}.nu
-            nu --config config.nu --env-config env.nu --plugin-config $out --no-history --no-std-lib  --commands '${lib.concatStringsSep ";" pluginExprs}; echo $nu.plugin-path'
-          '';
-    in
-    pluginFile;
 
   # just before mkAfter, so we can skip unneeded bash interactive initialization
   programs.bash.initExtra = lib.mkOrder 1499 ''
