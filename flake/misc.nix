@@ -15,7 +15,9 @@
     };
 
   system-parts = {
-    nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.allowUnfree = lib.mkDefault true;
+    nixpkgs.config.allowAliases = lib.mkDefault false;
+
     common = {
       stateVersion = lib.mkDefault "23.11";
       modules = [
