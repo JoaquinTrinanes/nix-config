@@ -1,4 +1,1 @@
-{
-  impurePath = ./impurePath.nix;
-  carapace = ./carapace.nix;
-}
+{ impurePath = ./impurePath.nix; }

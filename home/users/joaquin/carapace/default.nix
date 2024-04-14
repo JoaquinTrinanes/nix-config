@@ -9,7 +9,6 @@ let
 in
 {
   programs.carapace.enable = true;
-  programs.carapace.aliases = { };
   xdg.configFile."carapace/bridges.yaml".source = yaml.generate "bridges.yaml" {
     git = "fish";
     gpg = "fish";
