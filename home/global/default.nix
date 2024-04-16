@@ -5,6 +5,7 @@
   ...
 }:
 {
+  imports = [ ../lib ];
   home = {
     username = lib.mkDefault user.name;
     homeDirectory = lib.mkDefault (

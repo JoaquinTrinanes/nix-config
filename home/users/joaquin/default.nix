@@ -3,21 +3,10 @@
   pkgs,
   lib,
   inputs,
-  self,
   myLib,
   ...
 }:
 {
-  _module.args.myLib = import "${self}/home/lib" {
-    inherit
-      lib
-      config
-      pkgs
-      self
-      inputs
-      ;
-  };
-
   imports = [
     ./git
     ./neovim
