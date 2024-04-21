@@ -8,6 +8,10 @@ in
   networking.networkmanager.enable = true;
   networking.firewall.allowPing = true;
 
+  nix.settings.trusted-users = [ "@wheel" ];
+
+  nix.gc.options = "-d";
+
   boot.tmp = {
     cleanOnBoot = true;
     useTmpfs = true;
@@ -20,6 +24,7 @@ in
     ../common/samba
     ../common/tailscale
     ../common/home-assistant
+    ../common/garbage-collect
   ];
 
   services.logind.lidSwitch = "ignore";
