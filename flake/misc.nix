@@ -15,8 +15,13 @@
     };
 
   system-parts = {
-    nixpkgs.config.allowUnfree = lib.mkDefault true;
-    nixpkgs.config.allowAliases = lib.mkDefault false;
+    nixpkgs = {
+      enable = true;
+      config = {
+        allowUnfree = lib.mkDefault true;
+        allowAliases = lib.mkDefault false;
+      };
+    };
 
     common = {
       stateVersion = lib.mkDefault "23.11";

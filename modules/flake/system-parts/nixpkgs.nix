@@ -5,11 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkEnableOption mkOption types;
   cfg = config.system-parts.nixpkgs;
 in
 {
   options.system-parts.nixpkgs = {
+    enable = mkEnableOption "nixpkgs management";
     input = mkOption {
       default = inputs.nixpkgs or null;
       defaultText = lib.literalExpression "inputs.nixpkgs or null";
@@ -37,10 +38,16 @@ in
           lib.mkDefault (import cfg.input (lib.recursiveUpdate { inherit system; } cfg.finalConfig))
         );
       };
-
-    system-parts.nixpkgs.finalConfig = {
-      inherit (cfg) overlays config;
+    system-parts = {
+      nixpkgs.finalConfig = {
+        inherit (cfg) overlays config;
+      };
+      common.exclusiveModules = [ { nixpkgs = cfg.finalConfig; } ];
+      nixos.perHost =
+        { system, ... }:
+        {
+          nixpkgs.hostPlatform = lib.mkDefault system;
+        };
     };
-    system-parts.common.exclusiveModules = [ { nixpkgs = cfg.finalConfig; } ];
   };
 }

@@ -45,10 +45,7 @@ let
       config = {
         finalModules =
           cfg.modules
-          ++ [
-            { nixpkgs.hostPlatform = lib.mkDefault config.system; }
-            { networking.hostName = lib.mkDefault config.name; }
-          ]
+          ++ [ { networking.hostName = lib.mkDefault config.name; } ]
           ++ config.modules
           ++ [ (cfg.perHost config) ]
           ++ lib.mapAttrsToList (

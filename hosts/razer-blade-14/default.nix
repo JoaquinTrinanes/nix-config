@@ -74,8 +74,6 @@
     };
   };
 
-  # TODO: probably not the issue
-  services.avahi.enable = false;
   services.resolved = {
     # dnssec = "allow-downgrade";
     enable = true;
