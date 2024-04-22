@@ -32,14 +32,15 @@ let
             if (matches == null) then (lib.getExe plugin) else "${plugin}/bin/nu_plugin_${toString matches}";
           pluginExprs = map (plugin: "register ${pluginBinFromPkg plugin}") plugins;
         in
-        pkgs.runCommandLocal "plugin.nu" { nativeBuildInputs = [ nuUnwrapped ]; } ''
+        pkgs.runCommandLocal "plugin.msgpackz" { nativeBuildInputs = [ nuUnwrapped ]; } ''
           touch $out {config,env}.nu
           nu --config config.nu \
           --env-config env.nu \
-          --plugin-config $out \
+          --plugin-config plugin.msgpackz \
           --no-history \
           --no-std-lib \
-          --commands '${lib.concatStringsSep ";" pluginExprs}; echo $nu.plugin-path'
+          --commands '${lib.concatStringsSep ";" pluginExprs};'
+          cp plugin.msgpackz $out
         '';
     in
     myLib.mkWrapper {
