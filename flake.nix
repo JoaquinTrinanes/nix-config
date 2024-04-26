@@ -46,7 +46,7 @@ rec {
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       debug = true;
-      systems = [ "x86_64-linux" ];
+      systems = inputs.nixpkgs.lib.systems.flakeExposed;
 
       imports = [
         ./flake
