@@ -7,33 +7,40 @@
 }:
 let
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") (inputs // { p = inputs.nixpkgs; });
-  extraNixpkgsAliases = {
-    unstable = "nixpkgs-unstable";
-    nixpkgs-head = "master";
-  };
 in
 {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
   nix.registry = lib.mkMerge [
-    (lib.mapAttrs (_: value: {
-      to = {
-        owner = "NixOS";
-        ref = value;
-        repo = "nixpkgs";
-        type = "github";
+    {
+      nixpkgs-unstable = {
+        to = {
+          owner = "NixOS";
+          ref = "nixpkgs-unstable";
+          repo = "nixpkgs";
+          type = "github";
+        };
       };
-    }) extraNixpkgsAliases)
+      nixpkgs-head = {
+        to = {
+          owner = "NixOS";
+          ref = "master";
+          repo = "nixpkgs";
+          type = "github";
+        };
+      };
+    }
     (lib.mapAttrs (_: input: { flake = input; }) flakeInputs)
   ];
 
   environment.etc."nix/path".source = pkgs.linkFarm "nixPath" flakeInputs;
 
-  nix.nixPath =
-    [ "/etc/nix/path" ]
-    ++
+  nix.nixPath = [
+    "/etc/nix/path"
     # TODO: ideally find a way to add it to /etc/nix/path as a file
-    lib.mapAttrsToList (name: value: "${name}=channel:${value}") extraNixpkgsAliases;
+    "nixpkgs-head=https://github.com/NixOS/nixpkgs/archive/master.tar.gz"
+    "nixpkgs-unstable=channel:nixpkgs-unstable"
+  ];
 
   nix.channel.enable = lib.mkDefault false;
   # Disabling channels makes nix.nixPath not work
