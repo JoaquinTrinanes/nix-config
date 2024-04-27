@@ -47,9 +47,14 @@
     in
     lib.mkIf config.programs.mise.enable mise_activate_file;
 
-  xdg.configFile."direnv/lib/laravel.sh".source = ./lib/laravel.sh;
-  xdg.configFile."direnv/lib/my_flake.sh".source = ./lib/my_flake.sh;
-
+  xdg.configFile."direnv/lib/laravel.sh" = {
+    source = ./lib/laravel.sh;
+    executable = true;
+  };
+  xdg.configFile."direnv/lib/my-flake.sh" = {
+    source = ./lib/my_flake.sh;
+    executable = true;
+  };
   programs.git.ignores = [
     ".direnv"
     ".envrc"
