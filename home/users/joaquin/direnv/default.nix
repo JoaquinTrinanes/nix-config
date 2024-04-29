@@ -7,16 +7,15 @@
 {
   programs.direnv = {
     enable = true;
-    # manually activated to allow calling 'nix_direnv_manual_reload' globally
-    nix-direnv.enable = false;
+    nix-direnv.enable = true;
 
-    stdlib = ''
-      dotenv_if_exists
-      source_up_if_exists
-
-      source ${config.programs.direnv.nix-direnv.package}/share/nix-direnv/direnvrc
-      nix_direnv_manual_reload
-    '';
+    stdlib = lib.mkMerge [
+      ''
+        dotenv_if_exists
+        source_up_if_exists
+      ''
+      (lib.mkIf config.programs.direnv.nix-direnv.enable "nix_direnv_manual_reload")
+    ];
     config = {
       # bash_path = "";
 
