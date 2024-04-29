@@ -12,14 +12,14 @@
 
   environment.enableAllTerminfo = true;
 
+  services.libinput.touchpad = {
+    tapping = true;
+    scrollMethod = "twofinger";
+    naturalScrolling = true;
+  };
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
-    libinput.touchpad = {
-      tapping = true;
-      scrollMethod = "twofinger";
-      naturalScrolling = true;
-    };
   };
 
   environment.systemPackages = builtins.attrValues {
