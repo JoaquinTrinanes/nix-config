@@ -51,7 +51,7 @@
     executable = true;
   };
   xdg.configFile."direnv/lib/my-flake.sh" = {
-    source = ./lib/my_flake.sh;
+    source = ./lib/my-flake.sh;
     executable = true;
   };
   programs.git.ignores = [
