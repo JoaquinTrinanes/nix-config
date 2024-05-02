@@ -19,10 +19,10 @@ let
   nushellPkg =
     let
       nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
-      nuUnwrapped = nushellNightlyPkgs.nushellFull;
+      nuUnwrapped = nushellNightlyPkgs.nushell;
       pluginFile =
         let
-          plugins = builtins.attrValues { inherit (nushellNightlyPkgs) nu_plugin_formats; };
+          plugins = builtins.attrValues { inherit (nushellNightlyPkgs) nu_plugin_formats nu_plugin_polars; };
           pluginBinFromPkg =
             plugin:
             let
