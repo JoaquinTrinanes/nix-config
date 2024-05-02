@@ -424,11 +424,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1714619525,
-        "narHash": "sha256-+iql2RSN2W6maAkinvI3R3cLX1/JjgUxMvBvt9l8a3o=",
+        "lastModified": 1714654612,
+        "narHash": "sha256-KnE9AJRw7ENmDpSVbZhur4D4Zbw8JPQUuuFnIgcQ/7w=",
         "owner": "JoaquinTrinanes",
         "repo": "nushell-nightly-flake",
-        "rev": "c7738be29fbc3a3622ed0d0ca8247c6fa2e1dd6d",
+        "rev": "a31f03c999fae8903a9764b847f3b82d5ec5e820",
         "type": "github"
       },
       "original": {
