@@ -41,9 +41,7 @@
           { pkgs, ... }:
           {
             nix = {
-              # use older nix while HM issue #4692 isn't fixed
-              package = lib.mkDefault pkgs.nixVersions.nix_2_18;
-              # package = lib.mkDefault pkgs.nixVersions.unstable;
+              package = lib.mkDefault pkgs.nixVersions.unstable;
 
               settings = {
                 allowed-users = lib.mkDefault [ "@wheel" ];
@@ -56,7 +54,6 @@
                 experimental-features = [
                   "nix-command"
                   "flakes"
-                  "repl-flake"
                   "ca-derivations"
                   "auto-allocate-uids"
                 ];
