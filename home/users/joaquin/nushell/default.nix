@@ -30,7 +30,7 @@ let
               matches = lib.strings.match "^nushell_plugin_(.*)" name;
             in
             if (matches == null) then (lib.getExe plugin) else "${plugin}/bin/nu_plugin_${toString matches}";
-          pluginExprs = map (plugin: "register ${pluginBinFromPkg plugin}") plugins;
+          pluginExprs = map (plugin: "plugin add ${pluginBinFromPkg plugin}") plugins;
         in
         pkgs.runCommandLocal "plugin.msgpackz" { nativeBuildInputs = [ nuUnwrapped ]; } ''
           touch $out {config,env}.nu
