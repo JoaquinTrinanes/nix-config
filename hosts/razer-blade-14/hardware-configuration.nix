@@ -124,7 +124,7 @@
       # https://bugzilla.kernel.org/show_bug.cgi?id=196481
       # https://wiki.gentoo.org/wiki/Ryzen#Soft_freezes_on_1st_gen_Ryzen_7
       "processor.max_cstate=5"
-      # "idle=nowait" # malformed early option 'idle'
+      "idle=nomwait"
       # "pci=nomsi,noaer" # noaer comes from the gentoo wiki # one of these two makes the system unbootable
     ]
   ];
