@@ -23,7 +23,11 @@
       ];
     }
   ];
-  boot.loader.systemd-boot.enable = true;
+
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 10;
+  };
   boot.loader.timeout = 0;
   boot.initrd.availableKernelModules = [
     "nvme"
