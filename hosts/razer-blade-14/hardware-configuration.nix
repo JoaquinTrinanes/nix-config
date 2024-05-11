@@ -79,7 +79,7 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = false;
-  networking.interfaces."enp101s0f3u1".useDHCP = true;
+  # networking.interfaces."enp101s0f3u1".useDHCP = true;
   networking.interfaces."wlan0".useDHCP = true;
 
   networking.usePredictableInterfaceNames = true;
