@@ -78,7 +78,9 @@
             source ${lib.getExe pkgs.complete-alias}
           ''
         ]
-        ++ map (alias: "complete -F _complete_alias ${alias}") (builtins.attrNames config.home.shellAliases)
+        ++ map (alias: "complete -F _complete_alias ${lib.escapeShellArg alias}") (
+          builtins.attrNames config.home.shellAliases
+        )
       )
     )
   );
