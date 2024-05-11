@@ -14,15 +14,24 @@
     inputs.hardware.nixosModules.common-pc-laptop-ssd
     inputs.hardware.nixosModules.common-pc-laptop
     ../common/hardware-acceleration/amdgpu.nix
-    {
+  ];
+
+  specialisation = {
+    "swap-file".configuration = {
       boot.resumeDevice = "/dev/mapper/root";
       boot.kernelParams = [ "resume_offset=13078528" ];
       systemd.tmpfiles.rules = [
         # Writing 0 causes the size of hibernation images to be minimum
         "w /sys/power/image_size - - - - 0"
       ];
-    }
-  ];
+      swapDevices = [
+        {
+          device = "/swapfile";
+          size = 16 * 1024;
+        }
+      ];
+    };
+  };
 
   boot.loader.systemd-boot = {
     enable = true;
@@ -60,13 +69,6 @@
     # device = "/dev/disk/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
     fsType = "ext4";
   };
-
-  swapDevices = [
-    {
-      device = "/swapfile";
-      size = 16 * 1024;
-    }
-  ];
 
   environment.systemPackages = [
     (pkgs.writeShellScriptBin "prime-run" ''
