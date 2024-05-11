@@ -125,7 +125,8 @@
       # https://wiki.gentoo.org/wiki/Ryzen#Soft_freezes_on_1st_gen_Ryzen_7
       "processor.max_cstate=5"
       "idle=nomwait"
-      # "pci=nomsi,noaer" # noaer comes from the gentoo wiki # one of these two makes the system unbootable
+      "pci=noaer"
+      # "pci=nomsi,noaer" # nomsi probably makes the system unbootable
     ]
   ];
 
