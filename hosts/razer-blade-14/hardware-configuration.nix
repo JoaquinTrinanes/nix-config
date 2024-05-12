@@ -16,6 +16,9 @@
     ../common/hardware-acceleration/amdgpu.nix
   ];
 
+  # avoid loading amdgpu at stage 1. Freeze fix?
+  hardware.amdgpu.loadInInitrd = false;
+
   specialisation = {
     "swap-file".configuration = {
       boot.resumeDevice = "/dev/mapper/root";
