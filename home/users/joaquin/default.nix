@@ -31,12 +31,12 @@
     package = myLib.mkWrapper {
       basePackage = pkgs.jujutsu;
       env."JJ_CONFIG" = {
-        value = config.home.file.".jjconfig.toml".source;
+        value = config.xdg.configFile."jj/config.toml".source;
         force = false;
       };
     };
   };
-  home.file.".jjconfig.toml".enable = false;
+  xdg.configFile."jj/config.toml".enable = false;
 
   programs.password-store.enable = true;
 
