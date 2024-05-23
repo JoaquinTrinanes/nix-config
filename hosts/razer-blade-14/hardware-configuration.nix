@@ -63,6 +63,11 @@
 
   fileSystems.${config.boot.loader.efi.efiSysMountPoint} = {
     device = "/dev/disk/by-label/ESP";
+    fsType = "vfat";
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
     # device = "/dev/disk/by-uuid/984F-0AE3";
     # device = "/dev/nvme0n1p3";
   };
@@ -71,6 +76,9 @@
     device = "/dev/mapper/root";
     # device = "/dev/disk/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
     fsType = "ext4";
+    options = [
+      "noatime"
+    ];
   };
 
   environment.systemPackages = [
