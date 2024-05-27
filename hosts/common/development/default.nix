@@ -3,7 +3,7 @@
   environment.systemPackages = with pkgs; [
     # corepack
     # file
-    dbeaver
+    dbeaver-bin
     git-extras
     git-standup
     nil
