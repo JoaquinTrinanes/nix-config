@@ -87,16 +87,6 @@ local M = {
     end,
   },
   {
-    "folke/flash.nvim",
-    opts = {
-      modes = {
-        search = {
-          enabled = false,
-        },
-      },
-    },
-  },
-  {
     "nvimdev/dashboard-nvim",
     opts = function(_, opts)
       local logo = [[
@@ -119,10 +109,12 @@ local M = {
   },
   {
     "echasnovski/mini.indentscope",
-    opts = {
-      -- options = { try_as_border = true },
-      draw = { animation = require("mini.indentscope").gen_animation.none() },
-    },
+    opts = function(_, opts)
+      opts = opts or {}
+      opts.draw = opts.draw or {}
+      opts.draw.animation = require("mini.indentscope").gen_animation.none()
+      return opts
+    end,
   },
   {
     "LunarVim/bigfile.nvim",
