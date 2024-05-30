@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchurl,
   symlinkJoin,
@@ -39,7 +39,7 @@ let
         </wallpapers>
       '';
     in
-    stdenv.mkDerivation (result: {
+    stdenvNoCC.mkDerivation (result: {
       inherit name;
 
       strictDeps = true;
@@ -101,7 +101,7 @@ let
       };
     };
   };
-  dynamicWallpapers = stdenv.mkDerivation {
+  dynamicWallpapers = stdenvNoCC.mkDerivation {
     strictDeps = true;
     name = "Linux_Dynamic_Wallpapers";
     src = fetchFromGitHub {
@@ -117,7 +117,7 @@ let
       mkdir -p $out/share/backgrounds/gnome
       mkdir -p $out/share/gnome-background-properties
 
-      substituteInPlace Dynamic_Wallpapers/*.xml xml/*.xml --replace /usr $out
+      substituteInPlace Dynamic_Wallpapers/*.xml xml/*.xml --replace-fail /usr $out
       cp -r Dynamic_Wallpapers/* $out/share/backgrounds/gnome
       cp xml/* $out/share/gnome-background-properties
 
