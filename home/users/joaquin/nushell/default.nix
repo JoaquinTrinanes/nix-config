@@ -23,14 +23,7 @@ let
       pluginFile =
         let
           plugins = builtins.attrValues { inherit (nushellNightlyPkgs) nu_plugin_formats nu_plugin_polars; };
-          pluginBinFromPkg =
-            plugin:
-            let
-              name = plugin.pname;
-              matches = lib.strings.match "^nushell_plugin_(.*)" name;
-            in
-            if (matches == null) then (lib.getExe plugin) else "${plugin}/bin/nu_plugin_${toString matches}";
-          pluginExprs = map (plugin: "plugin add ${pluginBinFromPkg plugin}") plugins;
+          pluginExprs = map (plugin: "plugin add ${lib.getExe plugin}") plugins;
         in
         pkgs.runCommandLocal "plugin.msgpackz" { nativeBuildInputs = [ nuUnwrapped ]; } ''
           touch $out {config,env}.nu
