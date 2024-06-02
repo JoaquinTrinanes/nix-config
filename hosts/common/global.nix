@@ -39,6 +39,8 @@ in
   # Disabling channels makes nix.nixPath not work
   nix.settings.nix-path = lib.mkIf (!config.nix.channel.enable) config.nix.nixPath;
 
+  environment.sessionVariables.NIX_PATH = lib.mkIf (!config.nix.channel.enable) (lib.mkForce "");
+
   systemd = lib.mkMerge [
     # Cleanup channel + $HOME files
     (
@@ -75,9 +77,7 @@ in
     })
   ];
 
-  environment.sessionVariables = lib.mkIf config.nixpkgs.config.allowUnfree {
-    NIXPKGS_ALLOW_UNFREE = toString 1;
-  };
+  environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = lib.mkIf config.nixpkgs.config.allowUnfree "1";
 
   networking.usePredictableInterfaceNames = lib.mkDefault true;
 
