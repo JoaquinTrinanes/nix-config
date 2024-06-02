@@ -58,8 +58,8 @@ let
                     (user.homeManager.hosts.${name}.override config.finalSystem)
                   ];
                 };
-                useUserPackages = true;
-                useGlobalPkgs = true;
+                useUserPackages = lib.mkDefault true;
+                useGlobalPkgs = lib.mkDefault true;
                 extraSpecialArgs = lib.recursiveUpdate common.specialArgs config.specialArgs;
               };
             }
