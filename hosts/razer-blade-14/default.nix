@@ -90,6 +90,7 @@
   virtualisation.docker = {
     enable = true;
     logDriver = "local";
+    enableOnBoot = false;
   };
 
   services.switcherooControl.enable = true;
