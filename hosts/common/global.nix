@@ -27,15 +27,12 @@ in
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
   nix.registry = lib.mkMerge [
-    (lib.mapAttrs (_: input: input) flakeAliases)
+    flakeAliases
     (lib.mapAttrs (_: input: { flake = input; }) flakeInputs)
   ];
 
-  environment.etc."nix/path".source = pkgs.linkFarm "nixPath" flakeInputs;
-
   nix.nixPath = lib.mkMerge [
-    [ "/etc/nix/path" ]
-    (lib.mapAttrsToList (name: _: "${name}=flake:${name}") flakeAliases)
+    (lib.mapAttrsToList (name: _: "${name}=flake:${name}") (flakeInputs // flakeAliases))
   ];
 
   nix.channel.enable = lib.mkDefault false;
