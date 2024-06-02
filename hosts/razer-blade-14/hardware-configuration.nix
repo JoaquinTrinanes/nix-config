@@ -50,13 +50,16 @@
   ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-amd" ];
-  boot.supportedFilesystems = [ "ntfs" ];
+  boot.supportedFilesystems = {
+    ntfs = true;
+  };
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.luks.devices."root" = {
     # device = "/dev/disk/by-uuid/8c6ae37c-84b9-4d71-be13-b6b384097a5f";
     device = "/dev/mapper/vg-cryptroot";
     preLVM = false;
+    bypassWorkqueues = true;
   };
 
   boot.loader.efi.efiSysMountPoint = "/efi";
