@@ -3,11 +3,11 @@ let
   inherit (config.system-parts) flake-nix-config;
   substituterSettings.nix.settings = lib.mkMerge [
     {
-      substituters = flake-nix-config.extra-substituters;
+      substituters = lib.mkAfter flake-nix-config.extra-substituters;
       trusted-public-keys = flake-nix-config.extra-trusted-public-keys;
     }
     {
-      substituters = [
+      substituters = lib.mkAfter [
         "https://numtide.cachix.org"
         "https://cache.garnix.io"
       ];
