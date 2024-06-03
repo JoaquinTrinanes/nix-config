@@ -1,15 +1,7 @@
 local M = {
   {
-    "L3MON4D3/LuaSnip",
-    keys = function()
-      return {}
-    end,
-  },
-  {
     "hrsh7th/nvim-cmp",
-    dependencies = {
-      -- {"hrsh7th/cmp-emoji"},
-    },
+    dependencies = {},
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
       local has_words_before = function()
@@ -18,7 +10,7 @@ local M = {
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
       end
 
-      local luasnip = require("luasnip")
+      -- local luasnip = require("luasnip")
       local cmp = require("cmp")
 
       opts.completion.completeopt = "menuone,noinsert,noselect"
@@ -32,8 +24,8 @@ local M = {
             cmp.select_next_item(select_opts)
           -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
           -- this way you will only jump inside the snippet region
-          elseif luasnip.expand_or_jumpable() then
-            luasnip.expand_or_jump()
+          elseif vim.snippet.active({ direction = 1 }) then
+            vim.snippet.jump(1)
           elseif has_words_before() then
             cmp.complete()
           else
@@ -43,8 +35,8 @@ local M = {
         ["<S-Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item(select_opts)
-          elseif luasnip.jumpable(-1) then
-            luasnip.jump(-1)
+          elseif vim.snippet.active({ direction = -1 }) then
+            vim.snippet.jump(-1)
           else
             fallback()
           end
