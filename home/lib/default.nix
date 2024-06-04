@@ -57,6 +57,9 @@
             ]
           ) basePackage)
           {
+            passthru = {
+              unwrapped = basePackage;
+            };
             meta = {
               outputsToInstall = [ "out" ];
               outputs = [ "out" ];
