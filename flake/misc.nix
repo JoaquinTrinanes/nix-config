@@ -74,6 +74,8 @@
                 narinfo-cache-negative-ttl = lib.mkDefault 0;
                 use-xdg-base-directories = lib.mkDefault true;
                 warn-dirty = false;
+                # remove global registry
+                flake-registry = "";
               };
             };
           }
