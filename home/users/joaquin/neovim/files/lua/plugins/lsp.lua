@@ -71,15 +71,6 @@ local M = {
         marksman = { mason = false },
       },
       setup = {
-        eslint = function()
-          require("lazyvim.util").lsp.on_attach(function(client, bufnr)
-            if client.name == "eslint" then
-              client.server_capabilities.documentFormattingProvider = true
-            elseif client.name == "tsserver" then
-              client.server_capabilities.documentFormattingProvider = false
-            end
-          end)
-        end,
       },
     },
   },
@@ -137,12 +128,6 @@ local M = {
       formatters_by_ft = {
         toml = { "taplo" },
         php = { "pint" },
-        nix = {
-          {
-            "nixfmt",
-            "alejandra",
-          },
-        },
         blade = { "prettier" },
         markdown = {
           -- "injected",
@@ -204,23 +189,11 @@ local M = {
       lsp = { hover = { silent = true } },
     },
   },
-  {
-    "LhKipp/nvim-nu",
-    ft = { "nu" },
-    build = ":TSInstall nu",
-    opts = {
-      use_lsp_features = false,
-      all_cmd_names = [[nu -c 'help commands | get name | str join (char newline)']],
-    },
-    config = true,
-  },
   { "imsnif/kdl.vim", ft = { "kdl" } },
   { "prisma/vim-prisma", ft = { "prisma" } },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
-      opts.ensure_installed = "all"
-
       local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
       parser_config["blade"] = {
         install_info = {
@@ -230,6 +203,10 @@ local M = {
         },
         filetype = "blade",
       }
+
+      if type(opts.ensure_installed) == "table" then
+        vim.list_extend(opts.ensure_installed, { "blade" })
+      end
     end,
   },
 }

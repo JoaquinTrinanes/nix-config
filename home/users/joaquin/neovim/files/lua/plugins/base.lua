@@ -1,6 +1,5 @@
 local M = {
   { "nvim-lua/plenary.nvim" },
-  { "RRethy/vim-illuminate", opts = { filetypes_denylist = { "nu" } } },
   {
     "stevearc/oil.nvim",
     event = "VeryLazy",
@@ -45,19 +44,12 @@ local M = {
     },
   },
   {
-    "telescope.nvim",
-    dependencies = {
-      {
-        "nvim-telescope/telescope-fzf-native.nvim",
-        build = "make",
-        config = function()
-          require("telescope").load_extension("fzf")
-        end,
-      },
-    },
+    "nvim-telescope/telescope-fzf-native.nvim",
+    enabled = true,
   },
   {
     "stevearc/dressing.nvim",
+    dependencies = { "telescope.nvim" },
     opts = {
       input = {
         get_config = function()
@@ -74,8 +66,8 @@ local M = {
           if inner_opts.kind == "codeaction" or inner_opts.kind == "hover" then
             return { telescope = require("telescope.themes").get_cursor() }
           end
+          return { telescope = require("telescope.themes").get_dropdown() }
         end,
-        telescope = require("telescope.themes").get_dropdown(),
       },
     },
   },
@@ -118,6 +110,7 @@ local M = {
   },
   {
     "LunarVim/bigfile.nvim",
+    lazy = false,
     event = { "FileReadPre", "BufReadPre", "User FileOpened" },
     opts = {
       filesize = 10, -- in MB

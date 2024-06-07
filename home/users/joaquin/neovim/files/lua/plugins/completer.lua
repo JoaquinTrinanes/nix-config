@@ -13,7 +13,6 @@ local M = {
       -- local cmp_autopairs = require("nvim-autopairs.completion.cmp")
       -- local cmp = require("cmp")
       -- cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-      opts.experimental.ghost_text = true
 
       local prev_format = opts.formatting.format
       local max_menu_length = 15
