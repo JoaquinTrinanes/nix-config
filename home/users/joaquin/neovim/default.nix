@@ -25,14 +25,17 @@ in
         lazygit
         lua-language-server
         marksman
+        # nixd
+        pyright
         ripgrep
         shellcheck
         shfmt
+        statix
         stylua
         taplo
         yaml-language-server
         ;
-      inherit (pkgs.nodePackages) pyright prettier typescript-language-server;
+      inherit (pkgs.nodePackages) prettier typescript-language-server;
     };
     vimAlias = true;
     viAlias = true;
