@@ -6,17 +6,17 @@
   ...
 }:
 let
-  package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
   inherit (myLib) mkImpureLink;
 in
 {
   programs.neovim = {
-    inherit package;
     enable = lib.mkDefault true;
+    package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
     extraPackages = builtins.attrValues {
       inherit (pkgs)
         black
         dotenv-linter
+        fd
         fzf
         gcc
         git
