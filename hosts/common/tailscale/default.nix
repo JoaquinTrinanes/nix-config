@@ -1,7 +1,7 @@
+{ lib, ... }:
 {
-  networking = { };
   services.tailscale = {
-    enable = true;
+    enable = lib.mkDefault true;
     # Disallow incoming connections by default, must be overriden with mkForce
     extraUpFlags = [ "--shields-up" ];
   };
