@@ -43,14 +43,14 @@ let
       };
 
       config = {
-        finalModules =
+        finalModules = lib.mkMerge [
           cfg.modules
-          ++ [ { networking.hostName = lib.mkDefault config.name; } ]
-          ++ config.modules
-          ++ [ (cfg.perHost config) ]
-          ++ lib.mapAttrsToList (
+          [ { networking.hostName = lib.mkDefault config.name; } ]
+          config.modules
+          [ (cfg.perHost config) ]
+          (lib.mapAttrsToList (
             username: user:
-            mkIf (user.homeManager.hosts.${name}.enable or false) {
+            (mkIf (user.homeManager.hosts.${name}.enable or false) {
               imports = [ inputs.home-manager.nixosModules.home-manager ];
               home-manager = {
                 users."${user.name}" = {
@@ -62,8 +62,10 @@ let
                 useGlobalPkgs = lib.mkDefault true;
                 extraSpecialArgs = lib.recursiveUpdate common.specialArgs config.specialArgs;
               };
-            }
-          ) users;
+            })
+
+          ) users)
+        ];
 
         finalSystem = config.nixpkgs.lib.nixosSystem {
           modules = config.finalModules;

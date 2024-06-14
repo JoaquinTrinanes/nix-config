@@ -35,12 +35,15 @@ in
     {
       system-parts.homeManager = {
         standaloneModules = cfg.exclusiveModules;
-        modules = cfg.modules ++ [
-          {
-            home = {
-              inherit stateVersion;
-            };
-          }
+        modules = lib.mkMerge [
+          cfg.modules
+          [
+            {
+              home = {
+                inherit stateVersion;
+              };
+            }
+          ]
         ];
       };
 

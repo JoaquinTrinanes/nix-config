@@ -35,7 +35,7 @@ in
       { system, ... }:
       {
         _module.args.pkgs = lib.mkIf (cfg.input != null) (
-          lib.mkDefault (import cfg.input (lib.recursiveUpdate { inherit system; } cfg.finalConfig))
+          lib.mkDefault (import cfg.input (cfg.finalConfig // { inherit system; }))
         );
       };
     system-parts = {
