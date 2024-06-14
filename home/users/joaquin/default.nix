@@ -42,6 +42,14 @@
 
   colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
 
+  programs.less = {
+    enable = true;
+    keys = ''
+      #env
+      LESS = --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen
+    '';
+  };
+
   home = {
     sessionVariables = lib.mkIf config.programs.neovim.enable { MANPAGER = "nvim +Man!"; };
 
@@ -50,20 +58,8 @@
         nr = pkgs.writeShellScriptBin "nr" ''
           nix run nixpkgs#"$@"
         '';
-        less = myLib.mkWrapper {
-          basePackage = pkgs.less;
-          flags = [
-            "--ignore-case"
-            "--RAW-CONTROL-CHARS"
-            "--quit-if-one-screen"
-          ];
-        };
       in
-      [
-        less
-        nr
-      ]
-      ++ builtins.attrValues { inherit (pkgs) enpass; };
+      [ nr ] ++ builtins.attrValues { inherit (pkgs) enpass; };
   };
 
   programs.home-manager.enable = true;
