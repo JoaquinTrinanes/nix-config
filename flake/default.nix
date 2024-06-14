@@ -7,6 +7,7 @@ in
     ./misc.nix
     ./nixos-configurations.nix
     ./substituters.nix
+    ./templates
   ];
 
   flake.flakeModules = flakeModules;
