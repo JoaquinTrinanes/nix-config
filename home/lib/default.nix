@@ -44,10 +44,10 @@
         };
       in
       wrapper.overrideAttrs (
-        final: prev:
+        _final: _prev:
         lib.recursiveUpdate
           (lib.filterAttrs (
-            name: value:
+            name: _value:
             lib.elem name [
               "pname"
               "name"
@@ -65,6 +65,7 @@
               outputs = [ "out" ];
             };
           }
+
       );
   };
 }

@@ -2,8 +2,6 @@ local classNameRegex = [[(?:(?:[cC]lass[nN]ames?)|(?:CLASSNAMES?))]] -- "[cC][lL
 local classNamePropNameRegex = "(?:" .. classNameRegex .. "|(?:enter|leave)(?:From|To)?)"
 local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
 
-local nix_fmt_path = nil
-
 --- @param filename string
 local is_dotenv = function(filename)
   local name = vim.fs.basename(filename)
@@ -23,8 +21,7 @@ local M = {
           prefix = "icons",
         },
       },
-      -- inlay_hints = { enabled = true },
-      -- codelens = { enabled = vim.fn.has("nvim-0.10") },
+      inlay_hints = { enabled = true },
       servers = {
         eslint = {
           settings = {
@@ -69,9 +66,12 @@ local M = {
         nil_ls = { mason = false },
         nushell = { mason = false },
         marksman = { mason = false },
+        phpactor = {
+          mason = false,
+          enabled = false,
+        },
       },
-      setup = {
-      },
+      setup = {},
     },
   },
   {
@@ -138,49 +138,7 @@ local M = {
         },
       },
       ---@type table<string, conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig>
-      formatters = {
-        nix_fmt = {
-          --- @param ctx {filename: string, dirname: string, buf: number}
-          ---@diagnostic disable-next-line: unused-local
-          condition = function(self, ctx)
-            ---@diagnostic disable-next-line: param-type-mismatch
-            local command = self.command(self, ctx)
-            local has_nix_fmt = command ~= nil and command ~= ""
-
-            return has_nix_fmt
-          end,
-          ---@diagnostic disable-next-line: unused-local
-          command = function(self, ctx)
-            if nix_fmt_path == nil then
-              local handle, err = io.popen(
-                "nix eval --quiet --no-write-lock-file --no-update-lock-file --no-warn-dirty --impure --json .#formatter --apply '(x: (import <nixpkgs> {}).lib.getExe x.${builtins.currentSystem})' 2>&1"
-              )
-              if handle == nil or err ~= nil then
-                return ""
-              end
-              local response = handle:read("*a")
-              handle:close()
-
-              if not response then
-                return response
-              end
-
-              local ok, path = pcall(vim.json.decode, response)
-              if not ok then
-                path = ""
-              end
-
-              nix_fmt_path = path
-            end
-
-            return nix_fmt_path
-          end,
-          args = { "$FILENAME" },
-          stdin = false,
-          cwd = require("conform.util").root_file({ "flake.nix" }),
-          require_cwd = true,
-        },
-      },
+      formatters = {},
     },
   },
   {
