@@ -8,7 +8,7 @@ rec {
     hardware.url = "github:nixos/nixos-hardware";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    # neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-colors.url = "github:misterio77/nix-colors";
     nix-colors.inputs.nixpkgs-lib.follows = "nixpkgs";
