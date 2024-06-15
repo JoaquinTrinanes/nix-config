@@ -19,23 +19,6 @@
   # avoid loading amdgpu at stage 1. Freeze fix?
   hardware.amdgpu.loadInInitrd = false;
 
-  specialisation = {
-    "swap-file".configuration = {
-      boot.resumeDevice = "/dev/mapper/root";
-      boot.kernelParams = [ "resume_offset=13078528" ];
-      systemd.tmpfiles.rules = [
-        # Writing 0 causes the size of hibernation images to be minimum
-        "w /sys/power/image_size - - - - 0"
-      ];
-      swapDevices = [
-        {
-          device = "/swapfile";
-          size = 16 * 1024;
-        }
-      ];
-    };
-  };
-
   boot.loader.systemd-boot = {
     enable = true;
     configurationLimit = 10;
