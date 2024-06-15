@@ -29,7 +29,8 @@
     "xhci_pci"
     "thunderbolt"
     "usbhid"
-    "usb_storage"
+    # TODO: this isn't present anymore when running nixos-generate-config --show-hardware-config
+    # "usb_storage"
   ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-amd" ];
@@ -63,6 +64,7 @@
     # device = "/dev/disk/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
     fsType = "ext4";
     options = [
+      "defaults"
       "noatime"
     ];
   };
