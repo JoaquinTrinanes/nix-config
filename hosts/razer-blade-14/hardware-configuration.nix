@@ -29,8 +29,6 @@
     "xhci_pci"
     "thunderbolt"
     "usbhid"
-    # TODO: this isn't present anymore when running nixos-generate-config --show-hardware-config
-    # "usb_storage"
   ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-amd" ];

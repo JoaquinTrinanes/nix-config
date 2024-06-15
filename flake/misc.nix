@@ -41,19 +41,7 @@
           { pkgs, ... }:
           {
             nix = {
-              # much faster eval for now, slower >2.20, nix issue #10437
-              package = lib.mkDefault (
-                # 2.20 doesn't have the symlink fix backported yet :(
-                pkgs.nixVersions.nix_2_20.overrideAttrs (_oldAttrs: {
-                  src = pkgs.fetchFromGitHub {
-                    owner = "NixOS";
-                    repo = "nix";
-                    # 2.20-maintenance
-                    rev = "2cb5f579bf69d29a774f0d34181b095c5df1e4c6";
-                    hash = "sha256-Y8k1296wpfLHcpeJQc2cxcBOm3/j3kxe0oCydtfJkb8=";
-                  };
-                })
-              );
+              package = lib.mkDefault pkgs.nixVersions.latest;
 
               settings = {
                 allowed-users = lib.mkDefault [ "@wheel" ];
