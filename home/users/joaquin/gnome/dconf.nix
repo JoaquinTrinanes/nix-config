@@ -51,13 +51,18 @@ in
         (-8.547082)
       ];
     };
+    "org/gnome/shell/extensions/appindicator" = {
+      legacy-tray-enabled = false;
+    };
 
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";
     };
     "org/gnome/nautilus/preferences" = {
       # Editable address bar
-      always-use-location-entry = true;
+      # always-use-location-entry = true;
+      # Only when the setting is false can both forms of location navigation be employed.
+      always-use-location-entry = false;
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       binding = "<Control><Alt>t";
