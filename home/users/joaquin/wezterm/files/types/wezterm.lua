@@ -345,7 +345,7 @@
 ---@field visual_bell any #TODO
 ---@field warn_about_missing_glyphs boolean
 ---@field webgpu_force_fallback_adapter any #TODO
----@field webgpu_power_preference any #TODO
+---@field webgpu_power_preference "LowPower" | "HighPerformance" # Specifies the power preference when selecting a webgpu GPU instance. This option is only applicable when you have configured `front_end = "WebGpu"`.
 ---@field webgpu_preferred_adapter any #TODO
 ---@field win32_acrylic_accent_color any #TODO
 ---@field win32_system_backdrop any #TODO

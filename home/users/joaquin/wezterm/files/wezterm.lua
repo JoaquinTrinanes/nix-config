@@ -105,6 +105,11 @@ end
 
 config.term = "wezterm"
 config.front_end = "OpenGL"
+config.webgpu_power_preference = "LowPower"
+
+-- fixes crashing when using fractional scaling
+config.adjust_window_size_when_changing_font_size = true
+config.webgpu_force_fallback_adapter = true
 
 -- start maximized
 wezterm.on("gui-startup", function()
