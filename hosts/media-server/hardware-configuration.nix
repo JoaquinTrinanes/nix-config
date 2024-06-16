@@ -5,10 +5,15 @@
   config,
   lib,
   modulesPath,
+  inputs,
   ...
 }:
 {
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+    inputs.hardware.nixosModules.common-gpu-nvidia-disable
+    inputs.hardware.nixosModules.common-gpu-intel
+  ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.timeout = 0;

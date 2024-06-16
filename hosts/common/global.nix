@@ -39,6 +39,7 @@ in
   # Disabling channels makes nix.nixPath not work
   nix.settings.nix-path = lib.mkIf (!config.nix.channel.enable) config.nix.nixPath;
 
+  # TODO: do I really want this? Probably. But I rather just delete the variable altogether
   environment.sessionVariables.NIX_PATH = lib.mkIf (!config.nix.channel.enable) (lib.mkForce "");
 
   systemd = lib.mkMerge [

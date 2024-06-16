@@ -24,6 +24,7 @@
                 };
               };
           };
+          media-server.enable = true;
         };
       };
     };

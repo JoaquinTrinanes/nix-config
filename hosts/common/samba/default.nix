@@ -1,4 +1,3 @@
-{ pkgs, ... }:
 let
   path = "/mnt/media";
   publicPath = "${path}/Public";

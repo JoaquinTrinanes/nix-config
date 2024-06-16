@@ -8,7 +8,7 @@
       };
       "media-server" = {
         system = "x86_64-linux";
-        modules = [ ../hosts/media-server ];
+        modules = [ ../hosts/media-server/desktop.nix ];
       };
     };
 

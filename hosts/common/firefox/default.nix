@@ -93,14 +93,14 @@ in
         "security.ssl3.deprecated.rsa_des_ede3_sha" = false;
         "security.ssl3.dhe_rsa_aes_128_sha" = false;
         "security.ssl3.dhe_rsa_aes_256_sha" = false;
-        "security.ssl3.ecdhe_ecdsa_aes_128_sha" = false;
-        "security.ssl3.ecdhe_ecdsa_aes_256_sha" = false;
-        "security.ssl3.ecdhe_rsa_aes_128_sha" = false;
-        "security.ssl3.ecdhe_rsa_aes_256_sha" = false;
-        "security.ssl3.rsa_aes_128_sha" = false;
-        "security.ssl3.rsa_aes_256_sha" = false;
-        "security.ssl3.rsa_aes_128_gcm_sha256" = false;
-        "security.ssl3.rsa_aes_256_gcm_sha384" = false;
+        # "security.ssl3.ecdhe_ecdsa_aes_128_sha" = false;
+        # "security.ssl3.ecdhe_ecdsa_aes_256_sha" = false;
+        # "security.ssl3.ecdhe_rsa_aes_128_sha" = false;
+        # "security.ssl3.ecdhe_rsa_aes_256_sha" = false;
+        # "security.ssl3.rsa_aes_128_sha" = false;
+        # "security.ssl3.rsa_aes_256_sha" = false;
+        # "security.ssl3.rsa_aes_128_gcm_sha256" = false;
+        # "security.ssl3.rsa_aes_256_gcm_sha384" = false;
 
         # 1 = only base system fonts
         # 2 = also fonts from optional language packs
@@ -112,6 +112,7 @@ in
       }
     );
     preferences = {
+      # "browser.cache.disk.parent_directory" = lib.mkIf config.boot.tmp.useTmpfs "/tmp";
       "browser.aboutConfig.showWarning" = false;
       "browser.translations.neverTranslateLanguages" = lib.concatStringsSep "," [
         "en"
@@ -176,10 +177,13 @@ in
             "smart-referer@meh.paranoid.pk"
             "uBlock0@raymondhill.net"
             "vpn@proton.ch"
+            # proton pass
+            "78272b6fa58f4a1abaac99321d503a20@proton.me"
             # "tab-array@menhera.org"
             # "{aecec67f-0d10-4fa7-b7c7-609a2db280cf}" # violent monkey
           ];
           hiddenExtensions = [
+            # Settings: block VP{8,9}. TODO: Check if still needed with 4K videos
             "{9a41dee2-b924-4161-a971-7fb35c053a4a}" # enhanced-h264ify.
           ];
         in

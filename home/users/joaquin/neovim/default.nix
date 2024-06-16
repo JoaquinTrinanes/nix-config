@@ -1,3 +1,7 @@
+# TODO:
+# https://github.com/azuwis/lazyvim-nixvim/blob/master/flake.nix
+# https://github.com/LazyVim/LazyVim/discussions/1972
+# https://www.reddit.com/r/NixOS/comments/17el4x7/how_to_setup_neovim_using_lazyvim_using_nixos/
 {
   lib,
   pkgs,
@@ -12,9 +16,14 @@ in
   programs.neovim = {
     enable = lib.mkDefault true;
     package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    plugins = with pkgs.vimPlugins; [
+      # telescope-fzf-native-nvim
+      nvim-treesitter.withAllGrammars
+    ];
     extraPackages = builtins.attrValues {
       inherit (pkgs)
         black
+        deadnix
         dotenv-linter
         fd
         fzf

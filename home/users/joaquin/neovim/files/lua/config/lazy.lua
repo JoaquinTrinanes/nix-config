@@ -28,9 +28,11 @@ require("lazy").setup({
   checker = { enabled = false }, -- automatically check for plugin updates
   change_detection = { notify = false },
   performance = {
+    -- big performance penalty (50ms -> 200ms)
+    -- reset_packpath = false, -- reset the package path to improve startup time
     rtp = {
       -- TODO: check if it has a performance penalty. And probably check if lazy.nvim can be loaded in a non-dynamic way
-      --  reset = false,
+      reset = false,
       -- disable some rtp plugins
       disabled_plugins = {
         "gzip",

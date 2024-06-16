@@ -1,4 +1,28 @@
 local M = {
+  {
+    "m4xshen/hardtime.nvim",
+    cmd = { "Hardtime" },
+    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
+  {
+    "chentoast/marks.nvim",
+    event = { "LazyFile" },
+    opts = {
+      default_mappings = true,
+      cyclic = true,
+    },
+  },
+  -- {
+  --   "monaqa/dial.nvim",
+  --   opts = function(_, opts)
+  --     local augend = require("dial.augend")
+  --
+  --     opts.groups.default = vim.tbl_extend("force", opts.groups.default, {
+  --       augend.integer.alias.decimal_int, -- decimal integer (including negative number)
+  --     })
+  --   end,
+  -- },
   { "nvim-lua/plenary.nvim" },
   {
     "stevearc/oil.nvim",
