@@ -42,7 +42,7 @@
       # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
       # initialPassword = "correcthorsebatterystaple";
       isNormalUser = true;
-      openssh.authorizedKeys.keys = lib.mkForce [ ];
+      openssh.authorizedKeys.keys = [ ];
       extraGroups =
         [
           "wheel"
