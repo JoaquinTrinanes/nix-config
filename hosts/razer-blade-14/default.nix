@@ -57,13 +57,13 @@
 
   networking = {
     wireless.iwd.enable = true;
-    nftables = {
-      enable = true;
-    };
+    nftables.enable = true;
     nameservers = [
-      "1.1.1.1"
+      # "1.1.1.1"
+      "1.1.1.1#one.one.one.one"
       "2606:4700:4700::1111"
-      "1.0.0.1"
+      # "1.0.0.1"
+      "1.0.0.1#one.one.one.one"
       "2606:4700:4700::1001"
     ];
     networkmanager = {
@@ -80,6 +80,10 @@
     enable = true;
     # TODO: not sure if this is relevant
     fallbackDns = [
+      # "1.1.1.1#one.one.one.one"
+      # "2606:4700:4700::1111"
+      # "1.0.0.1#one.one.one.one"
+      # "2606:4700:4700::1001"
       # "127.0.0.1"
       # "::1"
     ];
