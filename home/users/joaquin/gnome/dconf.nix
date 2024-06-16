@@ -17,7 +17,7 @@ in
       favorite-apps = [
         "org.gnome.Nautilus.desktop"
         "firefox-devedition.desktop"
-        "discord.desktop"
+        "vesktop.desktop"
         "org.wezfurlong.wezterm.desktop"
       ];
     };
