@@ -8,6 +8,10 @@ in
     #   inherit (config.gtk.theme) name;
     #   # gtk-theme = name;
     # };
+    "org/gtk/gtk4/settings/file-chooser" = {
+      sort-directories-first = true;
+      show-hidden = true;
+    };
     "org/gnome/desktop/peripherals/touchpad" = {
       tap-to-click = true;
       two-finger-scrolling-enabled = true;
