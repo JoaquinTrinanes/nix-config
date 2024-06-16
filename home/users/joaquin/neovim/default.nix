@@ -15,6 +15,7 @@ in
     extraPackages = builtins.attrValues {
       inherit (pkgs)
         black
+        deadnix
         dotenv-linter
         fd
         fzf
