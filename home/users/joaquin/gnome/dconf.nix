@@ -1,8 +1,20 @@
-{ lib, ... }:
+{
+  lib,
+  self,
+  pkgs,
+  ...
+}:
 let
   inherit (lib.hm.gvariant) mkTuple;
 in
 {
+  imports = [
+    {
+      dconf.settings =
+        self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers.passthru.Rancho.dconfSettings;
+    }
+  ];
+
   dconf.settings = {
     # "org/gnome/shell/extensions/user-theme" = {
     #   inherit (config.gtk.theme) name;
