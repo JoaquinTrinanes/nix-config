@@ -13,6 +13,7 @@
         modules = [ ../home/users/joaquin ];
         hosts = {
           razer-blade-14 = {
+            enable = true;
             override =
               _osConfig:
               { config, ... }:
@@ -24,6 +25,7 @@
                 };
               };
           };
+          media-server.enable = true;
         };
       };
     };
