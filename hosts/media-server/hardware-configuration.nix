@@ -5,10 +5,53 @@
   config,
   lib,
   modulesPath,
+  inputs,
+  pkgs,
   ...
 }:
 {
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+    # inputs.hardware.nixosModules.common-gpu-nvidia-disable
+    # inputs.hardware.nixosModules.common-gpu-nvidia
+    inputs.hardware.nixosModules.msi-gl62
+    ../common/hardware-acceleration/intel.nix
+  ];
+
+  services.xserver.videoDrivers = [
+    "modesetting"
+    "nvidia"
+  ];
+
+  services.tlp = {
+    enable = true;
+    settings = {
+      RUNTIME_PM_ON_AC = "auto";
+      USB_AUTOSUSPEND = 0;
+      USB_EXCLUDE_BTUSB = 1;
+      RUNTIME_PM_DRIVER_DENYLIST = "mei_me";
+
+      # prevents powering down dGPU?
+      SOUND_POWER_SAVE_ON_AC = 1;
+      SOUND_POWER_SAVE_ON_BAT = 1;
+    };
+  };
+  services.power-profiles-daemon.enable = false;
+
+  hardware.nvidia = {
+    package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
+    modesetting.enable = false;
+    # package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
+    nvidiaSettings = false;
+    powerManagement = {
+      enable = true;
+      finegrained = true;
+    };
+  };
+
+  environment.variables = {
+    "__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
+  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.timeout = 0;
@@ -21,9 +64,15 @@
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.kernelParams = [
-    "ibt=off"
-    "module_blacklist=nouveau"
+  boot.kernelParams = lib.mkMerge [
+    [
+      "ibt=off"
+      "module_blacklist=nouveau"
+    ]
+    (lib.mkIf (!config.hardware.nvidia.modesetting.enable)
+      # last entries have priority, and the modeset=1 needs to be overriden
+      (lib.mkAfter [ "nvidia-drm.modeset=0" ])
+    )
   ];
   boot.extraModulePackages = [ ];
 
