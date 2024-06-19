@@ -8,7 +8,7 @@
 let
   inherit (lib) types mkOption mkEnableOption;
   cfg = config.system-parts.users;
-  inherit (config.system-parts) common homeManager nixos;
+  inherit (config.system-parts) common home-manager nixos;
   u2fKeyType = types.submodule {
     options = {
       keyHandle = mkOption { type = types.str; };
@@ -65,9 +65,9 @@ let
         };
         config = {
           finalModules = lib.mkMerge [
-            homeManager.modules
+            home-manager.modules
             config.modules
-            (lib.mkIf (homeManager.perUser != null) [ (homeManager.perUser user) ])
+            (lib.mkIf (home-manager.perUser != null) [ (home-manager.perUser user) ])
           ];
 
           finalConfigurations =
@@ -79,13 +79,13 @@ let
                 {
                   extraSpecialArgs = recursiveUpdateList [
                     common.specialArgs
-                    homeManager.specialArgs
+                    home-manager.specialArgs
                     config.specialArgs
                   ];
                   modules = config.finalModules;
                 };
               standaloneConfig = lib.recursiveUpdate baseConfig {
-                modules = baseConfig.modules ++ homeManager.standaloneModules;
+                modules = baseConfig.modules ++ home-manager.standaloneModules;
                 pkgs = withSystem "x86_64-linux" ({ pkgs, ... }: pkgs);
               };
               hostConfigs = lib.mapAttrs' (
@@ -102,7 +102,7 @@ let
                     }
                   )
                 )
-              ) user.homeManager.hosts;
+              ) user.home-manager.hosts;
             in
             lib.mkMerge [
               (lib.mkIf config.enable { ${user.name} = standaloneConfig; })
@@ -150,7 +150,7 @@ let
             ]
           );
         };
-        homeManager = mkOption {
+        home-manager = mkOption {
           type = mkHomeManagerUserConfigType config;
           default = { };
         };
@@ -164,7 +164,7 @@ in
       type = types.attrsOf userType;
       default = { };
     };
-    homeManager = mkOption {
+    home-manager = mkOption {
       type = types.submodule (
         { lib, ... }:
         {
@@ -189,7 +189,7 @@ in
           };
 
           config.finalConfigurations = lib.mkMerge (
-            lib.mapAttrsToList (_: value: value.homeManager.finalConfigurations) cfg
+            lib.mapAttrsToList (_: value: value.home-manager.finalConfigurations) cfg
           );
         }
       );
@@ -199,6 +199,6 @@ in
   config = {
     flake.homeConfigurations = lib.mapAttrs (
       _: inputs.home-manager.lib.homeManagerConfiguration
-    ) homeManager.finalConfigurations;
+    ) home-manager.finalConfigurations;
   };
 }

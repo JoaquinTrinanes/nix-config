@@ -8,7 +8,7 @@
       sshPublicKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCutbKZk+mbku2/ndSociCACyV+Joc0QVYRfjxAHW79 openpgp:0x31C20393"
       ];
-      homeManager = {
+      home-manager = {
         enable = true;
         modules = [ ../home/users/joaquin ];
         hosts = {
@@ -30,7 +30,7 @@
       };
     };
   };
-  system-parts.homeManager = {
+  system-parts.home-manager = {
     perUser = user: {
       _module.args = {
         inherit user;

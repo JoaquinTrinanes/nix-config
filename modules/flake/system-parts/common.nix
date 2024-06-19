@@ -33,7 +33,7 @@ in
       stateVersion = lib.mkIf (cfg.stateVersion != null) (lib.mkDefault cfg.stateVersion);
     in
     {
-      system-parts.homeManager = {
+      system-parts.home-manager = {
         standaloneModules = cfg.exclusiveModules;
         modules = lib.mkMerge [
           cfg.modules

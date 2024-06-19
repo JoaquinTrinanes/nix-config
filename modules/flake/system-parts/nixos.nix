@@ -50,12 +50,12 @@ let
           [ (cfg.perHost config) ]
           (lib.mapAttrsToList (
             username: user:
-            (mkIf (user.homeManager.hosts.${name}.enable or false) {
+            (mkIf (user.home-manager.hosts.${name}.enable or false) {
               imports = [ inputs.home-manager.nixosModules.home-manager ];
               home-manager = {
                 users."${user.name}" = {
-                  imports = user.homeManager.finalModules ++ [
-                    (user.homeManager.hosts.${name}.override config.finalSystem)
+                  imports = user.home-manager.finalModules ++ [
+                    (user.home-manager.hosts.${name}.override config.finalSystem)
                   ];
                 };
                 useUserPackages = lib.mkDefault true;
