@@ -65,10 +65,6 @@ local M = {
         nil_ls = { mason = false },
         nushell = { mason = false },
         marksman = { mason = false },
-        phpactor = {
-          mason = false,
-          enabled = false,
-        },
       },
       setup = {},
     },

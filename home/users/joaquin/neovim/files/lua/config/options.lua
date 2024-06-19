@@ -12,3 +12,6 @@ vim.g.root_spec = { "cwd", "lsp", { ".git", "lua" } }
 
 -- Hide the '[No Name]' buffer
 -- vim.opt.hidden = false
+
+-- LSP Server to use for PHP.
+vim.g.lazyvim_php_lsp = "intelephense" -- or "phpactor"
