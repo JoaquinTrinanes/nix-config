@@ -62,7 +62,6 @@ local M = {
           },
         },
         intelephense = { settings = { ["intelephense.files.maxSize"] = 10000000 } },
-        prismals = {},
         nil_ls = { mason = false },
         nushell = { mason = false },
         marksman = { mason = false },
@@ -148,7 +147,6 @@ local M = {
     },
   },
   { "imsnif/kdl.vim", ft = { "kdl" } },
-  { "prisma/vim-prisma", ft = { "prisma" } },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
