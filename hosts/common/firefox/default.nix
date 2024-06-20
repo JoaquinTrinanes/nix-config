@@ -199,9 +199,10 @@ in
         };
       SearchEngines = {
         Default = "DuckDuckGo";
-        Remove = [
-          "amazon@search.mozilla.org"
-          "bing@search.mozilla.org"
+        Remove = map (s: "${s}@search.mozilla.org") [
+          "amazon"
+          "bing"
+          "google"
         ];
       };
       DisableFeedbackCommands = true;
