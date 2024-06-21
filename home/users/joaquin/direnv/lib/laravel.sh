@@ -6,7 +6,13 @@ layout_laravel_sail() {
 	lib_dir="$(direnv_layout_dir)/laravel_sail"
 	bin_dir="$lib_dir/bin"
 	base_dir="$(direnv_layout_dir)/.."
+
 	rm -rf "$bin_dir"
+
+	if [ ! -f "$base_dir/vendor/bin/sail" ]; then
+		return
+	fi
+
 	mkdir -p "$bin_dir"
 	local scripts=(
 		composer
