@@ -14,18 +14,10 @@
         hosts = {
           razer-blade-14 = {
             enable = true;
-            override =
-              _osConfig:
-              { config, ... }:
-              {
-                impurePath = {
-                  enable = true;
-                  flakePath = "${config.home.homeDirectory}/Documents/nix-config";
-                  repoUrl = "https://github.com/JoaquinTrinanes/nix-config.git";
-                };
-              };
           };
-          media-server.enable = true;
+          media-server = {
+            enable = true;
+          };
         };
       };
     };
