@@ -40,7 +40,12 @@
         inherit (inputs) wrapper-manager;
         wrapper = wrapper-manager.lib.build {
           inherit pkgs;
-          modules = [ { wrappers.${name} = options; } ];
+          modules = [
+            {
+              _file = ./default.nix;
+              wrappers.${name} = options;
+            }
+          ];
         };
       in
       wrapper.overrideAttrs (

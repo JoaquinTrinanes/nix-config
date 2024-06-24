@@ -42,7 +42,12 @@ in
       nixpkgs.finalConfig = {
         inherit (cfg) overlays config;
       };
-      common.exclusiveModules = [ { nixpkgs = cfg.finalConfig; } ];
+      common.exclusiveModules = [
+        {
+          _file = ./nixpkgs.nix;
+          nixpkgs = cfg.finalConfig;
+        }
+      ];
       nixos.perHost =
         { system, ... }:
         {

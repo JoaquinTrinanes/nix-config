@@ -45,12 +45,18 @@ let
       config = {
         finalModules = lib.mkMerge [
           cfg.modules
-          [ { networking.hostName = lib.mkDefault config.name; } ]
+          [
+            {
+              _file = ./nixos.nix;
+              networking.hostName = lib.mkDefault config.name;
+            }
+          ]
           config.modules
           [ (cfg.perHost config) ]
           (lib.mapAttrsToList (
-            username: user:
+            _username: user:
             (mkIf (user.home-manager.hosts.${name}.enable or false) {
+              _file = ./nixos.nix;
               imports = [ inputs.home-manager.nixosModules.home-manager ];
               home-manager = {
                 users."${user.name}" = {

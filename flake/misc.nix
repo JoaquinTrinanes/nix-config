@@ -27,6 +27,7 @@
       stateVersion = lib.mkDefault "23.11";
       modules = [
         {
+          _file = ./misc.nix;
           _module.args = {
             inherit (config.system-parts) users;
             hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.system-parts.nixos.hosts;
@@ -40,6 +41,7 @@
         (
           { pkgs, ... }:
           {
+            _file = ./misc.nix;
             nix = {
               package = lib.mkDefault pkgs.nixVersions.latest;
 

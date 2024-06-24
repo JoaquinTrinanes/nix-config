@@ -39,6 +39,7 @@ in
           cfg.modules
           [
             {
+              _file = ./common.nix;
               home = {
                 inherit stateVersion;
               };
@@ -52,6 +53,7 @@ in
         ++ cfg.exclusiveModules
         ++ [
           {
+            _file = ./common.nix;
             system = {
               inherit stateVersion;
             };
