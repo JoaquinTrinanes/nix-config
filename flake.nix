@@ -47,9 +47,10 @@ rec {
       debug = true;
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
 
-      imports = [
-        ./flake
-        { system-parts.flake-nix-config = nixConfig; }
-      ];
+      imports = [ ./flake ];
+
+      _module.args = {
+        inherit nixConfig;
+      };
     };
 }
