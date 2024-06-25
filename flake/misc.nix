@@ -43,7 +43,7 @@
           {
             _file = ./misc.nix;
             nix = {
-              package = lib.mkDefault pkgs.nixVersions.latest;
+              package = lib.mkDefault pkgs.lix;
 
               settings = {
                 allowed-users = lib.mkDefault [ "@wheel" ];
