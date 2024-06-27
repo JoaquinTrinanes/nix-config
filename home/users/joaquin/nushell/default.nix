@@ -99,8 +99,7 @@ in
       ];
   };
 
-  # just before mkAfter, so we can skip unneeded bash interactive initialization
-  programs.bash.initExtra = lib.mkOrder ((lib.mkAfter { }).priority - 1) ''
+  programs.bash.initExtra = lib.mkBefore ''
     if [[ ! $(ps T --no-header --format=comm | grep -E -- '^(nu|.nu-wrapped)$') && -z $BASH_EXECUTION_STRING ]]; then
         shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION='''
         exec "${lib.getExe config.programs.nushell.package}" "$LOGIN_OPTION"
