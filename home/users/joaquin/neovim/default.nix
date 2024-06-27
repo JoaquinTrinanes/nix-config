@@ -36,7 +36,7 @@ in
         taplo
         yaml-language-server
         ;
-      inherit (pkgs.nodePackages) prettier typescript-language-server;
+      inherit (pkgs.nodePackages) intelephense prettier typescript-language-server;
     };
     vimAlias = true;
     viAlias = true;

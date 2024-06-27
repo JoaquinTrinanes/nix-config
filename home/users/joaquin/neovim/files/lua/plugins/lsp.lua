@@ -23,6 +23,7 @@ local M = {
       },
       inlay_hints = { enabled = true },
       servers = {
+        r_language_server = { mason = false },
         eslint = {
           settings = {
             rulesCustomizations = {
@@ -61,7 +62,21 @@ local M = {
             },
           },
         },
-        intelephense = { settings = { ["intelephense.files.maxSize"] = 10000000 } },
+        rust_analyzer = {
+          mason = false,
+          checkOnSave = {
+            extraArgs = {
+              -- -- prevent blocking compilation while indexing
+              -- "--target-dir",
+              -- "/tmp/rust-analyzer-check",
+            },
+          },
+        },
+        intelephense = {
+          mason = false,
+          settings = { ["intelephense.files.maxSize"] = 10000000 },
+        },
+        -- phpactor = { mason = false },
         nil_ls = { mason = false },
         nushell = { mason = false },
         marksman = { mason = false },
@@ -142,7 +157,6 @@ local M = {
       lsp = { hover = { silent = true } },
     },
   },
-  { "imsnif/kdl.vim", ft = { "kdl" } },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
