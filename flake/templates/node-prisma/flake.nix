@@ -22,6 +22,7 @@
         { pkgs, ... }:
         {
           devenv.shells.default = {
+            packages = builtins.attrValues { inherit (pkgs) bashInteractive; };
             languages.javascript = {
               enable = true;
               package = pkgs.nodejs_20;
