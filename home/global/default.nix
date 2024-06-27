@@ -44,6 +44,7 @@
     throw-keyids = true;
   };
 
+  # TODO: use sops for this
   xdg.configFile."Yubico/u2f_keys" = lib.mkIf (user.u2f != [ ]) {
     text =
       let
@@ -61,6 +62,6 @@
             options
           ];
       in
-      lib.concatStringsSep ":" ([ user.name ] ++ map mkKey user.u2f);
+      lib.concatLines user.u2f;
   };
 }

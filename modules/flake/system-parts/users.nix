@@ -9,14 +9,6 @@ let
   inherit (lib) types mkOption mkEnableOption;
   cfg = config.system-parts.users;
   inherit (config.system-parts) common home-manager nixos;
-  u2fKeyType = types.submodule {
-    options = {
-      keyHandle = mkOption { type = types.str; };
-      userKey = mkOption { type = types.str; };
-      coseType = mkOption { type = types.str; };
-      options = mkOption { type = types.str; };
-    };
-  };
   specialArgsOption = mkOption {
     type = types.attrsOf types.unspecified;
     default = { };
@@ -114,41 +106,10 @@ let
   userType = types.submodule (
     { name, config, ... }:
     {
-      freeformType = types.attrsOf types.unspecified;
       options = {
         name = mkOption {
           type = types.str;
           default = name;
-        };
-        email = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-        };
-        sshPublicKeys = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-        };
-        u2f = mkOption {
-          # nix shell nixpkgs#pam_u2f --command pamu2fcfg
-          type = types.listOf u2fKeyType;
-          default = [ ];
-        };
-        firstName = mkOption {
-          type = types.nullOr types.str;
-          default = name;
-        };
-        lastName = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-        };
-        fullName = mkOption {
-          type = types.str;
-          default = builtins.concatStringsSep " " (
-            builtins.filter (x: x != null) [
-              config.firstName
-              config.lastName
-            ]
-          );
         };
         home-manager = mkOption {
           type = mkHomeManagerUserConfigType config;
