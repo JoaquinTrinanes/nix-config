@@ -15,17 +15,18 @@ let
       "${config.xdg.configHome}/nushell";
   configFile = "${configDir}/config.nu";
   envFile = "${configDir}/env.nu";
+  pluginFile = "${configDir}/plugin.msgpackz";
+  nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
+  inherit (nushellNightlyPkgs) nushell;
 
-  nushellPkg =
+  nushellWrapped =
     let
-      nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
-      nuUnwrapped = nushellNightlyPkgs.nushell;
       pluginFile =
         let
           plugins = builtins.attrValues { inherit (nushellNightlyPkgs) nu_plugin_formats nu_plugin_polars; };
           pluginExprs = map (plugin: "plugin add ${lib.getExe plugin}") plugins;
         in
-        pkgs.runCommandLocal "plugin.msgpackz" { nativeBuildInputs = [ nuUnwrapped ]; } ''
+        pkgs.runCommandLocal "plugin.msgpackz" { nativeBuildInputs = [ nushell ]; } ''
           touch $out {config,env}.nu
           nu --config config.nu \
           --env-config env.nu \
@@ -37,7 +38,7 @@ let
         '';
     in
     myLib.mkWrapper {
-      basePackage = nuUnwrapped;
+      basePackage = nushell;
       flags = [
         "--plugin-config"
         pluginFile
@@ -56,10 +57,11 @@ in
   # config file are added to the wrapper
   home.file."${configFile}".enable = false;
   home.file."${envFile}".enable = false;
+  home.file."${pluginFile}".enable = false;
 
   programs.nushell = {
     enable = lib.mkDefault true;
-    package = nushellPkg;
+    package = nushellWrapped;
     inherit (config.home) shellAliases;
 
     # TODO: this causes IFD because the nushell module reads the source
@@ -73,7 +75,7 @@ in
     envFile.source = ./files/env.nu;
     extraConfig =
       let
-        nix = lib.getExe config.nix.package;
+        nix = if config.nix.package == null then pkgs.nix else lib.getExe config.nix.package;
         formatter = lib.getExe self.formatter.${pkgs.stdenv.hostPlatform.system};
       in
       lib.mkMerge [
