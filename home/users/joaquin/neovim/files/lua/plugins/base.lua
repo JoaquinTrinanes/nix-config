@@ -110,7 +110,6 @@ local M = {
   },
   {
     "LunarVim/bigfile.nvim",
-    lazy = false,
     event = { "FileReadPre", "BufReadPre", "User FileOpened" },
     opts = {
       filesize = 10, -- in MB
