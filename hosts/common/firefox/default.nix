@@ -185,6 +185,7 @@ in
           hiddenExtensions = [
             # Settings: block VP{8,9}. TODO: Check if still needed with 4K videos
             "{9a41dee2-b924-4161-a971-7fb35c053a4a}" # enhanced-h264ify.
+            "idcac-pub@guus.ninja" # I still don't care about cookies
           ];
         in
         (lib.genAttrs hiddenExtensions (name: mkExtension { inherit name; }))
