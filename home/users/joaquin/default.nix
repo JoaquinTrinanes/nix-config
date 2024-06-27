@@ -158,7 +158,10 @@
       hm = "home-manager";
       hms = "home-manager switch";
     }
-    // lib.optionalAttrs config.programs.bat.enable { "cat" = "bat -p"; };
+    // lib.optionalAttrs config.programs.bat.enable {
+      b = "bat";
+      "cat" = "bat -p";
+    };
 
   programs.gpg = {
     enable = true;
