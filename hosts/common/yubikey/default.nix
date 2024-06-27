@@ -14,4 +14,15 @@
     yubikey-personalization
     yubikey-personalization-gui
   ];
+
+  # security.pam.yubico = {
+  #   enable = lib.mkDefault true;
+  #   control = "sufficient";
+  #   mode = "challenge-response";
+  #   id = [ ];
+  # };
+
+  security.pam.u2f = {
+    control = "sufficient";
+  };
 }
