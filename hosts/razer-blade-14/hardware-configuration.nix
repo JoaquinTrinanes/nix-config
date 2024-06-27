@@ -14,7 +14,10 @@
     inputs.hardware.nixosModules.common-pc-laptop-ssd
     inputs.hardware.nixosModules.common-pc-laptop
     ../common/hardware-acceleration/amdgpu.nix
+    ./disko.nix
   ];
+
+  boot.initrd.systemd.enable = true;
 
   # avoid loading amdgpu at stage 1. Freeze fix?
   hardware.amdgpu.loadInInitrd = false;
@@ -34,38 +37,11 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.supportedFilesystems = {
     ntfs = true;
+    btrfs = true;
   };
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.luks.devices."root" = {
-    # device = "/dev/disk/by-uuid/8c6ae37c-84b9-4d71-be13-b6b384097a5f";
-    device = "/dev/mapper/vg-cryptroot";
-    preLVM = false;
-    bypassWorkqueues = true;
-  };
-
-  boot.loader.efi.efiSysMountPoint = "/efi";
-
-  fileSystems.${config.boot.loader.efi.efiSysMountPoint} = {
-    device = "/dev/disk/by-label/ESP";
-    fsType = "vfat";
-    options = [
-      "fmask=0022"
-      "dmask=0022"
-    ];
-    # device = "/dev/disk/by-uuid/984F-0AE3";
-    # device = "/dev/nvme0n1p3";
-  };
-
-  fileSystems."/" = {
-    device = "/dev/mapper/root";
-    # device = "/dev/disk/by-uuid/bb1eca97-4a4a-4f27-8f73-2facd71f55ff";
-    fsType = "ext4";
-    options = [
-      "defaults"
-      "noatime"
-    ];
-  };
+  boot.loader.efi.efiSysMountPoint = "/boot";
 
   environment.systemPackages = [
     (lib.mkIf config.hardware.nvidia.prime.offload.enable (

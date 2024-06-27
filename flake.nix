@@ -26,6 +26,9 @@ rec {
 
     autofirma-nix.url = "github:nilp0inter/autofirma-nix";
     autofirma-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
