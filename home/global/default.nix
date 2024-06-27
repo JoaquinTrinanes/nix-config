@@ -45,23 +45,6 @@
   };
 
   # TODO: use sops for this
-  xdg.configFile."Yubico/u2f_keys" = lib.mkIf (user.u2f != [ ]) {
-    text =
-      let
-        mkKey =
-          {
-            keyHandle,
-            userKey,
-            coseType,
-            options,
-          }:
-          lib.concatStringsSep "," [
-            keyHandle
-            userKey
-            coseType
-            options
-          ];
-      in
-      lib.concatLines user.u2f;
-  };
+  # nix shell nixpkgs#pam_u2f --command pamu2fcfg
+  # xdg.configFile."Yubico/u2f_keys".source = sops...
 }

@@ -67,11 +67,6 @@
                     ]
                   );
                 };
-                u2f = mkOption {
-                  # nix shell nixpkgs#pam_u2f --command pamu2fcfg
-                  type = types.listOf types.str;
-                  default = [ ];
-                };
                 sshPublicKeys = mkOption {
                   type = types.listOf types.str;
                   default = [ ];
