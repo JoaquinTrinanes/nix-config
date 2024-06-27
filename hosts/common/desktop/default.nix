@@ -29,7 +29,6 @@
     builtins.attrValues {
       inherit discord;
       inherit (pkgs)
-        # discord
         protonvpn-gui
         qbittorrent
         telegram-desktop

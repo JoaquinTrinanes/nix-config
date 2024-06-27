@@ -11,9 +11,5 @@
     NIXOS_OZONE_WL = "1";
   };
 
-  xdg = {
-    portal = {
-      extraPortals = with pkgs; [ xdg-desktop-portal-wlr ];
-    };
-  };
+  xdg.portal.wlr.enable = true;
 }
