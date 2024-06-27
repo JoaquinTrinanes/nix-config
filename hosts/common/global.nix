@@ -93,6 +93,7 @@ in
     jq
     ldns
     lshw
+    lsof
     openssl
     pciutils
     ripgrep
