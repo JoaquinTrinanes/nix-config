@@ -21,7 +21,11 @@ local M = {
           },
         },
       },
-      flavour = "frappe",
+      flavour = "auto", -- latte, frappe, macchiato, mocha
+      background = { -- :h background
+        light = "latte",
+        dark = "frappe",
+      },
       term_colors = true,
       custom_highlights = function(colors)
         return {
