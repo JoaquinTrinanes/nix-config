@@ -40,6 +40,10 @@ let
           type = types.attrsOf types.unspecified;
           default = { };
         };
+        extraArgs = mkOption {
+          type = types.attrsOf types.unspecified;
+          default = { };
+        };
       };
 
       config = {
@@ -73,10 +77,12 @@ let
           ) users)
         ];
 
-        finalSystem = config.nixpkgs.lib.nixosSystem {
-          modules = config.finalModules;
-          inherit (common) specialArgs;
-        };
+        finalSystem = config.nixpkgs.lib.nixosSystem (
+          lib.recursiveUpdate {
+            modules = config.finalModules;
+            inherit (common) specialArgs;
+          } config.extraArgs
+        );
       };
     }
   );
