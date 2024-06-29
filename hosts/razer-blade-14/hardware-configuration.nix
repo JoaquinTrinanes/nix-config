@@ -20,7 +20,7 @@
   boot.initrd.systemd.enable = true;
 
   # avoid loading amdgpu at stage 1. Freeze fix?
-  hardware.amdgpu.loadInInitrd = false;
+  hardware.amdgpu.initrd.enable = false;
 
   boot.loader.systemd-boot = {
     enable = true;
