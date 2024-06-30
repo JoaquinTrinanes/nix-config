@@ -230,6 +230,11 @@
     size = 16;
   };
 
+  gtk.iconTheme = {
+    name = "Adwaita";
+    package = pkgs.gnome.adwaita-icon-theme;
+  };
+
   # xdg.configFile."Proton/VPN/settings.json".text = builtins.toJSON {
   #   dns_custom_ips = [];
   #   features = {
