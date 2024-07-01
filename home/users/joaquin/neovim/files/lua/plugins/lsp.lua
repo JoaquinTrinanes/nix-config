@@ -129,12 +129,13 @@ local M = {
   },
   {
     "stevearc/conform.nvim",
+    ---@module "conform"
+    ---@type conform.setupOpts
     opts = {
       format = {
         -- lsp_fallback = "always",
         lsp_fallback = true,
       },
-      ---@type table<string, conform.FormatterUnit[]>
       formatters_by_ft = {
         toml = { "taplo" },
         php = { "pint" },
@@ -147,7 +148,6 @@ local M = {
           "trim_whitespace",
         },
       },
-      ---@type table<string, conform.FormatterConfig|fun(bufnr: integer): nil|conform.FormatterConfig>
       formatters = {},
     },
   },

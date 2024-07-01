@@ -1,4 +1,3 @@
----@type wezterm
 local wezterm = require("wezterm")
 local keys = require("keys")
 local H = require("helpers")
@@ -17,7 +16,7 @@ local direction_keys = {
 	l = "Right",
 }
 
----@param pane PaneObj
+---@param pane Pane
 M.has_mux = function(pane)
 	local is_zellij = H.has_foreground_process("zellij", pane)
 	local is_tmux = H.has_foreground_process("tmux", pane)

@@ -1,5 +1,18 @@
 local M = {
   {
+    -- will never be loaded, only used for types
+    "justinsgithub/wezterm-types",
+    lazy = true,
+  },
+  {
+    "folke/lazydev.nvim",
+    opts = {
+      library = {
+        { path = "wezterm-types/types", mods = { "wezterm" } },
+      },
+    },
+  },
+  {
     "echasnovski/mini.pairs",
     enabled = false,
   },

@@ -1,12 +1,12 @@
----@type wezterm
+---@diagnostic disable: inject-field
+
 local wezterm = require("wezterm")
 
 -- wezterm.add_to_config_reload_watch_list(wezterm.config_dir)
-
 ---@param key string
 ---@param mods "ALT" | "CTRL" | "SHIFT" | "CTRL|SHIFT" | nil
 ---@param action fun()
----@param get_should_execute fun(win: WindowObj, pane: PaneObj): boolean
+---@param get_should_execute fun(win: Window, pane: Pane): boolean
 ---@param default KeyAssignment?
 local conditional_map = function(key, mods, action, get_should_execute, default)
 	return {
@@ -23,7 +23,7 @@ local conditional_map = function(key, mods, action, get_should_execute, default)
 	}
 end
 
----@param pane PaneObj
+---@param pane Pane
 local get_process_name = function(pane)
 	local process_name = pane:get_foreground_process_name()
 	if process_name == nil then
@@ -33,7 +33,7 @@ local get_process_name = function(pane)
 end
 
 ---@param process string
----@param pane PaneObj
+---@param pane Pane
 local has_foreground_process = function(process, pane)
 	return get_process_name(pane) == process
 end
@@ -50,7 +50,7 @@ local direction_keys = {
 	l = "Right",
 }
 
----@param pane PaneObj
+---@param pane Pane
 local has_mux = function(pane)
 	local is_zellij = has_foreground_process("zellij", pane)
 	local is_tmux = has_foreground_process("tmux", pane)
@@ -97,7 +97,7 @@ end
 
 -- wezterm.add_to_config_reload_watch_list(wezterm.config_dir .. "/colors/flavours.toml")
 
----@type WeztermConfig
+---@type Config
 local config = {}
 if wezterm.config_builder then
 	config = wezterm.config_builder()
@@ -113,7 +113,7 @@ config.webgpu_force_fallback_adapter = true
 
 -- start maximized
 wezterm.on("gui-startup", function()
-	local tab, pane, window = wezterm.mux.spawn_window({})
+	local _, _, window = wezterm.mux.spawn_window({})
 	window:gui_window():maximize()
 end)
 
@@ -165,14 +165,16 @@ config.font = wezterm.font_with_fallback({
 config.tab_max_width = 999999
 
 -- config.window_decorations = "INTEGRATED_BUTTONS | RESIZE | TITLE"
-config.window_decorations = "RESIZE|TITLE"
+-- config.window_decorations = "RESIZE|TITLE"
 config.hide_tab_bar_if_only_one_tab = false -- true
 config.use_fancy_tab_bar = false
 
 config.font_size = 16
+---@diagnostic disable-next-line: assign-type-mismatch
 config.default_cursor_style = "SteadyBar"
 config.cursor_blink_rate = 0
 config.enable_scroll_bar = true
+---@diagnostic disable-next-line: assign-type-mismatch
 config.audible_bell = "Disabled"
 config.unicode_version = 15
 config.hide_mouse_cursor_when_typing = false

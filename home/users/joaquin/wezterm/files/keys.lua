@@ -1,4 +1,3 @@
----@type wezterm
 local wezterm = require("wezterm")
 
 local M = {}
@@ -6,7 +5,7 @@ local M = {}
 ---@param key string
 ---@param mods "ALT" | "CTRL" | "SHIFT" | "CTRL|SHIFT" | nil
 ---@param action fun()
----@param get_should_execute fun(win: WindowObj, pane: PaneObj): boolean
+---@param get_should_execute fun(win: Window, pane: Pane): boolean
 ---@param default KeyAssignment?
 M.conditional_map = function(key, mods, action, get_should_execute, default)
 	return {
