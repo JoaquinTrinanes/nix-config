@@ -8,7 +8,7 @@
     git-standup
     nil
     nixfmt-rfc-style
-    nodePackages.pnpm
+    pnpm
     scrcpy
     statix
     yarn-berry
