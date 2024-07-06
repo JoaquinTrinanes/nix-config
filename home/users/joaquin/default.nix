@@ -226,13 +226,13 @@
       defaultCursor = name;
     };
     name = "Adwaita";
-    package = pkgs.gnome.adwaita-icon-theme;
+    package = pkgs.adwaita-icon-theme;
     size = 16;
   };
 
   gtk.iconTheme = {
     name = "Adwaita";
-    package = pkgs.gnome.adwaita-icon-theme;
+    package = pkgs.adwaita-icon-theme;
   };
 
   # xdg.configFile."Proton/VPN/settings.json".text = builtins.toJSON {
