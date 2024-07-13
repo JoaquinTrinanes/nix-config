@@ -71,10 +71,6 @@
         )
       ];
     };
-    overlays = {
-      all = import ../overlays { inherit inputs; };
-      enabled = _: [ ];
-    };
   };
 
   flake = {

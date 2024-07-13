@@ -4,6 +4,5 @@
     ./users.nix
     ./common.nix
     ./nixpkgs.nix
-    ./overlays.nix
   ];
 }
