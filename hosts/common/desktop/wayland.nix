@@ -4,7 +4,8 @@
 
   environment.systemPackages = with pkgs; [
     wl-clipboard
-    xwaylandvideobridge
+    # # Doesn't work
+    # xwaylandvideobridge
   ];
 
   environment.sessionVariables = {
