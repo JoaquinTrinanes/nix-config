@@ -30,6 +30,9 @@ rec {
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+
+    lix-module.url = "git+https://git.lix.systems/lix-project/nixos-module";
+    lix-module.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {

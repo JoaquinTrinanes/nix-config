@@ -21,6 +21,7 @@
         allowUnfree = lib.mkDefault true;
         allowAliases = lib.mkDefault false;
       };
+      overlays = [ inputs.lix-module.overlays.default ];
     };
 
     common = {
@@ -32,6 +33,7 @@
             inherit (config.system-parts) users;
             hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.system-parts.nixos.hosts;
           };
+          # nix.package = lib.mkDefault pkgs.lix;
         }
       ];
       specialArgs = {
@@ -43,8 +45,6 @@
           {
             _file = ./misc.nix;
             nix = {
-              package = lib.mkDefault pkgs.lix;
-
               settings = {
                 allowed-users = lib.mkDefault [ "@wheel" ];
                 min-free = lib.mkDefault 128000000; # 128MB
