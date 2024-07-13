@@ -66,6 +66,19 @@
                 warn-dirty = false;
                 # remove global registry
                 flake-registry = "";
+
+                repl-overlays = [
+                  (pkgs.writeText "pkgs.nix"
+                    # nix
+                    ''
+                      info: final: prev:
+                      if prev ? legacyPackages && prev.legacyPackages ? ''${info.currentSystem} then
+                        { pkgs = prev.legacyPackages.''${info.currentSystem}; }
+                      else
+                        { }
+                    ''
+                  )
+                ];
               };
             };
           }
