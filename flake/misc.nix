@@ -54,6 +54,7 @@
                 log-lines = lib.mkDefault 50;
                 auto-optimise-store = lib.mkDefault true;
                 experimental-features = [
+                  "repl-flake"
                   "nix-command"
                   "flakes"
                   "auto-allocate-uids"
