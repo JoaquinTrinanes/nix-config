@@ -26,7 +26,6 @@ in
         lazygit
         lua-language-server
         marksman
-        # nixd
         pyright
         ripgrep
         shellcheck
@@ -34,9 +33,10 @@ in
         statix
         stylua
         taplo
+        typescript-language-server
         yaml-language-server
         ;
-      inherit (pkgs.nodePackages) intelephense prettier typescript-language-server;
+      inherit (pkgs.nodePackages) intelephense prettier;
     };
     vimAlias = true;
     viAlias = true;
