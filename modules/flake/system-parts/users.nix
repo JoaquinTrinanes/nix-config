@@ -2,13 +2,17 @@
   lib,
   config,
   inputs,
-  withSystem,
   ...
 }:
 let
   inherit (lib) types mkOption mkEnableOption;
   cfg = config.system-parts.users;
-  inherit (config.system-parts) common home-manager nixos;
+  inherit (config.system-parts)
+    common
+    home-manager
+    nixos
+    nixpkgs
+    ;
   specialArgsOption = mkOption {
     type = types.attrsOf types.unspecified;
     default = { };
@@ -78,7 +82,7 @@ let
                 };
               standaloneConfig = lib.recursiveUpdate baseConfig {
                 modules = baseConfig.modules ++ home-manager.standaloneModules;
-                pkgs = withSystem "x86_64-linux" ({ pkgs, ... }: pkgs);
+                pkgs = nixpkgs.input.legacyPackages."x86_64-linux";
               };
               hostConfigs = lib.mapAttrs' (
                 hostName:
