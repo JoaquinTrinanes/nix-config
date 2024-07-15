@@ -34,7 +34,12 @@
     "usbhid"
   ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [
+    "kvm-amd"
+
+    # needed to run the zenstates c6 fix
+    "msr"
+  ];
   boot.supportedFilesystems = {
     ntfs = true;
     btrfs = true;
@@ -111,6 +116,30 @@
     ]
   ];
 
+  systemd.services."ryzen-disable-c6" = {
+    description = "Ryzen Disable C6";
+    after = [
+      "sysinit.target"
+      "local-fs.target"
+      "suspend.target"
+      "hibernate.target"
+    ];
+    before = [ "basic.target" ];
+    wantedBy = [
+      "basic.target"
+      "suspend.target"
+      "hibernate.target"
+    ];
+    unitConfig = {
+      DefaultDependencies = "no";
+    };
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${lib.getExe pkgs.zenstates} --c6-disable";
+    };
+  };
+
+  # Removing any of these prevents the dGPU from entering D3Cold
   environment.variables = {
     "__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
     "__GLX_VENDOR_LIBRARY_NAME" = "mesa";
