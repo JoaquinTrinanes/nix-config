@@ -33,7 +33,6 @@
             inherit (config.system-parts) users;
             hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.system-parts.nixos.hosts;
           };
-          # nix.package = lib.mkDefault pkgs.lix;
         }
       ];
       specialArgs = {
@@ -45,6 +44,7 @@
           {
             _file = ./misc.nix;
             nix = {
+              package = lib.mkDefault pkgs.nix;
               settings = {
                 allowed-users = lib.mkDefault [ "@wheel" ];
                 min-free = lib.mkDefault 128000000; # 128MB
@@ -63,9 +63,9 @@
                 auto-allocate-uids = lib.mkDefault true;
                 narinfo-cache-negative-ttl = lib.mkDefault 0;
                 use-xdg-base-directories = lib.mkDefault true;
-                warn-dirty = false;
+                warn-dirty = lib.mkDefault false;
                 # remove global registry
-                flake-registry = "";
+                flake-registry = lib.mkDefault "";
 
                 repl-overlays = [
                   (pkgs.writeText "pkgs.nix"
