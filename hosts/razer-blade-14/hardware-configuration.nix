@@ -135,13 +135,9 @@
       "suspend.target"
       "hibernate.target"
     ];
-    unitConfig = {
-      DefaultDependencies = "no";
-    };
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${lib.getExe pkgs.zenstates} --c6-disable";
-    };
+    unitConfig.DefaultDependencies = false;
+    script = "${lib.getExe pkgs.zenstates} --c6-disable";
+    serviceConfig.Type = "oneshot";
   };
 
   # Removing any of these prevents the dGPU from entering D3Cold
