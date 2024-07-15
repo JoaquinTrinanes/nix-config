@@ -104,7 +104,7 @@
       "button.lid_init_state=open"
     ]
     [
-      # try to fix semi-random soft locks
+      # https://wiki.archlinux.org/title/Ryzen#Soft_lock_freezing
       "rcu_nocbs=0-15" # https://bugs.launchpad.net/linux/+bug/1690085/comments/69
 
       # https://bugzilla.kernel.org/show_bug.cgi?id=196481
@@ -113,6 +113,11 @@
       "idle=nomwait"
       "pci=noaer"
       # "pci=nomsi,noaer" # nomsi probably makes the system unbootable
+    ]
+    [
+      # https://forums.developer.nvidia.com/t/series-550-freezes-laptop/284772/45
+      "amdgpu.vm_update_mode=3"
+      "amdgpu.dcdebugmask=0x4"
     ]
   ];
 
@@ -150,7 +155,8 @@
     nvidiaSettings = false;
     modesetting.enable = false;
     powerManagement = {
-      enable = true;
+      # enable = true;
+      enable = false;
       finegrained = true;
     };
     prime = {
