@@ -19,7 +19,7 @@
 
   boot.initrd.systemd.enable = true;
 
-  # avoid loading amdgpu at stage 1. Freeze fix?
+  # avoid loading amdgpu at stage 1. Might reduce number of crashes on boot
   hardware.amdgpu.initrd.enable = false;
 
   boot.loader.systemd-boot = {
@@ -88,8 +88,8 @@
     "nvidia"
   ];
 
-  # Disabling nvidia.modesetting doesn't work if prime.offload is enabled
   boot.kernelParams = lib.mkMerge [
+    # Disabling nvidia.modesetting doesn't work if prime.offload is enabled
     (lib.mkIf (!config.hardware.nvidia.modesetting.enable)
       # last entries have priority, and the modeset=1 needs to be overriden
       (lib.mkAfter [ "nvidia-drm.modeset=0" ])
@@ -116,8 +116,8 @@
     "__GLX_VENDOR_LIBRARY_NAME" = "mesa";
   };
 
-  hardware.nvidia = {
-    package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
+  hardware.nvidia = lib.mkDefault {
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
     nvidiaSettings = false;
     modesetting.enable = false;
     powerManagement = {
