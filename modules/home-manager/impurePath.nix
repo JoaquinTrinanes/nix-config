@@ -10,6 +10,7 @@ let
   cfg = config.impurePath;
 in
 {
+  _class = "homeManager";
   options.impurePath = {
     enable = lib.mkEnableOption "impure flake path" // {
       default = cfg.flakePath != null;
