@@ -113,6 +113,7 @@
 
   environment.variables = {
     "__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
+    "__GLX_VENDOR_LIBRARY_NAME" = "mesa";
   };
 
   hardware.nvidia = {
@@ -129,7 +130,7 @@
       };
       offload = {
         enable = true;
-        enableOffloadCmd = true;
+        enableOffloadCmd = config.hardware.nvidia.prime.offload.enable;
       };
       amdgpuBusId = "PCI:100:0:0"; # result of converting 64:0:0 to decimal
       nvidiaBusId = "PCI:1:0:0";
