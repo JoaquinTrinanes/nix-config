@@ -1,1 +1,1 @@
-{ impurePath = ./impurePath.nix; }
+{ impurePath = ./impure-path.nix; }

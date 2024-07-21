@@ -34,7 +34,10 @@
   impurePath = lib.mkDefault {
     enable = true;
     flakePath = "${config.home.homeDirectory}/Documents/nix-config";
-    repoUrl = "https://github.com/JoaquinTrinanes/nix-config.git";
+    remote = {
+      name = "origin";
+      url = "git@github.com:JoaquinTrinanes/nix-config.git";
+    };
   };
 
   programs.jujutsu = {
@@ -192,7 +195,6 @@
   # Disable gnome-keyring ssh-agent
   xdg.configFile."autostart/gnome-keyring-ssh.desktop" = {
     enable = config.services.gpg-agent.enableSshSupport;
-    # TODO: move to module
     text = ''
       [Desktop Entry]
       Name=Disable Gnome SSH Key Agent
