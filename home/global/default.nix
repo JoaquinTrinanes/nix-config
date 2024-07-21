@@ -1,15 +1,14 @@
 {
   lib,
-  user,
   pkgs,
+  config,
   ...
 }:
 {
   imports = [ ../lib ];
   home = {
-    username = lib.mkDefault user.name;
     homeDirectory = lib.mkDefault (
-      if pkgs.stdenv.isLinux then "/home/${user.name}" else "/Users/${user.name}"
+      if pkgs.stdenv.isLinux then "/home/${config.home.username}" else "/Users/${config.home.username}"
     );
   };
 

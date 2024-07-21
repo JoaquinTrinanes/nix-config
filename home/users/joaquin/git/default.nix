@@ -1,4 +1,4 @@
-{ user, lib, ... }:
+{ config, ... }:
 {
   imports = [
     ./aliases.nix
@@ -7,8 +7,8 @@
   ];
   programs.git = {
     enable = true;
-    userName = user.fullName;
-    userEmail = lib.mkIf (user.email != null) user.email;
+    userName = config.accounts.email.accounts.primary.realName;
+    userEmail = config.accounts.email.accounts.primary.address;
     extraConfig = {
       core = {
         filemode = false;
@@ -49,7 +49,7 @@
       {
         condition = "gitdir:~/Documents/veganhacktivists/";
         contents = {
-          user.email = "joaquin@veganhacktivists.org";
+          user.email = config.accounts.email.accounts.vh.address;
         };
       }
     ];

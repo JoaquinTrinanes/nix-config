@@ -20,6 +20,17 @@
     inputs.nix-colors.homeManagerModules.default
   ];
 
+  accounts.email.accounts = {
+    primary = {
+      primary = true;
+      address = "hi@joaquint.io";
+      realName = "Joaquín Triñanes";
+    };
+    vh = {
+      address = "joaquin@veganhacktivists.org";
+    };
+  };
+
   impurePath = lib.mkDefault {
     enable = true;
     flakePath = "${config.home.homeDirectory}/Documents/nix-config";
