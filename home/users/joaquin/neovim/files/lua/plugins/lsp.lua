@@ -132,7 +132,7 @@ local M = {
     ---@module "conform"
     ---@type conform.setupOpts
     opts = {
-      format = {
+      default_format_opts = {
         -- lsp_fallback = "always",
         lsp_fallback = true,
       },
