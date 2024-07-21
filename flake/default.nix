@@ -2,6 +2,8 @@ let
   flakeModules = import ../modules/flake;
 in
 {
+  _class = "flake";
+
   imports = builtins.attrValues flakeModules ++ [
     ./home-configurations.nix
     ./misc.nix
