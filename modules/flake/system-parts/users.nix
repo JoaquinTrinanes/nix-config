@@ -44,9 +44,9 @@ let
                     enable = (mkEnableOption "home manager nixos module on the `${name}` host") // {
                       default = config.enable;
                     };
-                    override = mkOption {
-                      type = types.functionTo types.deferredModule;
-                      default = _osConfig: { };
+                    modules = mkOption {
+                      type = types.listOf types.deferredModule;
+                      default = [ ];
                     };
                   };
                 }
@@ -86,7 +86,7 @@ let
               };
               hostConfigs = lib.mapAttrs' (
                 hostName:
-                { enable, override }:
+                { enable, modules }:
                 let
                   host = nixos.hosts.${hostName}.finalSystem;
                 in
@@ -94,7 +94,8 @@ let
                   lib.mkIf enable (
                     lib.recursiveUpdate baseConfig {
                       inherit (host) pkgs;
-                      modules = baseConfig.modules ++ [ (override host.config) ];
+                      modules = baseConfig.modules ++ modules;
+                      extraSpecialArgs.osConfig = host.config;
                     }
                   )
                 )

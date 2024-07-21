@@ -64,9 +64,7 @@ let
               imports = [ inputs.home-manager.nixosModules.home-manager ];
               home-manager = {
                 users."${user.name}" = {
-                  imports = user.home-manager.finalModules ++ [
-                    (user.home-manager.hosts.${name}.override config.finalSystem)
-                  ];
+                  imports = user.home-manager.finalModules ++ user.home-manager.hosts.${name}.modules;
                 };
                 useUserPackages = lib.mkDefault true;
                 useGlobalPkgs = lib.mkDefault true;
