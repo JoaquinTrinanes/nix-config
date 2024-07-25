@@ -25,7 +25,6 @@
     };
 
     common = {
-      stateVersion = lib.mkDefault "23.11";
       modules = [
         {
           _file = ./misc.nix;

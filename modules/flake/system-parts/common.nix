@@ -21,43 +21,14 @@ in
       description = "Special args passed to all hosts and home manager configurations";
       default = { };
     };
-    stateVersion = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = "Default state version";
-    };
   };
 
-  config =
-    let
-      stateVersion = lib.mkIf (cfg.stateVersion != null) (lib.mkDefault cfg.stateVersion);
-    in
-    {
-      system-parts.home-manager = {
-        standaloneModules = cfg.exclusiveModules;
-        modules = lib.mkMerge [
-          cfg.modules
-          [
-            {
-              _file = ./common.nix;
-              home = {
-                inherit stateVersion;
-              };
-            }
-          ]
-        ];
-      };
-
-      system-parts.nixos.modules =
-        cfg.modules
-        ++ cfg.exclusiveModules
-        ++ [
-          {
-            _file = ./common.nix;
-            system = {
-              inherit stateVersion;
-            };
-          }
-        ];
+  config = {
+    system-parts.home-manager = {
+      inherit (cfg) modules;
+      standaloneModules = cfg.exclusiveModules;
     };
+
+    system-parts.nixos.modules = cfg.modules ++ cfg.exclusiveModules;
+  };
 }

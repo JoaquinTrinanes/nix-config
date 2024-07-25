@@ -62,4 +62,6 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" ];
   };
+
+  system.stateVersion = "24.11";
 }

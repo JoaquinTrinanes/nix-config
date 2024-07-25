@@ -263,4 +263,6 @@
   #   connect_at_app_startup = null;
   #   tray_pinned_servers = ["ES" "US"];
   # };
+
+  home.stateVersion = "24.11";
 }
