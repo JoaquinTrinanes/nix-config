@@ -10,6 +10,7 @@ in
     ./nixos-configurations.nix
     ./substituters.nix
     ./templates
+    ./lib
   ];
 
   flake.flakeModules = flakeModules;

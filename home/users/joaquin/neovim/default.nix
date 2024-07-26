@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (myLib) mkImpureLink;
+  inherit (myLib.impurePath) mkImpureLink;
 in
 {
   programs.neovim = {

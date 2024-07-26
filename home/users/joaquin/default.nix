@@ -39,6 +39,9 @@
       url = "git@github.com:JoaquinTrinanes/nix-config.git";
     };
   };
+  lib.my = {
+    inherit (config.lib) impurePath;
+  };
 
   programs.jujutsu = {
     enable = true;

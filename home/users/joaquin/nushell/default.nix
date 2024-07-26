@@ -48,7 +48,7 @@ let
         config.home.file."${envFile}".source
       ];
     };
-  scriptsDir = myLib.mkImpureLink ./files/scripts;
+  scriptsDir = myLib.impurePath.mkImpureLink ./files/scripts;
 in
 {
   imports = [ ./theme.nix ];
