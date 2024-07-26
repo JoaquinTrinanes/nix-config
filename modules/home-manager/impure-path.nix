@@ -46,6 +46,7 @@ in
         if [ ! -e ${cfg.flakePath} ]; then
           run cp $VERBOSE_ARG -r ${self} ${cfg.flakePath}
           ${lib.optionalString cfg.remote.enable ''
+            run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} init
             run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} remote add ${cfg.remote.name} ${cfg.remote.url}
           ''}
         fi
