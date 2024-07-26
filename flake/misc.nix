@@ -21,7 +21,10 @@
         allowUnfree = lib.mkDefault true;
         allowAliases = lib.mkDefault false;
       };
-      overlays = [ inputs.lix-module.overlays.default ];
+      overlays = [
+        inputs.lix-module.overlays.default
+        # (_final: prev: inputs.self.packages.${prev.stdenv.hostPlatform.system})
+      ];
     };
 
     common = {
