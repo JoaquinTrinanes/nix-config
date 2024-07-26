@@ -1,12 +1,12 @@
-{
-  inputs,
-  lib,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 let
   cfg = config.system-parts.nixos;
-  inherit (config.system-parts) users common;
+  inherit (config.system-parts)
+    users
+    home-manager
+    common
+    nixpkgs
+    ;
   configs = builtins.mapAttrs (_: host: host.finalSystem) cfg.hosts;
   inherit (lib) types mkOption mkIf;
   hostType = types.submodule (
@@ -19,7 +19,7 @@ let
         };
         nixpkgs = mkOption {
           type = types.unspecified;
-          default = inputs.nixpkgs;
+          default = nixpkgs.input;
           description = "Instance of nixpkgs";
         };
         modules = mkOption {
@@ -61,7 +61,7 @@ let
             _username: user:
             (mkIf (user.home-manager.hosts.${name}.enable or false) {
               _file = ./nixos.nix;
-              imports = [ inputs.home-manager.nixosModules.home-manager ];
+              imports = [ home-manager.input.nixosModules.home-manager ];
               home-manager = {
                 users."${user.name}" = {
                   imports = user.home-manager.finalModules ++ user.home-manager.hosts.${name}.modules;

@@ -1,9 +1,4 @@
-{
-  lib,
-  inputs,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 let
   inherit (lib) mkEnableOption mkOption types;
   cfg = config.system-parts.nixpkgs;
@@ -12,9 +7,7 @@ in
   options.system-parts.nixpkgs = {
     enable = mkEnableOption "nixpkgs management";
     input = mkOption {
-      default = inputs.nixpkgs or null;
-      defaultText = lib.literalExpression "inputs.nixpkgs or null";
-      type = types.nullOr (types.addCheck (types.attrsOf types.unspecified) (types.isType "flake"));
+      type = types.addCheck (types.attrsOf types.unspecified) (types.isType "flake");
     };
     overlays = mkOption {
       type = types.listOf types.unspecified;

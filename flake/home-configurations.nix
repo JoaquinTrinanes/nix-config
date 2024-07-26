@@ -1,4 +1,9 @@
-{ self, lib, ... }:
+{
+  self,
+  lib,
+  inputs,
+  ...
+}:
 {
 
   config.system-parts = {
@@ -18,6 +23,7 @@
       };
     };
     home-manager = {
+      input = inputs.home-manager;
       perUser = user: { home.username = lib.mkDefault user.name; };
       modules = [ ../home/global ] ++ builtins.attrValues self.homeManagerModules;
       standaloneModules = [ ../home/global/standalone.nix ];

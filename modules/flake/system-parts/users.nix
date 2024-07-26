@@ -1,9 +1,4 @@
-{
-  lib,
-  config,
-  inputs,
-  ...
-}:
+{ lib, config, ... }:
 let
   inherit (lib) types mkOption mkEnableOption;
   cfg = config.system-parts.users;
@@ -135,6 +130,9 @@ in
         { lib, ... }:
         {
           options = {
+            input = mkOption {
+              type = types.addCheck (types.attrsOf types.unspecified) (types.isType "flake");
+            };
             perUser = mkOption {
               type = types.nullOr (types.functionTo types.deferredModule);
               description = "Function that takes a user as an argument and returns a home manager module.";
@@ -164,7 +162,7 @@ in
 
   config = {
     flake.homeConfigurations = lib.mapAttrs (
-      _: inputs.home-manager.lib.homeManagerConfiguration
+      _: home-manager.input.lib.homeManagerConfiguration
     ) home-manager.finalConfigurations;
   };
 }
