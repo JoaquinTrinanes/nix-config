@@ -3,7 +3,6 @@
   pkgs,
   lib,
   inputs,
-  myLib,
   ...
 }:
 {
@@ -51,15 +50,7 @@
         email = config.programs.git.userEmail;
       };
     };
-    package = myLib.mkWrapper {
-      basePackage = pkgs.jujutsu;
-      env."JJ_CONFIG" = {
-        value = config.xdg.configFile."jj/config.toml".source;
-        force = false;
-      };
-    };
   };
-  xdg.configFile."jj/config.toml".enable = false;
 
   programs.password-store.enable = true;
 
