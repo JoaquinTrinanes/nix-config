@@ -1,13 +1,13 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  withSystem,
+  ...
+}:
 let
   inherit (lib) types mkOption mkEnableOption;
   cfg = config.system-parts.users;
-  inherit (config.system-parts)
-    common
-    home-manager
-    nixos
-    nixpkgs
-    ;
+  inherit (config.system-parts) common home-manager nixos;
   specialArgsOption = mkOption {
     type = types.attrsOf types.unspecified;
     default = { };
@@ -75,10 +75,15 @@ let
                   ];
                   modules = config.finalModules;
                 };
-              standaloneConfig = lib.recursiveUpdate baseConfig {
-                modules = baseConfig.modules ++ home-manager.standaloneModules;
-                pkgs = nixpkgs.input.legacyPackages."x86_64-linux";
-              };
+              standaloneConfig = lib.recursiveUpdate baseConfig (
+                withSystem "x86_64-linux" (
+                  { pkgs, lib, ... }:
+                  {
+                    modules = baseConfig.modules ++ home-manager.standaloneModules;
+                    inherit pkgs lib;
+                  }
+                )
+              );
               hostConfigs = lib.mapAttrs' (
                 hostName:
                 { enable, modules }:
@@ -87,11 +92,17 @@ let
                 in
                 lib.nameValuePair "${user.name}@${hostName}" (
                   lib.mkIf enable (
-                    lib.recursiveUpdate baseConfig {
-                      inherit (host) pkgs;
-                      modules = baseConfig.modules ++ modules;
-                      extraSpecialArgs.osConfig = host.config;
-                    }
+                    lib.recursiveUpdate baseConfig (
+                      withSystem host.pkgs.stdenv.hostPlatform.system (
+                        { lib, ... }:
+                        {
+                          inherit (host) pkgs;
+                          modules = baseConfig.modules ++ modules;
+                          extraSpecialArgs.osConfig = host.config;
+                          inherit lib;
+                        }
+                      )
+                    )
                   )
                 )
               ) user.home-manager.hosts;

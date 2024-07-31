@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  withSystem,
+  ...
+}:
 let
   cfg = config.system-parts.nixos;
   inherit (config.system-parts)
@@ -75,11 +80,14 @@ let
           ) users)
         ];
 
-        finalSystem = config.nixpkgs.lib.nixosSystem (
-          lib.recursiveUpdate {
-            modules = config.finalModules;
-            inherit (common) specialArgs;
-          } config.extraArgs
+        finalSystem = withSystem config.system (
+          { lib, ... }:
+          lib.nixosSystem (
+            lib.recursiveUpdate {
+              modules = config.finalModules;
+              inherit (common) specialArgs;
+            } config.extraArgs
+          )
         );
       };
     }

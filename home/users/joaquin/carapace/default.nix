@@ -1,9 +1,4 @@
-{
-  pkgs,
-  lib,
-  myLib,
-  ...
-}:
+{ pkgs, lib, ... }:
 let
   yaml = pkgs.formats.yaml { };
 in
@@ -15,7 +10,7 @@ in
     ykman = "fish";
     ssh = "fish";
   };
-  programs.carapace.package = myLib.mkWrapper {
+  programs.carapace.package = lib.my.mkWrapper {
     basePackage = pkgs.carapace;
     pathAdd = [ pkgs.fish ];
     env = lib.mapAttrs (_: value: { value = toString value; }) {

@@ -2,11 +2,11 @@
   lib,
   pkgs,
   inputs,
-  myLib,
+  config,
   ...
 }:
 let
-  inherit (myLib.impurePath) mkImpureLink;
+  inherit (config.lib.impurePath) mkImpureLink;
 in
 {
   programs.neovim = {

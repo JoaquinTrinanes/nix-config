@@ -3,7 +3,6 @@
   pkgs,
   lib,
   inputs,
-  myLib,
   self,
   ...
 }:
@@ -37,7 +36,7 @@ let
           cp plugin.msgpackz $out
         '';
     in
-    myLib.mkWrapper {
+    lib.my.mkWrapper {
       basePackage = nushell;
       flags = [
         "--plugin-config"
@@ -48,7 +47,7 @@ let
         config.home.file."${envFile}".source
       ];
     };
-  scriptsDir = myLib.impurePath.mkImpureLink ./files/scripts;
+  scriptsDir = config.lib.impurePath.mkImpureLink ./files/scripts;
 in
 {
   imports = [ ./theme.nix ];

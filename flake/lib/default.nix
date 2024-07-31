@@ -49,22 +49,16 @@ let
     };
 in
 {
-  system-parts.common.modules = [
-    (
-      {
-        lib,
-        pkgs,
-        config,
-        ...
-      }:
-      let
-        myLib = mkLib { inherit pkgs lib; };
-      in
-      {
-        _file = ./default.nix;
-        lib.my = myLib;
-        _module.args.myLib = config.lib.my;
-      }
-    )
-  ];
+  perSystem =
+    { pkgs, lib, ... }:
+    {
+      _module.args.lib = lib.extend (
+        final: _prev: {
+          my = mkLib {
+            inherit pkgs;
+            lib = final;
+          };
+        }
+      );
+    };
 }

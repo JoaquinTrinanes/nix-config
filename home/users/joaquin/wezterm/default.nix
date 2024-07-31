@@ -1,4 +1,4 @@
-{ config, myLib, ... }:
+{ config, ... }:
 {
   programs.wezterm = {
     enable = true;
@@ -59,5 +59,5 @@
       };
     };
   };
-  xdg.configFile."wezterm/wezterm.lua".source = myLib.impurePath.mkImpureLink ./files/wezterm.lua;
+  xdg.configFile."wezterm/wezterm.lua".source = config.lib.impurePath.mkImpureLink ./files/wezterm.lua;
 }
