@@ -42,7 +42,7 @@
       };
       exclusiveModules = [
         (
-          { pkgs, ... }:
+          { pkgs, config, ... }:
           {
             _file = ./misc.nix;
             nix = {
@@ -69,7 +69,7 @@
                 # remove global registry
                 flake-registry = lib.mkDefault "";
 
-                repl-overlays = [
+                repl-overlays = lib.mkIf (lib.getName config.nix.package == "lix") [
                   (pkgs.writeText "pkgs.nix"
                     # nix
                     ''
