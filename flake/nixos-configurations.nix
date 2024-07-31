@@ -1,4 +1,4 @@
-{ self, ... }:
+{ inputs, ... }:
 {
   system-parts.nixos = {
     hosts = {
@@ -12,6 +12,6 @@
       };
     };
 
-    modules = builtins.attrValues self.nixosModules ++ [ ../hosts/common/global.nix ];
+    modules = builtins.attrValues inputs.self.nixosModules ++ [ ../hosts/common/global.nix ];
   };
 }

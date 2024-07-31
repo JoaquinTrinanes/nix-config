@@ -1,7 +1,7 @@
 {
   lib,
-  self,
   pkgs,
+  inputs,
   ...
 }:
 let
@@ -11,7 +11,7 @@ in
   imports = [
     {
       dconf.settings =
-        self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers.passthru.Rancho.dconfSettings;
+        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers.passthru.Rancho.dconfSettings;
     }
   ];
 

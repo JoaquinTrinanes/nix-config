@@ -1,5 +1,4 @@
 {
-  self,
   inputs,
   config,
   lib,
@@ -39,7 +38,7 @@
         }
       ];
       specialArgs = {
-        inherit self inputs;
+        inherit inputs;
       };
       exclusiveModules = [
         (

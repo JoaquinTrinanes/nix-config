@@ -1,11 +1,11 @@
-{ pkgs, self, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [ ./wayland.nix ];
 
   services.xserver = {
     desktopManager.gnome.enable = true;
     desktopManager.gnome.sessionPath = [
-      self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers
+      inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers
     ];
   };
   programs.dconf.enable = true;
