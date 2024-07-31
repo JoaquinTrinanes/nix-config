@@ -32,6 +32,7 @@
 
   impurePath = lib.mkDefault {
     enable = true;
+    inherit (inputs) self;
     flakePath = "${config.home.homeDirectory}/Documents/nix-config";
     remote = {
       name = "origin";

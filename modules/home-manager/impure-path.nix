@@ -1,9 +1,4 @@
-{
-  lib,
-  config,
-  self,
-  ...
-}:
+{ lib, config, ... }:
 let
   inherit (lib) types;
   cfg = config.impurePath;
@@ -11,7 +6,7 @@ let
     p:
     let
       path = toString p;
-      strStoreDir = toString self;
+      strStoreDir = toString cfg.self;
       relativePath = lib.removePrefix "${strStoreDir}/" path;
     in
     if config.impurePath.enable then
@@ -33,6 +28,8 @@ in
     enable = lib.mkEnableOption "impure flake path";
 
     flakePath = lib.mkOption { type = types.str; };
+
+    self = lib.mkOption { type = types.path; };
 
     remote = lib.mkOption {
       default = null;
@@ -59,14 +56,14 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
-      xdg.configFile."home-manager/flake.nix".source = mkImpureLink "${self}/flake.nix";
+      xdg.configFile."home-manager/flake.nix".source = mkImpureLink "${cfg.self}/flake.nix";
       home.activation = lib.mkIf cfg.enable {
         copyConfig =
           lib.hm.dag.entryAfter [ "writeBoundary" ]
             # bash
             ''
               if [ ! -e ${cfg.flakePath} ]; then
-                run cp $VERBOSE_ARG -r ${self} ${cfg.flakePath}
+                run cp $VERBOSE_ARG -r ${cfg.self} ${cfg.flakePath}
                 ${lib.optionalString cfg.remote.enable ''
                   run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} init
                   run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} remote add ${cfg.remote.name} ${cfg.remote.url}
