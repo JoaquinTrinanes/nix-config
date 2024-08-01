@@ -60,6 +60,8 @@
                   "nix-command"
                   "flakes"
                   "auto-allocate-uids"
+                  "ca-derivations"
+                  "no-url-literals"
                 ];
                 keep-outputs = lib.mkDefault true;
                 auto-allocate-uids = lib.mkDefault true;
