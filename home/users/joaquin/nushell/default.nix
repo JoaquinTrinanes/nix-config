@@ -68,7 +68,7 @@ in
       fish = lib.getExe pkgs.fish;
     };
     environmentVariables = {
-      "NU_LIB_DIRS" = toString scriptsDir;
+      "NU_LIB_DIRS" = lib.escapeShellArg (lib.concatStringsSep ":" [ scriptsDir ]);
     };
     envFile.source = ./files/env.nu;
     extraConfig =
