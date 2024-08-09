@@ -52,7 +52,7 @@ in
   imports = [ ./theme.nix ];
   programs.carapace.enableNushellIntegration = false;
 
-  # config file are added to the wrapper
+  # config files are added to the wrapper
   home.file."${configFile}".enable = false;
   home.file."${envFile}".enable = false;
   home.file."${pluginFile}".enable = false;
@@ -62,11 +62,15 @@ in
     package = nushellWrapped;
     inherit (config.home) shellAliases;
 
-    # TODO: this causes IFD because the nushell module reads the source
-    configFile.source = pkgs.substituteAll {
-      src = ./files/config.nu;
-      fish = lib.getExe pkgs.fish;
-    };
+    # Source the file instead of setting the source to avoid HM causing IFD
+    configFile.text = ''
+      source ${
+        pkgs.substituteAll {
+          src = ./files/config.nu;
+          fish = lib.getExe pkgs.fish;
+        }
+      }
+    '';
     environmentVariables = {
       "NU_LIB_DIRS" = lib.escapeShellArg (lib.concatStringsSep ":" [ scriptsDir ]);
     };
