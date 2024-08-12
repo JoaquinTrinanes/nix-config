@@ -579,8 +579,7 @@
         "nix-colors": "nix-colors",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
-        "nushell-nightly": "nushell-nightly",
-        "wrapper-manager": "wrapper-manager"
+        "nushell-nightly": "nushell-nightly"
       }
     },
     "rust-overlay": {
@@ -616,26 +615,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "wrapper-manager": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1720446604,
-        "narHash": "sha256-RZ+Q04NnblBGq5nQAXiKcn69Gh87RqUjpl7mAk6BzSQ=",
-        "owner": "viperML",
-        "repo": "wrapper-manager",
-        "rev": "e1584a27f947c5a5d208c06ffcce09f13a3bd9a9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "viperML",
-        "repo": "wrapper-manager",
         "type": "github"
       }
     }

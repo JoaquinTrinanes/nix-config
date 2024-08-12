@@ -22,9 +22,6 @@ rec {
     nushell-nightly.url = "github:JoaquinTrinanes/nushell-nightly-flake";
     nushell-nightly.inputs.nixpkgs.follows = "nixpkgs";
 
-    wrapper-manager.url = "github:viperML/wrapper-manager";
-    wrapper-manager.inputs.nixpkgs.follows = "nixpkgs";
-
     autofirma-nix.url = "github:nilp0inter/autofirma-nix";
     autofirma-nix.inputs.nixpkgs.follows = "nixpkgs";
 
