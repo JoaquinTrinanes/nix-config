@@ -23,7 +23,7 @@
   services.tailscale.extraUpFlags = [ "--advertise-tags=tag:desktop" ];
 
   boot.tmp.cleanOnBoot = true;
-  boot.tmp.useTmpfs = true;
+  boot.tmp.useTmpfs = false;
 
   nix.settings.trusted-users = [ "@wheel" ];
 
