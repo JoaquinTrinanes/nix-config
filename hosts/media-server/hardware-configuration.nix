@@ -15,8 +15,12 @@
     # inputs.hardware.nixosModules.common-gpu-nvidia-disable
     # inputs.hardware.nixosModules.common-gpu-nvidia
     inputs.hardware.nixosModules.msi-gl62
-    ../common/hardware-acceleration/intel.nix
   ];
+
+  profiles.hardware-acceleration = {
+    enable = true;
+    cpuType = "intel";
+  };
 
   services.xserver.videoDrivers = [
     "modesetting"

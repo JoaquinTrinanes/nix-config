@@ -13,9 +13,13 @@
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
     inputs.hardware.nixosModules.common-pc-laptop
-    ../common/hardware-acceleration/amdgpu.nix
     ./disko.nix
   ];
+
+  profiles.hardware-acceleration = {
+    enable = true;
+    cpuType = "amd";
+  };
 
   boot.initrd.systemd.enable = true;
 
