@@ -6,18 +6,18 @@
 }:
 {
   imports = [
-    ../common/tailscale
     ../common/printing
     ./hardware-configuration.nix
   ];
 
   profiles = {
-    yubikey.enable = true;
-    nix-index.enable = true;
     desktop.enable = true;
     development.enable = true;
     gaming.enable = true;
     garbage-collect.enable = true;
+    nix-index.enable = true;
+    tailscale.enable = true;
+    yubikey.enable = true;
   };
 
   programs.firefox.package = pkgs.firefox-devedition;
