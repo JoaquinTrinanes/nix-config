@@ -7,12 +7,12 @@
 {
   imports = [
     ../common/tailscale
-    ../common/yubikey
     ../common/printing
     ./hardware-configuration.nix
   ];
 
   profiles = {
+    yubikey.enable = true;
     nix-index.enable = true;
     desktop.enable = true;
     development.enable = true;
