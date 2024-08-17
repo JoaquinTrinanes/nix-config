@@ -19,11 +19,11 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ../common/samba
     ../common/home-assistant
   ];
 
   profiles = {
+    samba.enable = true;
     garbageCollect.enable = true;
     jellyfin = {
       enable = true;

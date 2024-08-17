@@ -14,6 +14,7 @@
     ./jellyfin
     ./nix-index
     ./printing
+    ./samba
     ./ssh
     ./tailscale
     ./yubikey
