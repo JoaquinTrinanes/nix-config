@@ -10,5 +10,6 @@
     ./gaming
     ./nix-index
     ./garbage-collect
+    ./yubikey
   ];
 }
