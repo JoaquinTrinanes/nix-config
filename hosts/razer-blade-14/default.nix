@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ../common/printing
     ./hardware-configuration.nix
   ];
 
@@ -16,6 +15,7 @@
     gaming.enable = true;
     garbage-collect.enable = true;
     nix-index.enable = true;
+    printing.enable = true;
     tailscale.enable = true;
     yubikey.enable = true;
   };
