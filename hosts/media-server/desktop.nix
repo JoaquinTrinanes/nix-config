@@ -9,8 +9,9 @@ in
   imports = [
     ../razer-blade-14
     ./hardware-configuration.nix
-    ../common/ssh/server.nix
   ];
+
+  profiles.sshServer.enable = true;
   networking.firewall.allowPing = true;
 
   # nix.gc.options = "-d";

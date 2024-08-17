@@ -13,7 +13,7 @@
     desktop.enable = true;
     development.enable = true;
     gaming.enable = true;
-    garbage-collect.enable = true;
+    garbageCollect.enable = true;
     nix-index.enable = true;
     printing.enable = true;
     tailscale.enable = true;

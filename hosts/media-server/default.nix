@@ -19,14 +19,15 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ../common/ssh/server.nix
     ../common/jellyfin
     ../common/samba
     ../common/home-assistant
   ];
 
   profiles = {
-    garbage-collect.enable = true;
+    garbageCollect.enable = true;
+    tailscale.enable = true;
+    sshServer.enable = true;
     tailscale.enable = true;
   };
 
