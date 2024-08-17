@@ -4,12 +4,13 @@
     ./audio
     ./autofirma
     ./desktop
-    ./fonts
-    ./firefox
     ./development
+    ./firefox
+    ./fonts
     ./gaming
-    ./nix-index
     ./garbage-collect
+    ./nix-index
+    ./tailscale
     ./yubikey
   ];
 }

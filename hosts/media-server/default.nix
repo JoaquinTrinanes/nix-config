@@ -22,12 +22,12 @@ in
     ../common/ssh/server.nix
     ../common/jellyfin
     ../common/samba
-    ../common/tailscale
     ../common/home-assistant
   ];
 
   profiles = {
     garbage-collect.enable = true;
+    tailscale.enable = true;
   };
 
   services.logind.lidSwitch = "ignore";
