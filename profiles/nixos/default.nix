@@ -1,4 +1,7 @@
 {
   _class = "nixos";
-  imports = [ ./audio.nix ];
+  imports = [
+    ./audio
+    ./autofirma
+  ];
 }

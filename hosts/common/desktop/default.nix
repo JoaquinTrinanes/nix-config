@@ -4,10 +4,10 @@
     ./gnome.nix
     ../fonts
     ../firefox
-    ../autofirma
   ];
 
   profiles.audio.enable = true;
+  profiles.autofirma.enable = true;
 
   time.timeZone = lib.mkDefault "Europe/Madrid";
 
