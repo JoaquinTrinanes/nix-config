@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ../common/development
     ../common/gaming
     ../common/nix-index
     ../common/garbage-collect
@@ -15,6 +14,9 @@
     ../common/printing
     ./hardware-configuration.nix
   ];
+
+  profiles.desktop.enable = true;
+  profiles.development.enable = true;
 
   programs.firefox.package = pkgs.firefox-devedition;
 

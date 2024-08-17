@@ -6,5 +6,6 @@
     ./desktop
     ./fonts
     ./firefox
+    ./development
   ];
 }
