@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ../common/nix-index
     ../common/garbage-collect
     ../common/tailscale
     ../common/yubikey
@@ -14,6 +13,7 @@
     ./hardware-configuration.nix
   ];
 
+  profiles.nix-index.enable = true;
   profiles.desktop.enable = true;
   profiles.development.enable = true;
   profiles.gaming.enable = true;
