@@ -6,17 +6,19 @@
 }:
 {
   imports = [
-    ../common/garbage-collect
     ../common/tailscale
     ../common/yubikey
     ../common/printing
     ./hardware-configuration.nix
   ];
 
-  profiles.nix-index.enable = true;
-  profiles.desktop.enable = true;
-  profiles.development.enable = true;
-  profiles.gaming.enable = true;
+  profiles = {
+    nix-index.enable = true;
+    desktop.enable = true;
+    development.enable = true;
+    gaming.enable = true;
+    garbage-collect.enable = true;
+  };
 
   programs.firefox.package = pkgs.firefox-devedition;
 

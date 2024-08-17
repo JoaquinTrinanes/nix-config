@@ -24,8 +24,11 @@ in
     ../common/samba
     ../common/tailscale
     ../common/home-assistant
-    ../common/garbage-collect
   ];
+
+  profiles = {
+    garbage-collect.enable = true;
+  };
 
   services.logind.lidSwitch = "ignore";
 

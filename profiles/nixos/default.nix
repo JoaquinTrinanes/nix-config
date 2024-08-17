@@ -9,5 +9,6 @@
     ./development
     ./gaming
     ./nix-index
+    ./garbage-collect
   ];
 }
