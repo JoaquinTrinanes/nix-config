@@ -1,10 +1,10 @@
 { lib, config, ... }:
 let
-  cfg = config.profiles.garbage-collect;
+  cfg = config.profiles.garbageCollect;
 in
 {
-  options.profiles.garbage-collect = {
-    enable = lib.mkEnableOption "garbage-collect profile";
+  options.profiles.garbageCollect = {
+    enable = lib.mkEnableOption "garbage collect profile";
   };
 
   config = lib.mkIf cfg.enable {

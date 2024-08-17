@@ -12,6 +12,7 @@
     ./hardware-acceleration
     ./nix-index
     ./printing
+    ./ssh
     ./tailscale
     ./yubikey
   ];
