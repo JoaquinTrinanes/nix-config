@@ -3,5 +3,7 @@
   imports = [
     ./audio
     ./autofirma
+    ./desktop
+    ./fonts
   ];
 }

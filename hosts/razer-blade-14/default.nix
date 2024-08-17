@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ../common/desktop
     ../common/development
     ../common/gaming
     ../common/nix-index
