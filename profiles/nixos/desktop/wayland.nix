@@ -11,7 +11,8 @@ in
 {
   options.profiles.desktop.wayland = {
     enable = lib.mkEnableOption "wayland desktop profile" // {
-      default = true;
+      default = desktopCfg.enable;
+      defaultText = lib.literalExpression "config.profiles.desktop.enable";
     };
   };
 
