@@ -1,5 +1,6 @@
 {
   _class = "nixos";
+
   imports = [
     ./audio
     ./autofirma
@@ -10,6 +11,7 @@
     ./gaming
     ./garbage-collect
     ./hardware-acceleration
+    ./jellyfin
     ./nix-index
     ./printing
     ./ssh

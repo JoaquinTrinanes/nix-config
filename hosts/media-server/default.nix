@@ -19,14 +19,16 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ../common/jellyfin
     ../common/samba
     ../common/home-assistant
   ];
 
   profiles = {
     garbageCollect.enable = true;
-    tailscale.enable = true;
+    jellyfin = {
+      enable = true;
+      libraryDirs = [ "/mnt/media/Public/jellyfin" ];
+    };
     sshServer.enable = true;
     tailscale.enable = true;
   };
