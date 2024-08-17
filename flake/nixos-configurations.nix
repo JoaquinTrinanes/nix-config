@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
   system-parts.nixos = {
     hosts = {
@@ -12,6 +12,12 @@
       };
     };
 
-    modules = builtins.attrValues inputs.self.nixosModules ++ [ ../hosts/common/global.nix ];
+    modules = lib.mkMerge [
+      (builtins.attrValues inputs.self.nixosModules)
+      [
+        ../hosts/common/global.nix
+        ../profiles/nixos
+      ]
+    ];
   };
 }

@@ -2,11 +2,12 @@
 {
   imports = [
     ./gnome.nix
-    ../audio
     ../fonts
     ../firefox
     ../autofirma
   ];
+
+  profiles.audio.enable = true;
 
   time.timeZone = lib.mkDefault "Europe/Madrid";
 
