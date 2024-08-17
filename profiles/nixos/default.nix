@@ -7,5 +7,6 @@
     ./fonts
     ./firefox
     ./development
+    ./gaming
   ];
 }
