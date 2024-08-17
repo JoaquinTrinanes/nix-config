@@ -5,5 +5,6 @@
     ./autofirma
     ./desktop
     ./fonts
+    ./firefox
   ];
 }

@@ -11,8 +11,6 @@ in
   imports = [
     ./gnome.nix
     ./wayland.nix
-    # TODO: remove
-    ../../../hosts/common/firefox
   ];
 
   options.profiles.desktop = {
@@ -20,8 +18,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # TODO
-    # profiles.firefox.enable = true;
+    profiles.firefox.enable = lib.mkDefault true;
     profiles.desktop.gnome.enable = lib.mkDefault true;
     profiles.fonts.enable = lib.mkDefault true;
     profiles.audio.enable = lib.mkDefault true;
