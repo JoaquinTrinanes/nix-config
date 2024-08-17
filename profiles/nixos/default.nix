@@ -8,5 +8,6 @@
     ./firefox
     ./development
     ./gaming
+    ./nix-index
   ];
 }
