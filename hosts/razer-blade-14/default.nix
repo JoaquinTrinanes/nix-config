@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ../common/gaming
     ../common/nix-index
     ../common/garbage-collect
     ../common/tailscale
@@ -17,6 +16,7 @@
 
   profiles.desktop.enable = true;
   profiles.development.enable = true;
+  profiles.gaming.enable = true;
 
   programs.firefox.package = pkgs.firefox-devedition;
 
