@@ -9,7 +9,9 @@
     ./fonts
     ./gaming
     ./garbage-collect
+    ./hardware-acceleration
     ./nix-index
+    ./printing
     ./tailscale
     ./yubikey
   ];
