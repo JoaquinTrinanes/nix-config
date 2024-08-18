@@ -19,6 +19,7 @@ let
     default = { };
   };
   mkHomeManagerUserConfigType =
+    # TODO: remove extra home-manager nesting level, move one level out into parts.users.<user>.modules...
     user:
     types.submodule (
       { config, ... }:
@@ -186,6 +187,36 @@ in
   };
 
   config = {
+    parts.nixos.hosts = lib.mkMerge (
+      lib.mapAttrsToList (
+        userName: userCfg:
+        let
+          hostConfig = userCfg.home-manager.hosts;
+        in
+        lib.mkMerge (
+          lib.mapAttrsToList (
+            hostName:
+            { modules, enable }:
+            lib.mkIf enable {
+              ${hostName}.modules = [
+                {
+                  _file = ./users.nix;
+                  imports = [ home-manager.input.nixosModules.home-manager ];
+                  home-manager = {
+                    users."${userName}" = {
+                      imports = userCfg.home-manager.finalModules ++ modules;
+                    };
+                    useUserPackages = lib.mkDefault true;
+                    useGlobalPkgs = lib.mkDefault true;
+                    extraSpecialArgs = lib.recursiveUpdate common.specialArgs userCfg.home-manager.specialArgs;
+                  };
+                }
+              ];
+            }
+          ) hostConfig
+        )
+      ) cfg
+    );
     flake.homeConfigurations = lib.mapAttrs (
       _: home-manager.input.lib.homeManagerConfiguration
     ) home-manager.finalConfigurations;
