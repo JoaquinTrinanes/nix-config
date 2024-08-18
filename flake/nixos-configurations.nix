@@ -1,6 +1,6 @@
 { inputs, lib, ... }:
 {
-  system-parts.nixos = {
+  parts.nixos = {
     hosts = {
       "razer-blade-14" = {
         system = "x86_64-linux";

@@ -5,6 +5,7 @@ in
   _class = "flake";
 
   imports = builtins.attrValues flakeModules ++ [
+    ./parts
     ./home-configurations.nix
     ./misc.nix
     ./nixos-configurations.nix

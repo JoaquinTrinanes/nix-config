@@ -6,8 +6,8 @@
 }:
 let
   inherit (lib) types mkOption mkEnableOption;
-  cfg = config.system-parts.users;
-  inherit (config.system-parts)
+  cfg = config.parts.users;
+  inherit (config.parts)
     common
     home-manager
     nixos
@@ -137,7 +137,7 @@ let
   );
 in
 {
-  options.system-parts = {
+  options.parts = {
     users = mkOption {
       type = types.attrsOf userType;
       default = { };

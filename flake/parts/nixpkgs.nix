@@ -1,10 +1,10 @@
 { lib, config, ... }:
 let
   inherit (lib) mkEnableOption mkOption types;
-  cfg = config.system-parts.nixpkgs;
+  cfg = config.parts.nixpkgs;
 in
 {
-  options.system-parts.nixpkgs = {
+  options.parts.nixpkgs = {
     enable = mkEnableOption "nixpkgs management";
     input = mkOption {
       type = types.addCheck (types.attrsOf types.unspecified) (types.isType "flake");
@@ -31,7 +31,7 @@ in
           lib.mkDefault (import cfg.input (cfg.finalConfig // { inherit system; }))
         );
       };
-    system-parts = {
+    parts = {
       nixpkgs.finalConfig = {
         inherit (cfg) overlays config;
       };

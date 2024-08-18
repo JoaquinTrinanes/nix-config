@@ -13,7 +13,7 @@
       formatter = pkgs.nixfmt-rfc-style;
     };
 
-  system-parts = {
+  parts = {
     nixpkgs = {
       input = inputs.nixpkgs;
       enable = true;
@@ -32,8 +32,9 @@
         {
           _file = ./misc.nix;
           _module.args = {
-            inherit (config.system-parts) users;
-            hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.system-parts.nixos.hosts;
+            inherit (config.parts) users;
+            inherit inputs;
+            hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.parts.nixos.hosts;
           };
         }
       ];
