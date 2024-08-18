@@ -27,5 +27,5 @@ let
   };
 in
 {
-  system-parts.common.exclusiveModules = [ substituterSettingsModule ];
+  parts.common.exclusiveModules = [ substituterSettingsModule ];
 }

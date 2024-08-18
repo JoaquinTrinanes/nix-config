@@ -1,1 +1,1 @@
-{ system-parts = ./system-parts; }
+{ }

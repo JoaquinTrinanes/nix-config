@@ -5,8 +5,8 @@
   ...
 }:
 let
-  cfg = config.system-parts.nixos;
-  inherit (config.system-parts)
+  cfg = config.parts.nixos;
+  inherit (config.parts)
     users
     home-manager
     common
@@ -94,7 +94,7 @@ let
   );
 in
 {
-  options.system-parts.nixos = {
+  options.parts.nixos = {
     modules = mkOption {
       type = types.listOf types.deferredModule;
       default = [ ];

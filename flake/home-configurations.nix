@@ -1,7 +1,7 @@
 { lib, inputs, ... }:
 {
 
-  config.system-parts = {
+  config.parts = {
     users = {
       "joaquin" = {
         sshPublicKeys = [
@@ -25,7 +25,7 @@
     };
   };
 
-  options.system-parts =
+  options.parts =
     let
       inherit (lib) types mkOption;
     in

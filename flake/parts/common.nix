@@ -1,10 +1,10 @@
 { lib, config, ... }:
 let
   inherit (lib) mkOption types;
-  cfg = config.system-parts.common;
+  cfg = config.parts.common;
 in
 {
-  options.system-parts.common = {
+  options.parts.common = {
     modules = mkOption {
       type = types.listOf types.deferredModule;
       default = [ ];
@@ -24,11 +24,14 @@ in
   };
 
   config = {
-    system-parts.home-manager = {
+    parts.home-manager = {
       inherit (cfg) modules;
       standaloneModules = cfg.exclusiveModules;
     };
 
-    system-parts.nixos.modules = cfg.modules ++ cfg.exclusiveModules;
+    parts.nixos.modules = lib.mkMerge [
+      cfg.modules
+      cfg.exclusiveModules
+    ];
   };
 }
