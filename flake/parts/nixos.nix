@@ -6,14 +6,9 @@
 }:
 let
   cfg = config.parts.nixos;
-  inherit (config.parts)
-    users
-    home-manager
-    common
-    nixpkgs
-    ;
+  inherit (config.parts) common nixpkgs;
   configs = builtins.mapAttrs (_: host: host.finalSystem) cfg.hosts;
-  inherit (lib) types mkOption mkIf;
+  inherit (lib) types mkOption;
   hostType = types.submodule (
     { name, config, ... }:
     {
@@ -62,22 +57,6 @@ let
           ]
           config.modules
           [ (cfg.perHost config) ]
-          (lib.mapAttrsToList (
-            _username: user:
-            (mkIf (user.home-manager.hosts.${name}.enable or false) {
-              _file = ./nixos.nix;
-              imports = [ home-manager.input.nixosModules.home-manager ];
-              home-manager = {
-                users."${user.name}" = {
-                  imports = user.home-manager.finalModules ++ user.home-manager.hosts.${name}.modules;
-                };
-                useUserPackages = lib.mkDefault true;
-                useGlobalPkgs = lib.mkDefault true;
-                extraSpecialArgs = lib.recursiveUpdate common.specialArgs config.specialArgs;
-              };
-            })
-
-          ) users)
         ];
 
         finalSystem = withSystem config.system (

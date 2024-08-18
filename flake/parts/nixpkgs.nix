@@ -51,6 +51,7 @@ in
       nixos.perHost =
         { system, ... }:
         {
+          _file = ./nixpkgs.nix;
           nixpkgs.hostPlatform = lib.mkDefault system;
         };
     };

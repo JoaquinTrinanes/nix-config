@@ -10,6 +10,7 @@ in
       default = [ ];
       description = "Modules that are loaded in all hosts and home manager configurations";
     };
+
     exclusiveModules = mkOption {
       type = types.listOf types.deferredModule;
       default = [ ];
