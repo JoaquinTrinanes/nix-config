@@ -1,7 +1,6 @@
 { lib, inputs, ... }:
 {
-
-  config.parts = {
+  parts = {
     users = {
       "joaquin" = {
         sshPublicKeys = [
@@ -18,29 +17,9 @@
       };
     };
     home-manager = {
-      input = inputs.home-manager;
       perUser = user: { home.username = lib.mkDefault user.name; };
       modules = [ ../home/global ] ++ builtins.attrValues inputs.self.homeManagerModules;
       standaloneModules = [ ../home/global/standalone.nix ];
     };
   };
-
-  options.parts =
-    let
-      inherit (lib) types mkOption;
-    in
-    {
-      users = lib.mkOption {
-        type = types.attrsOf (
-          types.submodule {
-            options = {
-              sshPublicKeys = mkOption {
-                type = types.listOf types.str;
-                default = [ ];
-              };
-            };
-          }
-        );
-      };
-    };
 }
