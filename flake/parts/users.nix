@@ -2,6 +2,7 @@
   lib,
   config,
   withSystem,
+  inputs,
   ...
 }:
 let
@@ -128,6 +129,10 @@ let
           type = types.str;
           default = name;
         };
+        sshPublicKeys = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+        };
         home-manager = mkOption {
           type = mkHomeManagerUserConfigType config;
           default = { };
@@ -149,6 +154,9 @@ in
           options = {
             input = mkOption {
               type = types.addCheck (types.attrsOf types.unspecified) (types.isType "flake");
+              default = inputs.home-manager;
+              defaultText = lib.literalExpression "inputs.home-manager";
+
             };
             perUser = mkOption {
               type = types.nullOr (types.functionTo types.deferredModule);

@@ -15,7 +15,6 @@
 
   parts = {
     nixpkgs = {
-      input = inputs.nixpkgs;
       enable = true;
       config = {
         allowUnfree = lib.mkDefault true;
