@@ -74,7 +74,7 @@
       [ nr ] ++ builtins.attrValues { inherit (pkgs) enpass; };
   };
 
-  programs.home-manager.enable = true;
+  programs.home-manager.enable = lib.mkDefault (!config.submoduleSupport.enable);
 
   programs.bash.enable = true;
 
