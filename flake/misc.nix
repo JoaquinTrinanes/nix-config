@@ -75,6 +75,7 @@
                   # remove global registry
                   flake-registry = lib.mkDefault "";
 
+                  accept-flake-config = lib.mkIf isLix (lib.mkDefault false);
                   repl-overlays = lib.mkIf isLix [
                     (pkgs.writeText "pkgs.nix"
                       # nix

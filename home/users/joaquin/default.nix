@@ -157,7 +157,7 @@
       dcdn = "docker compose down";
       dcrm = "docker compose rm";
 
-      nx = "nixos-rebuild --use-remote-sudo";
+      nx = "nixos-rebuild --use-remote-sudo --accept-flake-config";
       nxs = "nx switch";
     }
     // lib.optionalAttrs (config.programs.home-manager.enable && !config.submoduleSupport.enable) {
