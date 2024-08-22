@@ -70,8 +70,18 @@
         nr = pkgs.writeShellScriptBin "nr" ''
           nix run nixpkgs#"$@"
         '';
+        ripgrep = lib.my.mkWrapper {
+          basePackage = pkgs.ripgrep;
+          env."RIPGREP_CONFIG_PATH" = {
+            value = pkgs.writeText "ripgreprc" (lib.concatLines config.programs.ripgrep.arguments);
+            force = false;
+          };
+        };
       in
-      [ nr ] ++ builtins.attrValues { inherit (pkgs) enpass; };
+      builtins.attrValues {
+        inherit nr ripgrep;
+        inherit (pkgs) enpass;
+      };
   };
 
   programs.home-manager.enable = lib.mkDefault (!config.submoduleSupport.enable);
