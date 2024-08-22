@@ -27,7 +27,7 @@ in
   options.impurePath = {
     enable = lib.mkEnableOption "impure flake path";
 
-    flakePath = lib.mkOption { type = types.str; };
+    flakePath = lib.mkOption { type = types.path; };
 
     self = lib.mkOption { type = types.path; };
 
