@@ -27,40 +27,37 @@ in
       programs.dconf.enable = true;
       services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
 
-      environment.gnome.excludePackages =
-        builtins.attrValues {
-          inherit (pkgs)
-            gnome-connections
-            gnome-tour
-            # baobab # disk usage analyzer
-            # cheese # photo booth
-            # eog # image viewer
-            # gedit # text editor
-            totem # video player
-            yelp # help viewer
-            # evince # document viewer
-            # file-roller # archive manager
-            geary # email client
-            # seahorse # password manager
-            # gnome-font-viewer
-            ;
-        }
-        ++ (with pkgs.gnome; [
+      environment.gnome.excludePackages = builtins.attrValues {
+        inherit (pkgs)
+          gnome-connections
           gnome-contacts
+          gnome-tour
+          # baobab # disk usage analyzer
+          # cheese # photo booth
+          # eog # image viewer
+          # gedit # text editor
+          totem # video player
+          yelp # help viewer
+          # evince # document viewer
+          # file-roller # archive manager
+          geary # email client
+          # seahorse # password manager
+          # gnome-font-viewer
           gnome-logs
+          gnome-maps
+          gnome-music
+          gnome-weather
+
           # gnome-calculator
           # gnome-calendar
           # gnome-characters
           # gnome-clocks
           # gnome-disk-utility
-          gnome-maps
-          gnome-music
           # gnome-photos
           # gnome-screenshot
           # gnome-system-monitor
-          gnome-weather
-
-        ]);
+          ;
+      };
 
       environment.systemPackages = builtins.attrValues {
         inherit (pkgs) pinentry-gnome3 gnome-tweaks adwaita-icon-theme;
