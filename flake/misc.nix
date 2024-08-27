@@ -65,7 +65,6 @@
                     "flakes"
                     "auto-allocate-uids"
                     "ca-derivations"
-                    "no-url-literals"
                   ] ++ lib.optionals isLix [ "pipe-operator" ];
                   keep-outputs = lib.mkDefault true;
                   auto-allocate-uids = lib.mkDefault true;
