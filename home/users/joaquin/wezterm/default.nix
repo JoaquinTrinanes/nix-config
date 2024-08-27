@@ -1,63 +1,80 @@
-{ config, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   programs.wezterm = {
     enable = true;
-    colorSchemes."base16" = with config.colorScheme.palette; {
-      ansi = [
-        base00
-        base08
-        base0B
-        base0A
-        base0D
-        base0E
-        base0C
-        base05
-      ];
-      brights = [
-        base03
-        base08
-        base0B
-        base0A
-        base0D
-        base0E
-        base0C
-        base07
-      ];
-      background = base00;
-      cursor_bg = base05;
-      cursor_fg = base00;
-      compose_cursor = base06;
-      foreground = base05;
-      scrollbar_thumb = base03;
-      selection_bg = base05;
-      selection_fg = base00;
-      split = base03;
-      visual_bell = base09;
-      tab_bar = {
-        background = base01;
-        inactive_tab_edge = base01;
-        active_tab = {
-          bg_color = base03;
-          fg_color = base05;
-        };
-        inactive_tab = {
-          bg_color = base00;
-          fg_color = base05;
-        };
-        inactive_tab_hover = {
-          bg_color = base05;
-          fg_color = base00;
-        };
-        new_tab = {
-          bg_color = base00;
-          fg_color = base05;
-        };
-        new_tab_hover = {
-          bg_color = base05;
-          fg_color = base00;
+    package = lib.my.mkWrapper {
+      basePackage = pkgs.wezterm;
+      env = {
+        # prevent dGPU not powering off when front_end = "WebGpu"
+        VK_ICD_FILENAMES.value = "${pkgs.mesa.drivers}/share/vulkan/icd.d/radeon_icd.x86_64.json";
+      };
+
+    };
+    colorSchemes."base16" =
+      let
+        c = config.colorScheme.palette;
+      in
+      {
+        ansi = [
+          c.base00
+          c.base08
+          c.base0B
+          c.base0A
+          c.base0D
+          c.base0E
+          c.base0C
+          c.base05
+        ];
+        brights = [
+          c.base03
+          c.base08
+          c.base0B
+          c.base0A
+          c.base0D
+          c.base0E
+          c.base0C
+          c.base07
+        ];
+        background = c.base00;
+        cursor_bg = c.base05;
+        cursor_fg = c.base00;
+        compose_cursor = c.base06;
+        foreground = c.base05;
+        scrollbar_thumb = c.base03;
+        selection_bg = c.base05;
+        selection_fg = c.base00;
+        split = c.base03;
+        visual_bell = c.base09;
+        tab_bar = {
+          background = c.base01;
+          inactive_tab_edge = c.base01;
+          active_tab = {
+            bg_color = c.base03;
+            fg_color = c.base05;
+          };
+          inactive_tab = {
+            bg_color = c.base00;
+            fg_color = c.base05;
+          };
+          inactive_tab_hover = {
+            bg_color = c.base05;
+            fg_color = c.base00;
+          };
+          new_tab = {
+            bg_color = c.base00;
+            fg_color = c.base05;
+          };
+          new_tab_hover = {
+            bg_color = c.base05;
+            fg_color = c.base00;
+          };
         };
       };
-    };
   };
   xdg.configFile."wezterm/wezterm.lua".source = config.lib.impurePath.mkImpureLink ./files/wezterm.lua;
 }

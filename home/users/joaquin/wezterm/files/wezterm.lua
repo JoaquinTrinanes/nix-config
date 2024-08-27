@@ -103,13 +103,22 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
+config.check_for_updates = false
+
 config.term = "wezterm"
+
 config.front_end = "OpenGL"
+if os.getenv("VK_ICD_FILENAMES") then
+	config.front_end = "WebGpu"
+end
+
+-- if enabled and on WebGpu, fails with 'Failed to create window: no compatible adapter found' error
+config.webgpu_force_fallback_adapter = false
+
 config.webgpu_power_preference = "LowPower"
 
 -- fixes crashing when using fractional scaling
 config.adjust_window_size_when_changing_font_size = true
-config.webgpu_force_fallback_adapter = true
 
 -- start maximized
 wezterm.on("gui-startup", function()
