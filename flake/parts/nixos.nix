@@ -37,7 +37,7 @@ let
           readOnly = true;
         };
         specialArgs = mkOption {
-          type = types.attrsOf types.unspecified;
+          type = types.lazyAttrsOf types.unspecified;
           default = { };
         };
         extraArgs = mkOption {
@@ -86,7 +86,7 @@ in
     };
     hosts = mkOption {
       description = "Host configurations";
-      type = types.attrsOf hostType;
+      type = types.lazyAttrsOf hostType;
       default = { };
     };
   };

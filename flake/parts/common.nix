@@ -18,7 +18,7 @@ in
     };
 
     specialArgs = mkOption {
-      type = types.attrsOf types.unspecified;
+      type = types.lazyAttrsOf types.unspecified;
       description = "Special args passed to all hosts and home manager configurations";
       default = { };
     };
