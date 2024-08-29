@@ -15,7 +15,7 @@ let
     nixpkgs
     ;
   specialArgsOption = mkOption {
-    type = types.attrsOf types.unspecified;
+    type = types.lazyAttrsOf types.unspecified;
     default = { };
   };
   mkHomeManagerUserConfigType =
@@ -38,7 +38,7 @@ let
           };
           specialArgs = specialArgsOption;
           hosts = mkOption {
-            type = types.attrsOf (
+            type = types.lazyAttrsOf (
               types.submodule (
                 { name, ... }:
                 {
@@ -145,7 +145,7 @@ in
 {
   options.parts = {
     users = mkOption {
-      type = types.attrsOf userType;
+      type = types.lazyAttrsOf userType;
       default = { };
     };
     home-manager = mkOption {
