@@ -10,11 +10,11 @@
     nix-direnv.enable = true;
 
     stdlib = lib.mkMerge [
+      (lib.mkIf config.programs.direnv.nix-direnv.enable (lib.mkBefore "nix_direnv_manual_reload"))
       ''
         dotenv_if_exists
         source_up_if_exists
       ''
-      (lib.mkIf config.programs.direnv.nix-direnv.enable "nix_direnv_manual_reload")
     ];
     config = {
       # bash_path = "";
