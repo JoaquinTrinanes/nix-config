@@ -30,6 +30,8 @@
 
   nix.settings.trusted-users = [ "@wheel" ];
 
+  environment.etc."nixos/current-config".source = inputs.self;
+
   systemd.tmpfiles.settings."${config.networking.hostName}" = {
     "/etc/nixos/flake.nix"."L+" = {
       argument = "${config.users.users."joaquin".home}/Documents/nix-config/flake.nix";
