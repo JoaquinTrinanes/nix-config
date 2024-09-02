@@ -30,11 +30,11 @@
 
   nix.settings.trusted-users = [ "@wheel" ];
 
-  systemd.tmpfiles.rules = [
-    "L+ /etc/nixos/flake.nix - - - - ${
-      config.users.users."joaquin".home
-    }/Documents/nix-config/flake.nix"
-  ];
+  systemd.tmpfiles.settings."${config.networking.hostName}" = {
+    "/etc/nixos/flake.nix"."L+" = {
+      argument = "${config.users.users."joaquin".home}/Documents/nix-config/flake.nix";
+    };
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
