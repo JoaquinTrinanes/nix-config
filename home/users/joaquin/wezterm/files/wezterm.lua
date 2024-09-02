@@ -113,7 +113,7 @@ if os.getenv("VK_ICD_FILENAMES") then
 end
 
 -- if enabled and on WebGpu, fails with 'Failed to create window: no compatible adapter found' error
-config.webgpu_force_fallback_adapter = false
+-- config.webgpu_force_fallback_adapter = true
 
 config.webgpu_power_preference = "LowPower"
 
@@ -141,7 +141,6 @@ config.font = wezterm.font_with_fallback({
 	"unscii-16-full",
 })
 
--- test
 -- config.font_rules = {
 -- 	{
 -- 		intensity = "Bold",
@@ -240,18 +239,5 @@ config.keys = {
 	split_nav("resize", "k"),
 	split_nav("resize", "l"),
 }
-
--- local ok, smart_splits = pcall(wezterm.plugin.require, "https://github.com/mrjones2014/smart-splits.nvim")
--- if ok then
--- 	smart_splits.apply_to_config(config, {
--- 		-- directional keys to use in order of: left, down, up, right
--- 		direction_keys = { "h", "j", "k", "l" },
--- 		-- modifier keys to combine with direction_keys
--- 		modifiers = {
--- 			move = "CTRL", -- modifier to use for pane movement, e.g. CTRL+h to move left
--- 			resize = "ALT", -- modifier to use for pane resize, e.g. META+h to resize to the left
--- 		},
--- 	})
--- end
 
 return config
