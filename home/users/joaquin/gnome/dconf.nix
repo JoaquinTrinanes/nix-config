@@ -27,7 +27,7 @@ in
     "org/gnome/desktop/peripherals/touchpad" = {
       tap-to-click = true;
       two-finger-scrolling-enabled = true;
-      natural-scroll = false;
+      natural-scroll = true;
     };
     "org/gnome/shell" = {
       favorite-apps = [
