@@ -3,6 +3,7 @@
   config,
   withSystem,
   inputs,
+  flake-parts-lib,
   ...
 }:
 let
@@ -58,7 +59,7 @@ let
           };
           finalConfigurations = mkOption {
             readOnly = true;
-            type = types.attrsOf types.unspecified;
+            type = types.lazyAttrsOf types.unspecified;
           };
         };
         config = {
@@ -183,6 +184,15 @@ in
           );
         }
       );
+    };
+  };
+
+  options.flake = flake-parts-lib.mkSubmoduleOptions {
+    homeConfigurations = mkOption {
+      type = types.lazyAttrsOf types.raw;
+      default = { };
+      description = ''Instantiated Home-Manager configurations.'';
+      example = lib.literalExpression ''{ "user@host" = inputs.home-manager.lib.homeManagerConfiguration { .. }; }'';
     };
   };
 
