@@ -22,6 +22,8 @@ local M = {
         },
       },
       inlay_hints = { enabled = true },
+      ---@module "lspconfig"
+      ---@type table<string, lspconfig.Config>
       servers = {
         r_language_server = { mason = false },
         eslint = {
@@ -81,6 +83,8 @@ local M = {
         nushell = { mason = false },
         marksman = { mason = false },
       },
+      ---@module "lspconfig"
+      ---@type table<string, fun(server:string, opts:lspconfig.Config):boolean?>
       setup = {},
     },
   },
@@ -94,6 +98,10 @@ local M = {
         },
         nix = { "statix", "deadnix" },
       },
+      ---@module "lint"
+      ---@class LinterConfig: lint.Linter
+      ---@field condition fun(ctx: { filename: string, dirname: string }): boolean
+      ---@type table<string, LinterConfig>
       linters = {
         dotenv_linter = {
           condition = function(ctx)
