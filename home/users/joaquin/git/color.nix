@@ -5,7 +5,7 @@ _: {
       meta = "yellow bold";
       frag = "magenta bold";
       old = "red bold";
-      new = "green bold";
+      new = "blue bold";
     };
     status = {
       added = "yellow";
