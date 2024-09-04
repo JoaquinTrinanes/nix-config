@@ -24,6 +24,7 @@
       format.numbered = "auto";
       log.decorate = "short";
       merge = {
+        conflictStyle = "diff3";
         log = false;
         # tool = "meld";
       };
