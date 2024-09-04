@@ -16,23 +16,14 @@
   };
 
   programs.gpg.settings = {
-    cert-digest-algo = "SHA512";
     charset = "utf-8";
-    default-preference-list = "SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed";
-    default-recipient-self = true;
-    fixed-list-mode = true;
-    keyid-format = "long";
-    keyserver = "hkps://keys.openpgp.org";
     list-options = "show-uid-validity";
-    no-comments = true;
-    no-emit-version = true;
-    no-symkey-cache = true;
-    personal-cipher-preferences = "AES256 AES192 AES";
-    personal-compress-preferences = "ZLIB BZIP2 ZIP Uncompressed";
-    personal-digest-preferences = "SHA512 SHA384 SHA256";
     require-cross-certification = true;
-    s2k-cipher-algo = "AES256";
-    s2k-digest-algo = "SHA512";
+    keyid-format = "long";
+    no-symkey-cache = true;
+    no-emit-version = true;
+    no-comments = true;
+    default-recipient-self = true;
     tofu-default-policy = "unknown";
     trust-model = "tofu+pgp";
     use-agent = true;
@@ -40,7 +31,30 @@
     with-fingerprint = true;
     # Disable recipient key ID in messages
     throw-keyids = true;
+
+    # # GPG defaults are decent now
+    # cert-digest-algo = "SHA512";
+    # default-preference-list = "SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed";
+    # personal-cipher-preferences = "AES256 AES192 AES";
+    # personal-compress-preferences = "ZLIB BZIP2 ZIP Uncompressed";
+    # personal-digest-preferences = "SHA512 SHA384 SHA256";
+    # s2k-cipher-algo = "AES256";
+    # s2k-digest-algo = "SHA512";
   };
+
+  home.file."${config.programs.gpg.homedir}/dirmngr.conf".text =
+    lib.generators.toKeyValue
+      {
+        mkKeyValue =
+          key: value: if lib.isString value then "${key} ${value}" else lib.optionalString value key;
+        listsAsDuplicateKeys = true;
+      }
+      {
+        keyserver = [
+          "hkps://keys.openpgp.org"
+          "hkp://zkaan2xfbuxia2wpf7ofnkbz6r5zdbbvxbunvp5g2iebopbfc4iqmbad.onion"
+        ];
+      };
 
   # TODO: use sops for this
   # nix shell nixpkgs#pam_u2f --command pamu2fcfg
