@@ -28,18 +28,16 @@ local M = {
       },
       term_colors = true,
       custom_highlights = function(colors)
+        local U = require("catppuccin.utils.colors")
+
         return {
           LspSignatureActiveParameter = { style = { "bold" } },
           SpellBad = {
             sp = colors.subtext0,
           },
-          -- Colorblind-friendliness
-          -- DiffAdd = {
-          --   bg = "#acd6fc",
-          -- },
-          -- diffRemoved = {
-          --   bg = "#e7a100",
-          -- },
+          DiffAdd = { bg = U.darken(colors.blue, 0.18, colors.base) },
+          -- DiffDelete = { bg = U.darken(colors.red, 0.18, colors.base) },
+          -- DiffChange = { bg = U.darken(colors.blue, 0.07, colors.base) },
         }
       end,
     },
