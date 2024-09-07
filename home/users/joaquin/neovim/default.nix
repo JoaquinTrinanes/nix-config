@@ -23,7 +23,7 @@ in
         git
         gnumake
         icu
-        lazygit
+        intelephense
         lua-language-server
         marksman
         pyright
@@ -36,7 +36,7 @@ in
         typescript-language-server
         yaml-language-server
         ;
-      inherit (pkgs.nodePackages) intelephense prettier;
+      inherit (pkgs.nodePackages) prettier;
     };
     vimAlias = true;
     viAlias = true;
