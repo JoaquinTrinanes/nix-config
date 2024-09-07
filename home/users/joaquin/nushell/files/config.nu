@@ -57,6 +57,15 @@ $env.config = {
         }
     }
     error_style: "fancy" # "fancy" or "plain" for screen reader-friendly error messages
+
+    # Whether an error message should be printed if an error of a certain kind is triggered.
+    display_errors: {
+        exit_code: false # assume the external command prints an error message
+        # Core dump errors are always printed, and SIGPIPE never triggers an error.
+        # The setting below controls message printing for termination by all other signals.
+        termination_signal: false
+    }
+
     datetime_format: {
         normal: '%a, %d %b %Y %H:%M:%S %z'  # shows up in displays of variables or other datetime's outside of tables
         # table: '%m/%d/%y %I:%M:%S%p'        # generally shows up in tabular outputs such as ls. commenting this out will change it to the default human readable datetime format
@@ -143,7 +152,6 @@ $env.config = {
         vi_insert: line # block, underscore, line , blink_block, blink_underscore, blink_line (block is the default)
         vi_normal: block # block, underscore, line, blink_block, blink_underscore, blink_line (underscore is the default)
     }
-    use_grid_icons: true
     footer_mode: "25" # always, never, number_of_rows, auto
     float_precision: 2
     use_ansi_coloring: true
