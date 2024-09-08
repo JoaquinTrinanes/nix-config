@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib.hm.gvariant) mkTuple;
+  inherit (lib.gvariant) mkTuple;
 in
 {
   imports = [
@@ -20,6 +20,9 @@ in
     #   inherit (config.gtk.theme) name;
     #   # gtk-theme = name;
     # };
+    "org/gnome/Console" = {
+      audible-bell = false;
+    };
     "org/gtk/gtk4/settings/file-chooser" = {
       sort-directories-first = true;
       show-hidden = true;
@@ -32,7 +35,7 @@ in
     "org/gnome/shell" = {
       favorite-apps = [
         "org.gnome.Nautilus.desktop"
-        "firefox-devedition.desktop"
+        "firefox.desktop"
         "vesktop.desktop"
         "org.wezfurlong.wezterm.desktop"
       ];

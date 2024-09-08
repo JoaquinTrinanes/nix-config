@@ -20,8 +20,6 @@
     yubikey.enable = true;
   };
 
-  programs.firefox.package = pkgs.firefox-devedition;
-
   services.tailscale.enable = false;
   services.tailscale.extraUpFlags = [ "--advertise-tags=tag:desktop" ];
 
