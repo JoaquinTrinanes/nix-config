@@ -9,6 +9,9 @@ rec {
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
+    neovim-nightly-overlay.inputs.hercules-ci-effects.inputs.flake-parts.follows = "flake-parts";
+    neovim-nightly-overlay.inputs.hercules-ci-effects.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-colors.url = "github:misterio77/nix-colors";
     nix-colors.inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -21,8 +24,10 @@ rec {
 
     nushell-nightly.url = "github:JoaquinTrinanes/nushell-nightly-flake";
     nushell-nightly.inputs.nixpkgs.follows = "nixpkgs";
+    nushell-nightly.inputs.flake-parts.follows = "flake-parts";
 
     autofirma-nix.url = "github:nilp0inter/autofirma-nix";
+    autofirma-nix.inputs.flake-parts.follows = "flake-parts";
     autofirma-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     disko.url = "github:nix-community/disko";
