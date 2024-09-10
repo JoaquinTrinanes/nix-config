@@ -37,7 +37,7 @@ let
     in
     lib.my.mkWrapper {
       basePackage = nushell;
-      flags = [
+      prependFlags = [
         "--plugin-config"
         pluginFile
         "--config"
