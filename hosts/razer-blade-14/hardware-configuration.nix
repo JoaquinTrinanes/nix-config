@@ -154,15 +154,16 @@
     "__GLX_VENDOR_LIBRARY_NAME" = "mesa";
   };
 
-  hardware.nvidia = lib.mkDefault {
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
-    nvidiaSettings = false;
-    modesetting.enable = false;
-    powerManagement = {
+  hardware.nvidia = {
+    open = true;
+    package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.latest;
+    nvidiaSettings = lib.mkDefault false;
+    modesetting.enable = lib.mkDefault false;
+    powerManagement = lib.mkDefault {
       enable = true;
       finegrained = true;
     };
-    prime = {
+    prime = lib.mkDefault {
       reverseSync = {
         enable = true;
       };
