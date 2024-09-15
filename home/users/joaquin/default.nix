@@ -116,7 +116,8 @@
   };
 
   programs.ripgrep = {
-    enable = true;
+    # managed through the wrapper
+    enable = false;
     arguments = [
       "--smart-case"
       "--auto-hybrid-regex"
@@ -246,22 +247,6 @@
     name = "Adwaita";
     package = pkgs.adwaita-icon-theme;
   };
-
-  # xdg.configFile."Proton/VPN/settings.json".text = builtins.toJSON {
-  #   dns_custom_ips = [];
-  #   features = {
-  #     moderate_nat = false;
-  #     netshield = 0; # 0 = disabled, 1 = block malware, 2 = block ads, trackers and malware
-  #     port_forwarding = false;
-  #     vpn_accelerator = true;
-  #   };
-  #   killswitch = 0; # 0, 1
-  #   protocol = "openvpn-udp"; # openvpn-udp, openvpn-tcp
-  # };
-  # xdg.configFile."Proton/VPN/app-config.json".text = builtins.toJSON {
-  #   connect_at_app_startup = null;
-  #   tray_pinned_servers = ["ES" "US"];
-  # };
 
   home.stateVersion = "24.11";
 }
