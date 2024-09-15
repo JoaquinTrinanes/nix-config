@@ -154,7 +154,7 @@
     in
     keyValue.generate "rc" { update-notifier = false; };
 
-  home.shellAliases =
+  home.shellAliases = lib.mkMerge [
     {
       l = "ls";
       ll = "ls -l";
@@ -170,21 +170,18 @@
       nx = "nixos-rebuild --use-remote-sudo --accept-flake-config";
       nxs = "nx switch";
     }
-    // lib.optionalAttrs (config.programs.home-manager.enable && !config.submoduleSupport.enable) {
+    (lib.mkIf (config.programs.home-manager.enable && !config.submoduleSupport.enable) {
       hm = "home-manager";
       hms = "home-manager switch";
-    }
-    // lib.optionalAttrs config.programs.bat.enable {
+    })
+    (lib.mkIf config.programs.bat.enable {
       b = "bat";
       "cat" = "bat -p";
-    };
+    })
+  ];
 
   programs.gpg = {
     enable = true;
-    settings = {
-      keyserver = "hkps://keys.openpgp.org";
-      default-recipient-self = true;
-    };
     scdaemonSettings = {
       disable-ccid = true;
     };
