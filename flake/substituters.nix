@@ -8,7 +8,9 @@ let
     _file = ./substituters.nix;
     nix.settings = lib.mkMerge [
       {
-        substituters = lib.mkIf (nixConfig ? extra-substituters) (lib.mkAfter nixConfig.extra-substituters);
+        substituters = lib.mkIf (lib.hasAttr "extra-substituters" nixConfig) (
+          lib.mkAfter nixConfig.extra-substituters
+        );
         trusted-public-keys = lib.mkIf (
           nixConfig ? extra-trusted-public-keys
         ) nixConfig.extra-trusted-public-keys;
