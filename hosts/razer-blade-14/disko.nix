@@ -20,8 +20,8 @@
                 mountpoint = "/boot";
                 mountOptions = [
                   "defaults"
-                  "fmask=0022"
-                  "dmask=0022"
+                  "fmask=0077"
+                  "dmask=0077"
                 ];
                 extraArgs = [
                   "-n"
