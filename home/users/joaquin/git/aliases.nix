@@ -1,4 +1,4 @@
-_: {
+{
   home.shellAliases = {
     "g" = "git";
     "ga" = "git add";
