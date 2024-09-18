@@ -36,8 +36,13 @@
     };
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
+  users.groups = {
+    "joaquin" = {
+      gid = config.users.users.joaquin.uid;
+    };
+  };
   users.users = {
     "joaquin" = {
       uid = 1000;
@@ -45,9 +50,11 @@
       # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
       # initialPassword = "correcthorsebatterystaple";
       isNormalUser = true;
+      group = "joaquin";
       openssh.authorizedKeys.keys = [ ];
       extraGroups =
         [
+          "users"
           "wheel"
           "networkmanager"
         ]
