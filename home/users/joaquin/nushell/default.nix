@@ -52,6 +52,9 @@ in
   imports = [ ./theme.nix ];
   programs.carapace.enableNushellIntegration = false;
 
+  # breaks nushell lsp due to not checking if shell is interactive
+  services.gpg-agent.enableNushellIntegration = false;
+
   # config files are added to the wrapper
   home.file."${configFile}".enable = false;
   home.file."${envFile}".enable = false;
@@ -74,7 +77,9 @@ in
     environmentVariables = {
       "NU_LIB_DIRS" = lib.escapeShellArg (lib.concatStringsSep ":" [ scriptsDir ]);
     };
-    envFile.source = ./files/env.nu;
+    envFile.text = ''
+      source ${./files/env.nu}
+    '';
     extraConfig =
       let
         nix = if config.nix.package == null then pkgs.nix else lib.getExe config.nix.package;
