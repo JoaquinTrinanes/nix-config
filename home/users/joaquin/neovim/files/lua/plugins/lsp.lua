@@ -171,11 +171,6 @@ local M = {
       ---@field condition fun(ctx: { filename: string, dirname: string }): boolean
       ---@type table<string, lint.Linter>
       linters = {
-        dotenv_linter = {
-          condition = function(ctx)
-            return is_dotenv(ctx.filename)
-          end,
-        },
         shellcheck = {
           condition = function(ctx)
             return not is_dotenv(ctx.filename)
