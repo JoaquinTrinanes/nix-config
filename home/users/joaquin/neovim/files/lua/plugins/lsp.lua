@@ -15,17 +15,21 @@ end
 local M = {
   {
     "neovim/nvim-lspconfig",
+    ---@module "lazyvim"
+    ---@type PluginLspOpts
     opts = {
       diagnostics = {
         virtual_text = {
           prefix = "icons",
         },
       },
-      inlay_hints = { enabled = true },
+      inlay_hints = {
+        enabled = true,
+        exclude = { "typescript", "typescriptreact" },
+      },
       ---@module "lspconfig"
       ---@type table<string, lspconfig.Config>
       servers = {
-        r_language_server = { mason = false },
         eslint = {
           settings = {
             rulesCustomizations = {
@@ -34,6 +38,7 @@ local M = {
           },
         },
         lua_ls = {
+          mason = false,
           settings = {
             Lua = {
               diagnostics = {
@@ -65,6 +70,7 @@ local M = {
           },
         },
         rust_analyzer = {
+          enabled = false,
           mason = false,
           checkOnSave = {
             extraArgs = {
@@ -76,9 +82,15 @@ local M = {
         },
         intelephense = {
           mason = false,
-          settings = { ["intelephense.files.maxSize"] = 10000000 },
+          settings = {
+            intelephense = {
+              files = {
+                maxSize = 10000000,
+              },
+            },
+            ["intelephense.files.maxSize"] = 10000000,
+          },
         },
-        -- phpactor = { mason = false },
         nushell = { mason = false },
         marksman = { mason = false },
         -- Ideally, use only nixd. But it breaks with accents/special chars
@@ -131,6 +143,12 @@ local M = {
             },
           },
         },
+        bashls = {
+          settings = {
+            bashIde = { shellcheckPath = "" },
+          },
+        },
+        r_language_server = { mason = false },
       },
       ---@module "lspconfig"
       ---@type table<string, fun(server:string, opts:lspconfig.Config):boolean?>
@@ -145,12 +163,13 @@ local M = {
           "shellcheck",
           -- "dotenv_linter",
         },
+        php = {},
         nix = { "statix", "deadnix" },
       },
       ---@module "lint"
-      ---@class LinterConfig: lint.Linter
+      ---@class lint.Linter
       ---@field condition fun(ctx: { filename: string, dirname: string }): boolean
-      ---@type table<string, LinterConfig>
+      ---@type table<string, lint.Linter>
       linters = {
         dotenv_linter = {
           condition = function(ctx)
@@ -174,14 +193,10 @@ local M = {
         "marksman",
       }
 
+      opts.PATH = "append"
       opts.ensure_installed = vim.tbl_filter(function(server)
         return not vim.list_contains(servers_to_skip, server)
       end, opts.ensure_installed)
-      -- vim.list_extend(opts.ensure_installed, {
-      --   "prettier",
-      --   "stylua",
-      --   "shfmt",
-      -- })
     end,
   },
   {
@@ -228,7 +243,7 @@ local M = {
       }
 
       if type(opts.ensure_installed) == "table" then
-        vim.list_extend(opts.ensure_installed, { "blade" })
+        vim.list_extend(opts.ensure_installed, { "blade", "php", "php_only", "html" })
       end
     end,
   },
