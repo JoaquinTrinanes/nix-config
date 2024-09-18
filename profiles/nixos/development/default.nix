@@ -18,7 +18,6 @@ in
         file
         git-extras
         hyperfine
-        nil
         nixfmt-rfc-style
         pnpm
         scrcpy

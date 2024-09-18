@@ -13,6 +13,7 @@ in
     enable = lib.mkDefault true;
     package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
     extraPackages = builtins.attrValues {
+      lazygit = config.programs.lazygit.package;
       inherit (pkgs)
         black
         deadnix
@@ -26,6 +27,8 @@ in
         intelephense
         lua-language-server
         marksman
+        nil
+        nixd
         pyright
         ripgrep
         shellcheck
