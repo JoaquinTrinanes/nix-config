@@ -112,7 +112,10 @@ in
         if shopt -q login_shell; then
           LOGIN_OPTIONS+=('--login') 
         fi
-        exec "${lib.getExe config.programs.nushell.package}" "''${LOGIN_OPTIONS[@]}"
+        # if nu errors, don't lock out of bash
+        if ${lib.getExe config.programs.nushell.package} "''${LOGIN_OPTIONS[@]}"; then
+          exit 0
+        fi
     fi
   '';
 }
