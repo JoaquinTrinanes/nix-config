@@ -9,5 +9,4 @@ def 'nu-complete artisan commands' [] {
 
 export extern main [
     command: string@'nu-complete artisan commands'
-    --help (-h)
 ]
