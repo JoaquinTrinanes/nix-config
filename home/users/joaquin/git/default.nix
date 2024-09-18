@@ -10,6 +10,7 @@
       user = {
         name = config.accounts.email.accounts.primary.realName;
         email = config.accounts.email.accounts.primary.address;
+        signingkey = "6E1446DD451C6BAF";
       };
       tag = {
         gpgsign = true;
