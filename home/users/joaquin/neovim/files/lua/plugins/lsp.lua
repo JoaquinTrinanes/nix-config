@@ -79,9 +79,58 @@ local M = {
           settings = { ["intelephense.files.maxSize"] = 10000000 },
         },
         -- phpactor = { mason = false },
-        nil_ls = { mason = false },
         nushell = { mason = false },
         marksman = { mason = false },
+        -- Ideally, use only nixd. But it breaks with accents/special chars
+        nil_ls = {
+          mason = false,
+          settings = {
+            ["nil"] = {
+              nix = {
+                formattings = { command = "nixfmt" },
+                maxMemoryMB = 3584,
+                flake = {
+                  autoArchive = true,
+                  autoEvalInputs = true,
+                },
+              },
+            },
+          },
+        },
+        nixd = {
+          mason = false,
+          settings = {
+            nixd = {
+              nixpkgs = {
+                expr = "import <nixpkgs> { }",
+              },
+              formatting = {
+                command = { "nixfmt" },
+              },
+              options = {
+                nixos = {
+                  expr = string.format(
+                    '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations."%s".options',
+                    vim.fn.system("hostname")
+                  ),
+                },
+                home_manager = {
+                  expr = string.format(
+                    '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."%s@%s".options',
+                    vim.fn.expand("$USER"),
+                    vim.fn.systemlist("hostname")[1]
+                  ),
+                },
+                flake_parts = {
+                  expr = '(builtins.getFlake ("git+file://" + toString ./.)).debug.options',
+                },
+                flake_parts_system = {
+                  expr = '(builtins.getFlake ("git+file://" + toString ./.)).currentSystem.options',
+                },
+              },
+            },
+          },
+        },
       },
       ---@module "lspconfig"
       ---@type table<string, fun(server:string, opts:lspconfig.Config):boolean?>
