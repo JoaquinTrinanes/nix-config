@@ -86,4 +86,12 @@
       ".apdisk"
     ];
   };
+  programs.lazygit = {
+    enable = true;
+    settings = {
+      gui = {
+        shortTimeFormat = "15:04";
+      };
+    };
+  };
 }
