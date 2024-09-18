@@ -7,9 +7,11 @@
   ];
   programs.git = {
     enable = true;
-    userName = config.accounts.email.accounts.primary.realName;
-    userEmail = config.accounts.email.accounts.primary.address;
     extraConfig = {
+      user = {
+        name = config.accounts.email.accounts.primary.realName;
+        email = config.accounts.email.accounts.primary.address;
+      };
       core = {
         filemode = false;
         whitespace = "trailing-space,space-before-tab";

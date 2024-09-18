@@ -44,8 +44,7 @@
     enable = true;
     settings = {
       user = {
-        name = config.programs.git.userName;
-        email = config.programs.git.userEmail;
+        inherit (config.programs.git.iniContent.user) name email;
       };
     };
   };
@@ -109,6 +108,11 @@
     enableZshIntegration = false;
     enableFishIntegration = false;
   };
+
+  programs.git.ignores = lib.mkIf config.programs.mise.enable [
+    ".mise.local.toml"
+    ".mise.*.local.toml"
+  ];
 
   programs.zoxide = {
     enable = true;
