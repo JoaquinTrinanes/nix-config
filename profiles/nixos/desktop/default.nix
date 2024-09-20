@@ -18,6 +18,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    xdg.mime.enable = lib.mkDefault true;
+
     profiles.firefox.enable = lib.mkDefault true;
     profiles.desktop.gnome.enable = lib.mkDefault true;
     profiles.fonts.enable = lib.mkDefault true;

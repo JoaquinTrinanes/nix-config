@@ -40,6 +40,11 @@
     };
   };
 
+  xdg = {
+    enable = true;
+    mimeApps.enable = true;
+  };
+
   programs.jujutsu = {
     enable = true;
     settings = {
