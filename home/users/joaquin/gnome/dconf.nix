@@ -33,12 +33,13 @@ in
       natural-scroll = true;
     };
     "org/gnome/shell" = {
-      favorite-apps = [
-        "org.gnome.Nautilus.desktop"
-        "firefox.desktop"
-        "vesktop.desktop"
-        "org.wezfurlong.wezterm.desktop"
-      ];
+      favorite-apps =
+        [ "org.gnome.Nautilus.desktop" ]
+        ++ lib.optional (osConfig != null) osConfig.programs.firefox.package.desktopItem.name
+        ++ [
+          "vesktop.desktop"
+          "org.wezfurlong.wezterm.desktop"
+        ];
     };
     "org/gnome/desktop/interface" = {
       icon-theme = "Adwaita";
