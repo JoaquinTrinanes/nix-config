@@ -6,6 +6,7 @@
   ...
 }:
 let
+  inherit (config.lib.impurePath) mkImpureLink;
   configDir =
     if pkgs.stdenv.isDarwin then
       "Library/Application Support/nushell"
@@ -46,7 +47,7 @@ let
         config.home.file."${envFile}".source
       ];
     };
-  scriptsDir = config.lib.impurePath.mkImpureLink ./files/scripts;
+  scriptsDir = mkImpureLink ./files/scripts;
 in
 {
   imports = [ ./theme.nix ];
