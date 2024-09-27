@@ -142,7 +142,6 @@ in
             MoreFromMozilla = false;
           };
         };
-        # extraPrefsFiles = [ "${./betterfox.js}" ];
         extraPrefs = lib.concatLines (
           lib.mapAttrsToList (name: value: mkAutoconfig name value { }) {
             "media.ffmpeg.vaapi.enabled" = true;
