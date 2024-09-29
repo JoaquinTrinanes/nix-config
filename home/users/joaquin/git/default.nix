@@ -76,6 +76,7 @@
       };
     };
     includes = [
+      { path = "config.local"; }
       {
         condition = "gitdir:~/Documents/veganhacktivists/";
         contents = {
