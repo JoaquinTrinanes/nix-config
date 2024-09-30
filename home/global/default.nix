@@ -12,7 +12,7 @@
   };
 
   programs.ssh = {
-    includes = [ "config.local" ];
+    includes = [ "local.conf" ];
   };
 
   programs.gpg.settings = {
