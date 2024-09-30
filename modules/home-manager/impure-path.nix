@@ -57,20 +57,20 @@ in
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
       xdg.configFile."home-manager/flake.nix".source = mkImpureLink "${cfg.self}/flake.nix";
-      home.activation = lib.mkIf cfg.enable {
-        copyConfig =
-          lib.hm.dag.entryAfter [ "writeBoundary" ]
-            # bash
-            ''
-              if [ ! -e ${cfg.flakePath} ]; then
-                run cp $VERBOSE_ARG -r ${cfg.self} ${cfg.flakePath}
-                ${lib.optionalString cfg.remote.enable ''
-                  run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} init
-                  run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} remote add ${cfg.remote.name} ${cfg.remote.url}
-                ''}
-              fi
-            '';
-      };
+      # home.activation = lib.mkIf cfg.enable {
+      #   copyConfig =
+      #     lib.hm.dag.entryAfter [ "writeBoundary" ]
+      #       # bash
+      #       ''
+      #         if [ ! -e ${cfg.flakePath} ]; then
+      #           run cp $VERBOSE_ARG -r ${cfg.self} ${cfg.flakePath}
+      #           ${lib.optionalString cfg.remote.enable ''
+      #             run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} init
+      #             run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} remote add ${cfg.remote.name} ${cfg.remote.url}
+      #           ''}
+      #         fi
+      #       '';
+      # };
     })
     {
       lib.impurePath = {
