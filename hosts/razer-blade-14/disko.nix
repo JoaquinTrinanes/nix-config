@@ -1,3 +1,4 @@
+# https://github.com/hmanhng/.flakes/blob/92f9c0d131bae3494a46945b08e2fbcd390bfb26/lib/disko/btrfs-single.nix
 { inputs, ... }:
 {
   imports = [ inputs.disko.nixosModules.disko ];
@@ -52,82 +53,72 @@
                 '';
                 settings = { };
                 content = {
-                  type = "lvm_pv";
-                  vg = "pool";
+                  type = "btrfs";
+                  # mountpoint = "/";
+                  extraArgs = [ "-f" ]; # Override existing partition
+                  mountOptions = [ "defaults" ];
+                  subvolumes = {
+                    swap = {
+                      mountpoint = "/.swapvol";
+                      mountOptions = [
+                        "defaults"
+                        "noatime"
+                      ];
+                      swap.swapfile.size = "32G";
+                    };
+                    # persist = {
+                    #   mountpoint = "/persist";
+                    #   mountOptions = [
+                    #     "defaults"
+                    #     "noatime"
+                    #     "compress=zstd"
+                    #   ];
+                    # };
+                    nix = {
+                      mountpoint = "/nix";
+                      mountOptions = [
+                        "defaults"
+                        "noatime"
+                        "compress=zstd"
+                      ];
+                    };
+                    rootfs = {
+                      mountpoint = "/";
+                      mountOptions = [
+                        "defaults"
+                        "noatime"
+                        "compress=zstd"
+                      ];
+                    };
+                    home = {
+                      mountpoint = "/home";
+                      mountOptions = [
+                        "defaults"
+                        "noatime"
+                        "compress=zstd"
+                      ];
+                    };
+                    var-log = {
+                      mountpoint = "/var/log";
+                      mountOptions = [
+                        "defaults"
+                        "noatime"
+                        "compress=zstd"
+                      ];
+                    };
+                  };
+                  postCreateHook = ''
+                    (
+                      MNTPOINT=$(mktemp -d)
+                      mount "$device" "$MNTPOINT" -o subvol=/
+                      trap 'umount "$MNTPOINT"; rm -rf "$MNTPOINT"' EXIT
+                      btrfs subvolume snapshot -r $MNTPOINT/rootfs $MNTPOINT/rootfs-blank
+                    )
+                  '';
                 };
               };
             };
           };
-        };
-      };
-    };
-    lvm_vg.pool = {
-      type = "lvm_vg";
-      lvs.root = {
-        size = "100%FREE";
-        content = {
-          type = "btrfs";
-          # mountpoint = "/";
-          extraArgs = [ "-f" ]; # Override existing partition
-          mountOptions = [ "defaults" ];
-          subvolumes = {
-            swap = {
-              mountpoint = "/.swapvol";
-              mountOptions = [
-                "defaults"
-                "noatime"
-              ];
-              swap.swapfile.size = "32G";
-            };
-            # persist = {
-            #   mountpoint = "/persist";
-            #   mountOptions = [
-            #     "defaults"
-            #     "noatime"
-            #     "compress=zstd"
-            #   ];
-            # };
-            nix = {
-              mountpoint = "/nix";
-              mountOptions = [
-                "defaults"
-                "noatime"
-                "compress=zstd"
-              ];
-            };
-            rootfs = {
-              mountpoint = "/";
-              mountOptions = [
-                "defaults"
-                "noatime"
-                "compress=zstd"
-              ];
-            };
-            home = {
-              mountpoint = "/home";
-              mountOptions = [
-                "defaults"
-                "noatime"
-                "compress=zstd"
-              ];
-            };
-            var-log = {
-              mountpoint = "/var/log";
-              mountOptions = [
-                "defaults"
-                "noatime"
-                "compress=zstd"
-              ];
-            };
-          };
-          postCreateHook = ''
-            (
-              MNTPOINT=$(mktemp -d)
-              mount "$device" "$MNTPOINT" -o subvol=/
-              trap 'umount "$MNTPOINT"; rm -rf "$MNTPOINT"' EXIT
-              btrfs subvolume snapshot -r $MNTPOINT/rootfs $MNTPOINT/rootfs-blank
-            )
-          '';
         };
       };
     };
