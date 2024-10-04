@@ -29,6 +29,7 @@ in
       show-hidden = true;
     };
     "org/gnome/desktop/peripherals/touchpad" = {
+      disable-while-typing = false;
       tap-to-click = true;
       two-finger-scrolling-enabled = true;
       natural-scroll = true;
