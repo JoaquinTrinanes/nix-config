@@ -26,6 +26,10 @@ in
 {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
+  security.sudo.extraConfig = ''
+    Defaults lecture = never
+  '';
+
   nix.registry = lib.mkMerge [
     flakeAliases
     (lib.mapAttrs (_: input: { flake = input; }) flakeInputs)
