@@ -5,23 +5,15 @@
 # - converted from a value back to a string when running external commands (to_string)
 # Note: The conversions happen *after* config.nu is loaded
 export-env {
-    let esep_list_converter = {
-        from_string: {|s| $s | split row (char esep) }
-        to_string: {|v|
-            $v
-            # | path expand -n
-            | str join (char esep)
+    def converter_by_separator [sep: string] {
+        {
+            from_string: {|s| $s | split row $sep }
+            to_string: {|v| $v | str join $sep }
         }
     }
 
-    let space_list_converter = {
-        from_string: {|s| $s | split row (char space) }
-        to_string: {|v|
-            $v
-            # | path expand -n
-            | str join (char space)
-        }
-    }
+    let esep_list_converter = converter_by_separator (char esep)
+    let space_list_converter = converter_by_separator (char space)
 
     $env.ENV_CONVERSIONS = {
         "DIRS_LIST": $esep_list_converter
