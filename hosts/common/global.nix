@@ -9,18 +9,24 @@ let
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   flakeAliases = {
     nixpkgs-unstable.to = {
-      owner = "NixOS";
-      ref = "nixpkgs-unstable";
-      repo = "nixpkgs";
       type = "github";
+      owner = "NixOS";
+      repo = "nixpkgs";
+      ref = "nixpkgs-unstable";
     };
     nixpkgs-head.to = {
-      owner = "NixOS";
-      ref = "master";
-      repo = "nixpkgs";
       type = "github";
+      owner = "NixOS";
+      repo = "nixpkgs";
+      ref = "HEAD";
     };
     p.flake = inputs.nixpkgs;
+    templates.to = {
+      type = "github";
+      owner = "NixOS";
+      repo = "templates";
+      ref = "HEAD";
+    };
   };
 in
 {
@@ -67,11 +73,12 @@ in
         rules = map deleteFile commonFiles;
       in
       {
-        tmpfiles.rules =
+        tmpfiles.rules = lib.mkMerge [
           rules
-          ++ lib.optionals (!config.nix.channel.enable) [
+          (lib.mkIf (!config.nix.channel.enable) [
             (deleteFile "/nix/var/nix/profiles/per-user/root/channels")
-          ];
+          ])
+        ];
         user.tmpfiles.rules = rules;
       }
     )
@@ -118,6 +125,7 @@ in
     lsof
     openssl
     pciutils
+    powertop
     ripgrep
     sd
     srm
