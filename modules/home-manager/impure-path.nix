@@ -57,20 +57,27 @@ in
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
       xdg.configFile."home-manager/flake.nix".source = mkImpureLink "${cfg.self}/flake.nix";
-      # home.activation = lib.mkIf cfg.enable {
-      #   copyConfig =
-      #     lib.hm.dag.entryAfter [ "writeBoundary" ]
-      #       # bash
-      #       ''
-      #         if [ ! -e ${cfg.flakePath} ]; then
-      #           run cp $VERBOSE_ARG -r ${cfg.self} ${cfg.flakePath}
-      #           ${lib.optionalString cfg.remote.enable ''
-      #             run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} init
-      #             run ${lib.getExe config.programs.git.package} -C ${cfg.flakePath} remote add ${cfg.remote.name} ${cfg.remote.url}
-      #           ''}
-      #         fi
-      #       '';
-      # };
+      home.activation = lib.mkIf cfg.enable {
+        copyConfig =
+          let
+            git = "${lib.getExe config.programs.git.package} -C ${lib.escapeShellArg cfg.flakePath}";
+          in
+          lib.hm.dag.entryAfter [ "writeBoundary" ]
+            # bash
+            ''
+              if [ ! -e ${cfg.flakePath} ]; then
+                run mkdir $VERBOSE_ARG -p "$(dirname ${cfg.flakePath})"
+                run cp $VERBOSE_ARG -r ${lib.escapeShellArg cfg.self} ${lib.escapeShellArg cfg.flakePath}
+                # Will mess up the permissions, but at least the correct files will be in the expected place since the start (and not readonly)
+                run chmod $VERBOSE_ARG -R 0755 ${lib.escapeShellArg cfg.flakePath}
+                ${lib.optionalString cfg.remote.enable ''
+                  run ${git} init
+                  run ${git} remote add ${lib.escapeShellArg cfg.remote.name} ${lib.escapeShellArg cfg.remote.url}
+                  # run ${git} branch --set-upstream-to=origin/HEAD
+                ''}
+              fi
+            '';
+      };
     })
     {
       lib.impurePath = {
