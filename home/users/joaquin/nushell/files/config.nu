@@ -24,9 +24,9 @@ let external_completer = {|spans: list<string>|
     }
 
     match $spans.0 {
-      git => $fish_completer
-      gpg => $fish_completer
-      _ => $default_completer
+        git => $fish_completer
+        gpg => $fish_completer
+        _ => $default_completer
     }
     | do $in $spans
     | if (($in | is-empty) and ($fallback_completer != null)) {
@@ -67,7 +67,7 @@ $env.config = {
     }
 
     datetime_format: {
-        normal: '%a, %d %b %Y %H:%M:%S %z'  # shows up in displays of variables or other datetime's outside of tables
+        normal: '%a, %d %b %Y %H:%M:%S %z' # shows up in displays of variables or other datetime's outside of tables
         # table: '%m/%d/%y %I:%M:%S%p'        # generally shows up in tabular outputs such as ls. commenting this out will change it to the default human readable datetime format
     },
     explore: {
@@ -133,9 +133,9 @@ $env.config = {
     }
     completions: {
         case_sensitive: false # set to true to enable case-sensitive completions
-        quick: true  # set this to false to prevent auto-selecting completions when only one remains
-        partial: true  # set this to false to prevent partial filling of the prompt
-        algorithm: "prefix"  # prefix or fuzzy
+        quick: true # set this to false to prevent auto-selecting completions when only one remains
+        partial: true # set this to false to prevent partial filling of the prompt
+        algorithm: "prefix" # prefix or fuzzy
         use_ls_colors: true
         external: {
             enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up my be very slow
@@ -211,7 +211,7 @@ $env.config = {
         env_change: {
             PWD: [
             # {|before, after|
-            #   null  # replace with source code to run if the PWD environment is different since the last repl input
+            #   null # replace with source code to run if the PWD environment is different since the last repl input
             # }
             ]
         }
@@ -230,7 +230,7 @@ $env.config = {
             type: {
                 layout: columnar
                 columns: 4
-                col_width: 20   # Optional value. If missing all the screen width is used to calculate column width
+                col_width: 20 # Optional value. If missing all the screen width is used to calculate column width
                 col_padding: 2
             }
         }
@@ -250,7 +250,7 @@ $env.config = {
             type: {
                 layout: description
                 columns: 4
-                col_width: 20   # Optional value. If missing all the screen width is used to calculate column width
+                col_width: 20 # Optional value. If missing all the screen width is used to calculate column width
                 col_padding: 2
                 selection_rows: 4
                 description_rows: 10
@@ -357,13 +357,13 @@ $env.config = {
         }
     ] | each {|menu| $menu | upsert style {}})
     keybindings: [
-       # fix shift+backspace not working with the kitty keyboard protocol
-       {
-          name: shift_back
-          modifier: Shift
-          keycode: Backspace
-          mode: [emacs, vi_normal, vi_insert]
-          event: { edit: Backspace }
+        # fix shift+backspace not working with the kitty keyboard protocol
+        {
+            name: shift_back
+            modifier: Shift
+            keycode: Backspace
+            mode: [emacs, vi_normal, vi_insert]
+            event: { edit: Backspace }
         }
         {
             name: completion_menu
@@ -372,10 +372,16 @@ $env.config = {
             mode: [emacs vi_normal vi_insert]
             event: {
                 until: [
-                { send: menu name: completion_menu }
-                { send: menunext }
+                    { send: menu name: completion_menu }
+                    { send: menunext }
                 ]
             }
+            # event: {
+            #     until: [
+            #     { send: menu name: completion_menu }
+            #     { send: menunext }
+            #     ]
+            # }
         }
         {
             name: completion_previous
