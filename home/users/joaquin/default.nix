@@ -177,7 +177,8 @@
       dcdn = "docker compose down";
       dcrm = "docker compose rm";
 
-      nx = "nixos-rebuild --use-remote-sudo --accept-flake-config";
+      nx = "nixos-rebuild --use-remote-sudo --accept-flake-config --option allow-import-from-derivation false";
+
       nxs = "nx switch";
     }
     (lib.mkIf (config.programs.home-manager.enable && !config.submoduleSupport.enable) {
