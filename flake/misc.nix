@@ -73,7 +73,7 @@
                   warn-dirty = lib.mkDefault false;
                   # remove global registry
                   flake-registry = lib.mkDefault "";
-
+                  sync-before-registering = true;
                   accept-flake-config = lib.mkIf isLix (lib.mkDefault false);
                   repl-overlays = lib.mkIf isLix [
                     (pkgs.writeText "pkgs.nix"
