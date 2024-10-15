@@ -73,7 +73,6 @@ in
                 "addon@darkreader.org"
                 "firefox-enpass@enpass.io"
                 "smart-referer@meh.paranoid.pk"
-                "tab-array@menhera.org"
                 "uBlock0@raymondhill.net"
                 "vpn@proton.ch"
               ];
@@ -147,6 +146,19 @@ in
             "media.ffmpeg.vaapi.enabled" = true;
             "gfx.webrender.all" = true;
             "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/115.0";
+
+            # disable account icon (?)
+            "identity.fxaccounts.toolbar.enabled" = false;
+
+            "full-screen-api.transition-duration.enter" = "0 0";
+            "full-screen-api.transition-duration.leave" = "0 0";
+            "full-screen-api.warning.delay" = -1;
+            "full-screen-api.warning.timeout" = 0;
+
+            "security.ssl.treat_unsafe_negotiation_as_broken" = true;
+
+            # Unhide the “add exception” button on the SSL error page, allowing users to directly accept a bad certificate
+            "browser.xul.error_pages.expert_bad_cert" = true;
 
             "app.normandy.enabled" = false;
             "app.normandy.api_url" = "";
