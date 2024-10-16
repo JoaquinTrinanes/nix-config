@@ -152,7 +152,7 @@ $env.config = {
         vi_insert: line # block, underscore, line , blink_block, blink_underscore, blink_line (block is the default)
         vi_normal: block # block, underscore, line, blink_block, blink_underscore, blink_line (underscore is the default)
     }
-    footer_mode: "25" # always, never, number_of_rows, auto
+    footer_mode: 25 # always, never, number_of_rows, auto
     float_precision: 2
     use_ansi_coloring: true
     bracketed_paste: true # enable bracketed paste, currently useless on windows
