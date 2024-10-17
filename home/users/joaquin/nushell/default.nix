@@ -97,7 +97,10 @@ in
           def "to nix" [
               --format(-f) # Format the result
           ]: any -> string {
-              to json | ${nix} eval --expr $"builtins.fromJSON '''($in)'''" | if $format { ${formatter} - | ${lib.getExe pkgs.bat} --paging=never --style=plain -l nix } else { $in }
+              to json --raw
+              | str replace --all "''$" $"(char single_quote)(char single_quote)$"
+              | nix eval --expr $"builtins.fromJSON '''($in)'''"
+              | if $format { ${formatter} - | ${lib.getExe pkgs.bat} --paging=never --style=plain -l nix } else { $in }
           }
         ''
         (lib.mkOrder 9999 ''
