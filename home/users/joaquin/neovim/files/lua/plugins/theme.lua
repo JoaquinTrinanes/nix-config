@@ -10,6 +10,7 @@ local M = {
     name = "catppuccin",
     opts = {
       integrations = {
+        gitsigns = false,
         native_lsp = {
           underlines = {
             errors = { "undercurl" },
@@ -35,9 +36,17 @@ local M = {
           SpellBad = {
             sp = colors.subtext0,
           },
+          Added = { fg = colors.blue },
           DiffAdd = { bg = U.darken(colors.blue, 0.18, colors.base) },
-          -- DiffDelete = { bg = U.darken(colors.red, 0.18, colors.base) },
-          -- DiffChange = { bg = U.darken(colors.blue, 0.07, colors.base) },
+          -- diffAdded = { link = "Added" },
+
+          Removed = { fg = colors.red },
+          DiffDelete = { bg = U.darken(colors.red, 0.18, colors.base) },
+          -- diffRemoved = { link = "Removed" },
+
+          Changed = { fg = colors.yellow },
+          -- diffChanged = { link = "Changed" },
+          DiffChange = { bg = U.darken(colors.yellow, 0.07, colors.base) },
         }
       end,
     },
