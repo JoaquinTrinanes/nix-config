@@ -61,23 +61,19 @@
   home = {
     sessionVariables = lib.mkIf config.programs.neovim.enable { MANPAGER = "nvim +Man!"; };
 
-    packages =
-      let
-        nr = pkgs.writeShellScriptBin "nr" ''
-          nix run nixpkgs#"$@"
-        '';
-        ripgrep = lib.my.mkWrapper {
-          basePackage = pkgs.ripgrep;
-          env."RIPGREP_CONFIG_PATH" = {
-            value = pkgs.writeText "ripgreprc" (lib.concatLines config.programs.ripgrep.arguments);
-            force = false;
-          };
+    packages = builtins.attrValues {
+      nr = pkgs.writeShellScriptBin "nr" ''
+        nix run nixpkgs#"$@"
+      '';
+      ripgrep = lib.my.mkWrapper {
+        basePackage = pkgs.ripgrep;
+        env."RIPGREP_CONFIG_PATH" = {
+          value = pkgs.writeText "ripgreprc" (lib.concatLines config.programs.ripgrep.arguments);
+          force = false;
         };
-      in
-      builtins.attrValues {
-        inherit nr ripgrep;
-        inherit (pkgs) enpass;
       };
+      inherit (pkgs) enpass ast-grep;
+    };
   };
 
   programs.home-manager.enable = lib.mkDefault (!config.submoduleSupport.enable);
@@ -172,6 +168,8 @@
       nx = "nixos-rebuild --use-remote-sudo --accept-flake-config --option allow-import-from-derivation false";
 
       nxs = "nx switch";
+      # prevent leaking information from secure files
+      svim = "${lib.getExe config.programs.neovim.package} -n --cmd 'au BufRead * setlocal nobackup nomodeline noshelltemp noswapfile noundofile nowritebackup shadafile=NONE'";
     }
     (lib.mkIf (config.programs.home-manager.enable && !config.submoduleSupport.enable) {
       hm = "home-manager";
