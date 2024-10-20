@@ -3,6 +3,7 @@
   pkgs,
   lib,
   inputs,
+  osConfig,
   ...
 }:
 {
@@ -202,6 +203,29 @@
       Hidden=true
     '';
   };
+
+  xdg.mimeApps.defaultApplications =
+    let
+      # TODO: use wrapped package
+      defaultWebBrowser = lib.mkIf (osConfig.programs.firefox.package.desktopItem.name or null != null) (
+        lib.mkAfter [
+          osConfig.programs.firefox.package.desktopItem.name
+        ]
+      );
+    in
+    {
+      "x-scheme-handler/http" = defaultWebBrowser;
+      "x-scheme-handler/https" = defaultWebBrowser;
+      "x-scheme-handler/chrome" = defaultWebBrowser;
+      "text/html" = defaultWebBrowser;
+      "application/pdf" = defaultWebBrowser;
+      "application/x-extension-htm" = defaultWebBrowser;
+      "application/x-extension-html" = defaultWebBrowser;
+      "application/x-extension-shtml" = defaultWebBrowser;
+      "application/xhtml+xml" = defaultWebBrowser;
+      "application/x-extension-xhtml" = defaultWebBrowser;
+      "application/x-extension-xht" = defaultWebBrowser;
+    };
 
   programs.atuin = {
     enable = true;
