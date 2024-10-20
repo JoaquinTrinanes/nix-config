@@ -7,32 +7,29 @@
 let
   cfg = config.profiles.gaming;
   # Don't launch steam with the dGPU
-  steamPackages = pkgs.steamPackages.overrideScope (
-    _steamPkgsFinal: steamPkgsPrev: {
-      steam = steamPkgsPrev.steam.overrideAttrs (
-        _final: prev: {
-          postInstall = lib.concatLines [
-            prev.postInstall
-            ''
-              substituteInPlace $out/share/applications/steam.desktop \
-              --replace-fail PrefersNonDefaultGPU=true PrefersNonDefaultGPU=false \
-              --replace-fail X-KDE-RunOnDiscreteGpu=true X-KDE-RunOnDiscreteGpu=false
-            ''
-          ];
-        }
-      );
-    }
-  );
-  steamPackagesNoInternet = steamPackages.overrideScope (
-    _steamPkgsFinal: steamPkgsPrev: {
-      steam-fhsenv = steamPkgsPrev.steam-fhsenv.override (prev: {
-        extraBwrapArgs = (prev.extraBwrapArgs or [ ]) ++ [ "--unshare-net" ];
+  steam = pkgs.steam.override (prev: {
+    steam-unwrapped = prev.steam-unwrapped.overrideAttrs (prevUnwrapped: {
+      postInstall = lib.concatLines [
+        prevUnwrapped.postInstall
+        ''
+          substituteInPlace $out/share/applications/steam.desktop \
+            --replace-fail PrefersNonDefaultGPU=true PrefersNonDefaultGPU=false \
+            --replace-fail X-KDE-RunOnDiscreteGpu=true X-KDE-RunOnDiscreteGpu=false 
+        ''
+      ];
+    });
+  });
+  steamNoInternet =
+    let
+      steamNoInternetPkg = steam.override (prev: {
+        steam-unwrapped = prev.steam-unwrapped.overrideAttrs (prevUnwrapped: {
+          extraBwrapArgs = (prevUnwrapped.args.extraBwrapArgs or [ ]) ++ [ "--unshare-net" ];
+        });
       });
-    }
-  );
-  steamNoInternet = pkgs.writeShellScriptBin "steam-no-internet" ''
-    exec -a "$0" ${lib.getExe steamPackagesNoInternet.steam-fhsenv} "$@"
-  '';
+    in
+    pkgs.writeShellScriptBin "steam-no-internet" ''
+      exec -a "$0" ${lib.getExe steamNoInternetPkg} "$@"
+    '';
 in
 {
   options.profiles.gaming = {
@@ -47,9 +44,15 @@ in
 
     programs.steam = lib.mkDefault {
       enable = true;
-      package = steamPackages.steam-fhsenv;
+      package = steam;
     };
-
-    environment.systemPackages = lib.mkIf cfg.steamNoInternet.enable [ steamNoInternet ];
+    environment.systemPackages =
+      lib.optionals cfg.steamNoInternet.enable [ steamNoInternet ]
+      ++ builtins.attrValues {
+        inherit (pkgs)
+          lutris
+          # itch
+          ;
+      };
   };
 }
