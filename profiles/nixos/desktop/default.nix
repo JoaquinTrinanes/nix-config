@@ -11,6 +11,7 @@ in
   imports = [
     ./gnome.nix
     ./wayland.nix
+    ./hyprland.nix
   ];
 
   options.profiles.desktop = {
