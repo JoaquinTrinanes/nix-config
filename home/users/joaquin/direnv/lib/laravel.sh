@@ -3,13 +3,12 @@
 layout_laravel_sail() {
   layout php
 
-  lib_dir="$(direnv_layout_dir)/laravel_sail"
-  bin_dir="$lib_dir/bin"
-  base_dir="$(direnv_layout_dir)/.."
+  local bin_dir
+  bin_dir="$(direnv_layout_dir)/laravel_sail/bin"
 
   rm -rf "$bin_dir"
 
-  if [ ! -f "$base_dir/vendor/bin/sail" ]; then
+  if [ ! -f "$PWD/vendor/bin/sail" ]; then
     return
   fi
 
@@ -26,7 +25,9 @@ layout_laravel_sail() {
     # pnpm
   )
   for script in "${scripts[@]}"; do
-    echo "\"$base_dir/vendor/bin/sail\" \"$script\" \"\$@\"" >"$bin_dir/$script"
+    local file="$bin_dir/$script"
+    echo "#!/usr/bin/env bash" >"$file"
+    echo "\"$PWD/vendor/bin/sail\" \"$script\" \"\$@\"" >>"$file"
   done
 
   chmod -R u+x "$bin_dir"

@@ -12,7 +12,7 @@ use_my_flake() {
   FLAKE_PATH="$HOME/.flakes/$PROJECT_NAME"
 
   if [ -f "$FLAKE_PATH/flake.nix" ]; then
-    use flake "$FLAKE_PATH" --impure "$@"
+    use flake "$FLAKE_PATH" --impure --accept-flake-config "$@"
     export FLAKE_PATH
   fi
 }
