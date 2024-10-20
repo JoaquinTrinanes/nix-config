@@ -16,6 +16,7 @@
     ./wezterm
     ./kitty
     ./carapace
+    ./jujutsu
     inputs.nix-colors.homeManagerModules.default
   ];
 
@@ -43,15 +44,6 @@
   xdg = {
     enable = true;
     mimeApps.enable = true;
-  };
-
-  programs.jujutsu = {
-    enable = true;
-    settings = {
-      user = {
-        inherit (config.programs.git.iniContent.user) name email;
-      };
-    };
   };
 
   programs.password-store.enable = true;
