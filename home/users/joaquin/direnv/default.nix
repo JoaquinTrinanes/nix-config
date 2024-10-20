@@ -13,7 +13,6 @@
       (lib.mkIf config.programs.direnv.nix-direnv.enable (lib.mkBefore "nix_direnv_manual_reload"))
       ''
         dotenv_if_exists
-        source_up_if_exists
       ''
     ];
     config = {
@@ -46,14 +45,9 @@
     in
     lib.mkIf config.programs.mise.enable mise_activate_file;
 
-  xdg.configFile."direnv/lib/laravel.sh" = {
-    source = ./lib/laravel.sh;
-    executable = true;
-  };
-  xdg.configFile."direnv/lib/my-flake.sh" = {
-    source = ./lib/my-flake.sh;
-    executable = true;
-  };
+  xdg.configFile."direnv/lib/laravel.sh".source = ./lib/laravel.sh;
+  xdg.configFile."direnv/lib/my-flake.sh".source = ./lib/my-flake.sh;
+
   programs.git.ignores = [
     ".direnv"
     ".envrc"
