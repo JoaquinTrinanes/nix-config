@@ -453,11 +453,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1729156844,
-        "narHash": "sha256-daHWv1yT5DDRZikJD2pDgaz25WEzGUEs2QeOw2EzvXE=",
+        "lastModified": 1729459040,
+        "narHash": "sha256-AuQzTAQhuADetdv9lrFswVU2T5EF+sI50odkeU26PQ0=",
         "owner": "JoaquinTrinanes",
         "repo": "nushell-nightly-flake",
-        "rev": "55f71bdf1b4fdaef61aef0ccc1acf0e32990aa00",
+        "rev": "aead5e56c2f5669ae7718735eb46fc43441f9815",
         "type": "github"
       },
       "original": {
@@ -489,11 +489,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1729045942,
-        "narHash": "sha256-HjmK0x5Zm2TK2vFpC7XBM2e3EDNVnAIuEoU2FkeN8xw=",
+        "lastModified": 1729304879,
+        "narHash": "sha256-H7KGGJUU9BcDNnfXiATBGgs6FJKWQdfftNJS+/v2aMU=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "9de3cea452d2401d6f93c06ad985178a4e11d1fc",
+        "rev": "b259ef799b5ac014604da71ecd92d4a52603ed2d",
         "type": "github"
       },
       "original": {
