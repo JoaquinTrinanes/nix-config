@@ -1,11 +1,33 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
+let
+  # Workaround for jj not having includeIf
+  jj =
+    let
+      wrapped = pkgs.writeShellScriptBin "jj" ''
+        if [[ $PWD/ = $HOME/Documents/veganhacktivists/* ]]; then
+          export JJ_EMAIL=''${JJ_EMAIL-${lib.escapeShellArg config.accounts.email.accounts.vh.address}}
+          # ${lib.toShellVar "JJ_EMAIL" config.accounts.email.accounts.vh.address}
+        fi
+        exec -a "$0" ${lib.getExe pkgs.jujutsu} "$@"
+      '';
+    in
+    pkgs.symlinkJoin {
+      name = "jj-wrapped";
+      paths = [
+        wrapped
+        pkgs.jujutsu
+      ];
+    };
+in
 {
   programs.jujutsu = {
     enable = lib.mkDefault true;
+    package = jj;
     settings = {
       user = {
         inherit (config.programs.git.iniContent.user) name email;
@@ -24,6 +46,11 @@
       ui = {
         default-command = [
           "log"
+          "-r"
+          "(HEAD@git..@):: | (HEAD@git..@)-"
+
+          # "log"
+
           # "status"
           # "--no-pager"
         ];
@@ -50,9 +77,16 @@
         ];
         d = [ "diff" ];
         h = [ "help" ];
+        g = [ "git" ];
         gp = [
           "git"
           "push"
+        ];
+        new-before = [
+          "new"
+          "--no-edit"
+          "--before"
+          "@"
         ];
       };
       revset-aliases = {
