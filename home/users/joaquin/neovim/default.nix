@@ -29,6 +29,7 @@ in
         marksman
         nil
         nixd
+        nodejs
         pyright
         ripgrep
         shellcheck
