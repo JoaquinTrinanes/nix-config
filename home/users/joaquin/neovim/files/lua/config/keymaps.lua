@@ -61,3 +61,25 @@ end)
 map("n", "<leader><leader>l>", function()
   require("smart-splits").swap_buf_right()
 end)
+
+map("n", "y<C-g>", function()
+  vim.fn.setreg("+", vim.fn.expand("%"))
+end, {
+  expr = true,
+})
+
+map("n", "<leader>fd", function()
+  vim.fn.setreg("+", vim.fs.dirname(vim.fn.expand("%:.")))
+end, { desc = "Copy relative file directory" })
+
+map("n", "<leader>fD", function()
+  vim.fn.setreg("+", vim.fs.dirname(vim.fn.expand("%:p")))
+end, { desc = "Copy file directory" })
+
+map("n", "<leader>fy", function()
+  vim.fn.setreg("+", vim.fn.expand("%:."))
+end, { desc = "Copy relative file path" })
+
+map("n", "<leader>fY", function()
+  vim.fn.setreg("+", vim.fn.expand("%:p"))
+end, { desc = "Copy file path" })
