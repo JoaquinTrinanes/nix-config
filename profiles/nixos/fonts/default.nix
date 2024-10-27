@@ -19,6 +19,7 @@ in
       joypixels
       noto-fonts-cjk-sans
       unscii
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
     ];
     fonts.fontconfig = lib.mkDefault {
       defaultFonts = {
