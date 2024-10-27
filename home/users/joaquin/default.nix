@@ -96,18 +96,6 @@
     )
   );
 
-  programs.mise = {
-    enable = true;
-    enableBashIntegration = false;
-    enableZshIntegration = false;
-    enableFishIntegration = false;
-  };
-
-  programs.git.ignores = lib.mkIf config.programs.mise.enable [
-    ".mise.local.toml"
-    ".mise.*.local.toml"
-  ];
-
   programs.zoxide = {
     enable = true;
     options = [ "--cmd=j" ];
