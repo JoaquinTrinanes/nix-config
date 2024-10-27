@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 {
@@ -34,16 +33,6 @@
       # };
     };
   };
-
-  xdg.configFile."direnv/lib/mise.sh".source =
-    let
-      mise_activate_file =
-        pkgs.runCommandLocal "use_mise.sh" { nativeBuildInputs = [ config.programs.mise.package ]; }
-          ''
-            mise direnv activate > $out
-          '';
-    in
-    lib.mkIf config.programs.mise.enable mise_activate_file;
 
   xdg.configFile."direnv/lib/laravel.sh".source = ./lib/laravel.sh;
   xdg.configFile."direnv/lib/my-flake.sh".source = ./lib/my-flake.sh;
