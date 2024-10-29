@@ -40,19 +40,21 @@ in
         backend = "gpg";
       };
       git = {
-        auto-local-bookmark = true;
+        auto-local-bookmark = false;
       };
       format = { };
+      revset-aliases = {
+        HEAD = "@-";
+        overview = "overview(trunk())";
+        "overview(base)" = "present(@) | present(base) | present(base::@) | ancestors(base:: & visible_heads(), 1)";
+        "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+        "p(n)" = "roots(@ | ancestors(@-, n))";
+      };
       ui = {
         default-command = [
           "log"
           "-r"
-          "(HEAD@git..@):: | (HEAD@git..@)-"
-
-          # "log"
-
-          # "status"
-          # "--no-pager"
+          "overview"
         ];
       };
       templates = { };
@@ -63,17 +65,20 @@ in
         "diff removed" = {
           fg = "red";
         };
+        bookmarks = {
+          bold = true;
+          fg = "magenta";
+        };
       };
       template-aliases = { };
       aliases = {
         l = [
           "log"
           "-r"
-          "(HEAD@git..@):: | (HEAD@git..@)-"
+          ".."
         ];
         s = [
           "status"
-          "--no-pager"
         ];
         d = [ "diff" ];
         h = [ "help" ];
@@ -88,10 +93,15 @@ in
           "--before"
           "@"
         ];
-      };
-      revset-aliases = {
-        HEAD = "@-";
-        "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+        nb = [ "new-before" ];
+        standup = [
+          "log"
+          "-r"
+          ''author_date(after:"yesterday") & mine()''
+          "--no-graph"
+          "-T"
+          "builtin_log_comfortable"
+        ];
       };
     };
   };
@@ -109,7 +119,6 @@ in
   #   '';
 
   home.shellAliases = lib.mkIf config.programs.jujutsu.enable {
-    jjs = "jj status";
     js = "jj status";
     jd = "jj diff";
   };
