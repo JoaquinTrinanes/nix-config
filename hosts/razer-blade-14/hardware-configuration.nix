@@ -76,6 +76,7 @@
 
   services.tlp = {
     enable = true;
+    enable = false;
     settings = {
       # TLP_ENABLE = 0;
       RUNTIME_PM_ON_AC = "auto";
@@ -84,6 +85,7 @@
     };
   };
   services.power-profiles-daemon.enable = false;
+  services.power-profiles-daemon.enable = true;
 
   powerManagement = {
     enable = true;
