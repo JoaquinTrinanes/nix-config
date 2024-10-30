@@ -24,6 +24,7 @@ in
       (lib.mkIf (cfg.cpuType == "amd") {
         environment.sessionVariables = {
           VDPAU_DRIVER = "radeonsi";
+          LIBVA_DRIVER_NAME = "radeonsi";
         };
       })
       (lib.mkIf (cfg.cpuType == "intel") {
