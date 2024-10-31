@@ -6,23 +6,29 @@
 }:
 let
   # Workaround for jj not having includeIf
-  jj =
-    let
-      wrapped = pkgs.writeShellScriptBin "jj" ''
-        if [[ $PWD/ = $HOME/Documents/veganhacktivists/* ]]; then
-          export JJ_EMAIL=''${JJ_EMAIL-${lib.escapeShellArg config.accounts.email.accounts.vh.address}}
-          # ${lib.toShellVar "JJ_EMAIL" config.accounts.email.accounts.vh.address}
-        fi
-        exec -a "$0" ${lib.getExe pkgs.jujutsu} "$@"
-      '';
-    in
-    pkgs.symlinkJoin {
-      name = "jj-wrapped";
-      paths = [
-        wrapped
-        pkgs.jujutsu
-      ];
+  jj = lib.my.mkWrapper {
+    basePackage = pkgs.writeShellScriptBin "jj" ''
+      if [[ $PWD/ = $HOME/Documents/veganhacktivists/* ]]; then
+        export JJ_EMAIL=''${JJ_EMAIL-${lib.escapeShellArg config.accounts.email.accounts.vh.address}}
+        # ${lib.toShellVar "JJ_EMAIL" config.accounts.email.accounts.vh.address}
+      fi
+      exec -a "$0" ${lib.getExe pkgs.jujutsu} "$@"
+    '';
+
+    # https://nixpk.gs/pr-tracker.html?pr=352298
+    env = {
+      PAGER = {
+        value = null;
+      };
     };
+    extraPackages = [
+      (pkgs.writeTextDir "share/fish/vendor_completions.d/jj.fish" ''
+        source ${pkgs.jujutsu}/share/fish/vendor_completions.d/jj.fish
+        source ${./jj.fish}
+      '')
+      pkgs.jujutsu
+    ];
+  };
 in
 {
   programs.jujutsu = {
@@ -44,11 +50,16 @@ in
       };
       format = { };
       revset-aliases = {
+        default_log = "present(@) | ancestors(immutable_heads().., 2) | present(trunk())";
         HEAD = "@-";
-        overview = "overview(trunk())";
-        "overview(base)" = "present(@) | present(base) | present(base::@) | ancestors(base:: & visible_heads(), 1)";
+        "common_ancestor(a, b)" = "heads(::a & ::b)";
+        "diverge(a, b)" = "common_ancestor(a, b)::(a|b)";
         "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
         "p(n)" = "roots(@ | ancestors(@-, n))";
+        overview = "overview(common_ancestor(trunk(), git_head()))";
+        "overview(base)" = "present(@) | present(base) | present(base::@) | ancestors(base:: & visible_heads(), 1)";
+      };
+      revsets = {
       };
       ui = {
         default-command = [
@@ -101,6 +112,13 @@ in
           "--no-graph"
           "-T"
           "builtin_log_comfortable"
+        ];
+        up = [
+          "rebase"
+          "-b"
+          "@"
+          "-d"
+          "trunk()"
         ];
       };
     };
