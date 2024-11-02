@@ -12,6 +12,7 @@ in
     ./substituters.nix
     ./templates
     ./lib
+    ./neovim
   ];
 
   flake.flakeModules = flakeModules;
