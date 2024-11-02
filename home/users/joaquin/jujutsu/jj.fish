@@ -170,6 +170,12 @@ function __jj_revision_modified_files
   end
 end
 
+function __jj_untracked_files
+  fd -tf -ts | grep -v "$(__jj file list)" | while read -l file
+    printf "%s\t%s\n" $file "Untracked"
+  end
+end
+
 function __jj_remotes
   __jj git remote list | while read -l remote
     printf "%s\t%s\n" (string split " " -m 1 -- $remote)
@@ -282,6 +288,7 @@ complete -f -c jj -n '__jj_seen_subcommand_from restore' -ka '(__jj_parse_revisi
 complete -f -c jj -n '__jj_seen_subcommand_from split' -ka '(__jj_parse_revision_modified_files_or_wc_modified_files)'
 complete -f -c jj -n '__jj_seen_subcommand_from squash' -ka '(__jj_parse_revision_modified_files_or_wc_modified_files)'
 complete -f -c jj -n '__jj_seen_subcommand_from untrack' -ka '(__jj_parse_revision_files_or_wc_modified_files)'
+complete -f -c jj -n '__jj_seen_subcommand_from file; and __jj_seen_subcommand_from track' -ka '(__jj_untracked_files)'
 
 # Revisions.
 complete -f -c jj -n '__jj_seen_subcommand_from abandon' -ka '(__jj_mutable_changes)'
