@@ -2,9 +2,11 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
+  diffEditor = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.neovim;
   # Workaround for jj not having includeIf
   jj = lib.my.mkWrapper {
     basePackage = pkgs.writeShellScriptBin "jj" ''
@@ -62,6 +64,11 @@ in
       revsets = {
       };
       ui = {
+        diff-editor = [
+          (lib.getExe diffEditor)
+          "-c"
+          "DiffEditor $left $right $output"
+        ];
         default-command = [
           "log"
           "-r"
