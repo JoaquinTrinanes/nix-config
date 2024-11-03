@@ -8,6 +8,8 @@
     }:
     let
       neovim = pkgs.callPackage ./mkNeovim.nix {
+        viAlias = true;
+        vimAlias = true;
         configDir = ../../home/users/joaquin/neovim/files;
         neovim-unwrapped = inputs'.neovim-nightly-overlay.packages.neovim;
         extraPackages = with pkgs; [
@@ -40,6 +42,7 @@
           p.lua-utils-nvim
         ];
         plugins = with pkgs.vimPlugins; [
+          blink-cmp
           hunk-nvim
           catppuccin-nvim
           vim-dadbod

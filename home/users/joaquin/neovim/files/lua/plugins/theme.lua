@@ -10,6 +10,7 @@ local M = {
     name = "catppuccin",
     opts = {
       integrations = {
+        blink_cmp = true,
         gitsigns = false,
         native_lsp = {
           underlines = {

@@ -1,5 +1,18 @@
 local M = {
-  { "nvim-lua/plenary.nvim" },
+  {
+    "m4xshen/hardtime.nvim",
+    cmd = { "Hardtime" },
+    -- dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
+  {
+    "chentoast/marks.nvim",
+    event = { "LazyFile" },
+    opts = {
+      default_mappings = true,
+      cyclic = true,
+    },
+  },
   {
     "stevearc/oil.nvim",
     event = "VeryLazy",
