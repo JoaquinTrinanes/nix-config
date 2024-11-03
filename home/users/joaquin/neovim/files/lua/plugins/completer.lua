@@ -17,10 +17,23 @@ local M = {
     enabled = false,
   },
   {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      -- { "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
+    "saghen/blink.cmp",
+    optional = true,
+    lazy = false,
+    opts = {
+      keymap = {
+        preset = "enter",
+        ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+        ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+      },
+
+      -- trigger = { completion = { show_in_snippet = false } },
+      -- prebuilt_binaries = { download = false },
+      windows = { autocomplete = { selection = "manual" } },
     },
+  },
+  {
+    "hrsh7th/nvim-cmp",
     --- @param opts cmp.ConfigSchema
     opts = function(_, opts)
       -- local cmp_autopairs = require("nvim-autopairs.completion.cmp")
