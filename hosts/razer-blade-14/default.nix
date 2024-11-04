@@ -100,8 +100,6 @@
     ];
     dnsovertls = "opportunistic";
   };
-  # override firefox's default DNS settings to force the local resolver
-  programs.firefox.preferences."network.trr.mode" = lib.mkForce 5;
 
   virtualisation.docker = {
     enable = true;
