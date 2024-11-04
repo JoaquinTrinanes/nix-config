@@ -40,8 +40,6 @@ rec {
     lix-module.url = "git+https://git.lix.systems/lix-project/nixos-module";
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
     lix-module.inputs.lix.follows = "lix";
-
-    mnw.url = "github:Gerg-L/mnw";
   };
 
   nixConfig = {

@@ -183,6 +183,11 @@ local M = {
     "williamboman/mason.nvim",
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
+      if vim.g.usePluginsFromStore then
+        opts.ensure_installed = {}
+        opts.automatic_installation = false
+        return
+      end
 
       local servers_to_skip = {
         "marksman",
@@ -200,7 +205,7 @@ local M = {
   },
   {
     "stevearc/conform.nvim",
-    ---@module "conform"
+    ---@module "conform.types"
     ---@type conform.setupOpts
     opts = {
       default_format_opts = {

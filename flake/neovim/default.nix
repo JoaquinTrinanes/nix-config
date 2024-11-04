@@ -1,4 +1,3 @@
-{ inputs, ... }:
 {
   perSystem =
     {
@@ -8,7 +7,7 @@
       ...
     }:
     let
-      toLuaBindings = lib.generators.toLua { asBindings = true; };
+      toLua = lib.generators.toLua { };
       mkPluginPath =
         plugins:
         let
@@ -23,8 +22,7 @@
               drv;
         in
         pkgs.linkFarm "vim-plugin-path" (map mkEntryFromDrv plugins);
-
-      baseNeovim =
+      plugins =
         let
           treesitter = pkgs.vimPlugins.nvim-treesitter.withPlugins (
             _:
@@ -43,154 +41,162 @@
               })
             ]
           );
-          plugins =
-            [ treesitter ]
-            ++ (with pkgs.vimPlugins; [
-              bigfile-nvim
-              bufferline-nvim
-              catppuccin-nvim
-              clangd_extensions-nvim
-              cmp-buffer
-              cmp-nvim-lsp
-              cmp-path
-              conform-nvim
-              crates-nvim
-              dashboard-nvim
-              dial-nvim
-              dressing-nvim
-              flash-nvim
-              flatten-nvim
-              friendly-snippets
-              gitsigns-nvim
-              grug-far-nvim
-              hardtime-nvim
-              harpoon2
-              hunk-nvim
-              indent-blankline-nvim
-              lazy-nvim
-              lazydev-nvim
-              LazyVim
-              lualine-lsp-progress
-              lualine-nvim
-              luasnip
-              marks-nvim
-              mason-lspconfig-nvim
-              mason-nvim
-              mini-ai
-              mini-hipatterns
-              mini-icons
-              mini-indentscope
-              mini-nvim
-              neo-tree-nvim
-              neorg
-              noice-nvim
-              nui-nvim
-              nvim-cmp
-              nvim-dap
-              nvim-dap-ui
-              nvim-lint
-              nvim-lspconfig
-              nvim-nio
-              nvim-snippets
-              nvim-treesitter-context
-              nvim-treesitter-textobjects
-              nvim-ts-autotag
-              oil-nvim
-              persistence-nvim
-              plenary-nvim
-              project-nvim
-              render-markdown-nvim
-              rustaceanvim
-              SchemaStore-nvim
-              smart-splits-nvim
-              tailwindcss-colors-nvim
-              telescope-fzf-native-nvim
-              telescope-nvim
-              todo-comments-nvim
-              treesitter
-              trouble-nvim
-              ts-comments-nvim
-              vim-dadbod
-              vim-dadbod-completion
-              vim-dadbod-ui
-              vim-jjdescription
-              which-key-nvim
-            ]);
-          configDir = ../../home/users/joaquin/neovim/files;
-          pluginPath = mkPluginPath plugins;
         in
-        inputs.mnw.lib.wrap pkgs {
-          neovim = inputs'.neovim-nightly-overlay.packages.default;
-          initLua = ''
-            ${toLuaBindings {
-              "vim.g.pluginPath" = pluginPath;
-              "vim.g.pluginNameOverride" = {
-                catppuccin = "catppuccin-nvim";
-                LuaSnip = "luasnip";
-                tailwindcss-colorizer-cmp = "tailwindcss-colorizer-cmp.nvim";
-                harpoon = "harpoon2";
-              };
-            }}
-            -- vim.opt.runtimepath:append(${lib.generators.toLua { } pluginPath})
-            -- vim.opt.packpath:prepend(${lib.generators.toLua { } pluginPath})
+        [ treesitter ]
+        ++ (with pkgs.vimPlugins; [
+          bigfile-nvim
+          bufferline-nvim
+          catppuccin-nvim
+          clangd_extensions-nvim
+          cmp-buffer
+          cmp-nvim-lsp
+          cmp-path
+          conform-nvim
+          crates-nvim
+          dashboard-nvim
+          dial-nvim
+          dressing-nvim
+          flash-nvim
+          flatten-nvim
+          friendly-snippets
+          gitsigns-nvim
+          grug-far-nvim
+          hardtime-nvim
+          harpoon2
+          hunk-nvim
+          indent-blankline-nvim
+          lazy-nvim
+          lazydev-nvim
+          LazyVim
+          lualine-lsp-progress
+          lualine-nvim
+          luasnip
+          marks-nvim
+          mason-lspconfig-nvim
+          mason-nvim
+          mini-ai
+          mini-hipatterns
+          mini-icons
+          mini-indentscope
+          mini-nvim
+          neo-tree-nvim
+          neorg
+          noice-nvim
+          nui-nvim
+          nvim-cmp
+          nvim-dap
+          nvim-dap-ui
+          nvim-lint
+          nvim-lspconfig
+          nvim-nio
+          nvim-snippets
+          nvim-treesitter-context
+          nvim-treesitter-textobjects
+          nvim-ts-autotag
+          oil-nvim
+          persistence-nvim
+          plenary-nvim
+          project-nvim
+          render-markdown-nvim
+          rustaceanvim
+          SchemaStore-nvim
+          smart-splits-nvim
+          tailwindcss-colors-nvim
+          telescope-fzf-native-nvim
+          telescope-nvim
+          todo-comments-nvim
+          trouble-nvim
+          ts-comments-nvim
+          vim-dadbod
+          vim-dadbod-completion
+          vim-dadbod-ui
+          vim-jjdescription
+          which-key-nvim
+        ]);
+      extraPackages = builtins.attrValues {
+        inherit (pkgs)
+          lazygit
+          black
+          deadnix
+          dotenv-linter
+          fd
+          fzf
+          gcc
+          git
+          gnumake
+          icu
+          intelephense
+          lua-language-server
+          marksman
+          nil
+          nixd
+          nodejs
+          pyright
+          ripgrep
+          shellcheck
+          shfmt
+          statix
+          stylua
+          taplo
+          typescript-language-server
+          vscode-langservers-extracted
+          yaml-language-server
+          ;
+        inherit (pkgs.nodePackages) prettier;
+      };
+      extraLuaPackages = ps: [ ps.jsregexp ];
+      mkNeovim = pkgs.callPackage ./mkNeovim.nix { };
+      baseNeovim =
+        let
+          pluginPath = mkPluginPath plugins;
+          configDir = ../../home/users/joaquin/neovim/files;
+        in
+        mkNeovim {
+          neovim-unwrapped = inputs'.neovim-nightly-overlay.packages.default;
+          inherit
+            plugins
+            extraLuaPackages
+            extraPackages
+            configDir
+            ;
+          globals = {
+            inherit pluginPath;
+            lazyOptions = {
+              lockfile = "${configDir}/lazy-lock.json";
+              install.missing = false;
+            };
+            pluginNameOverride = {
+              catppuccin = "catppuccin-nvim";
+              LuaSnip = "luasnip";
+              tailwindcss-colorizer-cmp = "tailwindcss-colorizer-cmp.nvim";
+              harpoon = "harpoon2";
+            };
+          };
+          luaRcContent = ''
             require("config.lazy")
           '';
-          devExcludedPlugins = [ configDir ];
-          devPluginPaths = [ ];
-          inherit plugins;
-          extraBinPath = builtins.attrValues {
-            inherit (pkgs)
-              lazygit
-              black
-              deadnix
-              dotenv-linter
-              fd
-              fzf
-              gcc
-              git
-              gnumake
-              icu
-              intelephense
-              lua-language-server
-              marksman
-              nil
-              nixd
-              nodejs
-              pyright
-              ripgrep
-              shellcheck
-              shfmt
-              statix
-              stylua
-              taplo
-              typescript-language-server
-              yaml-language-server
-              ;
-            inherit (pkgs.nodePackages) prettier;
-          };
-          extraLuaPackages = ps: [ ps.jsregexp ];
         };
     in
     {
       packages = {
         neovim = baseNeovim.override (prev: {
-          initLua = ''
-            vim.env.LAZY = vim.env.LAZY or "${pkgs.vimPlugins.lazy-nvim}"
-            ${prev.initLua or ""}
-          '';
+          luaRcContent =
+            ''
+              vim.env.LAZY = vim.env.LAZY or ${toLua pkgs.vimPlugins.lazy-nvim}
+            ''
+            + prev.luaRcContent or "";
+          globals = lib.recursiveUpdate prev.globals {
+            usePluginsFromStore = true;
+          };
           appName = "pureNvim";
-          viAlias = true;
-          vimAlias = true;
         });
-        neovim-impure =
-          (baseNeovim.override (prev: {
-            appName = "nvim";
-            initLua = ''
-              ${toLuaBindings { "vim.g.usePluginsFromStore" = false; }}
-              vim.go.packpath = vim.env.VIMRUNTIME
-              ${prev.initLua or ""}
-            '';
-          })).devMode;
+        neovim-impure = baseNeovim.override (prev: {
+          appName = "nvim";
+          luaRcContent = ''
+            vim.go.packpath = vim.env.VIMRUNTIME
+            ${prev.luaRcContent or ""}
+          '';
+        });
       };
 
     };

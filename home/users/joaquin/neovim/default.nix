@@ -8,19 +8,9 @@
 let
   inherit (config.lib.impurePath) mkImpureLink;
   packages = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
-  mkCustomNeovim =
-    pkg:
-    pkg.override (prev: {
-      devPluginPaths = (prev.devPluginPaths or [ ]) ++ [ (mkImpureLink ./files) ];
-    });
-  pureNeovim = mkCustomNeovim (
-    packages.neovim.override {
-      appName = "pureNvim";
-      viAlias = true;
-      vimAlias = false;
-    }
-  );
-  impureNeovim =
+
+  # vi
+  pureNeovim =
     let
       base = mkCustomNeovim (
         packages.neovim-impure.override (prev: {
@@ -38,9 +28,27 @@ let
       exec -a "$0" ${lib.getExe' base "vim"} "$@"
     '';
 
+  # vim, nvim
+  impureNeovim = packages.neovim-impure.override (prev: {
+    configDir = mkImpureLink ./files;
+    viAlias = false;
+    vimAlias = true;
+    appName = "nvim";
+    globals = lib.recursiveUpdate prev.globals {
+      usePluginsFromStore = false;
+      lazyOptions = {
+        lockfile = mkImpureLink ./files/lazy-lock.json; # "${configDir}/lazy-lock.json";
+        install.missing = true;
+      };
+    };
+  });
 in
 {
-  programs.neovim.package = pureNeovim;
+  programs.neovim.package = impureNeovim;
+  home.sessionVariables = {
+    EDITOR = config.programs.neovim.package.meta.mainProgram or "nvim";
+  };
+
   home.packages = [
     pureNeovim
     impureNeovim

@@ -8,7 +8,7 @@ end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 if vim.g.usePluginsFromStore == nil then
-  vim.g.usePluginsFromStore = true
+  vim.g.usePluginsFromStore = false
 end
 
 local dev = {}
@@ -35,7 +35,8 @@ if vim.g.usePluginsFromStore and vim.g.pluginPath then
   }
 end
 
-require("lazy").setup({
+--- @type LazyConfig
+local lazyoptions = {
   spec = {
     -- add LazyVim and import its plugins
     {
@@ -74,7 +75,6 @@ require("lazy").setup({
     { import = "plugins" },
   },
   dev = dev,
-  -- install = { missing = vim.g.impureRtp or false },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
     -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
@@ -88,9 +88,8 @@ require("lazy").setup({
   checker = { enabled = false }, -- automatically check for plugin updates
   change_detection = { notify = false },
   performance = {
-    reset_packpath = not vim.g.usePluginsFromStore,
+    -- reset_packpath = not vim.g.usePluginsFromStore,
     rtp = {
-      -- TODO: check if it has a performance penalty. And probably check if lazy.nvim can be loaded in a non-dynamic way
       reset = false,
       -- disable some rtp plugins
       disabled_plugins = {
@@ -105,4 +104,6 @@ require("lazy").setup({
       },
     },
   },
-})
+}
+
+require("lazy").setup(vim.tbl_deep_extend("force", lazyoptions, vim.g.lazyOptions or {}))

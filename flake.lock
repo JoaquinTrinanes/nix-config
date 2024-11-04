@@ -344,21 +344,6 @@
         "url": "https://git.lix.systems/lix-project/nixos-module"
       }
     },
-    "mnw": {
-      "locked": {
-        "lastModified": 1728258832,
-        "narHash": "sha256-RtrtcogcvjImxBMe/TRNoHT+6w4Omf64IhzI0/y6Zxk=",
-        "owner": "Gerg-L",
-        "repo": "mnw",
-        "rev": "00ccbc83e83694b07005e8f9273ca8557e5f20ae",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Gerg-L",
-        "repo": "mnw",
-        "type": "github"
-      }
-    },
     "neovim-nightly-overlay": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -506,7 +491,6 @@
         "home-manager": "home-manager",
         "lix": "lix",
         "lix-module": "lix-module",
-        "mnw": "mnw",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-colors": "nix-colors",
         "nix-index-database": "nix-index-database",
