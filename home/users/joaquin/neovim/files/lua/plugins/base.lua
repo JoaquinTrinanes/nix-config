@@ -132,6 +132,12 @@ local M = {
       },
     },
   },
+
+  {
+    "which-key.nvim",
+    opts = {
+      preset = "helix",
+    },
 }
 
 return M

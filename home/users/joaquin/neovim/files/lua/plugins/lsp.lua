@@ -192,6 +192,10 @@ local M = {
       opts.ensure_installed = vim.tbl_filter(function(server)
         return not vim.list_contains(servers_to_skip, server)
       end, opts.ensure_installed)
+      -- if vim.g.pluginPath then
+      -- if vim.g.pluginPath and not vim.g.impureRtp then
+      --   opts.ensure_installed = {}
+      -- end
     end,
   },
   {
@@ -238,7 +242,10 @@ local M = {
       }
 
       if type(opts.ensure_installed) == "table" then
-        vim.list_extend(opts.ensure_installed, { "blade", "php", "php_only", "html" })
+        vim.list_extend(opts.ensure_installed, { "blade", "php", "php_only", "html", "css" })
+      end
+      if not vim.g.impureRtp then
+        opts.ensure_installed = {}
       end
     end,
   },

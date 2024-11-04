@@ -7,49 +7,20 @@
 }:
 let
   inherit (config.lib.impurePath) mkImpureLink;
+  packages = inputs.self.packages.${pkgs.stdenv.hostPlatform.system};
+  mkCustomNeovim =
+    pkg:
+    pkg.override (prev: {
+      devPluginPaths = (prev.devPluginPaths or [ ]) ++ [ (mkImpureLink ./files) ];
+    });
 in
 {
-  programs.neovim = {
-    enable = lib.mkDefault true;
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    extraPackages = builtins.attrValues {
-      lazygit = config.programs.lazygit.package;
-      inherit (pkgs)
-        black
-        deadnix
-        dotenv-linter
-        fd
-        fzf
-        gcc
-        git
-        gnumake
-        icu
-        intelephense
-        lua-language-server
-        marksman
-        nil
-        nixd
-        nodejs
-        pyright
-        ripgrep
-        shellcheck
-        shfmt
-        statix
-        stylua
-        taplo
-        typescript-language-server
-        yaml-language-server
-        ;
-      inherit (pkgs.nodePackages) prettier;
-    };
-    vimAlias = true;
-    viAlias = true;
-    extraLuaConfig = ''
-      require("config.lazy")
-    '';
-    withNodeJs = true;
-    extraLuaPackages = p: [ p.jsregexp ];
-  };
+  home.packages = [
+    (mkCustomNeovim packages.neovim)
+    (pkgs.writeShellScriptBin "ivim" ''
+      exec -a "$0" ${lib.getExe (mkCustomNeovim packages.neovim-impure)} "$@"
+    '')
+  ];
 
   xdg.configFile."nvim/lua" = {
     source = mkImpureLink ./files/lua;

@@ -7,6 +7,7 @@ local M = {
   },
   {
     "catppuccin/nvim",
+    optional = true,
     name = "catppuccin",
     opts = {
       integrations = {

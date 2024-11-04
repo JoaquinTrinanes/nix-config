@@ -1,10 +1,37 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+local hasLazy, lazy = pcall(require, "lazy")
+if not vim.loop.fs_stat(lazypath) and not vim.env.LAZY then
   -- bootstrap lazy.nvim
   -- stylua: ignore
   vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
 end
+
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
+
+local dev = {}
+
+if vim.g.pluginPath then
+  dev = {
+    path = function(plugin)
+      local myNeovimPackages = vim.g.pluginPath
+      local path = nil
+      local name = vim.g.pluginNameOverride[plugin.name] or plugin.name
+      if vim.fn.isdirectory(myNeovimPackages .. "/start/" .. name) == 1 then
+        path = myNeovimPackages .. "/start/" .. name
+      elseif vim.fn.isdirectory(myNeovimPackages .. "/opt/" .. name) == 1 then
+        path = myNeovimPackages .. "/opt/" .. name
+      elseif vim.fn.isdirectory(myNeovimPackages .. "/" .. name) == 1 then
+        path = myNeovimPackages .. "/" .. name
+      else
+        path = "~/projects/" .. name
+      end
+      return path
+    end,
+    patterns = { "." },
+    -- fallback = vim.g.impureRtp or false,
+    fallback = true,
+  }
+end
 
 require("lazy").setup({
   spec = {
@@ -14,7 +41,7 @@ require("lazy").setup({
       import = "lazyvim.plugins",
     },
     { import = "lazyvim.plugins.extras.dap.core" },
-    { import = "lazyvim.plugins.extras.coding.blink" },
+    -- { import = "lazyvim.plugins.extras.coding.blink" },
     { import = "lazyvim.plugins.extras.dap.nlua" },
     { import = "lazyvim.plugins.extras.editor.dial" },
     { import = "lazyvim.plugins.extras.editor.harpoon2" },
@@ -40,8 +67,11 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
     { import = "lazyvim.plugins.extras.util.project" },
+    -- { import = "lazyvim.plugins.extras.coding.copilot" },
     { import = "plugins" },
   },
+  dev = dev,
+  -- install = { missing = vim.g.impureRtp or false },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
     -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
@@ -55,9 +85,10 @@ require("lazy").setup({
   checker = { enabled = false }, -- automatically check for plugin updates
   change_detection = { notify = false },
   performance = {
+    reset_packpath = true, -- vim.g.impureRtp,
     rtp = {
       -- TODO: check if it has a performance penalty. And probably check if lazy.nvim can be loaded in a non-dynamic way
-      --  reset = false,
+      reset = false,
       -- disable some rtp plugins
       disabled_plugins = {
         "gzip",
