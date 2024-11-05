@@ -90,7 +90,7 @@ in
         ''
           # Parse text as nix expression
           def "from nix" []: string -> any {
-              ${nix} eval --json --expr $in | from json
+              ${nix} eval --json -f - | from json
           }
 
           # Convert table data into a nix expression
