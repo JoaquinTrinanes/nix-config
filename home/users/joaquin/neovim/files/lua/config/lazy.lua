@@ -1,5 +1,4 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-local hasLazy, lazy = pcall(require, "lazy")
 if not vim.loop.fs_stat(lazypath) and not vim.env.LAZY then
   -- bootstrap lazy.nvim
   -- stylua: ignore
@@ -8,9 +7,13 @@ end
 
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
+if vim.g.usePluginsFromStore == nil then
+  vim.g.usePluginsFromStore = true
+end
+
 local dev = {}
 
-if vim.g.pluginPath then
+if vim.g.usePluginsFromStore and vim.g.pluginPath then
   dev = {
     path = function(plugin)
       local myNeovimPackages = vim.g.pluginPath
@@ -28,7 +31,6 @@ if vim.g.pluginPath then
       return path
     end,
     patterns = { "." },
-    -- fallback = vim.g.impureRtp or false,
     fallback = true,
   }
 end
@@ -38,6 +40,7 @@ require("lazy").setup({
     -- add LazyVim and import its plugins
     {
       "LazyVim/LazyVim",
+      opts = { news = { lazyvim = false, neovim = false } },
       import = "lazyvim.plugins",
     },
     { import = "lazyvim.plugins.extras.dap.core" },
@@ -85,7 +88,7 @@ require("lazy").setup({
   checker = { enabled = false }, -- automatically check for plugin updates
   change_detection = { notify = false },
   performance = {
-    reset_packpath = true, -- vim.g.impureRtp,
+    reset_packpath = not vim.g.usePluginsFromStore,
     rtp = {
       -- TODO: check if it has a performance penalty. And probably check if lazy.nvim can be loaded in a non-dynamic way
       reset = false,

@@ -2,11 +2,10 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 let
-  diffEditor = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.neovim;
+  diffEditor = config.programs.neovim.package;
   # Workaround for jj not having includeIf
   jj = lib.my.mkWrapper {
     basePackage = pkgs.writeShellScriptBin "jj" ''
@@ -14,10 +13,10 @@ let
         export JJ_EMAIL=''${JJ_EMAIL-${lib.escapeShellArg config.accounts.email.accounts.vh.address}}
         # ${lib.toShellVar "JJ_EMAIL" config.accounts.email.accounts.vh.address}
       fi
-      exec -a "$0" ${lib.getExe pkgs.jujutsu} "$@"
+      exec ${lib.getExe pkgs.jujutsu} "$@"
     '';
 
-    # https://nixpk.gs/pr-tracker.html?pr=352298
+    # FIXME: https://nixpk.gs/pr-tracker.html?pr=352298
     env = {
       PAGER = {
         value = null;

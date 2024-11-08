@@ -8,6 +8,7 @@
       ...
     }:
     let
+      toLuaBindings = lib.generators.toLua { asBindings = true; };
       mkPluginPath =
         plugins:
         let
@@ -25,95 +26,116 @@
 
       baseNeovim =
         let
-          plugins = with pkgs.vimPlugins; [
-            catppuccin-nvim
-            nvim-notify
-            telescope-fzf-native-nvim
-            # nvim-treesitter.withAllGrammars
-            lazy-nvim
-            LazyVim
-            nvim-treesitter-textobjects
-            nvim-treesitter-context
-            neo-tree-nvim
-            persistence-nvim
-            todo-comments-nvim
-            neorg
-            nvim-ts-autotag
-            gitsigns-nvim
-            indent-blankline-nvim
-            trouble-nvim
-            flash-nvim
-            noice-nvim
-
-            nvim-cmp
-            cmp-buffer
-            cmp-nvim-lsp
-            cmp-path
-
-            conform-nvim
-            crates-nvim
-            dashboard-nvim
-            lazydev-nvim
-            lualine-nvim
-            lualine-lsp-progress
-            luasnip
-            marks-nvim
-            mason-lspconfig-nvim
-            mason-nvim
-            mini-nvim
-            neo-tree-nvim
-            nvim-lint
-            nvim-lspconfig
-            plenary-nvim
-            project-nvim
-            tailwindcss-colors-nvim
-            ts-comments-nvim
-            which-key-nvim
-
-            bigfile-nvim
-            oil-nvim
-            smart-splits-nvim
-            clangd_extensions-nvim
-            bufferline-nvim
-
-            (nvim-treesitter.withPlugins (
-              _:
-              nvim-treesitter.allGrammars
-              ++ [
-                pkgs.tree-sitter-grammars.tree-sitter-nu
-                (pkgs.tree-sitter.buildGrammar {
-                  language = "blade";
-                  version = "0.10.1";
-                  src = pkgs.fetchFromGitHub {
-                    owner = "EmranMR";
-                    repo = "tree-sitter-blade";
-                    rev = "335b2a44b4cdd9446f1c01434226267a61851405";
-                    hash = "sha256-wXzmlg79Xva08wn3NoJDJ2cIHuShXPIlf+UK0TsZdbY=";
-                  };
-                })
-              ]
-            ))
-          ];
+          treesitter = pkgs.vimPlugins.nvim-treesitter.withPlugins (
+            _:
+            pkgs.vimPlugins.nvim-treesitter.allGrammars
+            ++ [
+              pkgs.tree-sitter-grammars.tree-sitter-nu
+              (pkgs.tree-sitter.buildGrammar {
+                language = "blade";
+                version = "0.10.1";
+                src = pkgs.fetchFromGitHub {
+                  owner = "EmranMR";
+                  repo = "tree-sitter-blade";
+                  rev = "335b2a44b4cdd9446f1c01434226267a61851405";
+                  hash = "sha256-wXzmlg79Xva08wn3NoJDJ2cIHuShXPIlf+UK0TsZdbY=";
+                };
+              })
+            ]
+          );
+          plugins =
+            [ treesitter ]
+            ++ (with pkgs.vimPlugins; [
+              bigfile-nvim
+              bufferline-nvim
+              catppuccin-nvim
+              clangd_extensions-nvim
+              cmp-buffer
+              cmp-nvim-lsp
+              cmp-path
+              conform-nvim
+              crates-nvim
+              dashboard-nvim
+              dial-nvim
+              dressing-nvim
+              flash-nvim
+              flatten-nvim
+              friendly-snippets
+              gitsigns-nvim
+              grug-far-nvim
+              hardtime-nvim
+              harpoon2
+              hunk-nvim
+              indent-blankline-nvim
+              lazy-nvim
+              lazydev-nvim
+              LazyVim
+              lualine-lsp-progress
+              lualine-nvim
+              luasnip
+              marks-nvim
+              mason-lspconfig-nvim
+              mason-nvim
+              mini-ai
+              mini-hipatterns
+              mini-icons
+              mini-indentscope
+              mini-nvim
+              neo-tree-nvim
+              neorg
+              noice-nvim
+              nui-nvim
+              nvim-cmp
+              nvim-dap
+              nvim-dap-ui
+              nvim-lint
+              nvim-lspconfig
+              nvim-nio
+              nvim-snippets
+              nvim-treesitter-context
+              nvim-treesitter-textobjects
+              nvim-ts-autotag
+              oil-nvim
+              persistence-nvim
+              plenary-nvim
+              project-nvim
+              render-markdown-nvim
+              rustaceanvim
+              SchemaStore-nvim
+              smart-splits-nvim
+              tailwindcss-colors-nvim
+              telescope-fzf-native-nvim
+              telescope-nvim
+              todo-comments-nvim
+              treesitter
+              trouble-nvim
+              ts-comments-nvim
+              vim-dadbod
+              vim-dadbod-completion
+              vim-dadbod-ui
+              vim-jjdescription
+              which-key-nvim
+            ]);
           configDir = ../../home/users/joaquin/neovim/files;
           pluginPath = mkPluginPath plugins;
-
         in
         inputs.mnw.lib.wrap pkgs {
           neovim = inputs'.neovim-nightly-overlay.packages.default;
           initLua = ''
-            ${lib.generators.toLua { asBindings = true; } {
+            ${toLuaBindings {
               "vim.g.pluginPath" = pluginPath;
               "vim.g.pluginNameOverride" = {
                 catppuccin = "catppuccin-nvim";
                 LuaSnip = "luasnip";
                 tailwindcss-colorizer-cmp = "tailwindcss-colorizer-cmp.nvim";
+                harpoon = "harpoon2";
               };
             }}
+            -- vim.opt.runtimepath:append(${lib.generators.toLua { } pluginPath})
             -- vim.opt.packpath:prepend(${lib.generators.toLua { } pluginPath})
             require("config.lazy")
           '';
           devExcludedPlugins = [ configDir ];
-          devPluginPaths = [ impureConfigDir ];
           devPluginPaths = [ ];
           inherit plugins;
           extraBinPath = builtins.attrValues {
@@ -156,24 +178,19 @@
             vim.env.LAZY = vim.env.LAZY or "${pkgs.vimPlugins.lazy-nvim}"
             ${prev.initLua or ""}
           '';
-          appName = "nvim";
+          appName = "pureNvim";
           viAlias = true;
           vimAlias = true;
         });
-        neovim-impure = baseNeovim.devMode.override { appName = "ivim"; };
-        neovim-extra-impure =
-          (baseNeovim.override (
-            old:
-            let
-              pluginPath = mkPluginPath old.plugins;
-            in
-            {
-              appName = "impurestNeovim";
-              devExcludedPlugins = [ pluginPath ];
-              plugins = [ ];
-              initLua = ''require("config.lazy")'';
-            }
-          )).devMode;
+        neovim-impure =
+          (baseNeovim.override (prev: {
+            appName = "nvim";
+            initLua = ''
+              ${toLuaBindings { "vim.g.usePluginsFromStore" = false; }}
+              vim.go.packpath = vim.env.VIMRUNTIME
+              ${prev.initLua or ""}
+            '';
+          })).devMode;
       };
 
     };

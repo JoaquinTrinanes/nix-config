@@ -13,13 +13,37 @@ let
     pkg.override (prev: {
       devPluginPaths = (prev.devPluginPaths or [ ]) ++ [ (mkImpureLink ./files) ];
     });
+  pureNeovim = mkCustomNeovim (
+    packages.neovim.override {
+      appName = "pureNvim";
+      viAlias = true;
+      vimAlias = false;
+    }
+  );
+  impureNeovim =
+    let
+      base = mkCustomNeovim (
+        packages.neovim-impure.override (prev: {
+          viAlias = false;
+          vimAlias = true;
+          appName = "nvim";
+          initLua = ''
+            vim.g.usePluginsFromStore = false
+            ${prev.initLua or ""}
+          '';
+        })
+      );
+    in
+    pkgs.writeShellScriptBin "vim" ''
+      exec -a "$0" ${lib.getExe' base "vim"} "$@"
+    '';
+
 in
 {
+  programs.neovim.package = pureNeovim;
   home.packages = [
-    (mkCustomNeovim packages.neovim)
-    (pkgs.writeShellScriptBin "ivim" ''
-      exec -a "$0" ${lib.getExe (mkCustomNeovim packages.neovim-impure)} "$@"
-    '')
+    pureNeovim
+    impureNeovim
   ];
 
   xdg.configFile."nvim/lua" = {

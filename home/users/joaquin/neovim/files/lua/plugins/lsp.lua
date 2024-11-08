@@ -204,8 +204,7 @@ local M = {
     ---@type conform.setupOpts
     opts = {
       default_format_opts = {
-        -- lsp_fallback = "always",
-        lsp_fallback = true,
+        lsp_format = "fallback",
       },
       formatters_by_ft = {
         toml = { "taplo" },
@@ -231,6 +230,11 @@ local M = {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
+      if vim.g.usePluginsFromStore then
+        opts.ensure_installed = {}
+        return
+      end
+
       local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
       parser_config["blade"] = {
         install_info = {
@@ -243,9 +247,6 @@ local M = {
 
       if type(opts.ensure_installed) == "table" then
         vim.list_extend(opts.ensure_installed, { "blade", "php", "php_only", "html", "css" })
-      end
-      if not vim.g.impureRtp then
-        opts.ensure_installed = {}
       end
     end,
   },
