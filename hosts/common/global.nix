@@ -32,6 +32,8 @@ in
 {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
+  documentation.nixos.enable = false;
+
   security.sudo.extraConfig = ''
     Defaults lecture = never
   '';
