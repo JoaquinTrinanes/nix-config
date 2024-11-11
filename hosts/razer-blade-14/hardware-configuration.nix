@@ -30,7 +30,7 @@
     enable = true;
     configurationLimit = 10;
   };
-  boot.loader.timeout = 0;
+  boot.loader.timeout = lib.mkDefault 0;
   boot.initrd.availableKernelModules = [
     "nvme"
     "xhci_pci"
@@ -70,7 +70,7 @@
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = false;
   # networking.interfaces."enp101s0f3u1".useDHCP = true;
-  networking.interfaces."wlan0".useDHCP = true;
+  # networking.interfaces."wlan0".useDHCP = true;
 
   networking.usePredictableInterfaceNames = true;
 
@@ -103,10 +103,10 @@
       # last entries have priority, and the modeset=1 needs to be overriden
       (lib.mkAfter [ "nvidia-drm.modeset=0" ])
     )
-    [
-      # suspend loop fix
-      "button.lid_init_state=open"
-    ]
+    # [
+    #   # suspend loop fix
+    #   "button.lid_init_state=open"
+    # ]
     [
       # https://wiki.archlinux.org/title/Ryzen#Soft_lock_freezing
       "rcu_nocbs=0-15" # https://bugs.launchpad.net/linux/+bug/1690085/comments/69
@@ -119,7 +119,6 @@
       "processor.max_cstate=3"
 
       "idle=nomwait"
-      "pci=noaer"
       # "pci=nomsi,noaer" # nomsi probably makes the system unbootable
     ]
     [
@@ -149,9 +148,9 @@
   };
 
   # Removing any of these prevents the dGPU from entering D3Cold
-  environment.variables = {
-    "__EGL_VENDOR_LIBRARY_FILENAMES" = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
-    "__GLX_VENDOR_LIBRARY_NAME" = "mesa";
+  environment.sessionVariables = {
+    __EGL_VENDOR_LIBRARY_FILENAMES = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
+    __GLX_VENDOR_LIBRARY_NAME = "mesa";
   };
 
   hardware.nvidia = {
