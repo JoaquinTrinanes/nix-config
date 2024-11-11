@@ -22,27 +22,38 @@
               drv;
         in
         pkgs.linkFarm "vim-plugin-path" (map mkEntryFromDrv plugins);
+      treesitter = pkgs.vimPlugins.nvim-treesitter.withPlugins (
+        _:
+        pkgs.vimPlugins.nvim-treesitter.allGrammars
+        ++ [
+          pkgs.tree-sitter-grammars.tree-sitter-nu
+          (pkgs.tree-sitter.buildGrammar {
+            language = "blade";
+            version = "0.10.1";
+            src = pkgs.fetchFromGitHub {
+              owner = "EmranMR";
+              repo = "tree-sitter-blade";
+              rev = "335b2a44b4cdd9446f1c01434226267a61851405";
+              hash = "sha256-wXzmlg79Xva08wn3NoJDJ2cIHuShXPIlf+UK0TsZdbY=";
+            };
+          })
+        ]
+      );
+      treesitterParsers = pkgs.symlinkJoin {
+        name = "nvim-treesitter-parsers";
+        paths = treesitter.dependencies;
+      };
+      bundledTreesitter = pkgs.symlinkJoin {
+        name = "nvim-treesitter";
+        paths = [
+          treesitter
+          treesitterParsers
+        ];
+      };
       plugins =
-        let
-          treesitter = pkgs.vimPlugins.nvim-treesitter.withPlugins (
-            _:
-            pkgs.vimPlugins.nvim-treesitter.allGrammars
-            ++ [
-              pkgs.tree-sitter-grammars.tree-sitter-nu
-              (pkgs.tree-sitter.buildGrammar {
-                language = "blade";
-                version = "0.10.1";
-                src = pkgs.fetchFromGitHub {
-                  owner = "EmranMR";
-                  repo = "tree-sitter-blade";
-                  rev = "335b2a44b4cdd9446f1c01434226267a61851405";
-                  hash = "sha256-wXzmlg79Xva08wn3NoJDJ2cIHuShXPIlf+UK0TsZdbY=";
-                };
-              })
-            ]
-          );
-        in
-        [ treesitter ]
+        [
+          bundledTreesitter
+        ]
         ++ (with pkgs.vimPlugins; [
           bigfile-nvim
           bufferline-nvim
@@ -193,6 +204,7 @@
         neovim-impure = baseNeovim.override (prev: {
           appName = "nvim";
           luaRcContent = ''
+            vim.opt.runtimepath:append(${toLua treesitterParsers})
             vim.go.packpath = vim.env.VIMRUNTIME
             ${prev.luaRcContent or ""}
           '';
