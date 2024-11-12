@@ -17,6 +17,7 @@ in
       fira-code-nerdfont
       dejavu_fonts
       joypixels
+      noto-fonts
       noto-fonts-cjk-sans
       unscii
       (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
