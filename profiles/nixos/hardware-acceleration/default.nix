@@ -23,8 +23,8 @@ in
     lib.mkMerge [
       (lib.mkIf (cfg.cpuType == "amd") {
         environment.sessionVariables = {
-          VDPAU_DRIVER = "radeonsi";
-          LIBVA_DRIVER_NAME = "radeonsi";
+          VDPAU_DRIVER = lib.mkDefault "radeonsi";
+          LIBVA_DRIVER_NAME = lib.mkDefault "radeonsi";
         };
       })
       (lib.mkIf (cfg.cpuType == "intel") {
@@ -37,14 +37,14 @@ in
           };
         };
         environment.sessionVariables = {
-          LIBVA_DRIVER_NAME = "iHD"; # Optionally, set the environment variable
+          LIBVA_DRIVER_NAME = lib.mkDefault "iHD"; # Optionally, set the environment variable
         };
       })
       {
         hardware.graphics = {
-          enable = true;
+          enable = lib.mkDefault true;
           extraPackages = builtins.attrValues { inherit (pkgs) libva-vdpau-driver libvdpau-va-gl; };
-          enable32Bit = true;
+          enable32Bit = lib.mkDefault true;
         };
       }
     ]
