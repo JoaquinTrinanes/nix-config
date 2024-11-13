@@ -26,7 +26,6 @@
         _:
         pkgs.vimPlugins.nvim-treesitter.allGrammars
         ++ [
-          pkgs.tree-sitter-grammars.tree-sitter-nu
           (pkgs.tree-sitter.buildGrammar {
             language = "blade";
             version = "0.10.1";

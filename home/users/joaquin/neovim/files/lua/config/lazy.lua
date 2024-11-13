@@ -88,7 +88,6 @@ local lazyoptions = {
   checker = { enabled = false }, -- automatically check for plugin updates
   change_detection = { notify = false },
   performance = {
-    -- reset_packpath = not vim.g.usePluginsFromStore,
     rtp = {
       reset = false,
       -- disable some rtp plugins
