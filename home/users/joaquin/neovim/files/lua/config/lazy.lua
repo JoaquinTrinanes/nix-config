@@ -13,27 +13,27 @@ end
 
 local dev = {}
 
-if vim.g.usePluginsFromStore and vim.g.pluginPath then
-  dev = {
-    path = function(plugin)
-      local myNeovimPackages = vim.g.pluginPath
-      local path = nil
-      local name = vim.g.pluginNameOverride[plugin.name] or plugin.name
-      if vim.fn.isdirectory(myNeovimPackages .. "/start/" .. name) == 1 then
-        path = myNeovimPackages .. "/start/" .. name
-      elseif vim.fn.isdirectory(myNeovimPackages .. "/opt/" .. name) == 1 then
-        path = myNeovimPackages .. "/opt/" .. name
-      elseif vim.fn.isdirectory(myNeovimPackages .. "/" .. name) == 1 then
-        path = myNeovimPackages .. "/" .. name
-      else
-        path = "~/projects/" .. name
-      end
-      return path
-    end,
-    patterns = { "." },
-    fallback = true,
-  }
-end
+-- if vim.g.usePluginsFromStore and vim.g.pluginPath then
+--   dev = {
+--     path = function(plugin)
+--       local myNeovimPackages = vim.g.pluginPath
+--       local path = nil
+--       local name = vim.g.pluginNameOverride[plugin.name] or plugin.name
+--       if vim.fn.isdirectory(myNeovimPackages .. "/start/" .. name) == 1 then
+--         path = myNeovimPackages .. "/start/" .. name
+--       elseif vim.fn.isdirectory(myNeovimPackages .. "/opt/" .. name) == 1 then
+--         path = myNeovimPackages .. "/opt/" .. name
+--       elseif vim.fn.isdirectory(myNeovimPackages .. "/" .. name) == 1 then
+--         path = myNeovimPackages .. "/" .. name
+--       else
+--         path = "~/projects/" .. name
+--       end
+--       return path
+--     end,
+--     patterns = { "." },
+--     fallback = true,
+--   }
+-- end
 
 --- @type LazyConfig
 local lazyoptions = {
@@ -104,5 +104,15 @@ local lazyoptions = {
     },
   },
 }
+vim.g.pluginPathMap = vim.g.pluginPathMap or {}
 
-require("lazy").setup(vim.tbl_deep_extend("force", lazyoptions, vim.g.lazyOptions or {}))
+for name, path in pairs(vim.g.pluginPathMap) do
+  table.insert(lazyoptions.spec, 1, { name, dir = path })
+end
+
+vim.g.lazyOptions = vim.g.lazyOptions or {}
+
+require("lazy").setup(vim.tbl_deep_extend("force", lazyoptions, vim.g.lazyOptions))
+
+vim.g.lazyOptions = nil
+vim.g.pluginPathMap = nil

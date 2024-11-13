@@ -154,6 +154,34 @@
           ;
         inherit (pkgs.nodePackages) prettier;
       };
+      pluginNameOverride = {
+        catppuccin = "catppuccin-nvim";
+        LuaSnip = "luasnip";
+        tailwindcss-colorizer-cmp = "tailwindcss-colorizer-cmp.nvim";
+        harpoon = "harpoon2";
+      };
+      devPlugins = [ pkgs.vimPlugins.blink-cmp ];
+      mkPluginPathMap =
+        plugins:
+        let
+          getPluginSpecName =
+            plugin:
+            let
+              name = plugin.pname or plugin.name;
+            in
+            if lib.hasAttr name pluginNameOverride then
+              pluginNameOverride.${name}
+            else if
+              lib.hasAttrByPath [
+                "src"
+                "repo"
+              ] plugin
+            then
+              "${plugin.src.owner}/${plugin.src.repo}"
+            else
+              name;
+        in
+        lib.listToAttrs (map (p: lib.nameValuePair (getPluginSpecName p) p) plugins);
       extraLuaPackages = ps: [ ps.jsregexp ];
       mkNeovim = pkgs.callPackage ./mkNeovim.nix { };
       baseNeovim =
@@ -175,12 +203,6 @@
               lockfile = "${configDir}/lazy-lock.json";
               install.missing = false;
             };
-            pluginNameOverride = {
-              catppuccin = "catppuccin-nvim";
-              LuaSnip = "luasnip";
-              tailwindcss-colorizer-cmp = "tailwindcss-colorizer-cmp.nvim";
-              harpoon = "harpoon2";
-            };
           };
           luaRcContent = ''
             require("config.lazy")
@@ -196,12 +218,16 @@
             ''
             + prev.luaRcContent or "";
           globals = lib.recursiveUpdate prev.globals {
+            pluginPathMap = mkPluginPathMap plugins;
             usePluginsFromStore = true;
           };
           appName = "pureNvim";
         });
         neovim-impure = baseNeovim.override (prev: {
           appName = "nvim";
+          globals = prev.globals // {
+            pluginPathMap = mkPluginPathMap devPlugins;
+          };
           luaRcContent = ''
             vim.opt.runtimepath:append(${toLua treesitterParsers})
             vim.go.packpath = vim.env.VIMRUNTIME
