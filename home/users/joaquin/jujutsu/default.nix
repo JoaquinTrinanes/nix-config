@@ -44,6 +44,7 @@ in
       user = {
         inherit (config.programs.git.iniContent.user) name email;
       };
+
       signing = lib.mkIf (config.programs.git.iniContent.commit.gpgSign or false) {
         sign-all = true;
         key = lib.mkIf (
@@ -54,22 +55,30 @@ in
       git = {
         auto-local-bookmark = false;
       };
+      core = {
+        fsmonitor = "watchman";
+        watchman.register_snapshot_trigger = true;
+      };
       format = { };
       revset-aliases = {
         default_log = "present(@) | ancestors(immutable_heads().., 2) | present(trunk())";
-        HEAD = "@-";
-        "common_ancestor(a, b)" = "heads(::a & ::b)";
-        "diverge(a, b)" = "common_ancestor(a, b)::(a|b)";
+        "diverge(x)" = "fork_point(x)::x";
         "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
-        "p(n)" = "roots(@ | ancestors(@-, n))";
-        overview = "overview(common_ancestor(trunk(), git_head()))";
-        "overview(base)" = "present(@) | present(base) | present(base::@) | ancestors(base:: & visible_heads(), 1)";
+
+        # get last n ancestors of rev
+        "p(base, n)" = "roots(base | ancestors(base-, n))";
+        "p(n)" = "p(@, n)";
+
+        "overview(from, to)" = "present(to::) | present(from) | present(from::to) | ancestors(from:: & (visible_heads() ~ untracked_remote_bookmarks()), 1)";
+        "overview(from)" = "overview(from, @)";
+        overview = "overview(fork_point(trunk() | git_head()))";
       };
       revsets = {
       };
       ui = {
         diff-editor = [
           (lib.getExe diffEditor)
+          "-n"
           "-c"
           "DiffEditor $left $right $output"
         ];
@@ -92,8 +101,12 @@ in
           fg = "magenta";
         };
       };
-      template-aliases = { };
+      template-aliases = {
+        desc = "builtin_log_compact_full_description";
+      };
       aliases = {
+        a = [ "abandon" ];
+        ab = [ "abandon" ];
         l = [
           "log"
           "-r"
@@ -105,9 +118,18 @@ in
         d = [ "diff" ];
         h = [ "help" ];
         g = [ "git" ];
+        f = [
+          "git"
+          "fetch"
+        ];
         gp = [
           "git"
           "push"
+        ];
+        clone = [
+          "git"
+          "clone"
+          "--colocate"
         ];
         new-before = [
           "new"
@@ -135,6 +157,12 @@ in
     };
   };
 
+  home.packages = lib.mkIf config.programs.jujutsu.enable (
+    builtins.attrValues { inherit (pkgs) watchman; }
+  );
+
+  programs.git.ignores = lib.mkIf config.programs.jujutsu.enable [ ".jj/" ];
+
   # programs.nushell.extraConfig =
   #   let
   #     jjComp = pkgs.runCommandLocal "jujutsu.nu" { } ''
@@ -148,7 +176,14 @@ in
   #   '';
 
   home.shellAliases = lib.mkIf config.programs.jujutsu.enable {
-    js = "jj status";
+    j = "jj";
+    jb = "jj bookmark";
     jd = "jj diff";
+    jf = "jj git fetch";
+    jg = "jj git";
+    jl = "jj log";
+    jn = "jj new";
+    jp = "jj git push";
+    js = "jj status";
   };
 }
