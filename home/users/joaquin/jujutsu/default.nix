@@ -2,32 +2,37 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
   diffEditor = config.programs.neovim.package;
+  jj-unwrapped = inputs.jj.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
   # Workaround for jj not having includeIf
   jj = lib.my.mkWrapper {
     basePackage = pkgs.writeShellScriptBin "jj" ''
       if [[ $PWD/ = $HOME/Documents/veganhacktivists/* ]]; then
         export JJ_EMAIL=''${JJ_EMAIL-${lib.escapeShellArg config.accounts.email.accounts.vh.address}}
-        # ${lib.toShellVar "JJ_EMAIL" config.accounts.email.accounts.vh.address}
       fi
-      exec ${lib.getExe pkgs.jujutsu} "$@"
+      exec ${lib.getExe jj-unwrapped} "$@"
     '';
 
     # FIXME: https://nixpk.gs/pr-tracker.html?pr=352298
     env = {
       PAGER = {
-        value = null;
+        value = "less --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen";
+        force = true;
+        # also works without force
+        # value = null;
       };
     };
     extraPackages = [
       (pkgs.writeTextDir "share/fish/vendor_completions.d/jj.fish" ''
-        source ${pkgs.jujutsu}/share/fish/vendor_completions.d/jj.fish
+        source ${jj-unwrapped}/share/fish/vendor_completions.d/jj.fish
         source ${./jj.fish}
       '')
-      pkgs.jujutsu
+      jj-unwrapped
     ];
   };
 in
