@@ -16,6 +16,7 @@
     ./nushell
     ./terminal
     ./wireplumber
+    ./hyprland
     inputs.nix-colors.homeManagerModules.default
   ];
 

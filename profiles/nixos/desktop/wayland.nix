@@ -31,6 +31,6 @@ in
       ELECTRON_OZONE_PLATFORM_HINT = lib.mkDefault "auto";
     };
 
-    xdg.portal.wlr.enable = lib.mkDefault true;
+    # xdg.portal.wlr.enable = lib.mkDefault true;
   };
 }

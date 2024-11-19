@@ -27,6 +27,8 @@ in
     profiles.audio.enable = lib.mkDefault true;
     profiles.autofirma.enable = lib.mkDefault true;
 
+    profiles.desktop.hyprland.enable = true;
+
     time.timeZone = lib.mkDefault "Europe/Madrid";
 
     environment.enableAllTerminfo = lib.mkDefault true;

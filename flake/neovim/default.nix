@@ -130,6 +130,7 @@
           gcc
           git
           gnumake
+          hyprls
           icu
           intelephense
           lazygit
