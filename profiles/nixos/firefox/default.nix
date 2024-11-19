@@ -17,13 +17,18 @@ in
   config =
     let
       inherit (inputs.self.packages.${pkgs.stdenv.hostPlatform.system}) firefox;
+      firefoxWithConfig = firefox.override (prev: {
+        extraPolicies = lib.recursiveUpdate prev.extraPolicies (
+          lib.recursiveUpdate firefoxCfg.policies { Preferences = firefoxCfg.preferences; }
+        );
+      });
+
     in
     lib.mkIf cfg.enable {
+      environment.systemPackages = [ firefoxWithConfig ];
       programs.firefox = {
-        enable = true;
-        package = firefox.override (prev: {
-          extraPolicies = lib.recursiveUpdate prev.extraPolicies firefoxCfg.policies;
-        });
+        enable = false;
+        package = firefoxWithConfig;
       };
 
       xdg.mime.defaultApplications =
