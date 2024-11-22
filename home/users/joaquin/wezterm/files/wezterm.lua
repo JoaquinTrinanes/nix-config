@@ -95,8 +95,6 @@ local zellij_only_map = function(key, mods, action, default)
 	end, default)
 end
 
--- wezterm.add_to_config_reload_watch_list(wezterm.config_dir .. "/colors/flavours.toml")
-
 ---@type Config
 local config = {}
 if wezterm.config_builder then
@@ -120,10 +118,15 @@ config.webgpu_power_preference = "LowPower"
 -- fixes crashing when using fractional scaling
 config.adjust_window_size_when_changing_font_size = true
 
--- start maximized
-wezterm.on("gui-startup", function()
-	local _, _, window = wezterm.mux.spawn_window({})
-	window:gui_window():maximize()
+local mux = wezterm.mux
+wezterm.on("gui-attached", function(domain)
+	-- maximize all displayed windows on startup
+	local workspace = mux.get_active_workspace()
+	for _, window in ipairs(mux.all_windows()) do
+		if window:get_workspace() == workspace then
+			window:gui_window():maximize()
+		end
+	end
 end)
 
 config.enable_wayland = os.getenv("XDG_SESSION_TYPE") == "wayland"
@@ -174,6 +177,7 @@ config.tab_max_width = 999999
 
 -- config.window_decorations = "INTEGRATED_BUTTONS | RESIZE | TITLE"
 -- config.window_decorations = "RESIZE|TITLE"
+config.window_decorations = "TITLE | RESIZE"
 config.hide_tab_bar_if_only_one_tab = false -- true
 config.use_fancy_tab_bar = false
 
