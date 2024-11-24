@@ -155,8 +155,9 @@
 
   hardware.nvidia = {
     open = true;
-    package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.latest;
-    nvidiaSettings = lib.mkDefault false;
+    # package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.latest;
+    package = lib.mkDefault config.boot.kernelPackages.nvidiaPackages.beta;
+    nvidiaSettings = lib.mkDefault true;
     modesetting.enable = lib.mkDefault false;
     powerManagement = lib.mkDefault {
       enable = true;

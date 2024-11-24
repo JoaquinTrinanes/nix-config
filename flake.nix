@@ -42,7 +42,7 @@ rec {
     lix-module.inputs.lix.follows = "lix";
 
     jj.url = "github:martinvonz/jj";
-    jj.inputs.nixpkgs.follows = "nixpkgs";
+    # jj.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {

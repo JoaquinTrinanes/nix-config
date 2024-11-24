@@ -139,7 +139,7 @@
           lua-language-server
           marksman
           nil
-          nixd
+          # nixd
           nodejs
           pyright
           ripgrep
