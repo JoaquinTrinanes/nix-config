@@ -151,6 +151,8 @@
   environment.sessionVariables = {
     __EGL_VENDOR_LIBRARY_FILENAMES = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
     __GLX_VENDOR_LIBRARY_NAME = "mesa";
+    # needed because of wezterm and ghostty always using dGPU
+    VK_ICD_FILENAMES = "${pkgs.mesa.drivers}/share/vulkan/icd.d/radeon_icd.x86_64.json";
   };
 
   hardware.nvidia = {
