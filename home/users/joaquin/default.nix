@@ -8,6 +8,7 @@
 }:
 {
   imports = [
+    ./ghostty
     ./git
     ./neovim
     ./nushell
