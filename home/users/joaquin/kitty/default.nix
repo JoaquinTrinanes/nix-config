@@ -55,7 +55,7 @@ in
   programs.kitty = {
     enable = true;
     font = {
-      name = "FiraCode Nerd Font";
+      name = "monospace";
       size = 16;
     };
     keybindings = {
@@ -77,8 +77,6 @@ in
     };
     settings = lib.mkMerge [
       {
-        bold_font = "FiraCode Nerd Font SemBd";
-        bold_italic_font = "FiraCode Nerd Font SemBd";
         disable_ligatures = "cursor";
         enable_audio_bell = false;
         touch_scroll_multiplier = 5;
