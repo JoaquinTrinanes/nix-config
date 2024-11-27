@@ -133,7 +133,8 @@ config.enable_wayland = os.getenv("XDG_SESSION_TYPE") == "wayland"
 
 config.color_scheme = "base16"
 config.font = wezterm.font_with_fallback({
-	{ family = "FiraCode Nerd Font", harfbuzz_features = { "ss05" } },
+	{ family = "Maple Mono", harfbuzz_features = { "cv01", "cv02", "cv03", "ss01", "ss04", "ss05" } },
+	-- { family = "FiraCode Nerd Font", harfbuzz_features = { "ss05" } },
 	"DejaVu Sans Mono",
 	{ family = "JoyPixels", assume_emoji_presentation = true },
 	"Noto Sans Mono CJK HK",

@@ -52,9 +52,9 @@ in
       enable-hot-corners = false;
       # gtk-theme = config.gtk.theme.name;
     };
-    "org/gnome/TextEditor" = {
-      custom-font = "FiraCode Nerd Font 12";
-    };
+    # "org/gnome/TextEditor" = {
+    #   custom-font = "FiraCode Nerd Font 12";
+    # };
     "org/gnome/mutter" = {
       edge-tiling = true;
       # experimental-features = [ "scale-monitor-framebuffer" ];
