@@ -7,7 +7,9 @@
 }:
 let
   diffEditor = config.programs.neovim.package;
-  jj-unwrapped = inputs.jj.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  jj-unwrapped = inputs.jj.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
+    doCheck = false;
+  };
 
   # Workaround for jj not having includeIf
   jj = lib.my.mkWrapper {
