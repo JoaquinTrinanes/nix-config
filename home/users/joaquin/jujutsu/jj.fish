@@ -1,10 +1,13 @@
 # Additional Fish completions for Jujutsu
 # https://gist.github.com/bnjmnt4n/9f47082b8b6e6ed2b2a805a1516090c8
 
+
 # TODO: passthru other args? E.g.. --at-operation, --repository
 function __jj
   command jj --ignore-working-copy --color=never --quiet $argv 2> /dev/null
 end
+
+COMPLETE=fish __jj | source
 
 # Aliases
 # Based on https://github.com/fish-shell/fish-shell/blob/cd71359c42f633d9d71a63591ae16d150407a2b2/share/completions/git.fish#L625.
@@ -25,7 +28,7 @@ __jj config list aliases -T 'concat(name, "\t", value, "\n")' --include-defaults
   set -l args $alias
   # Replace wrapping `[]` if any
   set -l command (string replace -r --all '^\[|]$' ""  -- $command)
-  while test (string length -- $command) -gt 0
+  while test (string length -- "$command") -gt 0
     set -l parsed (string match -r '^"((?:\\\"|[^"])*?)"(?:,\s)?(.*)$' --groups-only  -- $command)
     set --append args $parsed[1]
     set command $parsed[2]
