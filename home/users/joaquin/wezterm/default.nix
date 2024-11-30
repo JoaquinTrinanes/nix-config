@@ -9,8 +9,7 @@
   programs.wezterm = {
     enable = true;
     package = lib.my.mkWrapper {
-      # basePackage = pkgs.wezterm;
-      basePackage = inputs.wezterm.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      basePackage = pkgs.wezterm;
       env = {
         # prevent dGPU not powering off when front_end = "WebGpu"
         VK_ICD_FILENAMES.value = "${pkgs.mesa.drivers}/share/vulkan/icd.d/radeon_icd.x86_64.json";
