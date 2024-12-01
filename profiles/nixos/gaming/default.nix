@@ -8,6 +8,9 @@ let
   cfg = config.profiles.gaming;
   # Don't launch steam with the dGPU
   steam = pkgs.steam.override (prev: {
+    extraEnv = {
+      VK_ICD_FILENAMES = null;
+    } // prev.extraEnv or { };
     steam-unwrapped = prev.steam-unwrapped.overrideAttrs (prevUnwrapped: {
       postInstall = lib.concatLines [
         prevUnwrapped.postInstall
