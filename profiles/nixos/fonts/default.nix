@@ -14,14 +14,14 @@ in
 
   config = lib.mkIf cfg.enable {
     fonts.packages = with pkgs; [
-      fira-code-nerdfont
+      nerd-fonts.fira-code
       maple-mono
       dejavu_fonts
       joypixels
       noto-fonts
       noto-fonts-cjk-sans
       unscii
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+      nerd-fonts.symbols-only
     ];
     fonts.fontconfig = lib.mkDefault {
       defaultFonts = {
