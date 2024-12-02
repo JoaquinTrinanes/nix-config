@@ -37,7 +37,10 @@ export-env {
     }
 }
 
-if $nu.is-interactive { {GPG_TTY: tty } } else { {} } | load-env
+
+if (is-terminal --stdin) {
+    $env.GPG_TTY = (tty)
+}
 
 # $env.NU_LIB_DIRS = [
 #     ($nu.default-config-dir | path join 'scripts')
@@ -49,7 +52,6 @@ if $nu.is-interactive { {GPG_TTY: tty } } else { {} } | load-env
 # $env.NU_PLUGIN_DIRS = [
 #     # ($nu.config-path | path dirname | path join 'plugins')
 # ]
-
 
 export-env {
     load-env {
