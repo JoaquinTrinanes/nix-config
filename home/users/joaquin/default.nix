@@ -81,20 +81,27 @@
 
   programs.bash.enable = true;
 
-  programs.bash.initExtra = lib.mkIf (config.home.shellAliases != { }) (
-    lib.mkAfter (
-      lib.concatLines (
-        [
-          ''
-            source ${lib.getExe pkgs.complete-alias}
-          ''
-        ]
-        ++ map (alias: "complete -F _complete_alias ${lib.escapeShellArg alias}") (
-          builtins.attrNames config.home.shellAliases
+  programs.bash.initExtra = lib.mkMerge [
+    (lib.mkIf (config.home.shellAliases != { }) (
+      lib.mkAfter (
+        lib.concatLines (
+          [
+            ''
+              source ${lib.getExe pkgs.complete-alias}
+            ''
+          ]
+          ++ map (alias: "complete -F _complete_alias ${lib.escapeShellArg alias}") (
+            builtins.attrNames config.home.shellAliases
+          )
         )
       )
-    )
-  );
+    ))
+    (lib.mkAfter ''
+      if [ -f "$HOME/.bashrc.local" ]; then
+        source "$HOME/.bashrc.local"
+      fi
+    '')
+  ];
 
   programs.zoxide = {
     enable = true;
