@@ -180,6 +180,11 @@
     enable = true;
     enableSshSupport = true;
     pinentryPackage = pkgs.pinentry-gnome3;
+
+    # timeout since last activity
+    defaultCacheTtl = 15 * 60; # 15 minutes
+    # timeout since password last entered
+    maxCacheTtl = 15 * 60;
   };
   # Disable gnome-keyring ssh-agent
   xdg.configFile."autostart/gnome-keyring-ssh.desktop" = {
