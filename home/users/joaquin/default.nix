@@ -3,22 +3,21 @@
   pkgs,
   lib,
   inputs,
-  osConfig,
   ...
 }:
 {
   imports = [
+    ./carapace
+    ./direnv
     ./ghostty
     ./git
+    ./gnome
+    ./jujutsu
+    ./kitty
     ./neovim
     ./nushell
-    ./gnome
-    ./direnv
-    ./wireplumber
     ./wezterm
-    ./kitty
-    ./carapace
-    ./jujutsu
+    ./wireplumber
     inputs.nix-colors.homeManagerModules.default
   ];
 
@@ -196,11 +195,9 @@
   xdg.mimeApps.defaultApplications =
     let
       # TODO: use wrapped package
-      defaultWebBrowser = lib.mkIf (osConfig.programs.firefox.package.desktopItem.name or null != null) (
-        lib.mkAfter [
-          osConfig.programs.firefox.package.desktopItem.name
-        ]
-      );
+      defaultWebBrowser = lib.mkAfter [
+        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.firefox.desktopItem.name
+      ];
     in
     {
       "x-scheme-handler/http" = defaultWebBrowser;
