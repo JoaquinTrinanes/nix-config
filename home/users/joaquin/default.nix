@@ -98,7 +98,7 @@
 
   programs.zoxide = {
     enable = true;
-    options = [ "--cmd=j" ];
+    options = [ "--cmd=z" ];
   };
 
   programs.ripgrep = {
