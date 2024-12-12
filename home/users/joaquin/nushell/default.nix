@@ -7,6 +7,7 @@
 }:
 let
   inherit (config.lib.impurePath) mkImpureLink;
+  inherit (lib.hm.nushell) toNushell;
   configDir =
     if pkgs.stdenv.isDarwin then
       "Library/Application Support/nushell"
@@ -75,10 +76,8 @@ in
         }
       }
     '';
-    environmentVariables = {
-      "NU_LIB_DIRS" = lib.escapeShellArg (lib.concatStringsSep ":" [ scriptsDir ]);
-    };
     envFile.text = ''
+      const NU_LIB_DIRS = $NU_LIB_DIRS ++ ${toNushell { } [ scriptsDir ]}
       source ${./files/env.nu}
     '';
     extraConfig =

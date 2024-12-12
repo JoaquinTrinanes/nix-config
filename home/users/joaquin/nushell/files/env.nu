@@ -42,17 +42,6 @@ if (is-terminal --stdin) {
     $env.GPG_TTY = (tty)
 }
 
-# $env.NU_LIB_DIRS = [
-#     ($nu.default-config-dir | path join 'scripts')
-# ]
-
-# Directories to search for plugin binaries when calling register
-#
-# By default, <nushell-config-dir>/plugins is added
-# $env.NU_PLUGIN_DIRS = [
-#     # ($nu.config-path | path dirname | path join 'plugins')
-# ]
-
 export-env {
     load-env {
         PROMPT_INDICATOR_VI_NORMAL: ""

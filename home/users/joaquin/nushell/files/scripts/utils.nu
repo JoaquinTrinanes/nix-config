@@ -54,6 +54,5 @@ export def whichp [
         $result
     }
 }
-}
 
 export alias w = whichp
