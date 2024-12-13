@@ -101,6 +101,7 @@
           nvim-nio
           nvim-snippets
           nvim-treesitter-context
+          SchemaStore-nvim
           nvim-treesitter-textobjects
           nvim-ts-autotag
           oil-nvim
@@ -109,8 +110,8 @@
           project-nvim
           render-markdown-nvim
           rustaceanvim
-          SchemaStore-nvim
           smart-splits-nvim
+          snacks-nvim
           tailwindcss-colors-nvim
           telescope-fzf-native-nvim
           telescope-nvim
@@ -125,8 +126,8 @@
         ]);
       extraPackages = builtins.attrValues {
         inherit (pkgs)
-          lazygit
           black
+          chafa
           deadnix
           dotenv-linter
           fd
@@ -136,11 +137,13 @@
           gnumake
           icu
           intelephense
+          lazygit
           lua-language-server
           marksman
           nil
-          # nixd
+          nixd
           nodejs
+          phpactor
           pyright
           ripgrep
           shellcheck

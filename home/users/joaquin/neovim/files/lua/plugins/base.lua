@@ -1,8 +1,9 @@
 local M = {
-  { "nvim-lua/plenary.nvim" },
   {
     "stevearc/oil.nvim",
     event = "VeryLazy",
+    ---@module 'oil'
+    ---@type oil.SetupOpts
     opts = {
       columns = {
         -- "permissions",
@@ -49,6 +50,7 @@ local M = {
   },
   {
     "stevearc/dressing.nvim",
+    optional = true,
     opts = {
       input = {
         get_config = function()
@@ -72,6 +74,7 @@ local M = {
   },
   {
     "nvim-lualine/lualine.nvim",
+    optional = true,
     opts = function(_, opts)
       opts.sections = opts.sections or {}
       -- disable clock
@@ -79,29 +82,8 @@ local M = {
     end,
   },
   {
-    "nvimdev/dashboard-nvim",
-    opts = {
-      config = {
-        header = {
-          "        ⠀⠀⢀⣀⣠⣤⣤⣶⣶⣿⣷⣆⠀⠀⠀⠀",
-          "⠀⠀⠀⢀⣤⣤⣶⣶⣾⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⡆⠀⠀⠀",
-          "⠀⢀⣴⣿⣿⣿⣿⣿⣿⡿⠛⠉⠉⠀⠀⠀⣿⣿⣿⣿⣷⠀⠀⠀",
-          "⣠⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⢤⣶⣾⠿⢿⣿⣿⣿⣿⣇⠀⠀",
-          "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠈⠉⠀⠀⠀⣿⣿⣿⣿⣿⡆⠀",
-          "⢸⣿⣿⣿⣏⣿⣿⣿⣿⣿⣷⠀⠀⢠⣤⣶⣿⣿⣿⣿⣿⣿⣿⡀",
-          "⠀⢿⣿⣿⣿⡸⣿⣿⣿⣿⣿⣇⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣧",
-          "⠀⠸⣿⣿⣿⣷⢹⣿⣿⣿⣿⣿⣄⣀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-          "⠀⠀⢻⣿⣿⣿⡇⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-          "⠀⠀⠘⣿⣿⣿⣿⠘⠻⠿⢛⣛⣭⣽⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-          "⠀⠀⠀⢹⣿⣿⠏⠀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠋",
-          "⠀⠀⠀⠈⣿⠏⠀⣰⣿⣿⣿⣿⣿⣿⠿⠟⠛⠋⠉⠀⠀⠀⠀⠀",
-          "⠀⠀⠀⠀⠀⠀⢠⡿⠿⠛⠋⠉⠀⠀⠀⠀        ",
-        },
-      },
-    },
-  },
-  {
     "echasnovski/mini.indentscope",
+    optional = true,
     opts = function(_, opts)
       opts = opts or {}
       opts.draw = opts.draw or {}
@@ -110,41 +92,116 @@ local M = {
     end,
   },
   {
-    "LunarVim/bigfile.nvim",
-    event = { "FileReadPre", "BufReadPre", "User FileOpened" },
+    "folke/snacks.nvim",
+    optional = true,
+    ---@module "snacks"
+    ---@class snacks.Config
     opts = {
-      filesize = 10, -- in MB
-      features = {
-        "indent_blankline",
-        "illuminate",
-        "lsp",
-        "treesitter",
-        "syntax",
-        "matchparen",
-        "vimopts",
-        "filetype",
-        {
-          name = "mini.indentscope",
-          opts = { defer = false },
-          disable = function()
-            vim.b.miniindentscope_disable = true
-          end,
+      dashboard = {
+        sections = {
+          { section = "header" },
+          {
+            section = "keys",
+            gap = 1,
+            -- indent=2,
+            padding = 1,
+          },
+          {
+            -- icon = " ",
+            -- pane = 2,
+            title = "Recent Files",
+            section = "recent_files",
+            indent = 2,
+            padding = 1,
+          },
+          {
+            -- icon = " ",
+            -- pane = 2,
+            title = "Projects",
+            section = "projects",
+            indent = 2,
+            padding = 1,
+          },
+          { section = "startup" },
+        },
+        preset = {
+          header = [[
+███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+          --  header = [[
+          --        ⠀⠀⢀⣀⣠⣤⣤⣶⣶⣿⣷⣆⠀⠀⠀⠀
+          -- ⠀⠀⠀⢀⣤⣤⣶⣶⣾⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⡆⠀⠀⠀
+          -- ⠀⢀⣴⣿⣿⣿⣿⣿⣿⡿⠛⠉⠉⠀⠀⠀⣿⣿⣿⣿⣷⠀⠀⠀
+          -- ⣠⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⢤⣶⣾⠿⢿⣿⣿⣿⣿⣇⠀⠀
+          -- ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠈⠉⠀⠀⠀⣿⣿⣿⣿⣿⡆⠀
+          -- ⢸⣿⣿⣿⣏⣿⣿⣿⣿⣿⣷⠀⠀⢠⣤⣶⣿⣿⣿⣿⣿⣿⣿⡀
+          -- ⠀⢿⣿⣿⣿⡸⣿⣿⣿⣿⣿⣇⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣧
+          -- ⠀⠸⣿⣿⣿⣷⢹⣿⣿⣿⣿⣿⣄⣀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿
+          -- ⠀⠀⢻⣿⣿⣿⡇⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+          -- ⠀⠀⠘⣿⣿⣿⣿⠘⠻⠿⢛⣛⣭⣽⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿
+          -- ⠀⠀⠀⢹⣿⣿⠏⠀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠋
+          -- ⠀⠀⠀⠈⣿⠏⠀⣰⣿⣿⣿⣿⣿⣿⠿⠟⠛⠋⠉⠀⠀⠀⠀⠀
+          -- ⠀⠀⠀⠀⠀⠀⢠⡿⠿⠛⠋⠉⠀⠀⠀⠀        ]],
         },
       },
     },
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
+    optional = true,
     opts = {
       filesystem = { hijack_netrw_behavior = "disabled" },
     },
   },
   {
     "which-key.nvim",
+    optional = true,
     opts = {
       preset = "helix",
     },
+  },
   { "julienvincent/hunk.nvim", cmd = { "DiffEditor" }, opts = {} },
+  { "avm99963/vim-jjdescription", lazy = false },
+  {
+    "akinsho/bufferline.nvim",
+    optional = true,
+    keys = {
+      -- { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
+      { "<leader>br", false },
+      { "<leader>bh", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
+      { "<leader>bl", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
+    },
+  },
+  {
+    "ibhagwan/fzf-lua",
+    optional = true,
+    opts = function(_, opts)
+      local config = require("fzf-lua.config")
+
+      local prev_ui_select = opts.ui_select
+
+      opts.ui_select = function(fzf_opts, items)
+        local result = prev_ui_select(fzf_opts, items)
+
+        if fzf_opts.kind == "codeaction" then
+          result.winopts.relative = "cursor"
+          result.winopts.backdrop = 100
+          result.winopts.height = math.floor(math.min(vim.o.lines * 0.3 - 16, #items + 2) + 0.5) + 16
+        end
+        return result
+      end
+
+      config.defaults.keymap.fzf["tab"] = "down"
+      config.defaults.keymap.fzf["shift-tab"] = "up"
+
+      opts.fzf_opts = vim.tbl_extend("force", opts.fzf_opts, { ["--cycle"] = true })
+      return opts
+    end,
+  },
 }
 
 return M
