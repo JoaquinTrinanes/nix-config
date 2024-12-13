@@ -14,26 +14,43 @@ local M = {
   },
   {
     "echasnovski/mini.pairs",
+    optional = true,
     enabled = false,
   },
   {
     "saghen/blink.cmp",
     optional = true,
-    lazy = false,
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
     opts = {
+      completion = {
+        trigger = {
+          show_on_insert_on_trigger_character = false,
+        },
+      },
       keymap = {
         preset = "enter",
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
         ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
       },
 
-      -- trigger = { completion = { show_in_snippet = false } },
-      -- prebuilt_binaries = { download = false },
-      windows = { autocomplete = { selection = "manual" } },
+      fuzzy = { prebuilt_binaries = { download = not vim.g.usePluginsFromStore } },
+      list = { selection = "auto_insert" },
+      windows = {
+        cycle = {
+          from_bottom = true,
+          from_top = true,
+        },
+      },
+      documentation = {
+        auto_show = true,
+      },
     },
   },
   {
     "hrsh7th/nvim-cmp",
+    optional = true,
+    --- @module "cmp"
     --- @param opts cmp.ConfigSchema
     opts = function(_, opts)
       -- local cmp_autopairs = require("nvim-autopairs.completion.cmp")
@@ -63,6 +80,58 @@ local M = {
         end
         return item
       end
+    end,
+  },
+
+  -- supertab
+  {
+    "hrsh7th/nvim-cmp",
+    optional = true,
+    ---@module "cmp"
+    ---@param opts cmp.ConfigSchema
+    opts = function(_, opts)
+      local has_words_before = function()
+        unpack = unpack or table.unpack
+        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+      end
+
+      local cmp = require("cmp")
+
+      opts.completion.completeopt = "menuone,noinsert,noselect"
+
+      local select_opts = { behaviour = cmp.SelectBehavior.Select }
+
+      opts.mapping = vim.tbl_extend("force", opts.mapping, {
+        ["<Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item(select_opts)
+          elseif vim.snippet.active({ direction = 1 }) then
+            vim.schedule(function()
+              vim.snippet.jump(1)
+            end)
+          elseif has_words_before() then
+            cmp.complete()
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item(select_opts)
+          elseif vim.snippet.active({ direction = -1 }) then
+            vim.schedule(function()
+              vim.snippet.jump(-1)
+            end)
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+        ["<CR>"] = cmp.mapping.confirm({
+          behavior = cmp.ConfirmBehavior.Replace,
+          select = false,
+        }),
+      })
     end,
   },
 }
