@@ -333,6 +333,6 @@
         '';
     in
     {
-      packages.firefox = pkgs.wrapFirefox pkgs.firefox-esr-unwrapped firefoxConfig;
+      packages.firefox = pkgs.wrapFirefox pkgs.firefox-unwrapped firefoxConfig;
     };
 }
