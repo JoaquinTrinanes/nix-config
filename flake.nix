@@ -41,7 +41,7 @@ rec {
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
     lix-module.inputs.lix.follows = "lix";
 
-    jj.url = "github:martinvonz/jj";
+    jj.url = "github:jj-vcs/jj";
     # jj.inputs.nixpkgs.follows = "nixpkgs";
 
     ghostty.url = "git+ssh://git@github.com/ghostty-org/ghostty";
