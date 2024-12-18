@@ -59,13 +59,17 @@
                   fallback = lib.mkDefault true;
                   log-lines = lib.mkDefault 50;
                   auto-optimise-store = lib.mkDefault true;
-                  experimental-features = [
-                    "repl-flake"
-                    "nix-command"
-                    "flakes"
-                    "auto-allocate-uids"
-                    "ca-derivations"
-                  ] ++ lib.optionals isLix [ "pipe-operator" ];
+                  experimental-features =
+                    [
+                      "nix-command"
+                      "flakes"
+                      "auto-allocate-uids"
+                      "ca-derivations"
+                    ]
+                    ++ lib.optionals isLix [
+                      "pipe-operator"
+                      "repl-flake"
+                    ];
                   keep-outputs = lib.mkDefault true;
                   auto-allocate-uids = lib.mkDefault true;
                   narinfo-cache-negative-ttl = lib.mkDefault 0;
