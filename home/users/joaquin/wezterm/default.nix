@@ -2,9 +2,15 @@
   config,
   pkgs,
   lib,
-  inputs,
   ...
 }:
+let
+  shellIntegrationStr = ''
+    if [[ $TERM_PROGRAM = "WezTerm" ]]; then
+      source "${config.programs.wezterm.package}/etc/profile.d/wezterm.sh"
+    fi
+  '';
+in
 {
   programs.wezterm = {
     enable = true;
@@ -76,6 +82,13 @@
           };
         };
       };
+    enableBashIntegration = false;
+    enableZshIntegration = false;
   };
-  xdg.configFile."wezterm/wezterm.lua".source = config.lib.impurePath.mkImpureLink ./files/wezterm.lua;
+  xdg.configFile."wezterm/wezterm.lua".source =
+    config.lib.impurePath.mkImpureLink ./files/wezterm.lua;
+
+  programs.bash.initExtra = lib.mkAfter shellIntegrationStr;
+  programs.zsh.initExtra = lib.mkAfter shellIntegrationStr;
+
 }
