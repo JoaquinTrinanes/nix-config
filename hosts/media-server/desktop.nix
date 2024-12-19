@@ -7,7 +7,7 @@ in
 {
   disabledModules = [ ../razer-blade-14/hardware-configuration.nix ];
   imports = [
-    ../razer-blade-14
+    ../common/desktop.nix
     ./hardware-configuration.nix
   ];
 
