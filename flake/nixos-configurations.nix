@@ -17,6 +17,13 @@
           ../hosts/media-server/hardware-configuration.nix
         ];
       };
+      piorno = {
+        system = "x86_64-linux";
+        modules = [
+          ../hosts/common/desktop.nix
+          ../hosts/piorno/hardware-configuration.nix
+          ../hosts/piorno/disko.nix
+        ];
       };
     };
 
