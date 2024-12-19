@@ -12,6 +12,7 @@
           hosts = {
             razer-blade-14.enable = true;
             media-server.enable = true;
+            piorno.enable = true;
           };
         };
       };
