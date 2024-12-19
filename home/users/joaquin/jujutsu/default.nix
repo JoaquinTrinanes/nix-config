@@ -11,24 +11,9 @@ let
     doCheck = false;
   };
 
-  # Workaround for jj not having includeIf
   jj = lib.my.mkWrapper {
-    basePackage = pkgs.writeShellScriptBin "jj" ''
-      if [[ $PWD/ = $HOME/Documents/veganhacktivists/* ]]; then
-        export JJ_EMAIL=''${JJ_EMAIL-${lib.escapeShellArg config.accounts.email.accounts.vh.address}}
-      fi
-      exec ${lib.getExe jj-unwrapped} "$@"
-    '';
+    basePackage = jj-unwrapped;
 
-    # FIXME: https://nixpk.gs/pr-tracker.html?pr=352298
-    env = {
-      PAGER = {
-        value = "less --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen";
-        force = true;
-        # also works without force
-        # value = null;
-      };
-    };
     extraPackages = [
       (pkgs.writeTextDir "share/fish/vendor_completions.d/jj.fish" ''
         source ${jj-unwrapped}/share/fish/vendor_completions.d/jj.fish
@@ -46,6 +31,15 @@ in
       user = {
         inherit (config.programs.git.iniContent.user) name email;
       };
+
+      "--scope" = [
+        {
+          "--when" = {
+            repositories = [ "~/Documents/veganhacktivists/" ];
+          };
+          user.email = config.accounts.email.accounts.vh.address;
+        }
+      ];
 
       signing = lib.mkIf (config.programs.git.iniContent.commit.gpgSign or false) {
         sign-all = true;
@@ -71,7 +65,8 @@ in
         "p(base, n)" = "roots(base | ancestors(base-, n))";
         "p(n)" = "p(@, n)";
 
-        "overview(from, to)" = "present(to::) | present(from) | present(from::to) | ancestors(from:: & (visible_heads() ~ untracked_remote_bookmarks()), 1)";
+        "overview(from, to)" =
+          "present(to::) | present(from) | present(from::to) | ancestors(from:: & (visible_heads() ~ untracked_remote_bookmarks()), 1)";
         "overview(from)" = "overview(from, @)";
         overview = "overview(fork_point(trunk() | git_head()))";
       };
