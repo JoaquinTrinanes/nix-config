@@ -2,13 +2,21 @@
 {
   parts.nixos = {
     hosts = {
-      "razer-blade-14" = {
+      razer-blade-14 = {
         system = "x86_64-linux";
-        modules = [ ../hosts/razer-blade-14 ];
+        modules = [
+          ../hosts/common/desktop.nix
+          ../hosts/razer-blade-14/hardware-configuration.nix
+          ../hosts/razer-blade-14/disko.nix
+        ];
       };
-      "media-server" = {
+      media-server = {
         system = "x86_64-linux";
-        modules = [ ../hosts/media-server/desktop.nix ];
+        modules = [
+          ../hosts/media-server/desktop.nix
+          ../hosts/media-server/hardware-configuration.nix
+        ];
+      };
       };
     };
 
