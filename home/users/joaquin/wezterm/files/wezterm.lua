@@ -106,9 +106,9 @@ config.check_for_updates = false
 config.term = "wezterm"
 
 config.front_end = "OpenGL"
-if os.getenv("VK_ICD_FILENAMES") then
-	config.front_end = "WebGpu"
-end
+-- if os.getenv("VK_ICD_FILENAMES") then
+config.front_end = "WebGpu"
+-- end
 
 -- if enabled and on WebGpu, fails with 'Failed to create window: no compatible adapter found' error
 -- config.webgpu_force_fallback_adapter = true

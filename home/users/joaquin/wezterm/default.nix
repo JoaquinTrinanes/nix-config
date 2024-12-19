@@ -16,10 +16,10 @@ in
     enable = true;
     package = lib.my.mkWrapper {
       basePackage = pkgs.wezterm;
-      env = {
-        # prevent dGPU not powering off when front_end = "WebGpu"
-        VK_ICD_FILENAMES.value = "${pkgs.mesa.drivers}/share/vulkan/icd.d/radeon_icd.x86_64.json";
-      };
+      # env = lib.optionalAttrs (config.hardware.nvidia.prime.nvidiaBusNvidia != "") {
+      #   # prevent dGPU not powering off when front_end = "WebGpu"
+      #   VK_ICD_FILENAMES.value = "${pkgs.mesa.drivers}/share/vulkan/icd.d/radeon_icd.x86_64.json";
+      # };
 
     };
     colorSchemes."base16" =
