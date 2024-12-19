@@ -18,7 +18,7 @@
     };
     home-manager = {
       perUser = user: { home.username = lib.mkDefault user.name; };
-      modules = [ ../home/global ] ++ builtins.attrValues inputs.self.homeManagerModules;
+      modules = [ ../home/global ] ++ builtins.attrValues inputs.self.modules.homeManager;
       standaloneModules = [ ../home/global/standalone.nix ];
     };
   };

@@ -1,3 +1,4 @@
+{ inputs, ... }:
 let
   flakeModules = import ../modules/flake;
 in
@@ -5,6 +6,7 @@ in
   _class = "flake";
 
   imports = builtins.attrValues flakeModules ++ [
+    inputs.flake-parts.flakeModules.flakeModules
     ./parts
     ./home-configurations.nix
     ./misc.nix
@@ -16,5 +18,9 @@ in
     ./neovim
   ];
 
-  flake.flakeModules = flakeModules;
+  flake.modules = {
+    flake = flakeModules;
+    nixos = import ../modules/nixos;
+    homeManager = import ../modules/home-manager;
+  };
 }

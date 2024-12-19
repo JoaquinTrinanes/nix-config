@@ -13,7 +13,7 @@
     };
 
     modules = lib.mkMerge [
-      (builtins.attrValues inputs.self.nixosModules)
+      (builtins.attrValues inputs.self.modules.nixos)
       [
         ../hosts/common/global.nix
         ../profiles/nixos
