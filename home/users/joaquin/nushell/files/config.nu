@@ -5,7 +5,7 @@ let carapace_completer = {|spans|
 }
 
 let fish_completer = {|spans: list<string>|
-    @fish@ --command $'complete "--do-complete=($spans | str join " ")"'
+    fish --command $'complete "--do-complete=($spans | str join " ")"'
     | $"value(char tab)description(char newline)" + $in
     | from tsv --flexible --no-infer
 }
@@ -34,7 +34,7 @@ let external_completer = {|spans: list<string>|
     }
  }
 
-$env.config.ls.clickable_links = false
+# $env.config.ls.clickable_links = false
 
 $env.config.table.mode = "compact"
 $env.config.table.header_on_separator = true
@@ -42,12 +42,9 @@ $env.config.table.trim.truncating_suffix = "…"
 
 $env.config.filesize.metric = true
 
-$env.config.cursor_shape = {
-    # TODO: set to inherit?
-    emacs: line # block, underscore, line, blink_block, blink_underscore, blink_line (line is the default)
-    vi_insert: line # block, underscore, line , blink_block, blink_underscore, blink_line (block is the default)
-    vi_normal: block # block, underscore, line, blink_block, blink_underscore, blink_line (underscore is the default)
-}
+$env.config.cursor_shape.emacs = "line"
+$env.config.cursor_shape.vi_insert = "line"
+$env.config.cursor_shape.vi_normal = "block"
 
 $env.config.edit_mode = "vi"
 
@@ -68,7 +65,7 @@ $env.config.completions.partial = true
 $env.config.completions.algorithm = "prefix" # prefix or fuzzy
 $env.config.completions.external.completer = $external_completer
 
-$env.config.menus = [
+$env.config.menus ++= [
     # Configuration for default nushell menus
     # Note the lack of source parameter
     {
@@ -200,7 +197,10 @@ $env.config.menus = [
     }
 ] | each {|menu| $menu | upsert style {} }
 
-$env.config.keybindings = [
+$env.config.display_errors.termination_signal = false
+$env.config.display_errors.exit_code = false
+
+$env.config.keybindings ++= [
     # fix shift+backspace not working with the kitty keyboard protocol
     {
         name: shift_back
@@ -216,24 +216,9 @@ $env.config.keybindings = [
         mode: [emacs vi_normal vi_insert]
         event: {
             until: [
-                { send: menu name: completion_menu }
-                { send: menunext }
                 { edit: complete }
             ]
         }
-        # event: {
-        #     until: [
-        #     { send: menu name: completion_menu }
-        #     { send: menunext }
-        #     ]
-        # }
-    }
-    {
-        name: completion_previous
-        modifier: shift
-        keycode: backtab
-        mode: [emacs, vi_normal, vi_insert] # Note: You can add the same keybinding to all modes by using a list
-        event: { send: menuprevious }
     }
     {
         name: undo_or_previous_page
