@@ -24,27 +24,40 @@ local M = {
     ---@type blink.cmp.Config
     opts = {
       completion = {
+        ghost_text = {
+          enabled = false,
+        },
         trigger = {
+          show_in_snippet = false,
+          show_on_trigger_character = true,
           show_on_insert_on_trigger_character = false,
         },
+        accept = { auto_brackets = { kind_resolution = { blocked_filetypes = { "nu" } } } },
+        list = {
+          selection = "auto_insert",
+        },
       },
+      -- menu = {
+      --   draw = { treesitter = { "lsp" } },
+      -- },
+      -- signature = { enabled = true },
       keymap = {
-        preset = "enter",
-        ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
-        ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+        preset = "default",
+        -- ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+        -- ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
       },
 
       fuzzy = { prebuilt_binaries = { download = not vim.g.usePluginsFromStore } },
-      list = { selection = "auto_insert" },
+      -- list = { selection = "auto_insert" },
       windows = {
         cycle = {
           from_bottom = true,
           from_top = true,
         },
       },
-      documentation = {
-        auto_show = true,
-      },
+      -- documentation = {
+      --   auto_show = true,
+      -- },
     },
   },
   {
