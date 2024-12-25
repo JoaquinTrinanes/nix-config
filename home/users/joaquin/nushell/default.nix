@@ -47,6 +47,7 @@ let
         "--env-config"
         config.home.file."${envFile}".source
       ];
+      pathAdd = [ pkgs.fish ];
     };
   scriptsDir = mkImpureLink ./files/scripts;
 in
@@ -70,15 +71,12 @@ in
     # Source the file instead of setting the source to avoid HM causing IFD
     configFile.text = ''
       source ${
-        pkgs.substituteAll {
-          src = ./files/config.nu;
-          fish = lib.getExe pkgs.fish;
-        }
+        mkImpureLink ./files/config.nu
       }
     '';
     envFile.text = ''
       const NU_LIB_DIRS = $NU_LIB_DIRS ++ ${toNushell { } [ scriptsDir ]}
-      source ${./files/env.nu}
+      source ${mkImpureLink ./files/env.nu}
     '';
     extraConfig =
       let
