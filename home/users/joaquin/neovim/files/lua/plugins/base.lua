@@ -195,9 +195,6 @@ local M = {
         return result
       end
 
-      config.defaults.keymap.fzf["tab"] = "down"
-      config.defaults.keymap.fzf["shift-tab"] = "up"
-
       opts.fzf_opts = vim.tbl_extend("force", opts.fzf_opts, { ["--cycle"] = true })
       return opts
     end,

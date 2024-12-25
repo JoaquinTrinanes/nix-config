@@ -101,40 +101,6 @@ $env.config.menus ++= [
             description_rows: 10
         }
     }
-    # Example of extra menus created using a nushell source
-    # Use the source field to create a list of records that populates
-    # the menu
-    {
-        name: commands_menu
-        only_buffer_difference: false
-        marker: "# "
-        type: {
-            layout: columnar
-            columns: 4
-            col_width: 20
-            col_padding: 2
-        }
-        source: { |buffer, position|
-            scope commands
-            | where name =~ $buffer
-            | each { |it| {value: $it.name description: $it.usage} }
-        }
-    }
-    {
-        name: vars_menu
-        only_buffer_difference: true
-        marker: "# "
-        type: {
-            layout: list
-            page_size: 10
-        }
-        source: { |buffer, position|
-            scope variables
-            | where name =~ $buffer
-            | sort-by name
-            | each { |it| {value: $it.name description: $it.type} }
-        }
-    }
     {
         name: commands_with_description
         only_buffer_difference: true
@@ -201,8 +167,8 @@ $env.config.display_errors.termination_signal = false
 $env.config.display_errors.exit_code = false
 
 $env.config.keybindings ++= [
-    # fix shift+backspace not working with the kitty keyboard protocol
     {
+        # fix shift+backspace not working with the kitty keyboard protocol
         name: shift_back
         modifier: Shift
         keycode: Backspace
@@ -210,49 +176,45 @@ $env.config.keybindings ++= [
         event: { edit: Backspace }
     }
     {
-        name: completion_menu
+        name: disable_tab_completion
         modifier: none
-        keycode: tab
+        keycode: Tab
+        mode: [emacs vi_normal vi_insert]
+        event: null
+    }
+    {
+        name: disable_shift_tab_completion
+        modifier: Shift
+        keycode: BackTab
+        mode: [emacs vi_normal vi_insert]
+        event: null
+    }
+    {
+        name: completion_menu_next
+        modifier: control
+        keycode: char_n
         mode: [emacs vi_normal vi_insert]
         event: {
             until: [
+                { send: menu name: completion_menu }
+                { send: menunext }
                 { edit: complete }
             ]
         }
     }
     {
-        name: undo_or_previous_page
+        name: completion_menu_prev
         modifier: control
-        keycode: char_z
-        mode: emacs
+        keycode: char_p
+        mode: [emacs vi_normal vi_insert]
         event: {
             until: [
-                { send: menupageprevious }
-                { edit: undo }
+                { send: menu name: completion_menu }
+                { send: menuprevious }
+                { edit: complete }
             ]
         }
     }
-    {
-        name: yank
-        modifier: control
-        keycode: char_y
-        mode: emacs
-        event: {
-            until: [
-                { edit: pastecutbufferafter }
-            ]
-        }
-    }
-    # {
-    #     name: kill-line
-    #     modifier: control
-    #     keycode: char_c
-    #     mode: [emacs, vi_normal, vi_insert]
-    #     event: [
-    #         { edit: CutFromStart }
-    #         { edit: CutToEnd }
-    #     ]
-    # }
     {
         name: copy_selection
         modifier: control_shift
