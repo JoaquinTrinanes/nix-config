@@ -8,31 +8,26 @@ let
   cfg = config.profiles.gaming;
   # Don't launch steam with the dGPU
   steam = pkgs.steam.override (prev: {
-    extraEnv = {
-      VK_ICD_FILENAMES = null;
-    } // prev.extraEnv or { };
     steam-unwrapped = prev.steam-unwrapped.overrideAttrs (prevUnwrapped: {
       postInstall = lib.concatLines [
         prevUnwrapped.postInstall
         ''
           substituteInPlace $out/share/applications/steam.desktop \
             --replace-fail PrefersNonDefaultGPU=true PrefersNonDefaultGPU=false \
-            --replace-fail X-KDE-RunOnDiscreteGpu=true X-KDE-RunOnDiscreteGpu=false 
+            --replace-fail X-KDE-RunOnDiscreteGpu=true X-KDE-RunOnDiscreteGpu=false
         ''
       ];
     });
   });
-  steamNoInternet =
-    let
-      steamNoInternetPkg = steam.override (prev: {
-        steam-unwrapped = prev.steam-unwrapped.overrideAttrs (prevUnwrapped: {
-          extraBwrapArgs = (prevUnwrapped.args.extraBwrapArgs or [ ]) ++ [ "--unshare-net" ];
-        });
-      });
-    in
-    pkgs.writeShellScriptBin "steam-no-internet" ''
-      exec -a "$0" ${lib.getExe steamNoInternetPkg} "$@"
-    '';
+  steamNoInternet = pkgs.writeShellScriptBin "steam-no-internet" ''
+    exec -a "$0" ${
+      lib.getExe (
+        steam.override (prev: {
+          extraBwrapArgs = prev.extraBwrapArgs or [ ] ++ [ "--unshare-net" ];
+        })
+      )
+    } "$@"
+  '';
 in
 {
   options.profiles.gaming = {
