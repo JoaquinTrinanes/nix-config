@@ -50,6 +50,7 @@ in
       };
       git = {
         auto-local-bookmark = false;
+        private-commits = "private_commits()";
       };
       core = {
         fsmonitor = "watchman";
@@ -58,6 +59,7 @@ in
       format = { };
       revset-aliases = {
         default_log = "present(@) | ancestors(immutable_heads().., 2) | present(trunk())";
+        "private_commits()" = ''description("private:*") & mine()'';
         "diverge(x)" = "fork_point(x)::x";
         "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
 
