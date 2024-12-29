@@ -27,37 +27,25 @@ local M = {
         ghost_text = {
           enabled = false,
         },
-        trigger = {
-          show_in_snippet = false,
-          show_on_trigger_character = true,
-          show_on_insert_on_trigger_character = false,
-        },
         accept = { auto_brackets = { kind_resolution = { blocked_filetypes = { "nu" } } } },
         list = {
           selection = "auto_insert",
+          cycle = {
+            from_bottom = true,
+            from_top = true,
+          },
+        },
+        menu = {
+          draw = { treesitter = { "lsp" } },
         },
       },
-      -- menu = {
-      --   draw = { treesitter = { "lsp" } },
-      -- },
-      -- signature = { enabled = true },
+      signature = { enabled = true },
       keymap = {
         preset = "default",
         -- ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
         -- ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
       },
-
-      fuzzy = { prebuilt_binaries = { download = not vim.g.usePluginsFromStore } },
-      -- list = { selection = "auto_insert" },
-      windows = {
-        cycle = {
-          from_bottom = true,
-          from_top = true,
-        },
-      },
-      -- documentation = {
-      --   auto_show = true,
-      -- },
+      fuzzy = { prebuilt_binaries = { download = false } },
     },
   },
   {
