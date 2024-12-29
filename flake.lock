@@ -15,13 +15,13 @@
       "locked": {
         "lastModified": 1735256338,
         "narHash": "sha256-+vAY4EJyxrQfzPL7WWuQ0izZhyGaFKEJ93kMYi/r14c=",
-        "owner": "nilp0inter",
+        "owner": "nix-community",
         "repo": "autofirma-nix",
         "rev": "22774e8ea2838d3bc473970121c0132a66ef8025",
         "type": "github"
       },
       "original": {
-        "owner": "nilp0inter",
+        "owner": "nix-community",
         "repo": "autofirma-nix",
         "type": "github"
       }

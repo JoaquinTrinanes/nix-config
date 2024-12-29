@@ -26,7 +26,7 @@ rec {
     nushell-nightly.inputs.nixpkgs.follows = "nixpkgs";
     nushell-nightly.inputs.flake-parts.follows = "flake-parts";
 
-    autofirma-nix.url = "github:nilp0inter/autofirma-nix";
+    autofirma-nix.url = "github:nix-community/autofirma-nix";
     autofirma-nix.inputs.flake-parts.follows = "flake-parts";
     autofirma-nix.inputs.nixpkgs.follows = "nixpkgs";
 
