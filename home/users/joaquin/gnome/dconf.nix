@@ -84,7 +84,7 @@ in
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       binding = "<Control><Alt>t";
-      command = "wezterm";
+      command = "xdg-terminal-exec";
       name = "Launch terminal";
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
