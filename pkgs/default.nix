@@ -3,7 +3,9 @@
     { pkgs, ... }:
     {
       packages = {
-        dynamic-gnome-wallpapers = pkgs.callPackage ./dynamic-gnome-wallpapers.nix { };
+        dynamic-gnome-wallpapers = pkgs.callPackage ./dynamic-gnome-wallpapers.nix {
+          withDynamic = false;
+        };
       };
     };
 }
