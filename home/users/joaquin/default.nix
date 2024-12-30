@@ -9,14 +9,12 @@
   imports = [
     ./carapace
     ./direnv
-    ./ghostty
     ./git
     ./gnome
     ./jujutsu
-    ./kitty
     ./neovim
     ./nushell
-    ./wezterm
+    ./terminal
     ./wireplumber
     inputs.nix-colors.homeManagerModules.default
   ];
@@ -76,7 +74,6 @@
       inherit (pkgs)
         ast-grep
         enpass
-        xdg-terminal-exec
         ;
     };
   };
@@ -264,12 +261,6 @@
       SetEnv TERM="xterm-256color"
     '';
   };
-
-  xdg.configFile."xdg-terminals.list".text = ''
-    com.mitchellh.ghostty.desktop
-    org.wezfurlong.wezterm.desktop
-    kitty.desktop
-  '';
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";

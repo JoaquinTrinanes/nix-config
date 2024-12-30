@@ -59,32 +59,51 @@ in
       size = 16;
     };
     keybindings = {
-      "ctrl+j" = "kitten pass_keys.py neighboring_window bottom ctrl+j  \"^.* - nvim$\"";
-      "ctrl+k" = "kitten pass_keys.py neighboring_window top    ctrl+k \"^.* - nvim$\"";
-      "ctrl+h" = "kitten pass_keys.py neighboring_window left   ctrl+h \"^.* - nvim$\"";
-      "ctrl+l" = "kitten pass_keys.py neighboring_window right  ctrl+l \"^.* - nvim$\"";
-
-      # the 3 here is the resize amount, adjust as needed
-      "alt+j" = "kitten pass_keys.py relative_resize down  3 alt+j \"^.* - nvim$\"";
-      "alt+k" = "kitten pass_keys.py relative_resize up    3 alt+k \"^.* - nvim$\"";
-      "alt+h" = "kitten pass_keys.py relative_resize left  3 alt+h \"^.* - nvim$\"";
-      "alt+l" = "kitten pass_keys.py relative_resize right 3 alt+l \"^.* - nvim$\"";
-
-      "ctrl+alt+-" = "launch --location=hsplit";
-      "ctrl+alt+\\" = "launch --location=vsplit";
-      "ctrl+alt+|" = "launch --location=vsplit";
-      "ctrl+shift+l" = "kitty_shell window";
+      "ctrl+alt+-" = "launch --location=hsplit --cwd=current";
+      "ctrl+alt+\\" = "launch --location=vsplit --cwd=current";
+      "ctrl+alt+|" = "launch --location=vsplit --cwd=current";
+      # "ctrl+shift+l" = "kitty_shell window";
+      "ctrl+shift+escape" = "kitty_shell window";
     };
     settings = lib.mkMerge [
       {
         disable_ligatures = "cursor";
         enable_audio_bell = false;
         touch_scroll_multiplier = 5;
+        allow_remote_control = true;
+        listen_on = if pkgs.stdenv.isLinux then "unix:@mykitty" else "/tmp/mykitty";
+        enabled_layouts = lib.concatStringsSep "," [
+          "splits"
+          "all"
+        ];
       }
       theme
     ];
+    extraConfig = ''
+      map ctrl+j neighboring_window down
+      map ctrl+k neighboring_window up
+      map ctrl+h neighboring_window left
+      map ctrl+l neighboring_window right
+
+      # Unset the mapping to pass the keys to neovim
+      map --when-focus-on var:IS_NVIM ctrl+j
+      map --when-focus-on var:IS_NVIM ctrl+k
+      map --when-focus-on var:IS_NVIM ctrl+h
+      map --when-focus-on var:IS_NVIM ctrl+l
+
+      # the 3 here is the resize amount, adjust as needed
+      map alt+j kitten relative_resize.py down  3
+      map alt+k kitten relative_resize.py up    3
+      map alt+h kitten relative_resize.py left  3
+      map alt+l kitten relative_resize.py right 3
+
+      map --when-focus-on var:IS_NVIM alt+j
+      map --when-focus-on var:IS_NVIM alt+k
+      map --when-focus-on var:IS_NVIM alt+h
+      map --when-focus-on var:IS_NVIM alt+l
+    '';
   };
-  xdg.configFile."kitty/pass_keys.py".source = "${smart-splits-nvim}/kitty/pass_keys.py";
+  # xdg.configFile."kitty/pass_keys.py".source = "${smart-splits-nvim}/kitty/pass_keys.py";
   xdg.configFile."kitty/relative_resize.py".source = "${smart-splits-nvim}/kitty/relative_resize.py";
   xdg.configFile."kitty/neighboring_window.py".source = "${smart-splits-nvim}/kitty/neighboring_window.py";
 }
