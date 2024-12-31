@@ -31,33 +31,9 @@ keybind = alt+l=goto_split:right
 # keybind = ctrl+j=goto_split:bottom
 # keybind = ctrl+l=goto_split:right
 
-# font-family = "FiraCode Nerd Font"
-# font-feature = ss05
-
-font-family = "Maple Mono"
-
-# @,#...
-font-feature = cv01
-
-# i
-font-feature = cv02
-
-# a
-font-feature = cv03
-
-# @
-# font-feature = cv04
-
-# ===
-font-feature = ss01
-# [todo]...
-# font-feature = ss02
-
-# >=,<=
-font-feature = ss04
-
-# {{ }}
+font-family = monospace
 font-feature = ss05
+font-style-bold = SemiBold
 
 gtk-wide-tabs = false
 gtk-tabs-location = bottom

@@ -26,50 +26,74 @@ in
     fonts.fontconfig = lib.mkDefault {
       defaultFonts = {
         monospace = [
+          "FiraCode Nerd Font"
           "Maple Mono"
-          # "FiraCode Nerd Font"
+          "Noto Sans Mono CJK HK"
+          "Noto Sans Mono CJK JP"
+          "Noto Sans Mono CJK SC"
+          "Noto Sans Mono CJK TC"
+          "Noto Sans Mono CJK KR"
         ];
         emoji = [
           "JoyPixels"
+          "Symbols Nerd Font Mono"
           "unscii-16-full"
         ];
       };
-      localConf = ''
-        <?xml version="1.0"?>
-        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
-        <fontconfig>
-          <match target="font">
-            <test name="family" compare="eq" ignore-blanks="true">
-              <string>FiraCode Nerd Font</string>
-            </test>
-            <edit name="fontfeatures" mode="append">
-              <!-- @ style -->
-              <string>ss05 on</string>
-            </edit>
-          </match>
-          <match target="font">
-            <test name="family" compare="eq" ignore-blanks="true">
-              <string>Maple Mono</string>
-            </test>
-            <edit name="fontfeatures" mode="append">
-              <!-- @,#,$,%... style -->
-              <string>cv01 on</string>
-              <!-- a style -->
-              <string>cv03 on</string>
-              <!-- @ style -->
-              <string>cv04 on</string>
-              <!-- == ligatures -->
-              <string>ss01 on</string>
-              <!-- [TODO] pills (test) -->
-              <string>ss02 on</string>
-              <!-- <= ligatures -->
-              <string>ss04 on</string>
-              <!-- {{ }} ligatures -->
-              <string>ss05 on</string>
-            </edit>
-          </match>
-        </fontconfig>
-      '';
+      localConf =
+        let
+          fontConfigByFamily = {
+            "FiraCode Nerd Font" = {
+              features = {
+                # @ style
+                ss05 = true;
+              };
+            };
+            "Maple Mono" = {
+              features = {
+                # @,#,$,%... style
+                cv01 = true;
+                # a style
+                cv03 = true;
+                # @ style
+                cv04 = true;
+                # == ligatures
+                ss01 = true;
+                # [TODO] pills
+                ss02 = false;
+                # <= ligatures
+                ss04 = true;
+                # {{ }} ligatures
+                ss05 = true;
+              };
+            };
+          };
+          mkFontConfig =
+            font:
+            {
+              features ? { },
+            }:
+            ''
+              <match target="font">
+                <test name="family" compare="eq" ignore-blanks="true">
+                  <string>${font}</string>
+                </test>
+                <edit name="fontfeatures" mode="append">
+                  ${lib.concatMapAttrsStringSep "\n" (
+                    name: value: "<string>${name} ${if value then "on" else "off"}</string>"
+                  ) features}
+                  <!-- @ style -->
+                </edit>
+              </match>
+            '';
+        in
+        ''
+          <?xml version="1.0"?>
+          <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+          <fontconfig>
+            ${lib.concatMapAttrsStringSep "\n" mkFontConfig fontConfigByFamily} 
+          </fontconfig>
+        '';
     };
 
     nixpkgs.config.joypixels.acceptLicense = true;
