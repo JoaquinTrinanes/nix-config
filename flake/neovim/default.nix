@@ -62,6 +62,7 @@
           cmp-nvim-lsp
           cmp-path
           conform-nvim
+          fidget-nvim
           crates-nvim
           dashboard-nvim
           dial-nvim
@@ -77,7 +78,6 @@
           indent-blankline-nvim
           lazy-nvim
           lazydev-nvim
-          LazyVim
           lualine-lsp-progress
           lualine-nvim
           luasnip
@@ -163,7 +163,7 @@
         tailwindcss-colorizer-cmp = "tailwindcss-colorizer-cmp.nvim";
         harpoon = "harpoon2";
       };
-      devPlugins = [ pkgs.vimPlugins.blink-cmp ];
+      devPlugins = builtins.attrValues { inherit (pkgs.vimPlugins) blink-cmp telescope-fzf-native-nvim; };
       mkPluginPathMap =
         plugins:
         let
