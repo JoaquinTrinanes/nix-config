@@ -1,13 +1,31 @@
 local M = {
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "catppuccin",
-    },
-  },
+  -- {
+  --   "vimpostor/vim-lumen",
+  --   enabled = false,
+  --   lazy = false,
+  --   -- config = function()
+  --   --   vim.api.nvim_create_autocmd("User", {
+  --   --     pattern = "LumenLight",
+  --   --     callback = function()
+  --   --       vim.print("Entered light mode")
+  --   --     end,
+  --   --   })
+  --   --   vim.api.nvim_create_autocmd("User", {
+  --   --     pattern = "LumenDark",
+  --   --     callback = function()
+  --   --       vim.print("Entered dark mode")
+  --   --     end,
+  --   --   })
+  --   -- end,
+  -- },
+  { "folke/tokyonight.nvim", lazy = false, optional = true, enabled = false },
   {
     "catppuccin/nvim",
-    optional = true,
+    priority = 1000,
+    init = function()
+      vim.cmd.colorscheme("catppuccin")
+    end,
+    -- optional = true,
     name = "catppuccin",
     opts = {
       integrations = {
