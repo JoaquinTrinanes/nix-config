@@ -36,15 +36,9 @@ local M = {
   },
   {
     "saghen/blink.cmp",
-    opts_extend = {
-      "sources.completion.enabled_providers",
-      "sources.compat",
-      "sources.default",
-    },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
-      sources = { default = { "lsp", "path", "snippets", "buffer" } },
       completion = {
         ghost_text = {
           enabled = false,
@@ -68,24 +62,6 @@ local M = {
         -- ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
       },
       fuzzy = { prebuilt_binaries = { download = false } },
-    },
-  },
-  {
-    "neovim/nvim-lspconfig",
-    optional = true,
-    opts = function(_, opts)
-      opts = opts or {}
-      opts.capabilities =
-        vim.tbl_deep_extend("force", {}, opts.capabilities or {}, require("blink.cmp").get_lsp_capabilities())
-      -- return { capabilities = require("blink.cmp").get_lsp_capabilities() }
-      return opts
-    end,
-  },
-  {
-    "catppuccin",
-    optional = true,
-    opts = {
-      integrations = { blink_cmp = true },
     },
   },
   -- {

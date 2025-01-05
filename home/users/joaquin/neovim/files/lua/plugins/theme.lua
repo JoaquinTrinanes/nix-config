@@ -1,4 +1,11 @@
 local M = {
+  {
+    "LazyVim/LazyVim",
+    optional = true,
+    opts = {
+      colorscheme = "catppuccin",
+    },
+  },
   -- {
   --   "vimpostor/vim-lumen",
   --   enabled = false,
@@ -29,7 +36,6 @@ local M = {
     name = "catppuccin",
     opts = {
       integrations = {
-        blink_cmp = true,
         gitsigns = false,
         native_lsp = {
           underlines = {

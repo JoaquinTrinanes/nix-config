@@ -12,20 +12,14 @@ let
   # vi
   pureNeovim =
     let
-      base = mkCustomNeovim (
-        packages.neovim-impure.override (prev: {
-          viAlias = false;
-          vimAlias = true;
-          appName = "nvim";
-          initLua = ''
-            vim.g.usePluginsFromStore = false
-            ${prev.initLua or ""}
-          '';
-        })
-      );
+      base = packages.neovim.override {
+        appName = "pureNvim";
+        viAlias = true;
+        vimAlias = false;
+      };
     in
-    pkgs.writeShellScriptBin "vim" ''
-      exec -a "$0" ${lib.getExe' base "vim"} "$@"
+    pkgs.writeShellScriptBin "vi" ''
+      exec -a "$0" ${lib.getExe base} "$@"
     '';
 
   # vim, nvim

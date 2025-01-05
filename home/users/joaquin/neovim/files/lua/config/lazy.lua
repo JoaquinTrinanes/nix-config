@@ -19,110 +19,51 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-local opt = vim.opt
-
-opt.confirm = true
-
-opt.number = true
-opt.relativenumber = true
-
-opt.smarttab = true
-opt.expandtab = true -- Use spaces instead of tabs
-opt.shiftround = true -- Round indent
-opt.shiftwidth = 2 -- Size of an indent
-opt.tabstop = 2 -- Number of spaces tabs count for
-
-opt.smartindent = true -- Insert indents automatically
-
-opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-
-opt.smoothscroll = true
--- opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
--- opt.foldmethod = "expr"
-opt.foldtext = ""
-
-opt.shortmess:append({ W = true, I = true, c = true, C = true })
-
-opt.completeopt = "menuone,longest"
-
-opt.wrap = true
-opt.linebreak = true
-opt.smoothscroll = true
-
--- Hide the '[No Name]' buffer
--- vim.opt.hidden = false
-
-if vim.env.COLORTERM == nil then
-  opt.pumblend = 0 -- Popup blend
-  opt.termguicolors = false
-end
-
--- Highlight one character after textwidth
-opt.colorcolumn = "+1"
-
-opt.ignorecase = true
-opt.smartcase = true
-
-opt.signcolumn = "yes"
-
-opt.splitright = true
-opt.splitbelow = true
-
-vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
-end)
-
-opt.list = true
-opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-
--- Preview substitutions live, as you type!
-opt.inccommand = "split"
-
--- Show which line your cursor is on
-opt.cursorline = true
-
--- Minimal number of screen lines to keep above and below the cursor.
-opt.scrolloff = 10
-
-vim.api.nvim_create_user_command("Opts", function(args)
-  local get_plugin_opts = function(name)
-    local plugin = require("lazy.core.config").spec.plugins[name]
-    if not plugin then
-      return {}
-    end
-    local Plugin = require("lazy.core.plugin")
-    return Plugin.values(plugin, "opts", false)
-  end
-
-  local result = {}
-  if #args.fargs == 1 then
-    result = get_plugin_opts(args.fargs[1])
-  else
-    for _, name in ipairs(args.fargs) do
-      local opts = get_plugin_opts(name)
-      result[name] = opts
-    end
-  end
-  vim.print(result)
-end, {
-  nargs = "+",
-  complete = function()
-    return vim.tbl_keys(require("lazy.core.config").spec.plugins)
-  end,
-})
-
 if vim.g.usePluginsFromStore == nil then
   vim.g.usePluginsFromStore = false
 end
 
-local dev = {}
-
 --- @type LazyConfig
 local lazyoptions = {
   spec = {
+    { "LazyVim/LazyVim", opts = { news = { lazyvim = false, neovim = false } }, import = "lazyvim.plugins" },
+    { import = "lazyvim.plugins.extras.dap.core" },
+    { import = "lazyvim.plugins.extras.dap.nlua" },
+    { import = "lazyvim.plugins.extras.coding.luasnip" },
+    { import = "lazyvim.plugins.extras.editor.dial" },
+    { import = "lazyvim.plugins.extras.editor.harpoon2" },
+    { import = "lazyvim.plugins.extras.editor.inc-rename" },
+    { import = "lazyvim.plugins.extras.formatting.prettier" },
+    { import = "lazyvim.plugins.extras.linting.eslint" },
+    { import = "lazyvim.plugins.extras.ui.mini-indentscope" },
+    { import = "lazyvim.plugins.extras.ui.indent-blankline" },
+    { import = "lazyvim.plugins.extras.ui.treesitter-context" },
+    { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
+    { import = "lazyvim.plugins.extras.util.project" },
+    -- { import = "lazyvim.plugins.extras.editor.telescope" },
+    { import = "lazyvim.plugins.extras.editor.fzf" },
+    { import = "lazyvim.plugins.extras.editor.mini-files" },
+
+    -- lang support
+    { import = "lazyvim.plugins.extras.lang.zig" },
+    { import = "lazyvim.plugins.extras.lang.clangd" },
+    { import = "lazyvim.plugins.extras.lang.docker" },
+    { import = "lazyvim.plugins.extras.lang.json" },
+    { import = "lazyvim.plugins.extras.lang.markdown" },
+    { import = "lazyvim.plugins.extras.lang.nix" },
+    { import = "lazyvim.plugins.extras.lang.nushell" },
+    { import = "lazyvim.plugins.extras.lang.php" },
+    { import = "lazyvim.plugins.extras.lang.prisma" },
+    { import = "lazyvim.plugins.extras.lang.rust" },
+    { import = "lazyvim.plugins.extras.lang.sql" },
+    { import = "lazyvim.plugins.extras.lang.tailwind" },
+    { import = "lazyvim.plugins.extras.lang.terraform" },
+    { import = "lazyvim.plugins.extras.lang.toml" },
+    { import = "lazyvim.plugins.extras.lang.typescript" },
+    { import = "lazyvim.plugins.extras.lang.yaml" },
+
     { import = "plugins" },
   },
-  dev = dev,
   defaults = {
     lazy = false,
     version = false, -- always use the latest git commit
@@ -153,9 +94,6 @@ for name, path in pairs(vim.g.pluginPathMap) do
 end
 
 vim.g.lazyOptions = vim.g.lazyOptions or {}
-
-require("config.keymaps")
-require("config.autocmds")
 
 require("lazy").setup(vim.tbl_deep_extend("force", lazyoptions, vim.g.lazyOptions))
 
