@@ -42,7 +42,11 @@ rec {
     lix-module.inputs.lix.follows = "lix";
 
     jj.url = "github:jj-vcs/jj";
-    # jj.inputs.nixpkgs.follows = "nixpkgs";
+    jj.inputs.nixpkgs.follows = "nixpkgs";
+
+    ghostty.url = "github:ghostty-org/ghostty";
+    ghostty.inputs.nixpkgs-unstable.follows = "nixpkgs";
+    ghostty.inputs.nixpkgs-stable.follows = "nixpkgs";
   };
 
   nixConfig = {
