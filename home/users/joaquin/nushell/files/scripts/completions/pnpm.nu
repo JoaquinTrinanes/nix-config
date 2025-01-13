@@ -59,10 +59,9 @@ def 'nu-complete pnpm' [] {
     } {
         pnpm completion -- pnpm | lines | each {|it| $"($it) " } | wrap value
     }
-    let external_completions = (do $env.config.completions.external.completer [pnpm ''])
-    let script_completions = (
-        nu-complete pnpm user scripts
-    )
+    let external_completions = do $env.config.completions.external.completer [pnpm '']
+    let script_completions = nu-complete pnpm user scripts
+
     [
         ...$external_completions
         ...$script_completions
