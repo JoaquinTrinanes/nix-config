@@ -45,7 +45,7 @@ local M = {
         },
         accept = { auto_brackets = { kind_resolution = { blocked_filetypes = { "nu" } } } },
         list = {
-          selection = "auto_insert",
+          selection = { preselect = false, auto_insert = true },
           cycle = {
             from_bottom = true,
             from_top = true,
@@ -58,8 +58,7 @@ local M = {
       signature = { enabled = true },
       keymap = {
         preset = "default",
-        -- ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
-        -- ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+        ["<C-n>"] = { "select_next", "show", "show_documentation", "hide_documentation", "fallback" },
       },
       fuzzy = { prebuilt_binaries = { download = false } },
     },
