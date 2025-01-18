@@ -7,22 +7,8 @@
 }:
 let
   diffEditor = config.programs.neovim.package;
-  jj-unwrapped = inputs.jj.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
+  jj = inputs.jj.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
     doCheck = false;
-  };
-
-  jj = lib.my.mkWrapper {
-    basePackage = jj-unwrapped;
-
-    extraPackages = [
-      (pkgs.writeTextDir "share/fish/vendor_completions.d/jj.fish" ''
-        function __jj
-          command jj --ignore-working-copy --color=never --quiet $argv 2> /dev/null
-        end
-        COMPLETE=fish __jj | source
-      '')
-      jj-unwrapped
-    ];
   };
 in
 {
@@ -44,7 +30,6 @@ in
       ];
 
       signing = lib.mkIf (config.programs.git.iniContent.commit.gpgSign or false) {
-        sign-all = true;
         key = lib.mkIf (
           config.programs.git.iniContent.user.signingKey or null != null
         ) config.programs.git.iniContent.user.signingKey;
@@ -60,34 +45,38 @@ in
       };
       format = { };
       revset-aliases = {
-        default = "present(@) | ancestors(immutable_heads().., 2) | present(trunk())";
-        "private_commits()" = ''description("private:*") & mine()'';
-        "diverge(x)" = "fork_point(x)::x";
-        "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & ~mine())";
+        "default()" = "present(@) | ancestors(immutable_heads().., 2) | present(trunk())";
 
-        # get last n ancestor of rev
-        "p(base, n)" = "roots(base | ancestors(base-, n))";
-        "p(n)" = "p(@, n)";
+        "user(x)" = "author(x) | committer(x)";
+
+        "original_private_commits()" = ''description(glob:"private:*") & mine()'';
+        "private_commits()" = "original_private_commits()";
+
+        "around(x)" = "around(x, 3)";
+        "around(x, n)" = "ancestors(x, n) | descendants(x, n)";
 
         "overview(from, to)" =
           "present(to::) | present(from) | present(from::to) | ancestors(from:: & (visible_heads() ~ untracked_remote_bookmarks()), 1)";
-        "overview(from)" = "overview(from, @)";
-        overview = "overview(fork_point(trunk() | git_head()))";
 
         "lagging_bookmarks" = "::bookmarks() & mutable() & mine() ~ trunk()::";
 
-        # Current stack of commits
-        "current(from, n)" = "coalesce(ancestors(reachable(from, mutable()), n), default)";
-        "current(from)" = "current(from, 2)";
-        current = "current(@-+)";
+        "stack" = "stack()";
+        "stack()" = "stack(@)";
+        "stack(from)" = "stack(from, 2)";
+        "stack(from, n)" =
+          "descendants(from, 2) | ancestors(from, 2) | coalesce(ancestors(reachable(from, immutable_heads() | mutable()), n), default())";
+        # TODO: this show all bookmark heads between trunk and from. Maybe don't do it and depend on the default log for that? It can get big (renovate)
+        # "stack(from, n)" =
+        #   "coalesce(ancestors(reachable(from, mutable() | trunk()), n) | (trunk():: & from.. & (remote_bookmarks() | bookmarks())), default())";
 
-        "nearest_bookmarks(from)" = "heads(::from- & bookmarks())";
         "nearest_bookmarks()" = "nearest_bookmarks(@)";
+        "nearest_bookmarks(x)" = "heads(::x- & bookmarks())";
 
-        wip = "trunk()::heads(mutable()) & mine()";
+        "wip()" = "wip(trunk())";
+        "wip(from)" = "from::heads(mutable()) & mine()";
       };
       revsets = {
-        short-prefixes = "current | default";
+        short-prefixes = "stack() | default()";
       };
       ui = {
         diff-editor = [
@@ -99,10 +88,9 @@ in
         default-command = [
           "log"
           "-r"
-          "current | trunk()"
+          "stack() | trunk()"
         ];
       };
-      templates = { };
       colors = {
         "diff added" = {
           fg = "blue";
@@ -121,6 +109,10 @@ in
       aliases = {
         a = [ "abandon" ];
         ab = [ "absorb" ];
+        cat = [
+          "file"
+          "show"
+        ];
         clone = [
           "git"
           "clone"
@@ -180,7 +172,7 @@ in
           "--from"
           "nearest_bookmarks()"
           "--to"
-          ''heads(ancestors(@) & description(regex:".") ~ empty())''
+          ''heads(reachable(nearest_bookmarks(), nearest_bookmarks()::@ ~ description(exact:"") ~ empty() ~ private_commits()))''
         ];
         up = [
           "rebase"
