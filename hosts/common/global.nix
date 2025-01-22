@@ -32,6 +32,8 @@ in
 {
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
+  boot.kernelPackages = lib.mkDefault pkgs.linuxKernel.packageAliases.linux_latest;
+
   documentation.nixos.enable = false;
 
   security.sudo.extraConfig = ''
