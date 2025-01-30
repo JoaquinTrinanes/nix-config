@@ -47,7 +47,8 @@ local M = {
     cmd = "Neotree",
     opts = {
       filesystem = {
-        hijack_netrw_behavior = "disabled",
+        filtered_items = {
+          hide_dotfiles = false,
         -- follow_current_file = { enabled = true },
         -- bind_to_cwd = false,
       },

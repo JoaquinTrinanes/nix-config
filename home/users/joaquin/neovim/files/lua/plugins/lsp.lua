@@ -73,8 +73,7 @@ local M = {
             },
           },
         },
-        rust_analyzer = {
-          enabled = false,
+        ["rust_analyzer"] = {
           mason = false,
           checkOnSave = {
             extraArgs = {
@@ -86,6 +85,10 @@ local M = {
         },
         intelephense = {
           mason = false,
+          init_options = {
+            globalStoragePath = vim.fn.expand("$XDG_DATA_HOME"),
+            licenceKey = vim.fn.expand("$XDG_DATA_HOME/intelephense/licence.txt"),
+          },
           settings = {
             intelephense = {
               files = {
@@ -104,10 +107,10 @@ local M = {
             ["nil"] = {
               nix = {
                 formattings = { command = "nixfmt" },
-                maxMemoryMB = 3584,
+                -- maxMemoryMB = 3584,
                 flake = {
-                  autoArchive = true,
-                  autoEvalInputs = true,
+                  -- autoArchive = true,
+                  -- autoEvalInputs = true,
                 },
               },
             },

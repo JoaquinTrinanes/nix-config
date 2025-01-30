@@ -84,4 +84,21 @@ end, {
 vim.g.snacks_animate = false
 vim.g.root_spec = { "cwd", "lsp", { ".git", "lua" } }
 vim.g.lazyvim_php_lsp = "intelephense"
+vim.g.lazyvim_picker = "snacks"
+
 vim.g.ai_cmp = false
+
+vim.g.dbs = {
+  {
+    name = "postgres",
+    url = function()
+      return ("postgres://%s:%s@%s:%s/%s"):format(
+        vim.env.PGUSER,
+        vim.env.PGPASSWORD,
+        vim.env.PGHOST or "localhost",
+        vim.env.PGPORT or "5432",
+        vim.env.PGDATABASE
+      )
+    end,
+  },
+}

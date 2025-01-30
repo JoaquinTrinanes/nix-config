@@ -45,8 +45,10 @@ local lazyoptions = {
     { import = "lazyvim.plugins.extras.editor.snacks_picker" },
 
     { import = "lazyvim.plugins.extras.editor.mini-files" },
+    { import = "lazyvim.plugins.extras.coding.mini-surround" },
 
     -- lang support
+    { import = "lazyvim.plugins.extras.lang.python" },
     { import = "lazyvim.plugins.extras.lang.zig" },
     { import = "lazyvim.plugins.extras.lang.clangd" },
     { import = "lazyvim.plugins.extras.lang.docker" },
@@ -91,13 +93,11 @@ local lazyoptions = {
   },
 }
 
-for name, path in pairs(vim.g.pluginPathMap) do
+for name, path in pairs(vim.g.pluginPathMap or {}) do
   table.insert(lazyoptions.spec, 1, { name, dir = path })
 end
 
-vim.g.lazyOptions = vim.g.lazyOptions or {}
-
-require("lazy").setup(vim.tbl_deep_extend("force", lazyoptions, vim.g.lazyOptions))
+require("lazy").setup(vim.tbl_deep_extend("force", lazyoptions, vim.g.lazyOptions or {}))
 
 vim.g.lazyOptions = nil
 vim.g.pluginPathMap = nil

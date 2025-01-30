@@ -8,20 +8,6 @@
     }:
     let
       toLua = lib.generators.toLua { };
-      mkPluginPath =
-        plugins:
-        let
-          mkEntryFromDrv =
-            drv:
-            if lib.isDerivation drv then
-              {
-                name = lib.getName drv;
-                path = drv;
-              }
-            else
-              drv;
-        in
-        pkgs.linkFarm "vim-plugin-path" (map mkEntryFromDrv plugins);
       treesitter = pkgs.vimPlugins.nvim-treesitter.withPlugins (
         _:
         pkgs.vimPlugins.nvim-treesitter.allGrammars
@@ -49,11 +35,19 @@
           treesitterParsers
         ];
       };
+      devPlugins = builtins.attrValues {
+        inherit (pkgs.vimPlugins)
+          blink-cmp
+          ;
+      };
       plugins =
-        [
+        devPlugins
+        ++ [
           bundledTreesitter
         ]
         ++ (with pkgs.vimPlugins; [
+          LazyVim
+          SchemaStore-nvim
           bigfile-nvim
           bufferline-nvim
           catppuccin-nvim
@@ -63,6 +57,7 @@
           dashboard-nvim
           dial-nvim
           dressing-nvim
+          fidget-nvim
           flash-nvim
           flatten-nvim
           friendly-snippets
@@ -81,15 +76,16 @@
           mason-lspconfig-nvim
           mason-nvim
           mini-ai
+          mini-files
           mini-hipatterns
           mini-icons
           mini-indentscope
           mini-nvim
+          minimap-vim
           neo-tree-nvim
           neorg
           noice-nvim
           nui-nvim
-          nvim-cmp
           nvim-dap
           nvim-dap-ui
           nvim-lint
@@ -97,9 +93,9 @@
           nvim-nio
           nvim-snippets
           nvim-treesitter-context
-          SchemaStore-nvim
           nvim-treesitter-textobjects
           nvim-ts-autotag
+          nvim-web-devicons
           oil-nvim
           persistence-nvim
           plenary-nvim
@@ -116,14 +112,18 @@
           vim-dadbod-completion
           vim-dadbod-ui
           vim-jjdescription
+          vim-sleuth
           which-key-nvim
         ]);
       extraPackages = builtins.attrValues {
         inherit (pkgs)
+          bash-language-server
           biome
           black
           chafa
+          code-minimap
           deadnix
+          dockerfile-language-server-nodejs
           dotenv-linter
           fd
           fzf
@@ -145,15 +145,17 @@
           shfmt
           statix
           stylua
+          tailwindcss-language-server
           taplo
           typescript-language-server
           vscode-langservers-extracted
+          vtsls
           yaml-language-server
           ;
         inherit (pkgs.nodePackages) prettier;
       };
       pluginNameOverride = {
-        catppuccin = "catppuccin-nvim";
+        catppuccin-nvim = "catppuccin";
         LuaSnip = "luasnip";
         tailwindcss-colorizer-cmp = "tailwindcss-colorizer-cmp.nvim";
         harpoon = "harpoon2";
@@ -179,11 +181,13 @@
               name;
         in
         lib.listToAttrs (map (p: lib.nameValuePair (getPluginSpecName p) p) plugins);
-      extraLuaPackages = ps: [ ps.jsregexp ];
+      extraLuaPackages = ps: [
+        ps.jsregexp
+        ps.magick
+      ];
       mkNeovim = pkgs.callPackage ./mkNeovim.nix { };
-      baseNeovim =
+      baseNeovim' =
         let
-          pluginPath = mkPluginPath plugins;
           configDir = ../../home/users/joaquin/neovim/files;
         in
         mkNeovim {
@@ -195,7 +199,6 @@
             configDir
             ;
           globals = {
-            inherit pluginPath;
             lazyOptions = {
               lockfile = "${configDir}/lazy-lock.json";
               install.missing = false;
@@ -205,6 +208,7 @@
             require("config.lazy")
           '';
         };
+      baseNeovim = baseNeovim'.overrideAttrs { dontRewriteSymlinks = true; };
     in
     {
       packages = {
