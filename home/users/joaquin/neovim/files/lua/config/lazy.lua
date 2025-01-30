@@ -42,7 +42,8 @@ local lazyoptions = {
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
     { import = "lazyvim.plugins.extras.util.project" },
     -- { import = "lazyvim.plugins.extras.editor.telescope" },
-    { import = "lazyvim.plugins.extras.editor.fzf" },
+    { import = "lazyvim.plugins.extras.editor.snacks_picker" },
+
     { import = "lazyvim.plugins.extras.editor.mini-files" },
 
     -- lang support

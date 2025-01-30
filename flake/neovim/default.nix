@@ -58,11 +58,7 @@
           bufferline-nvim
           catppuccin-nvim
           clangd_extensions-nvim
-          cmp-buffer
-          cmp-nvim-lsp
-          cmp-path
           conform-nvim
-          fidget-nvim
           crates-nvim
           dashboard-nvim
           dial-nvim
@@ -113,8 +109,6 @@
           smart-splits-nvim
           snacks-nvim
           tailwindcss-colors-nvim
-          telescope-fzf-native-nvim
-          telescope-nvim
           todo-comments-nvim
           trouble-nvim
           ts-comments-nvim
@@ -164,7 +158,6 @@
         tailwindcss-colorizer-cmp = "tailwindcss-colorizer-cmp.nvim";
         harpoon = "harpoon2";
       };
-      devPlugins = builtins.attrValues { inherit (pkgs.vimPlugins) blink-cmp telescope-fzf-native-nvim; };
       mkPluginPathMap =
         plugins:
         let
