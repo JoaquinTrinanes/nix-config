@@ -1,12 +1,14 @@
+-- Avoid conflicts with prettier
+vim.g.lazyvim_prettier_needs_config = true
+
 local M = {
   {
     "stevearc/conform.nvim",
-    cmd = { "ConformInfo" },
+    optional = true,
     ---@module "conform.types"
     ---@type conform.setupOpts
     opts = {
       default_format_opts = {
-        lsp_format = "fallback",
       },
       formatters_by_ft = {
         lua = { "stylua" },

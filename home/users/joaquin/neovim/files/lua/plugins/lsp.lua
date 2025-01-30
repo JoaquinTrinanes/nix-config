@@ -153,6 +153,7 @@ local M = {
           },
         },
         r_language_server = { mason = false },
+        biome = { mason = false },
       },
       ---@module "lspconfig"
       ---@type table<string, fun(server:string, opts:lspconfig.Config):boolean?>
@@ -186,7 +187,6 @@ local M = {
   },
   {
     "williamboman/mason.nvim",
-    enabled = false,
     -- enabled = not vim.g.usePluginsFromStore,
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
@@ -215,7 +215,6 @@ local M = {
   },
   {
     "nvim-treesitter/nvim-treesitter",
-    opts_extend = { "ensure_installed" },
     opts = function(_, opts)
       if vim.g.usePluginsFromStore then
         opts.ensure_installed = {}
@@ -240,4 +239,3 @@ local M = {
 }
 
 return M
--- return X

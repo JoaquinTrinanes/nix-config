@@ -126,6 +126,7 @@
         ]);
       extraPackages = builtins.attrValues {
         inherit (pkgs)
+          biome
           black
           chafa
           deadnix
