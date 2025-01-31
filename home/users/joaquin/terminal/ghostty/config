@@ -12,23 +12,22 @@ window-width = 99999
 window-padding-y = 4
 window-padding-x = 4
 window-padding-balance = true
-# window-decoration = false
 
-font-size = 16
+font-size = 14
 
 keybind = ctrl+alt+minus=new_split:down
 keybind = ctrl+alt+backslash=new_split:right
 
 keybind = alt+f=toggle_split_zoom
 
-keybind = alt+k=goto_split:top
+keybind = alt+k=goto_split:up
 keybind = alt+h=goto_split:left
-keybind = alt+j=goto_split:bottom
+keybind = alt+j=goto_split:down
 keybind = alt+l=goto_split:right
 
-# keybind = ctrl+k=goto_split:top
+# keybind = ctrl+k=goto_split:up
 # keybind = ctrl+h=goto_split:left
-# keybind = ctrl+j=goto_split:bottom
+# keybind = ctrl+j=goto_split:down
 # keybind = ctrl+l=goto_split:right
 
 font-family = monospace
@@ -38,5 +37,4 @@ font-style-bold = SemiBold
 gtk-wide-tabs = false
 gtk-tabs-location = bottom
 
-auto-update = off
 
