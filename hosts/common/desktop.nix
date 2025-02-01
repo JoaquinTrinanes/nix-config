@@ -33,7 +33,6 @@
     };
   };
 
-
   users.groups = {
     "joaquin" = {
       gid = config.users.users.joaquin.uid;
@@ -107,6 +106,4 @@
   programs.nix-ld.enable = true;
 
   i18n.defaultLocale = "en_DK.UTF-8";
-
-  system.stateVersion = "24.11";
 }
