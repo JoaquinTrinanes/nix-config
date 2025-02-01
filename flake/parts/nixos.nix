@@ -66,6 +66,9 @@ let
             lib.mkIf (userHostConfig.enable or userConfig.home-manager.enable) {
               _file = ./nixos.nix;
               imports = [ home-manager.input.nixosModules.home-manager ];
+              users.users."${userName}" = {
+                isNormalUser = lib.mkDefault true;
+              };
               home-manager = {
                 users."${userName}" = {
                   imports = userConfig.home-manager.finalModules ++ userHostConfig.modules or [ ];
