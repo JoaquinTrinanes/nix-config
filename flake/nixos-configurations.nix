@@ -25,6 +25,13 @@
           ../hosts/piorno/disko.nix
         ];
       };
+      capacho = {
+        system = "x86_64-linux";
+        modules = [
+          ../hosts/capacho/hardware-configuration.nix
+          ../hosts/capacho/default.nix
+        ];
+      };
     };
 
     modules = lib.mkMerge [

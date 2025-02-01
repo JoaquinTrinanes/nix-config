@@ -11,6 +11,7 @@
     ./gaming
     ./garbage-collect
     ./hardware-acceleration
+    ./hetzner
     ./jellyfin
     ./nix-index
     ./printing

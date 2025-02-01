@@ -1,0 +1,43 @@
+{ lib, config, ... }:
+let
+  hetznerCfg = config.profiles.hetzner;
+  cfg = config.profiles.hetzner.cloud-init;
+in
+{
+  options.profiles.hetzner.cloud-init = {
+    enable = lib.mkEnableOption "cloud-init hetzner profile" // {
+      default = hetznerCfg.enable;
+      defaultText = lib.literalExpression "config.profiles.hetzner.enable";
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    services.cloud-init =
+      {
+        enable = lib.mkDefault true;
+        network.enable = lib.mkDefault true;
+
+        # Never flush the host's SSH keys. See #148. Since we build the images
+        # using NixOS, that kind of issue shouldn't happen to us.
+        settings.ssh_deletekeys = lib.mkDefault false;
+
+        ## Automatically enable the filesystems that are used
+      }
+      // (lib.genAttrs
+        [
+          "btrfs"
+          "ext4"
+          "xfs"
+        ]
+        (fsName: {
+          enable = lib.mkDefault (lib.any (fs: fs.fsType == fsName) (lib.attrValues config.fileSystems));
+        })
+      );
+
+    networking.useNetworkd = lib.mkDefault true;
+    networking.useDHCP = lib.mkDefault false;
+
+    # Delegate the hostname setting to cloud-init by default
+    networking.hostName = lib.mkOverride 1337 ""; # lower prio than lib.mkDefault
+  };
+}

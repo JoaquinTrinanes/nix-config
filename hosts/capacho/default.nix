@@ -1,0 +1,4 @@
+{ ... }:
+{
+  profiles.hetzner.enable = true;
+}
