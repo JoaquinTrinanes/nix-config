@@ -44,13 +44,17 @@ in
         ];
     };
     "org/gnome/desktop/interface" = {
-      icon-theme = "Adwaita";
       clock-show-weekday = true;
       clock-format = "24h";
-      text-scaling-factor = 1.25;
+      text-scaling-factor = lib.mkDefault 1.25;
       show-battery-percentage = true;
       enable-hot-corners = false;
-      # gtk-theme = config.gtk.theme.name;
+
+      # Remove invalid values if theme changes
+      cursor-theme = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
+      icon-theme = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
+      gtk-theme = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
+      cursor-size = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
     };
     # "org/gnome/TextEditor" = {
     #   custom-font = "FiraCode Nerd Font 12";
@@ -78,7 +82,6 @@ in
     };
     "org/gnome/nautilus/preferences" = {
       # Editable address bar
-      # always-use-location-entry = true;
       # Only when the setting is false can both forms of location navigation be employed.
       always-use-location-entry = false;
     };

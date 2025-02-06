@@ -265,21 +265,8 @@
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
-  home.pointerCursor = {
-    gtk.enable = true;
-    x11 = {
-      enable = true;
-      defaultCursor = "Adwaita";
-    };
-    name = "Adwaita";
-    package = pkgs.adwaita-icon-theme;
-    size = 16;
-  };
+  gtk.enable = true;
 
-  gtk.iconTheme = {
-    name = "Adwaita";
-    package = pkgs.adwaita-icon-theme;
-  };
 
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
 }
