@@ -197,6 +197,7 @@ in
   };
 
   config = {
+    parts.home-manager.perUser = user: { home.username = lib.mkDefault user.name; };
     flake.homeConfigurations = lib.mapAttrs (
       _: home-manager.input.lib.homeManagerConfiguration
     ) home-manager.finalConfigurations;
