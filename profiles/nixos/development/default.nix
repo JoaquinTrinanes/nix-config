@@ -24,7 +24,7 @@ in
         statix
         yarn-berry
         ;
-      dbeaver-bin = lib.my.mkWrapper {
+      dbeaver-bin = pkgs.my.mkWrapper {
         basePackage = pkgs.dbeaver-bin;
         extraPackages = [ pkgs.gtk3 ];
         env.GDK_BACKEND.value = "x11";

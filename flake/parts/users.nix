@@ -85,7 +85,7 @@ let
                 };
               standaloneConfig = lib.recursiveUpdate baseConfig (
                 withSystem "x86_64-linux" (
-                  { system, lib, ... }:
+                  { system, ... }:
                   {
                     modules = baseConfig.modules ++ home-manager.standaloneModules;
                     pkgs = nixpkgs.input.legacyPackages.${system};

@@ -64,7 +64,7 @@
       nr = pkgs.writeShellScriptBin "nr" ''
         nix run nixpkgs#"$@"
       '';
-      ripgrep = lib.my.mkWrapper {
+      ripgrep = pkgs.my.mkWrapper {
         basePackage = pkgs.ripgrep;
         env."RIPGREP_CONFIG_PATH" = {
           value = pkgs.writeText "ripgreprc" (lib.concatLines config.programs.ripgrep.arguments);

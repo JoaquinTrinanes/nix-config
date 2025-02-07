@@ -10,7 +10,7 @@ in
     ykman = "fish";
     ssh = "fish";
   };
-  programs.carapace.package = lib.my.mkWrapper {
+  programs.carapace.package = pkgs.my.mkWrapper {
     basePackage = pkgs.carapace;
     pathAdd = [ pkgs.fish ];
     env = lib.mapAttrs (_: value: { value = toString value; }) {

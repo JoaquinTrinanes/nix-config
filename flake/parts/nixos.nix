@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  withSystem,
   ...
 }:
 let
@@ -81,13 +80,10 @@ let
           ) users)
         ];
 
-        finalSystem = withSystem config.system (
-          { lib, ... }:
-          lib.nixosSystem {
-            modules = config.finalModules;
-            inherit (common) specialArgs;
-          }
-        );
+        finalSystem = lib.nixosSystem {
+          modules = config.finalModules;
+          inherit (common) specialArgs;
+        };
       };
     }
   );

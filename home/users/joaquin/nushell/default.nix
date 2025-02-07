@@ -37,7 +37,7 @@ let
           cp plugin.msgpackz $out
         '';
     in
-    lib.my.mkWrapper {
+    pkgs.my.mkWrapper {
       basePackage = nushell;
       prependFlags = [
         "--plugin-config"

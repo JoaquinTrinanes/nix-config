@@ -14,7 +14,7 @@ in
 {
   programs.wezterm = {
     enable = true;
-    package = lib.my.mkWrapper {
+    package = pkgs.my.mkWrapper {
       basePackage = pkgs.wezterm;
       # env = lib.optionalAttrs (config.hardware.nvidia.prime.nvidiaBusNvidia != "") {
       #   # prevent dGPU not powering off when front_end = "WebGpu"
