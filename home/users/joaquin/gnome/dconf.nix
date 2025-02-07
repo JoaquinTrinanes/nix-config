@@ -2,7 +2,6 @@
   lib,
   pkgs,
   inputs,
-  osConfig,
   ...
 }:
 let
@@ -12,7 +11,7 @@ in
   imports = [
     {
       dconf.settings =
-        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers.passthru.Rancho.dconfSettings;
+        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers.Rancho.dconfSettings;
     }
   ];
 
@@ -36,11 +35,20 @@ in
     };
     "org/gnome/shell" = {
       favorite-apps =
+        let
+          getDesktopItem =
+            pkg:
+            pkg.desktopItem
+              or (if ((lib.length (pkg.desktopItems or [ ])) != 0) then lib.head pkg.desktopItems else null);
+          getName = pkg: (getDesktopItem pkg).name;
+        in
         [ "org.gnome.Nautilus.desktop" ]
-        ++ lib.optional (osConfig != null) osConfig.programs.firefox.package.desktopItem.name
+        ++ [ (getName inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.firefox) ]
         ++ [
-          "vesktop.desktop"
-          "org.wezfurlong.wezterm.desktop"
+          (getName pkgs.vesktop)
+          "com.mitchellh.ghostty.desktop"
+          (getName pkgs.vesktop)
+          "com.mitchellh.ghostty.desktop"
         ];
     };
     "org/gnome/desktop/interface" = {
@@ -56,13 +64,9 @@ in
       gtk-theme = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
       cursor-size = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
     };
-    # "org/gnome/TextEditor" = {
-    #   custom-font = "FiraCode Nerd Font 12";
-    # };
     "org/gnome/mutter" = {
       edge-tiling = true;
-      # experimental-features = [ "scale-monitor-framebuffer" ];
-      experimental-features = [ ];
+      experimental-features = [ "scale-monitor-framebuffer" ];
     };
     "org/gnome/shell/extensions/espresso" = {
       show-notifications = false;
