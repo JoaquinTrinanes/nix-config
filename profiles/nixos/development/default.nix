@@ -33,7 +33,5 @@ in
 
     # includes android-tools
     programs.adb.enable = true;
-
-    programs.npm.enable = true;
   };
 }
