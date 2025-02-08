@@ -1,4 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
+let
+  terminalPriorities = [
+    "com.mitchellh.ghostty.desktop"
+    "org.wezfurlong.wezterm.desktop"
+    "kitty.desktop"
+  ];
+in
 {
   imports = [
     ./ghostty
@@ -6,11 +13,14 @@
     ./wezterm
   ];
 
-  home.packages = [ pkgs.xdg-terminal-exec ];
+  home.packages = builtins.attrValues {
+    inherit (pkgs) nautilus-python nautilus-open-any-terminal xdg-terminal-exec;
+  };
 
-  xdg.configFile."xdg-terminals.list".text = ''
-    com.mitchellh.ghostty.desktop
-    org.wezfurlong.wezterm.desktop
-    kitty.desktop
-  '';
+  xdg.configFile."xdg-terminals.list".text = lib.concatLines terminalPriorities;
+  dconf.settings."com/github/stunkymonkey/nautilus-open-any-terminal" = {
+    terminal = "custom"; # lib.head terminalPriorities;
+    new-tab = true;
+    custom-local-command = "xdg-terminal-exec --dir=%s";
+  };
 }
