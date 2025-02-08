@@ -16,6 +16,9 @@ in
     enable = true;
     package = pkgs.my.mkWrapper {
       basePackage = pkgs.wezterm;
+      postBuild = ''
+        rm -rf $out/share/nautilus-python
+      '';
       # env = lib.optionalAttrs (config.hardware.nvidia.prime.nvidiaBusNvidia != "") {
       #   # prevent dGPU not powering off when front_end = "WebGpu"
       #   VK_ICD_FILENAMES.value = "${pkgs.mesa.drivers}/share/vulkan/icd.d/radeon_icd.x86_64.json";
