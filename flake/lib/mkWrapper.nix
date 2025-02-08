@@ -17,6 +17,7 @@
   extraWrapperFlags ? [ ],
   renames ? { },
   binaryWrapper ? false,
+  postBuild ? "",
 }:
 let
   envToWrapperArg =
@@ -134,6 +135,8 @@ let
           ${lib.concatMapStringsSep "\n" (
             p: if lib.hasAttr "man" p then "${lib.getExe xorg.lndir} -silent ${p.man} $out" else "#"
           ) ([ basePackage ] ++ extraPackages)}
+
+          ${postBuild}
         '';
       passthru =
         (basePackage.passthru or { })
