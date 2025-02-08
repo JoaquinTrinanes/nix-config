@@ -59,7 +59,12 @@ in
     };
 
     environment.systemPackages = builtins.attrValues {
-      inherit (pkgs) pinentry-gnome3 gnome-tweaks adwaita-icon-theme;
+      inherit (pkgs)
+        adwaita-icon-theme
+        gnome-tweaks
+        nautilus-python
+        pinentry-gnome3
+        ;
     };
 
     # TODO: see if this works after reboot (ensure .config/mimeapps.list doesn't exist)
