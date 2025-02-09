@@ -68,7 +68,7 @@ in
       edge-tiling = true;
       experimental-features = [ "scale-monitor-framebuffer" ];
     };
-    "org/gnome/shell/extensions/espresso" = {
+    "org/gnome/shell/extensions/caffeine" = {
       show-notifications = false;
     };
     "org/gnome/shell/extensions/nightthemeswitcher/time" = {

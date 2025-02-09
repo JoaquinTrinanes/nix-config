@@ -3,7 +3,6 @@ let
   extensions = builtins.attrValues {
     inherit (pkgs.gnomeExtensions)
       dash-to-panel
-      # espresso
       caffeine
       appindicator
       night-theme-switcher
