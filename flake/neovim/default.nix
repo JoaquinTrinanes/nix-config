@@ -48,18 +48,13 @@
         ++ (with pkgs.vimPlugins; [
           LazyVim
           SchemaStore-nvim
-          bigfile-nvim
           bufferline-nvim
           catppuccin-nvim
           clangd_extensions-nvim
           conform-nvim
           crates-nvim
-          dashboard-nvim
           dial-nvim
-          dressing-nvim
-          fidget-nvim
           flash-nvim
-          flatten-nvim
           friendly-snippets
           gitsigns-nvim
           grug-far-nvim
@@ -83,7 +78,6 @@
           mini-nvim
           minimap-vim
           neo-tree-nvim
-          neorg
           noice-nvim
           nui-nvim
           nvim-dap
@@ -131,6 +125,7 @@
           git
           gnumake
           icu
+          imagemagick
           intelephense
           lazygit
           lua-language-server
