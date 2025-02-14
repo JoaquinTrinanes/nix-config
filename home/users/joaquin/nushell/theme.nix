@@ -24,36 +24,38 @@ in
             base0f: "${base0F}" # Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
         }
 
-        def relative_luminance_helper [x: float] {
-            if $x <= 0.03928 {
-                $x / 12.92
-            } else {
-                ((($x + 0.055) / 1.055) ** 2.4)
-            }
-        }
-
         def relative_luminance [color] {
-            let parts = (
-                $color
+            def relative_luminance_helper [x: float] {
+                if $x <= 0.03928 {
+                    $x / 12.92
+                } else {
+                    ((($x + 0.055) / 1.055) ** 2.4)
+                }
+            }
+
+            let rgb = $color
                 | str trim -c '#' --left
                 | split chars
                 | window 2 --stride 2
                 | each {str join}
-                | into int -r 16
-                | each {|x|
-                    ($x | into float) / 255
-                    | relative_luminance_helper $in
-                }
-            )
+                | into int --radix 16
+                | each {|v| relative_luminance_helper ($v / 255) }
 
-            let l = ((0.2126 * $parts.0) + (0.7152 * $parts.1) + (0.0722 * $parts.2))
-            $l
-          }
+            let r = $rgb.0
+            let b = $rgb.1
+            let g = $rgb.2
+
+            (0.2126 * $r) + (0.7152 * $g) + (0.0722 * $b)
+        }
 
         def contrast [color1, color2] {
-            let l1 = ((relative_luminance $color1))
-            let l2 = ((relative_luminance $color2))
-            ($l1 + 0.05) / ($l2 + 0.05)
+            let l1 = relative_luminance $color1
+            let l2 = relative_luminance $color2
+
+            let lighter = [$l1 $l2] | math max
+            let darker = [$l1 $l2] | math min
+
+            ($lighter + 0.05) / ($darker + 0.05)
         }
 
 
@@ -65,83 +67,85 @@ in
             selected_match_text: { bg: $colors.base02 attr: urb }
         }
 
-        let bool = {|| if $in { $colors.base0d } else { $colors.base08 } }
         let theme_show_color = {|str|
             if $str =~ '^#[a-fA-F\d]{6}$' {
-                { bg: $str fg: (if (contrast $str $colors.base00) < 0.5 { $colors.base05 } else { $colors.base00 }) }
+                let contrast00 = contrast $str $colors.base00
+                let contrast05 = contrast $str $colors.base05
+
+                { bg: $str fg: (if ($contrast00 > $contrast05) { $colors.base00 } else { $colors.base05 }) }
             } else {
                 $colors.base06
             }
         }
 
         let theme = {
-              separator: $colors.base03
-              leading_trailing_space_bg: { bg: $colors.base04 }
-              header: $colors.base0b
-              date: {|| (date now) - $in |
-                  if $in < 1hr {
-                      $colors.base0e
-                  } else if $in < 6hr {
-                      $colors.base0a
-                  } else if $in < 1day {
-                      $colors.base0b
-                  } else if $in < 3day {
-                      $colors.base0c
-                  } else if $in < 1wk {
-                      $colors.base0d
-                  } else if $in < 6wk {
-                      $colors.base0e
-                  } else { $colors.base0f }
-              }
-              filesize: {||
-                  if $in == 0b {
-                      $colors.base02
-                  } else if $in < 1mb {
-                      $colors.base0c
-                  } else if $in > 0.5gb {
-                      { fg: $colors.base08 attr: b }
-                  } else { $colors.base0d }
-              }
-              row_index: $colors.base0c
-              bool: $bool
-              int: $colors.base0b
-              duration: $colors.base08
-              range: $colors.base08
-              float: $colors.base08
-              string: $theme_show_color
-              nothing: $colors.base08
-              binary: $colors.base08
-              cellpath: $colors.base08
-              hints: $colors.base02
+            separator: $colors.base03
+            leading_trailing_space_bg: { bg: $colors.base04 }
+            header: $colors.base0b
+            date: {|| (date now) - $in |
+                if $in < 1hr {
+                    $colors.base0e
+                } else if $in < 6hr {
+                    $colors.base0a
+                } else if $in < 1day {
+                    $colors.base0b
+                } else if $in < 3day {
+                    $colors.base0c
+                } else if $in < 1wk {
+                    $colors.base0d
+                } else if $in < 6wk {
+                    $colors.base0e
+                } else { $colors.base0f }
+            }
+            filesize: {||
+                if $in == 0b {
+                    $colors.base02
+                } else if $in < 1mb {
+                    $colors.base0c
+                } else if $in > 0.5gb {
+                    { fg: $colors.base08 attr: b }
+                } else { $colors.base0d }
+            }
+            row_index: $colors.base0c
+            bool: {|| if $in { $colors.base0d } else { $colors.base08 } }
+            int: $colors.base0b
+            duration: $colors.base08
+            range: $colors.base08
+            float: $colors.base08
+            string: $theme_show_color
+            nothing: $colors.base08
+            binary: $colors.base08
+            cellpath: $colors.base08
+            hints: $colors.base02
 
-              shape_garbage: { fg: $colors.base08 attr: u}
-              shape_bool: $colors.base0d
-              shape_int: { fg: $colors.base0e attr: b}
-              shape_float: { fg: $colors.base0e attr: b}
-              shape_range: { fg: $colors.base0a attr: b}
-              shape_internalcall: { fg: $colors.base0c attr: b}
-              shape_external: $colors.base0c
-              shape_externalarg: { fg: $colors.base0b attr: b}
-              shape_literal: $colors.base0d
-              shape_operator: $colors.base0a
-              shape_signature: { fg: $colors.base0b attr: b}
-              shape_string: $colors.base0b
-              shape_filepath: $colors.base0d
-              shape_globpattern: { fg: $colors.base0d attr: b}
-              shape_variable: $colors.base0e
-              shape_flag: { fg: $colors.base0d attr: b}
-              shape_custom: {attr: b}
-          }
+            shape_garbage: { fg: $colors.base08 attr: u}
+            shape_bool: $colors.base0d
+            shape_int: { fg: $colors.base0e attr: b}
+            shape_float: { fg: $colors.base0e attr: b}
+            shape_range: { fg: $colors.base0a attr: b}
+            shape_internalcall: { fg: $colors.base0c attr: b}
+            shape_external: $colors.base0c
+            shape_externalarg: { fg: $colors.base0b attr: b}
+            shape_literal: $colors.base0d
+            shape_operator: $colors.base0a
+            shape_signature: { fg: $colors.base0b attr: b}
+            shape_string: $colors.base0b
+            shape_filepath: $colors.base0d
+            shape_globpattern: { fg: $colors.base0d attr: b}
+            shape_variable: $colors.base0e
+            shape_flag: { fg: $colors.base0d attr: b}
+            shape_custom: {attr: b}
+        }
 
-      load-env {
-          colors: $colors
-          config: (
-              $env.config?
-              | default {}
-              | upsert color_config ($env.config?.color_config? | default {} | merge $theme)
-              | upsert menus ($env.config?.menus? | default [] | each {|it| $it | upsert style $menu_style })
-          )
-      }
+        load-env {
+            colors: $colors
+            config: (
+                $env.config?
+                | default {}
+                | upsert color_config ($env.config?.color_config? | default {} | merge $theme)
+                | upsert menus ($env.config?.menus? | default [] | each {|it| $it | upsert style $menu_style })
+            )
+        }
     }
   '';
 }
