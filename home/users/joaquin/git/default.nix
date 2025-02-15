@@ -6,14 +6,15 @@
 
   programs.git = {
     enable = true;
+    signing = {
+      format = "openpgp";
+      key = "6E1446DD451C6BAF";
+      signByDefault = true;
+    };
     extraConfig = {
       user = {
         name = config.accounts.email.accounts.primary.realName;
         email = config.accounts.email.accounts.primary.address;
-        signingkey = "6E1446DD451C6BAF";
-      };
-      tag = {
-        gpgsign = true;
       };
       core = {
         filemode = false;
@@ -21,10 +22,9 @@
       };
       commit = {
         verbose = true;
-        gpgsign = true;
       };
       diff = {
-        mnemonicprefix = true;
+        mnemonicPrefix = true;
         # tool = "meld";
       };
       difftool.prompt = false;

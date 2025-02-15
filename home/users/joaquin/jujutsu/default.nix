@@ -17,7 +17,8 @@ in
     package = jj;
     settings = {
       user = {
-        inherit (config.programs.git.iniContent.user) name email;
+        name = config.programs.git.userName;
+        email = config.programs.git.userEmail;
       };
 
       "--scope" = [
@@ -29,15 +30,18 @@ in
         }
       ];
 
-      signing = lib.mkIf (config.programs.git.iniContent.commit.gpgSign or false) {
-        key = lib.mkIf (
-          config.programs.git.iniContent.user.signingKey or null != null
-        ) config.programs.git.iniContent.user.signingKey;
-        backend = "gpg";
+      signing = lib.mkIf config.programs.git.signing.signByDefault {
+        inherit (config.programs.git.signing) key;
+        backend =
+          if (config.programs.git.signing.format == "openpgp") then
+            "gpg"
+          else
+            config.programs.git.signing.format;
       };
       git = {
         auto-local-bookmark = false;
         private-commits = "private_commits()";
+        sign-on-push = config.programs.git.signing.signByDefault;
       };
       core = {
         fsmonitor = "watchman";
