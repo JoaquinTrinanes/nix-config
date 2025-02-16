@@ -40,8 +40,9 @@ in
       };
       git = {
         auto-local-bookmark = false;
-        private-commits = "private_commits()";
+        private-commits = "private()";
         sign-on-push = config.programs.git.signing.signByDefault;
+        subprocess = true;
       };
       core = {
         fsmonitor = "watchman";
@@ -49,46 +50,48 @@ in
       };
       format = { };
       revset-aliases = {
-        "default()" = "present(@) | ancestors(immutable_heads().., 2) | present(trunk())";
+        "default()" = "default(@)";
+        "default(x)" = "present(x) | ancestors(immutable_heads().., 2) | present(trunk())";
 
         "user(x)" = "author(x) | committer(x)";
 
-        "original_private_commits()" = ''description(glob:"private:*") & mine()'';
-        "private_commits()" = "original_private_commits()";
+        "undescribed()" = ''description(exact:"")'';
+
+        # useful for overriding in repo config
+        "original_private()" = ''description(glob:"private:*") & mine()'';
+        "private()" = "original_private()";
 
         "around(x)" = "around(x, 3)";
         "around(x, n)" = "ancestors(x, n) | descendants(x, n)";
 
-        "overview(from, to)" =
-          "present(to::) | present(from) | present(from::to) | ancestors(from:: & (visible_heads() ~ untracked_remote_bookmarks()), 1)";
+        "between(x, y)" = "roots(x | y)::heads(x | y)";
 
-        "lagging_bookmarks" = "::bookmarks() & mutable() & mine() ~ trunk()::";
 
-        "stack" = "stack()";
+
         "stack()" = "stack(@)";
         "stack(from)" = "stack(from, 2)";
-        "stack(from, n)" =
-          "descendants(from, 2) | ancestors(from, 2) | coalesce(ancestors(reachable(from, immutable_heads() | mutable()), n), default())";
-        # TODO: this show all bookmark heads between trunk and from. Maybe don't do it and depend on the default log for that? It can get big (renovate)
-        # "stack(from, n)" =
-        #   "coalesce(ancestors(reachable(from, mutable() | trunk()), n) | (trunk():: & from.. & (remote_bookmarks() | bookmarks())), default())";
+        "stack(from, n)" = "ancestors(reachable(@, mutable()), n)";
 
         "nearest_bookmarks()" = "nearest_bookmarks(@)";
         "nearest_bookmarks(x)" = "heads(::x- & bookmarks())";
 
-        "wip()" = "wip(trunk())";
-        "wip(from)" = "from::heads(mutable()) & mine()";
+        "open()" = "trunk().. & mine()";
       };
       revsets = {
-        short-prefixes = "stack() | default()";
+        short-prefixes = "coalesce(stack(), default())";
+      };
+      merge-tools = {
+        hunk = {
+          program = lib.getExe diffEditor;
+          edit-args = [
+            "-n"
+            "-c"
+            "DiffEditor $left $right $output"
+          ];
+        };
       };
       ui = {
-        diff-editor = [
-          (lib.getExe diffEditor)
-          "-n"
-          "-c"
-          "DiffEditor $left $right $output"
-        ];
+        diff-editor = "hunk";
         default-command = [
           "log"
           "-r"
@@ -123,6 +126,7 @@ in
           "--colocate"
         ];
         d = [ "diff" ];
+        dup = [ "duplicate" ];
         e = [ "edit" ];
         f = [
           "git"
@@ -162,6 +166,7 @@ in
         s = [
           "status"
         ];
+        sq = [ "squash" ];
         standup = [
           "log"
           "-r"
@@ -170,13 +175,14 @@ in
           "-T"
           "builtin_log_comfortable"
         ];
+        t = [ "tug" ];
         tug = [
           "bookmark"
           "move"
           "--from"
           "nearest_bookmarks()"
           "--to"
-          ''heads(reachable(nearest_bookmarks(), nearest_bookmarks()::@ ~ description(exact:"") ~ empty() ~ private_commits()))''
+          ''heads(reachable(nearest_bookmarks(), nearest_bookmarks()::@ ~ description(exact:"") ~ empty() ~ private()))''
         ];
         up = [
           "rebase"
@@ -195,18 +201,6 @@ in
 
   programs.git.ignores = lib.mkIf config.programs.jujutsu.enable [ ".jj/" ];
 
-  # programs.nushell.extraConfig =
-  #   let
-  #     jjComp = pkgs.runCommandLocal "jujutsu.nu" { } ''
-  #       ${
-  #         lib.getExe (config.programs.nushell.package.unwrapped or config.programs.nushell.package)
-  #       } -c '${lib.getExe config.programs.jujutsu.package} util completion nushell' > $out
-  #     '';
-  #   in
-  #   lib.mkIf config.programs.jujutsu.enable ''
-  #     use ${jjComp} *
-  #   '';
-
   home.shellAliases = lib.mkIf config.programs.jujutsu.enable {
     j = "jj";
     ja = "jj a";
@@ -221,5 +215,6 @@ in
     jn = "jj n";
     jp = "jj p";
     js = "jj s";
+    jt = "jj t";
   };
 }
