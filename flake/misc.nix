@@ -21,7 +21,6 @@
         allowAliases = lib.mkDefault false;
       };
       overlays = [
-        inputs.lix-module.overlays.default
         # (_final: prev: inputs.self.packages.${prev.stdenv.hostPlatform.system})
       ];
     };
