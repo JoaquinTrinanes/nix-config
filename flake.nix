@@ -10,8 +10,6 @@ rec {
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
-    neovim-nightly-overlay.inputs.hercules-ci-effects.inputs.flake-parts.follows = "flake-parts";
-    neovim-nightly-overlay.inputs.hercules-ci-effects.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-colors.url = "github:misterio77/nix-colors";
     nix-colors.inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -32,14 +30,6 @@ rec {
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
-
-    lix = {
-      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-      flake = false;
-    };
-    lix-module.url = "git+https://git.lix.systems/lix-project/nixos-module";
-    lix-module.inputs.nixpkgs.follows = "nixpkgs";
-    lix-module.inputs.lix.follows = "lix";
 
     jj.url = "github:jj-vcs/jj";
     jj.inputs.nixpkgs.follows = "nixpkgs";

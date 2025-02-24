@@ -21,7 +21,6 @@
         allowAliases = lib.mkDefault false;
       };
       overlays = [
-        inputs.lix-module.overlays.default
         # (_final: prev: inputs.self.packages.${prev.stdenv.hostPlatform.system})
       ];
     };
@@ -50,7 +49,7 @@
                 isLix = lib.getName config.nix.package == "lix";
               in
               {
-                package = lib.mkDefault pkgs.nix;
+                package = lib.mkDefault pkgs.lix;
                 settings = {
                   allowed-users = lib.mkDefault [ "@wheel" ];
                   min-free = lib.mkDefault 128000000; # 128MB
