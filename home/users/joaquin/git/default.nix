@@ -11,11 +11,9 @@
       key = "6E1446DD451C6BAF";
       signByDefault = true;
     };
+    userName = config.accounts.email.accounts.primary.realName;
+    userEmail = config.accounts.email.accounts.primary.address;
     extraConfig = {
-      user = {
-        name = config.accounts.email.accounts.primary.realName;
-        email = config.accounts.email.accounts.primary.address;
-      };
       core = {
         filemode = false;
         whitespace = "trailing-space,space-before-tab";
@@ -24,17 +22,25 @@
         verbose = true;
       };
       diff = {
+        algorith = "histogram";
+        renames = true;
         mnemonicPrefix = true;
-        # tool = "meld";
       };
       difftool.prompt = false;
-      # icdiff.options = "--line-numbers";
+      fetch = {
+        prune = true;
+        pruneTags = true;
+        all = true;
+      };
       format.numbered = "auto";
-      log.decorate = "short";
+      log = {
+        decorate = "short";
+        mailmap = true;
+      };
       merge = {
-        conflictStyle = "diff3";
+        conflictStyle = "zdiff3";
         log = false;
-        # tool = "meld";
+        autoStash = true;
       };
       mergetool = {
         keepBackup = false;
@@ -49,10 +55,21 @@
         autoSetupRemote = true;
         followTags = true;
       };
-      help.autocorrect = 1;
-      rebase.autosquash = true;
+      help.autocorrect = "immedate";
+      rebase = {
+        autoSquash = true;
+        autoStash = true;
+        updateRefs = true;
+      };
       status.showUntrackedFiles = "normal"; # "all";
       init.defaultBranch = "main";
+      rerere = {
+        enabled = true;
+        autoupdate = true;
+      };
+      tag = {
+        sort = "version:refname";
+      };
 
       color = {
         ui = true;
@@ -72,7 +89,15 @@
           local = "yellow";
           remote = "green";
         };
-        branch = { };
+      };
+      url = {
+        "https://github.com/".insteadOf = [
+          "gh:"
+          "github:"
+        ];
+        "https://gitlab.com/".insteadOf = "gl:";
+        "git@github.com:".insteadOf = "ghs:";
+        "git@github.com:veganhacktivists/".insteadOf = "vh:";
       };
     };
     includes = [
