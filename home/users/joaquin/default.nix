@@ -168,7 +168,7 @@
       # prevent leaking information from secure files
       svim = "${lib.getExe config.programs.neovim.package} -n --cmd 'au BufRead * setlocal nobackup nomodeline noshelltemp noswapfile noundofile nowritebackup shadafile=NONE'";
     }
-    (lib.mkIf (config.programs.home-manager.enable && !config.submoduleSupport.enable) {
+    (lib.mkIf config.programs.home-manager.enable {
       hm = "home-manager";
       hms = "home-manager switch";
     })
@@ -262,10 +262,11 @@
     '';
   };
 
-  # Nicely reload system units when changing configs
-  systemd.user.startServices = "sd-switch";
-
-  gtk.enable = true;
+  home.pointerCursor = {
+    name = "Adwaita";
+    package = pkgs.adwaita-icon-theme;
+    size = 24;
+  };
 
 
   home.stateVersion = "25.05";
