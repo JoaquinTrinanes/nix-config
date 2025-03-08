@@ -76,6 +76,8 @@
           mini-icons
           mini-indentscope
           mini-nvim
+          mini-splitjoin
+          mini-surround
           minimap-vim
           neo-tree-nvim
           noice-nvim
@@ -96,7 +98,6 @@
           project-nvim
           render-markdown-nvim
           rustaceanvim
-          smart-splits-nvim
           snacks-nvim
           tailwindcss-colors-nvim
           todo-comments-nvim
@@ -112,7 +113,6 @@
       extraPackages = builtins.attrValues {
         inherit (pkgs)
           bash-language-server
-          biome
           black
           chafa
           code-minimap
@@ -133,11 +133,12 @@
           nil
           nixd
           nodejs
-          phpactor
           pyright
           ripgrep
+          ruff
           shellcheck
           shfmt
+          sqlfluff
           statix
           stylua
           tailwindcss-language-server

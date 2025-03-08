@@ -19,9 +19,7 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-if vim.g.usePluginsFromStore == nil then
-  vim.g.usePluginsFromStore = false
-end
+vim.g.usePluginsFromStore = vim.g.usePluginsFromStore == true or false
 
 --- @type LazyConfig
 local lazyoptions = {
@@ -40,8 +38,7 @@ local lazyoptions = {
     { import = "lazyvim.plugins.extras.ui.indent-blankline" },
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
     { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
-    { import = "lazyvim.plugins.extras.util.project" },
-    -- { import = "lazyvim.plugins.extras.editor.telescope" },
+    { import = "lazyvim.plugins.extras.editor.navic" },
     { import = "lazyvim.plugins.extras.editor.snacks_picker" },
 
     { import = "lazyvim.plugins.extras.editor.mini-files" },
@@ -60,7 +57,6 @@ local lazyoptions = {
     { import = "lazyvim.plugins.extras.lang.prisma" },
     { import = "lazyvim.plugins.extras.lang.rust" },
     { import = "lazyvim.plugins.extras.lang.sql" },
-    { import = "lazyvim.plugins.extras.lang.tailwind" },
     { import = "lazyvim.plugins.extras.lang.terraform" },
     { import = "lazyvim.plugins.extras.lang.toml" },
     { import = "lazyvim.plugins.extras.lang.typescript" },
