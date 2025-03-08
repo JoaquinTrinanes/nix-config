@@ -15,11 +15,6 @@ opt.smartindent = true -- Insert indents automatically
 
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
-opt.smoothscroll = true
--- opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
--- opt.foldmethod = "expr"
-opt.foldtext = ""
-
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
 opt.completeopt = "menuone,longest"
@@ -83,22 +78,44 @@ end, {
 
 vim.g.snacks_animate = false
 vim.g.root_spec = { "cwd", "lsp", { ".git", "lua" } }
+
+---@type 'intelephense'|'phpactor'
 vim.g.lazyvim_php_lsp = "intelephense"
-vim.g.lazyvim_picker = "snacks"
+
+---@type 'auto'|'nvim-cmp'|'blink.cmp'
+vim.g.lazyvim_cmp = "auto"
+
+---@type 'auto'|'snacks'|'fzf'|'telescope'|nil
+vim.g.lazyvim_picker = "auto"
 
 vim.g.ai_cmp = false
 
 vim.g.dbs = {
   {
-    name = "postgres",
+    name = "local",
     url = function()
-      return ("postgres://%s:%s@%s:%s/%s"):format(
-        vim.env.PGUSER,
-        vim.env.PGPASSWORD,
-        vim.env.PGHOST or "localhost",
-        vim.env.PGPORT or "5432",
-        vim.env.PGDATABASE
-      )
+      return vim.env.DATABASE_URL
+        or ("%s://%s:%s@%s:%s/%s"):format(
+          vim.env.DB_PROTOCOL or vim.env.DATABASE_PROTOCOL or "postgres",
+          vim.env.DB_USER or vim.env.DATABASE_USER,
+          vim.env.DB_PASSWORD or vim.env.DATABASE_PASSWORD,
+          vim.env.DB_HOST or vim.env.DATABASE_HOST or "localhost",
+          vim.env.DB_PORT or vim.env.DATABASE_PORT or "5432",
+          vim.env.DB_NAME or vim.env.DATABASE_NAME
+        )
+    end,
+  },
+  {
+    name = "local postgres",
+    url = function()
+      return vim.env.PG_URL
+        or ("postgresql://%s:%s@%s:%s/%s"):format(
+          vim.env.PGUSER,
+          vim.env.PGPASSWORD,
+          vim.env.PGHOST or "localhost",
+          vim.env.PGPORT or "5432",
+          vim.env.PGDATABASE
+        )
     end,
   },
 }

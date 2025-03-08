@@ -6,11 +6,10 @@ local M = {
   },
   {
     "folke/lazydev.nvim",
-    opts = {
-      library = {
-        { path = "wezterm-types/types", mods = { "wezterm" } },
-      },
-    },
+    opts_extend = { "library" },
+    opts = { library = {
+      { path = "wezterm-types", mods = { "wezterm" } },
+    } },
   },
   {
     "echasnovski/mini.pairs",

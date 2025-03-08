@@ -2,16 +2,6 @@ local classNameRegex = "[cC][lL][aA][sS][sS][nN][aA][mM][eE][sS]?"
 local classNamePropNameRegex = "(?:" .. classNameRegex .. "|(?:enter|leave)(?:From|To)?)"
 local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
 
---- @param filename string
-local is_dotenv = function(filename)
-  local name = vim.fs.basename(filename)
-  if name == nil then
-    return false
-  end
-
-  return name == ".env" or name == ".envrc" or vim.startswith(name, ".env.")
-end
-
 local M = {
   {
     "neovim/nvim-lspconfig",
@@ -68,6 +58,9 @@ local M = {
                     .. [[\s*}]],
                   -- classNames(...)
                   { [[class[nN]ames\(([^)]*)\)]], quotedStringRegex },
+
+                  { "cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+                  { "cx\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
                 },
               },
             },
@@ -155,6 +148,7 @@ local M = {
             bashIde = { shellcheckPath = "" },
           },
         },
+        ruff = { mason = false },
         r_language_server = { mason = false },
         biome = { mason = false },
       },
@@ -166,12 +160,8 @@ local M = {
   {
     "mfussenegger/nvim-lint",
     opts = {
-      events = { "BufWritePost", "BufReadPost", "InsertLeave" },
       linters_by_ft = {
-        sh = {
-          "shellcheck",
-          -- "dotenv_linter",
-        },
+        sh = { "shellcheck" },
         php = {},
         nix = { "statix", "deadnix" },
       },
@@ -182,7 +172,12 @@ local M = {
       linters = {
         shellcheck = {
           condition = function(ctx)
-            return not is_dotenv(ctx.filename)
+            local name = vim.fs.basename(ctx.filename)
+            if name == nil then
+              return false
+            end
+
+            return name == ".env" or name == ".envrc" or vim.startswith(name, ".env.")
           end,
         },
       },
@@ -190,7 +185,6 @@ local M = {
   },
   {
     "williamboman/mason.nvim",
-    -- enabled = not vim.g.usePluginsFromStore,
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       if vim.g.usePluginsFromStore then
@@ -208,6 +202,16 @@ local M = {
         return not vim.list_contains(servers_to_skip, server)
       end, opts.ensure_installed)
     end,
+  },
+  {
+    "folke/ts-comments.nvim",
+    optional = true,
+    opts = {
+      lang = {
+        -- Fix being unable to uncomment comments
+        phpdoc = { "// %s" },
+      },
+    },
   },
   {
     "folke/noice.nvim",

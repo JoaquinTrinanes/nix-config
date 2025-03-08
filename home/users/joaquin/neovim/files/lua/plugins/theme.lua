@@ -6,50 +6,21 @@ local M = {
       colorscheme = "catppuccin",
     },
   },
-  -- {
-  --   "vimpostor/vim-lumen",
-  --   enabled = false,
-  --   lazy = false,
-  --   -- config = function()
-  --   --   vim.api.nvim_create_autocmd("User", {
-  --   --     pattern = "LumenLight",
-  --   --     callback = function()
-  --   --       vim.print("Entered light mode")
-  --   --     end,
-  --   --   })
-  --   --   vim.api.nvim_create_autocmd("User", {
-  --   --     pattern = "LumenDark",
-  --   --     callback = function()
-  --   --       vim.print("Entered dark mode")
-  --   --     end,
-  --   --   })
-  --   -- end,
-  -- },
+  -- { "vimpostor/vim-lumen" },
   { "folke/tokyonight.nvim", lazy = false, optional = true, enabled = false },
   {
     "catppuccin/nvim",
     priority = 1000,
-    init = function()
-      vim.cmd.colorscheme("catppuccin")
-    end,
-    -- optional = true,
+    optional = true,
     name = "catppuccin",
+    ---@module "catppuccin"
+    ---@type CatppuccinOptions
     opts = {
       integrations = {
         gitsigns = false,
-        native_lsp = {
-          underlines = {
-            errors = { "undercurl" },
-            -- hints = { "underline" },
-            hints = { "undercurl" },
-            warnings = { "undercurl" },
-            -- information = { "underline" },
-            information = { "undercurl" },
-          },
-        },
       },
       flavour = "auto", -- latte, frappe, macchiato, mocha
-      background = { -- :h background
+      background = {
         light = "latte",
         dark = "frappe",
       },
