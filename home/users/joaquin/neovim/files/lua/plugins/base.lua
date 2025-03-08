@@ -2,22 +2,19 @@ local M = {
   {
     "folke/snacks.nvim",
     optional = true,
-    init = function()
-      vim.g.snacks_animate = false
-    end,
     ---@module 'snacks'
     ---@type snacks.Config
     opts = {
-      debug = {},
+      scroll = { enabled = false },
       dashboard = {
         preset = {
           header = [[
-   ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
-   ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
-   ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
-   ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
-   ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
-   ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
           --  header = [[
           --        ⠀⠀⢀⣀⣠⣤⣤⣶⣶⣿⣷⣆⠀⠀⠀⠀
           -- ⠀⠀⠀⢀⣤⣤⣶⣶⣾⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⡆⠀⠀⠀
@@ -34,21 +31,57 @@ local M = {
           -- ⠀⠀⠀⠀⠀⠀⢠⡿⠿⠛⠋⠉⠀⠀⠀⠀        ]],
         },
       },
+      image = { enabled = false },
+      picker = {
+        layouts = {
+          select = {
+            layout = {
+              relative = "cursor",
+              -- width = 70,
+              -- min_width = 0,
+              row = 1,
+            },
+          },
+        },
+        win = {
+          list = {
+            keys = {
+              ["<C-y>"] = { "confirm", mode = { "n", "i" } },
+            },
+          },
+          input = {
+            keys = {
+              ["<C-y>"] = { "confirm", mode = { "n", "i" } },
+
+              ["<a-f>"] = { "" },
+              ["<a-h>"] = { "" },
+              ["<a-i>"] = { "" },
+              ["<a-m>"] = { "" },
+              -- ["<a-p>"] = { "" },
+
+              ["<c-f>"] = { "toggle_follow", mode = { "i", "n" } },
+              ["<c-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+              ["<c-i>"] = { "toggle_ignored", mode = { "i", "n" } },
+              ["<c-m>"] = { "toggle_maximize", mode = { "i", "n" } },
+              -- ["<c-p>"] = { "toggle_preview", mode = { "i", "n" } },
+            },
+          },
+        },
+      },
       indent = { animate = { enabled = false }, blank = { char = "·" } },
       bigfile = { enabled = true },
       quickfile = { enabled = true },
     },
   },
   {
-    "tpope/vim-sleuth",
-  },
-  {
     "akinsho/bufferline.nvim",
+    optional = true,
     keys = {
       -- disable default key
       { "<leader>br", false },
       { "<leader>bh", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
       { "<leader>bl", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
+      { "<leader>bb", "<cmd>BufferLinePick<cr>", desc = "Pick buffer" },
     },
   },
   {
@@ -79,27 +112,15 @@ local M = {
   { "julienvincent/hunk.nvim", cmd = { "DiffEditor" }, opts = {} },
   { "avm99963/vim-jjdescription", lazy = false },
   {
-    "ibhagwan/fzf-lua",
-    optional = true,
-    opts = function(_, opts)
-      local prev_ui_select = opts.ui_select
-
-      opts.ui_select = function(fzf_opts, items)
-        local result = prev_ui_select(fzf_opts, items)
-
-        if fzf_opts.kind == "codeaction" then
-          result.winopts.relative = "cursor"
-          result.winopts.backdrop = 100
-          result.winopts.height = math.floor(math.min(vim.o.lines * 0.3 - 16, #items + 2) + 0.5) + 16
-        end
-        return result
-      end
-
-      opts.keymap = opts.keymap or {}
-      opts.keymap.builtin = { true, ["<C-c>"] = "hide" }
-      opts.fzf_opts = vim.tbl_extend("force", opts.fzf_opts, { ["--cycle"] = true })
-      return opts
-    end,
+    "echasnovski/mini.splitjoin",
+    opts = { mappings = { toggle = "gS", split = "", join = "" } },
+  },
+  {
+    "mrjones2014/smart-splits.nvim",
+    enabled = false,
+    version = "*",
+    priority = 1000,
+    lazy = false,
   },
 }
 

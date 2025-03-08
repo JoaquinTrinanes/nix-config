@@ -207,7 +207,6 @@
 
   xdg.mimeApps.defaultApplications =
     let
-      # TODO: use wrapped package
       defaultWebBrowser = lib.mkAfter [
         inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.firefox.desktopItem.name
       ];
@@ -230,11 +229,10 @@
     enable = true;
     flags = [ "--disable-up-arrow" ];
     settings = {
-      # keymap_mode = "vim-normal";
-      # https://docs.rs/regex/latest/regex/#syntax
+      dotfiles.enable = false;
       history_filter = [ "^\\s+" ];
-      # number of context lines to show when scrolling by pages
       scroll_context_lines = 3;
+      keymap_mode = "vim-insert";
     };
   };
 
