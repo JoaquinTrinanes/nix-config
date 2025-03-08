@@ -23,8 +23,7 @@ let
     let
       pluginFile =
         let
-          plugins = builtins.attrValues { inherit (nushellNightlyPkgs) nu_plugin_formats nu_plugin_polars; };
-          pluginExprs = map (plugin: "plugin add ${lib.getExe plugin}") plugins;
+          pluginExprs = map (plugin: "plugin add ${lib.getExe plugin}") config.programs.nushell.plugins;
         in
         pkgs.runCommandLocal "plugin.msgpackz" { nativeBuildInputs = [ nushell ]; } ''
           touch $out {config,env}.nu
@@ -68,11 +67,16 @@ in
     package = nushellWrapped;
     inherit (config.home) shellAliases;
 
+    plugins = builtins.attrValues {
+      inherit (nushellNightlyPkgs)
+        nu_plugin_formats
+        nu_plugin_polars
+        ;
+    };
+
     # Source the file instead of setting the source to avoid HM causing IFD
     configFile.text = ''
-      source ${
-        mkImpureLink ./files/config.nu
-      }
+      source ${mkImpureLink ./files/config.nu}
     '';
     envFile.text = ''
       const NU_LIB_DIRS = $NU_LIB_DIRS ++ ${toNushell { } [ scriptsDir ]}
@@ -84,6 +88,7 @@ in
         formatter = lib.getExe inputs.self.formatter.${pkgs.stdenv.hostPlatform.system};
       in
       lib.mkMerge [
+        # nu
         ''
           # Parse text as nix expression
           def "from nix" []: string -> any {
