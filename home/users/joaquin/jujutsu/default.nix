@@ -45,7 +45,8 @@ in
         subprocess = true;
       };
       core = {
-        fsmonitor = "watchman";
+        # enabled per repo
+        fsmonitor = "none";
         watchman.register_snapshot_trigger = true;
       };
       format = { };
@@ -70,7 +71,10 @@ in
 
         "stack()" = "stack(@)";
         "stack(from)" = "stack(from, 2)";
-        "stack(from, n)" = "ancestors(reachable(@, mutable()), n)";
+        "stack(from, n)" = "original_stack(from, n)";
+
+        # For extending in-repo config
+        "original_stack(from, n)" = "ancestors(reachable(@, mutable()), n)";
 
         "nearest_bookmarks()" = "nearest_bookmarks(@)";
         "nearest_bookmarks(x)" = "heads(::x- & bookmarks())";
@@ -92,6 +96,7 @@ in
       };
       ui = {
         diff-editor = "hunk";
+        always-allow-large-revsets = true;
         default-command = [
           "log"
           "-r"
@@ -149,6 +154,8 @@ in
           "-r"
           "::@"
         ];
+        # jls = [
+        r = [ "rebase" ];
         n = [ "new" ];
         new-before = [
           "new"
@@ -167,6 +174,11 @@ in
           "status"
         ];
         sq = [ "squash" ];
+        squp = [
+          "squash"
+          "-t"
+          "@- ~ private()"
+        ];
         standup = [
           "log"
           "-r"
@@ -214,7 +226,9 @@ in
     jll = "jj ll";
     jn = "jj n";
     jp = "jj p";
+    jr = "jj r";
     js = "jj s";
+    jsq = "jj sq";
     jt = "jj t";
   };
 }
