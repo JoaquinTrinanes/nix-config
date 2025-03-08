@@ -43,9 +43,8 @@
   services.power-profiles-daemon.enable = false;
 
   hardware.nvidia = {
-    package = pkgs.linuxPackages_latest.nvidiaPackages.latest;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
     modesetting.enable = false;
-    # package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
     nvidiaSettings = false;
     powerManagement = {
       enable = true;

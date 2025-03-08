@@ -72,7 +72,7 @@
   # networking.interfaces."enp101s0f3u1".useDHCP = true;
   # networking.interfaces."wlan0".useDHCP = true;
 
-  networking.usePredictableInterfaceNames = true;
+  networking.usePredictableInterfaceNames = lib.mkDefault true;
 
   services.tlp = {
     enable = false;
@@ -125,6 +125,10 @@
       # https://forums.developer.nvidia.com/t/series-550-freezes-laptop/284772/45
       "amdgpu.vm_update_mode=3"
       "amdgpu.dcdebugmask=0x4"
+    ]
+    [
+      # https://forums.developer.nvidia.com/t/nvidia-gpu-fails-to-power-off-prime-razer-blade-14-2022/250023/37 (didn't work)
+      "nvidia.NVreg_DynamicPowerManagementVideoMemoryThreshold=0"
     ]
   ];
 

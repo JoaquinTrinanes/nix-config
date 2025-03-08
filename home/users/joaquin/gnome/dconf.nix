@@ -33,6 +33,9 @@ in
       two-finger-scrolling-enabled = true;
       natural-scroll = true;
     };
+    "org/gnome/tweaks" = {
+      show-extensions-notice = false;
+    };
     "org/gnome/shell" = {
       favorite-apps =
         let

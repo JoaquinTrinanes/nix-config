@@ -15,12 +15,12 @@ let
       relativePath;
   mkImpureLink =
     path:
-    config.lib.file.mkOutOfStoreSymlink (
-      if config.impurePath.enable then
-        (config.lib.impurePath.absPath path)
-      else
-        lib.warn "impurePath is disabled, symlinks will point to store files" path
-    );
+    if config.impurePath.enable then
+      config.lib.file.mkOutOfStoreSymlink (
+        cfg.flakePath + lib.removePrefix (toString cfg.self) (toString path)
+      )
+    else
+      lib.warn "impurePath is disabled, symlinks will point to store files" path;
 in
 {
   _class = "homeManager";
@@ -61,15 +61,16 @@ in
         copyConfig =
           let
             git = "${lib.getExe config.programs.git.package} -C ${lib.escapeShellArg cfg.flakePath}";
+            relativeFlakePath = "${lib.removePrefix "${config.home.homeDirectory}/" cfg.flakePath}";
           in
           lib.hm.dag.entryAfter [ "writeBoundary" ]
             # bash
             ''
-              if [ ! -e ${cfg.flakePath} ]; then
-                run mkdir $VERBOSE_ARG -p "$(dirname ${cfg.flakePath})"
+              if [ ! -e ${relativeFlakePath} ]; then
+                run mkdir $VERBOSE_ARG -m 0755 -p "$(dirname ${relativeFlakePath})"
                 run cp $VERBOSE_ARG -r ${lib.escapeShellArg cfg.self} ${lib.escapeShellArg cfg.flakePath}
                 # Will mess up the permissions, but at least the correct files will be in the expected place since the start (and not readonly)
-                run chmod $VERBOSE_ARG -R 0755 ${lib.escapeShellArg cfg.flakePath}
+                run chmod $VERBOSE_ARG -R 0755 ${lib.escapeShellArg relativeFlakePath}
                 ${lib.optionalString cfg.remote.enable ''
                   run ${git} init
                   run ${git} remote add ${lib.escapeShellArg cfg.remote.name} ${lib.escapeShellArg cfg.remote.url}
