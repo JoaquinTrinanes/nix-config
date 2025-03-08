@@ -32,7 +32,7 @@ in
 
   config = {
     perSystem =
-      { system, ... }:
+      { system, lib, ... }:
       {
         _module.args.pkgs = lib.mkIf (cfg.input != null) (
           lib.mkDefault (import cfg.input (cfg.finalConfig // { inherit system; }))

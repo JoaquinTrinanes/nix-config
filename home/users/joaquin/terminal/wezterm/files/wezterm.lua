@@ -2,7 +2,6 @@
 
 local wezterm = require("wezterm")
 
--- wezterm.add_to_config_reload_watch_list(wezterm.config_dir)
 ---@param key string
 ---@param mods "ALT" | "CTRL" | "SHIFT" | "CTRL|SHIFT" | nil
 ---@param action fun()
@@ -189,9 +188,11 @@ config.cursor_blink_rate = 0
 config.enable_scroll_bar = true
 ---@diagnostic disable-next-line: assign-type-mismatch
 config.audible_bell = "Disabled"
-config.unicode_version = 15
+config.unicode_version = 14
 config.hide_mouse_cursor_when_typing = false
 config.enable_kitty_keyboard = true
+
+config.scrollback_lines = 50000
 
 config.keys = {
 	zellij_only_map(
@@ -243,6 +244,19 @@ config.keys = {
 	split_nav("resize", "j"),
 	split_nav("resize", "k"),
 	split_nav("resize", "l"),
+}
+
+config.mouse_bindings = {
+	{
+		event = { Down = { streak = 4, button = "Left" } },
+		action = wezterm.action.SelectTextAtMouseCursor("SemanticZone"),
+		mods = "NONE",
+	},
+	{
+		event = { Up = { streak = 4, button = "Left" } },
+		action = wezterm.action.Nop,
+		mods = "NONE",
+	},
 }
 
 return config

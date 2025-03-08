@@ -1,4 +1,3 @@
-{ lib, ... }:
 {
   parts.nixpkgs.overlays = [
     (final: _prev: {

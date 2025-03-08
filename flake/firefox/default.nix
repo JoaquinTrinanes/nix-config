@@ -93,7 +93,6 @@
             lib.mapAttrsToList (name: value: mkAutoconfig name value { }) {
               "media.ffmpeg.vaapi.enabled" = true;
               "gfx.webrender.all" = true;
-              "general.useragent.override" = "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/115.0";
 
               # disable account icon (?)
               "identity.fxaccounts.toolbar.enabled" = false;

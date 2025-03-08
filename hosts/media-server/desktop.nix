@@ -1,4 +1,4 @@
-{ users, ... }:
+{ users, pkgs, ... }:
 let
   sshConfig = {
     openssh.authorizedKeys.keys = users."joaquin".sshPublicKeys;
@@ -20,6 +20,8 @@ in
     cleanOnBoot = true;
     useTmpfs = true;
   };
+
+  environment.systemPackages = with pkgs; [ acpi ];
 
   # services.logind.lidSwitch = "ignore";
 
