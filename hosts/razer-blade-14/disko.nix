@@ -63,6 +63,7 @@
                       mountOptions = [
                         "defaults"
                         "noatime"
+                        "nofail"
                       ];
                       swap.swapfile.size = "32G";
                     };

@@ -13,7 +13,11 @@
 
   services.fwupd.enable = true;
 
+  hardware.amdgpu.opencl.enable = true;
+
   boot.initrd.systemd.enable = true;
+
+  environment.systemPackages = builtins.attrValues { inherit (pkgs.nvtopPackages) amd; };
 
   boot.loader.systemd-boot = {
     enable = true;
