@@ -40,6 +40,8 @@ in
   config = lib.mkIf cfg.enable {
     programs.ns-usbloader.enable = lib.mkDefault true;
 
+    programs.gamemode.enable = lib.mkDefault true;
+
     programs.steam = lib.mkDefault {
       enable = true;
       package = steam;
@@ -48,8 +50,11 @@ in
       lib.optionals cfg.steamNoInternet.enable [ steamNoInternet ]
       ++ builtins.attrValues {
         inherit (pkgs)
+          heroic
+          itch
           lutris
-          # itch
+          mangohud
+          wine
           ;
       };
   };
