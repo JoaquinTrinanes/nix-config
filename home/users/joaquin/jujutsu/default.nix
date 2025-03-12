@@ -47,7 +47,7 @@ in
       core = {
         # enabled per repo
         fsmonitor = "none";
-        watchman.register_snapshot_trigger = true;
+        watchman.register-snapshot-trigger = true;
       };
       format = { };
       revset-aliases = {
@@ -225,6 +225,7 @@ in
     jla = "jj la";
     jll = "jj ll";
     jn = "jj n";
+    jnb = "jj nb";
     jp = "jj p";
     jr = "jj r";
     js = "jj s";
