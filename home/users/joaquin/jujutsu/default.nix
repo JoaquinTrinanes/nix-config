@@ -157,22 +157,23 @@ in
         # jls = [
         r = [ "rebase" ];
         n = [ "new" ];
-        new-before = [
+        na = [
           "new"
-          "--before"
+          "--no-edit"
+          "--after"
           "@"
         ];
         nb = [
-          "new-before"
+          "new"
           "--no-edit"
+          "--before"
+          "@"
         ];
         p = [
           "git"
           "push"
         ];
-        s = [
-          "status"
-        ];
+        s = [ "status" ];
         sq = [ "squash" ];
         squp = [
           "squash"
@@ -225,6 +226,7 @@ in
     jla = "jj la";
     jll = "jj ll";
     jn = "jj n";
+    jna = "jj na";
     jnb = "jj nb";
     jp = "jj p";
     jr = "jj r";
