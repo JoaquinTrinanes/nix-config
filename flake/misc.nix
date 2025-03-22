@@ -26,16 +26,6 @@
     };
 
     common = {
-      modules = [
-        {
-          _file = ./misc.nix;
-          _module.args = {
-            inherit (config.parts) users;
-            inherit inputs;
-            hosts = lib.mapAttrs (_: h: h.finalSystem.config) config.parts.nixos.hosts;
-          };
-        }
-      ];
       specialArgs = {
         inherit inputs;
       };
