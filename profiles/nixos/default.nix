@@ -9,7 +9,6 @@
     ./firefox
     ./fonts
     ./gaming
-    ./garbage-collect
     ./hardware-acceleration
     ./jellyfin
     ./nix-index
