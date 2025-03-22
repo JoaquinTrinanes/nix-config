@@ -1,6 +1,5 @@
 {
   inputs,
-  config,
   lib,
   ...
 }:
@@ -24,6 +23,26 @@
         # (_final: prev: inputs.self.packages.${prev.stdenv.hostPlatform.system})
       ];
     };
+
+    home-manager.modules = [
+      {
+        _file = ./misc.nix;
+        nix.gc = lib.mkDefault {
+          automatic = true;
+          frequency = "weekly";
+        };
+      }
+    ];
+    nixos.modules = [
+      {
+        _file = ./misc.nix;
+        nix.gc = lib.mkDefault {
+          automatic = true;
+          dates = "weekly";
+        };
+
+      }
+    ];
 
     common = {
       specialArgs = {
