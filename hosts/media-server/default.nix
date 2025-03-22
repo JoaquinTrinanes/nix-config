@@ -24,7 +24,6 @@ in
 
   profiles = {
     samba.enable = true;
-    garbageCollect.enable = true;
     jellyfin = {
       enable = true;
       libraryDirs = [ "/mnt/media/Public/jellyfin" ];
