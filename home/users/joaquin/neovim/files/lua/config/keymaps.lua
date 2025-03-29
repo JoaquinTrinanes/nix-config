@@ -10,6 +10,8 @@ local function map(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, options)
 end
 
+local mapSafe = LazyVim.safe_keymap_set
+
 -- don't copy text when deleting single characters
 map("n", "x", [["_x]])
 map("n", "X", [["_X]])
@@ -112,18 +114,11 @@ map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
 map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
--- buffers
-map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-map("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-
--- Clear search and stop snippet on escape
--- map({ "i", "n", "s" }, "<esc>", function()
---   vim.cmd("noh")
---   LazyVim.cmp.actions.snippet_stop()
---   return "<esc>"
--- end, { expr = true, desc = "Escape and Clear hlsearch" })
+-- Buffers. Only set if no other plugin does
+mapSafe("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+mapSafe("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+mapSafe("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+mapSafe("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
