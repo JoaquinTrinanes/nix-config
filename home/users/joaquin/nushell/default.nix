@@ -7,7 +7,6 @@
 }:
 let
   inherit (config.lib.impurePath) mkImpureLink;
-  inherit (lib.hm.nushell) toNushell;
   configDir =
     if pkgs.stdenv.isDarwin then
       "Library/Application Support/nushell"
@@ -38,17 +37,25 @@ let
     in
     pkgs.my.mkWrapper {
       basePackage = nushell;
-      prependFlags = [
-        "--plugin-config"
-        pluginFile
-        "--config"
-        config.home.file."${configFile}".source
-        "--env-config"
-        config.home.file."${envFile}".source
-      ];
+      prependFlags =
+        let
+          envFileSource = builtins.tryEval config.home.file."${envFile}".source;
+          configFileSource = builtins.tryEval config.home.file."${configFile}".source;
+        in
+        [
+          "--plugin-config"
+          pluginFile
+        ]
+        ++ lib.optionals configFileSource.success [
+          "--config"
+          configFileSource.value
+        ]
+        ++ lib.optionals envFileSource.success [
+          "--env-config"
+          envFileSource.value
+        ];
       pathAdd = [ pkgs.fish ];
     };
-  scriptsDir = mkImpureLink ./files/scripts;
 in
 {
   imports = [ ./theme.nix ];
@@ -65,7 +72,6 @@ in
   programs.nushell = {
     enable = lib.mkDefault true;
     package = nushellWrapped;
-    inherit (config.home) shellAliases;
 
     plugins = builtins.attrValues {
       inherit (nushellNightlyPkgs)
@@ -77,10 +83,6 @@ in
     # Source the file instead of setting the source to avoid HM causing IFD
     configFile.text = ''
       source ${mkImpureLink ./files/config.nu}
-    '';
-    envFile.text = ''
-      const NU_LIB_DIRS = $NU_LIB_DIRS ++ ${toNushell { } [ scriptsDir ]}
-      source ${mkImpureLink ./files/env.nu}
     '';
     extraConfig =
       let
@@ -105,10 +107,15 @@ in
               | if $format { ${formatter} - | ${lib.getExe pkgs.bat} --paging=never --style=plain -l nix } else { $in }
           }
         ''
-        (lib.mkOrder 9999 ''
-          use ${scriptsDir} *
-          overlay use ${scriptsDir}/completions
-        '')
+        (
+          let
+            scriptsDir = mkImpureLink ./files/scripts;
+          in
+          lib.mkOrder 9999 ''
+            use ${scriptsDir} *
+            overlay use ${scriptsDir}/completions
+          ''
+        )
       ];
   };
 
