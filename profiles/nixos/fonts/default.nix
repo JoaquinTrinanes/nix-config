@@ -15,7 +15,7 @@ in
   config = lib.mkIf cfg.enable {
     fonts.packages = with pkgs; [
       nerd-fonts.fira-code
-      maple-mono
+      maple-mono.variable
       dejavu_fonts
       joypixels
       noto-fonts
