@@ -87,7 +87,8 @@ in
     extraConfig =
       let
         nix = if config.nix.package == null then pkgs.nix else lib.getExe config.nix.package;
-        formatter = lib.getExe inputs.self.formatter.${pkgs.stdenv.hostPlatform.system};
+        # formatter = lib.getExe inputs.self.formatter.${pkgs.stdenv.hostPlatform.system};
+        formatter = lib.getExe pkgs.nixfmt-rfc-style;
       in
       lib.mkMerge [
         # nu
