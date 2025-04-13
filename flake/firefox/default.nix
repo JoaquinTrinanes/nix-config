@@ -53,7 +53,7 @@
           DNSOverHTTPS = {
             Enabled = true;
             Fallback = false;
-            Locked = true;
+            Locked = false;
             ProviderURL = "https://dns.quad9.net/dns-query";
           };
           DontCheckDefaultBrowser = true;
@@ -325,7 +325,7 @@
         in
         name: value:
         {
-          status ? "locked",
+          status ? "user",
         }:
         ''
           ${statusFunctionName.${status}}("${name}", ${builtins.toJSON value});
