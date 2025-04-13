@@ -54,8 +54,7 @@
             Enabled = true;
             Fallback = false;
             Locked = true;
-
-            ProviderURL = "https://cloudflare-dns.com/dns-query";
+            ProviderURL = "https://dns.quad9.net/dns-query";
           };
           DontCheckDefaultBrowser = true;
           EnableTrackingProtection = {
@@ -203,6 +202,7 @@
               "browser.display.use_system_colors" = true;
               "extensions.activeThemeID" = "default-theme@mozilla.org"; # responsive to light and dark mode changes, and not always the default
               "general.autoScroll" = true; # enable middle click scroll
+              "middlemouse.paste" = false;
 
               "browser.toolbars.bookmarks.visibility" = "newtab";
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
