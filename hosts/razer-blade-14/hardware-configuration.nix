@@ -16,6 +16,8 @@
     ./disko.nix
   ];
 
+  services.switcherooControl.enable = true;
+
   profiles.hardware-acceleration = {
     enable = true;
     cpuType = "amd";
