@@ -201,6 +201,7 @@
               ];
               "browser.display.use_system_colors" = true;
               "extensions.activeThemeID" = "default-theme@mozilla.org"; # responsive to light and dark mode changes, and not always the default
+
               "general.autoScroll" = true; # enable middle click scroll
               "middlemouse.paste" = false;
 

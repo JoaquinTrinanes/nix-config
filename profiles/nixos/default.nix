@@ -6,6 +6,7 @@
     ./autofirma
     ./desktop
     ./development
+    ./dnscrypt
     ./firefox
     ./fonts
     ./gaming
