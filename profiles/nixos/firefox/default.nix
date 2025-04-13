@@ -19,7 +19,15 @@ in
       inherit (inputs.self.packages.${pkgs.stdenv.hostPlatform.system}) firefox;
       firefoxWithConfig = firefox.override (prev: {
         extraPolicies = lib.recursiveUpdate prev.extraPolicies (
-          lib.recursiveUpdate firefoxCfg.policies { Preferences = firefoxCfg.preferences; }
+          lib.recursiveUpdate firefoxCfg.policies {
+            Preferences = lib.mapAttrs' (
+              key: value:
+              lib.nameValuePair key {
+                Value = value;
+                Status = firefoxCfg.preferencesStatus;
+              }
+            ) firefoxCfg.preferences;
+          }
         );
       });
 
@@ -28,6 +36,10 @@ in
       environment.systemPackages = [ firefoxWithConfig ];
       programs.firefox = {
         enable = false;
+
+        # allow changing without rebuilds
+        preferencesStatus = "user";
+
         package = firefoxWithConfig;
       };
 
