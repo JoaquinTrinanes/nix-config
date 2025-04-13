@@ -85,14 +85,6 @@
     domains = [ "~." ];
   };
 
-  virtualisation.docker = {
-    enable = true;
-    logDriver = "local";
-    enableOnBoot = false;
-  };
-
-  services.switcherooControl.enable = true;
-
   programs.nix-ld.enable = true;
 
   i18n.defaultLocale = "en_DK.UTF-8";
