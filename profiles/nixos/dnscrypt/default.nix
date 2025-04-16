@@ -120,6 +120,11 @@ in
         ];
       })
     ];
+
+    programs.captive-browser = lib.mkDefault {
+      enable = true;
+      interface = "wlan0";
+    };
   };
 
 }
