@@ -115,6 +115,16 @@ in
           fg = "magenta";
         };
       };
+      templates = {
+        draft_commit_description = ''
+          separate(
+            "\n",
+            builtin_draft_commit_description,
+            "JJ: ignore-rest\n",
+            diff.git()
+          )
+        '';
+      };
       template-aliases = {
         desc = "builtin_log_compact_full_description";
       };
