@@ -41,19 +41,15 @@ in
       displayManager.gdm.enable = lib.mkDefault true;
     };
 
-    environment.systemPackages =
-      let
-        discord = pkgs.vesktop;
-      in
-      builtins.attrValues {
-        inherit discord;
-        inherit (pkgs)
-          protonvpn-gui
-          qbittorrent
-          telegram-desktop
-          vlc
-          ;
-      };
+    environment.systemPackages = builtins.attrValues {
+      inherit (pkgs)
+        vesktop
+        discord-canary
+        qbittorrent
+        telegram-desktop
+        vlc
+        ;
+    };
     programs.dconf.enable = lib.mkDefault true;
     programs.dconf.profiles.gdm.databases = [
       {
