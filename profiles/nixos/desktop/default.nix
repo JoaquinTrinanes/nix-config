@@ -29,8 +29,6 @@ in
 
     time.timeZone = lib.mkDefault "Europe/Madrid";
 
-    environment.enableAllTerminfo = lib.mkDefault true;
-
     services.libinput.touchpad = lib.mkDefault {
       tapping = true;
       scrollMethod = "twofinger";
@@ -56,8 +54,6 @@ in
         settings = {
           "org/gnome/desktop/peripherals/touchpad" = {
             tap-to-click = true;
-            # two-finger-scrolling-enabled = true;
-            # natural-scroll = false;
           };
         };
       }
