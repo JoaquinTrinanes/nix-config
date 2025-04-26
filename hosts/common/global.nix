@@ -34,7 +34,7 @@ in
 
   environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
 
-  boot.kernelPackages = lib.mkDefault pkgs.linuxKernel.packageAliases.linux_latest;
+  boot.kernelPackages = lib.mkDefault pkgs.linuxKernel.packageAliases.linux_default;
 
   documentation.nixos.enable = false;
 
