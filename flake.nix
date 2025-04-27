@@ -33,24 +33,16 @@ rec {
 
     jj.url = "github:jj-vcs/jj";
     jj.inputs.nixpkgs.follows = "nixpkgs";
-
-    ghostty.url = "github:ghostty-org/ghostty";
-    ghostty.inputs.nixpkgs-unstable.follows = "nixpkgs";
-    ghostty.inputs.nixpkgs-stable.follows = "nixpkgs";
   };
 
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
       "https://nushell-nightly.cachix.org"
-      "https://cuda-maintainers.cachix.org"
-      "https://ghostty.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nushell-nightly.cachix.org-1:nLwXJzwwVmQ+fLKD6aH6rWDoTC73ry1ahMX9lU87nrc="
-      "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
-      "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
     ];
   };
 

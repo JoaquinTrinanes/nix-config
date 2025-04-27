@@ -1,17 +1,13 @@
 {
   pkgs,
   config,
-  inputs,
   ...
 }:
-let
-  inherit (inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}) ghostty;
-in
 {
   programs.ghostty = {
     enable = true;
     package = pkgs.my.mkWrapper {
-      basePackage = ghostty;
+      basePackage = pkgs.ghostty;
       postBuild = ''
         rm -rf $out/share/nautilus-python
       '';
