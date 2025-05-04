@@ -187,7 +187,7 @@
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
-    pinentryPackage = pkgs.pinentry-gnome3;
+    pinentry.package = pkgs.pinentry-gnome3;
 
     # timeout since last activity
     defaultCacheTtl = 15 * 60; # 15 minutes
