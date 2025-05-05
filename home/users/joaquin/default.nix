@@ -228,8 +228,11 @@
   programs.atuin = {
     enable = true;
     flags = [ "--disable-up-arrow" ];
+    daemon.enable = true;
     settings = {
-      dotfiles.enable = false;
+      auto_sync = false;
+      sync.records = true;
+      dotfiles.enable = true;
       history_filter = [ "^\\s+" ];
       scroll_context_lines = 3;
       keymap_mode = "vim-insert";
