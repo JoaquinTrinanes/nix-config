@@ -37,19 +37,63 @@ in
             "gpg"
           else
             config.programs.git.signing.format;
+        behavior = "drop";
       };
       git = {
         auto-local-bookmark = false;
         private-commits = "private()";
         sign-on-push = config.programs.git.signing.signByDefault;
-        subprocess = true;
+      };
+      fix.tools = {
+        prettier = {
+          command = [
+            "prettier"
+            "--stdin-filepath"
+            "$path"
+          ];
+          patterns = [
+            "glob:'**/*.js'"
+            "glob:'**/*.json'"
+            "glob:'**/*.jsonc'"
+            "glob:'**/*.jsx'"
+            "glob:'**/*.md'"
+            "glob:'**/*.mdx'"
+            "glob:'**/*.scss'"
+            "glob:'**/*.ts'"
+            "glob:'**/*.tsx'"
+            "glob:'**/*.vue'"
+            "glob:'**/*.yaml'"
+            "glob:'**/*.yml'"
+          ];
+        };
+        biome = {
+          command = [
+            "biome"
+            "check"
+            "--stdin-file-path=$path"
+            "--write"
+          ];
+          patterns = [
+            "glob:'**/*.js'"
+            "glob:'**/*.json'"
+            "glob:'**/*.jsonc'"
+            "glob:'**/*.jsx'"
+            "glob:'**/*.md'"
+            "glob:'**/*.mdx'"
+            "glob:'**/*.scss'"
+            "glob:'**/*.ts'"
+            "glob:'**/*.tsx'"
+            "glob:'**/*.vue'"
+            "glob:'**/*.yaml'"
+            "glob:'**/*.yml'"
+          ];
+        };
       };
       core = {
         # enabled per repo
         fsmonitor = "none";
         watchman.register-snapshot-trigger = true;
       };
-      format = { };
       revset-aliases = {
         "default()" = "default(@)";
         "default(x)" = "present(x) | ancestors(immutable_heads().., 2) | present(trunk())";
@@ -76,10 +120,18 @@ in
         # For extending in-repo config
         "original_stack(from, n)" = "ancestors(reachable(@, mutable()), n)";
 
-        "nearest_bookmarks()" = "nearest_bookmarks(@)";
-        "nearest_bookmarks(x)" = "heads(::x- & bookmarks())";
+        "closest_bookmarks()" = "closest_bookmarks(@)";
+        "closest_bookmarks(x)" = "heads(::x & bookmarks())";
 
         "open()" = "trunk().. & mine()";
+        "closest_public_bookmarks()" = "closest_public_bookmarks(@)";
+        "closest_public_bookmarks(x)" = "heads(::x & bookmarks() ~ private())";
+
+        "closest_pushable()" = "closest_pushable(@)";
+        "closest_pushable(x)" =
+          ''heads(reachable(closest_public_bookmarks(x), closest_public_bookmarks(x)::x ~ private() ~ description(exact:"") & (~empty() | merges())))'';
+
+        "why_immutable(x)" = "x | roots(x:: & immutable_heads())";
       };
       revsets = {
         short-prefixes = "coalesce(stack(), default())";
@@ -120,7 +172,7 @@ in
           separate(
             "\n",
             builtin_draft_commit_description,
-            "JJ: ignore-rest\n",
+            "JJ: ignore-rest\n\n",
             diff.git()
           )
         '';
@@ -183,6 +235,7 @@ in
           "git"
           "push"
         ];
+        r = [ "rebase" ];
         s = [ "status" ];
         sq = [ "squash" ];
         squp = [
@@ -203,9 +256,9 @@ in
           "bookmark"
           "move"
           "--from"
-          "nearest_bookmarks()"
+          "closest_public_bookmarks(@)"
           "--to"
-          ''heads(reachable(nearest_bookmarks(), nearest_bookmarks()::@ ~ description(exact:"") ~ empty() ~ private()))''
+          "closest_pushable(@)"
         ];
         up = [
           "rebase"
@@ -223,6 +276,21 @@ in
   );
 
   programs.git.ignores = lib.mkIf config.programs.jujutsu.enable [ ".jj/" ];
+
+  programs.starship.settings = {
+    custom = {
+      jj-op = {
+        when = "jj --ignore-working-copy workspace root";
+        detect_folders = [ ".jj" ];
+        format = ''(\[[$symbol](blue) [$output]($style)\] )'';
+        symbol = "op";
+        command = ''
+          ls .jj/repo/op_heads/heads | head -c 4
+        '';
+        shell = "bash";
+      };
+    };
+  };
 
   home.shellAliases = lib.mkIf config.programs.jujutsu.enable {
     j = "jj";
