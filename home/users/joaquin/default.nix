@@ -95,6 +95,7 @@
       inherit (pkgs)
         ast-grep
         enpass
+        mergiraf
         ;
     };
   };
