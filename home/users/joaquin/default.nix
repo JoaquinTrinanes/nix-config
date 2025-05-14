@@ -57,6 +57,27 @@
     '';
   };
 
+  programs.mise = {
+    enable = true;
+    globalConfig = {
+      settings = {
+        all_compile = false;
+        experimental = true;
+        idiomatic_version_file_enable_tools = [
+          "node"
+          "rust"
+        ];
+      };
+    };
+  };
+
+  programs.git.ignores = lib.mkIf config.programs.mise.enable [
+    "mise.local.*"
+    "mise.*.local.*"
+    ".mise.local.*"
+    ".mise.*.local.*"
+  ];
+
   home = {
     sessionVariables = lib.mkIf config.programs.neovim.enable { MANPAGER = "nvim +Man!"; };
 
