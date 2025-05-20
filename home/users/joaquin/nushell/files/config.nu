@@ -63,17 +63,24 @@ let external_completer = {|spans: list<string>|
         $spans
     }
 
-    match $spans.0 {
+    let completer = match $spans.0 {
         git => $fish_completer
         gpg => $fish_completer
+        jj => $fish_completer
+        nix => $fish_completer
         _ => $default_completer
     }
-    | do $in $spans
+
+    if ($completer == null) { return null }
+
+    do $completer $spans
     | if (($in | is-empty) and ($fallback_completer != null)) {
         do $fallback_completer $spans
     } else {
         $in
     }
+    # avoid empty result preventing native file completion
+    | if ($in | is-empty) { null } else { $in }
  }
 
 # $env.config.ls.clickable_links = false
