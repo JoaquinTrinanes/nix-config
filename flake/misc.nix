@@ -58,7 +58,7 @@
                 isLix = lib.getName config.nix.package == "lix";
               in
               {
-                package = lib.mkDefault pkgs.lix;
+                package = lib.mkDefault pkgs.lixPackageSets.latest.lix;
                 settings = {
                   allowed-users = lib.mkDefault [ "@wheel" ];
                   min-free = lib.mkDefault 128000000; # 128MB
@@ -76,7 +76,6 @@
                     ]
                     ++ lib.optionals isLix [
                       "pipe-operator"
-                      "repl-flake"
                     ];
                   keep-outputs = lib.mkDefault true;
                   auto-allocate-uids = lib.mkDefault true;
