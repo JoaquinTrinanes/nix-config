@@ -18,6 +18,10 @@ local M = {
       },
       formatters = {
         sqlfluff = { require_cwd = false },
+        topiary_nu = {
+          command = "topiary",
+          args = { "format", "--language", "nu" },
+        },
         biome = {
           -- transform biome into biome-check, but without hardcoding the filetypes
           args = { "check", "--write", "--stdin-file-path", "$FILENAME" },

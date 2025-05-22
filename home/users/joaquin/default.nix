@@ -97,6 +97,47 @@
         enpass
         mergiraf
         ;
+      topiary =
+        let
+          topiary-nushell = builtins.fetchTree {
+            type = "github";
+            owner = "blindFS";
+            repo = "topiary-nushell";
+            rev = "7f836bc14e0a435240c190b89ea02846ac883632";
+          };
+          tree-sitter-nu = pkgs.tree-sitter.buildGrammar {
+            language = "nu";
+            version = "0.0.0+rev=d5c71a10";
+            src = builtins.fetchTree {
+              type = "github";
+              owner = "nushell";
+              repo = "tree-sitter-nu";
+              rev = "d5c71a10b4d1b02e38967b05f8de70e847448dd1";
+            };
+            meta.homepage = "https://github.com/nushell/tree-sitter-nu";
+          };
+        in
+        pkgs.my.mkWrapper {
+          basePackage = pkgs.topiary;
+          prependFlags = [ "--merge-configuration" ];
+          env = {
+            TOPIARY_CONFIG_FILE.value =
+              pkgs.writeText "languages.ncl"
+                # nickel
+                ''
+                  {
+                    languages = {
+                      nu = {
+                        indent = "    ", # 4 spaces
+                        extensions = ["nu"],
+                        grammar.source.path = "${tree-sitter-nu}/parser"
+                      },
+                    },
+                  }
+                '';
+            TOPIARY_LANGUAGE_DIR.value = "${topiary-nushell}/languages";
+          };
+        };
     };
   };
 
