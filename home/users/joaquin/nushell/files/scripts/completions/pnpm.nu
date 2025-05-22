@@ -20,13 +20,7 @@ def 'nu-complete pnpm user scripts' [] {
 
 def 'nu-complete pnpm installed packages' [] {
     # pnpm list --json | from json | get dependencies | columns
-    package_json |
-    transpose depType deps |
-    where depType =~ '(?i)dependencies$' |
-    get deps |
-    each {|it| $it | items {|k,v| { value: $k description: $v } }} |
-    flatten |
-    sort
+    package_json | transpose depType deps | where depType =~ '(?i)dependencies$' | get deps | each {|it| $it | items {|k, v| {value: $k description: $v} } } | flatten | sort
 }
 
 def 'nu-complete pnpm cached packages' [] {
@@ -50,7 +44,6 @@ def 'nu-complete pnpm package binaries' [] {
     }
 }
 
-
 def 'nu-complete pnpm' [] {
     let external_completions = do $env.config.completions.external.completer [pnpm '']
     let script_completions = nu-complete pnpm user scripts
@@ -70,6 +63,5 @@ export extern install [
 ]
 
 export extern main [
-    command?:string@'nu-complete pnpm'
+    command?: string@'nu-complete pnpm'
 ]
-

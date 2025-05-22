@@ -9,4 +9,3 @@
 # export def --wrapped "nix profile list" [...args] {
 #     ^nix profile list --json $args | from json
 # }
-
