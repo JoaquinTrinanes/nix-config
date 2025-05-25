@@ -106,7 +106,6 @@
           vim-dadbod
           vim-dadbod-completion
           vim-dadbod-ui
-          vim-jjdescription
           vim-sleuth
           which-key-nvim
         ]);

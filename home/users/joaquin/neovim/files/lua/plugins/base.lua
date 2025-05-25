@@ -110,7 +110,6 @@ local M = {
     end,
   },
   { "julienvincent/hunk.nvim", cmd = { "DiffEditor" }, opts = {} },
-  { "avm99963/vim-jjdescription", lazy = false },
   {
     "echasnovski/mini.splitjoin",
     opts = { mappings = { toggle = "gS", split = "", join = "" } },
