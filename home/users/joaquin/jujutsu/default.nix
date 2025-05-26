@@ -32,6 +32,7 @@ in
 
       signing = lib.mkIf config.programs.git.signing.signByDefault {
         inherit (config.programs.git.signing) key;
+        backends.gpg.program = lib.getExe pkgs.sequoia-chameleon-gnupg;
         backend =
           if (config.programs.git.signing.format == "openpgp") then
             "gpg"

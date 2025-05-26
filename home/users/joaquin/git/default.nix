@@ -1,4 +1,9 @@
-{ config, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   imports = [
     ./aliases.nix
@@ -14,6 +19,7 @@
     userName = config.accounts.email.accounts.primary.realName;
     userEmail = config.accounts.email.accounts.primary.address;
     extraConfig = {
+      gpg.program = lib.getExe pkgs.sequoia-chameleon-gnupg;
       core = {
         filemode = false;
         whitespace = "trailing-space,space-before-tab";
