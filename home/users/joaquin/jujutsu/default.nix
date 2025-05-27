@@ -115,22 +115,23 @@ in
 
 
         "stack()" = "stack(@)";
-        "stack(from)" = "stack(from, 2)";
-        "stack(from, n)" = "original_stack(from, n)";
+        "stack(x)" = "stack(x, 2)";
+        "stack(x, n)" = "original_stack(x, n)";
 
         # For extending in-repo config
-        "original_stack(from, n)" = "ancestors(reachable(@, mutable()), n)";
+        "original_stack(x, n)" = "ancestors(reachable(x, mutable()), n)";
 
         "closest_bookmarks()" = "closest_bookmarks(@)";
         "closest_bookmarks(x)" = "heads(::x & bookmarks())";
 
-        "open()" = "trunk().. & mine()";
         "closest_public_bookmarks()" = "closest_public_bookmarks(@)";
         "closest_public_bookmarks(x)" = "heads(::x & bookmarks() ~ private())";
 
         "closest_pushable()" = "closest_pushable(@)";
         "closest_pushable(x)" =
           ''heads(reachable(closest_public_bookmarks(x), closest_public_bookmarks(x)::x ~ private() ~ description(exact:"") & (~empty() | merges())))'';
+
+        "open()" = "stack(trunk().. & mine(), 1)";
 
         "why_immutable(x)" = "x | roots(x:: & immutable_heads())";
       };
@@ -218,7 +219,6 @@ in
           "::@"
         ];
         # jls = [
-        r = [ "rebase" ];
         n = [ "new" ];
         na = [
           "new"
@@ -231,6 +231,11 @@ in
           "--no-edit"
           "--before"
           "@"
+        ];
+        open = [
+          "log"
+          "-r"
+          "open()"
         ];
         p = [
           "git"
