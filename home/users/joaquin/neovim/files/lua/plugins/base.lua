@@ -33,6 +33,7 @@ local M = {
       },
       image = { enabled = false },
       picker = {
+        sources = { grep = { jump = { match = true } } },
         layouts = {
           select = {
             layout = {
@@ -53,22 +54,22 @@ local M = {
             keys = {
               ["<C-y>"] = { "confirm", mode = { "n", "i" } },
 
-              ["<a-f>"] = { "" },
-              ["<a-h>"] = { "" },
-              ["<a-i>"] = { "" },
-              ["<a-m>"] = { "" },
               -- ["<a-p>"] = { "" },
+              ["<A-f>"] = false,
+              ["<A-h>"] = false,
+              ["<A-i>"] = false,
+              ["<A-m>"] = false,
 
-              ["<c-f>"] = { "toggle_follow", mode = { "i", "n" } },
-              ["<c-h>"] = { "toggle_hidden", mode = { "i", "n" } },
-              ["<c-i>"] = { "toggle_ignored", mode = { "i", "n" } },
-              ["<c-m>"] = { "toggle_maximize", mode = { "i", "n" } },
-              -- ["<c-p>"] = { "toggle_preview", mode = { "i", "n" } },
+              ["<C-f>"] = { "toggle_follow", mode = { "i", "n" } },
+              ["<C-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+              ["<C-i>"] = { "toggle_ignored", mode = { "i", "n" } },
+              ["<C-m>"] = { "toggle_maximize", mode = { "i", "n" } },
+              -- ["<C-c>"] = { "", mode = { "i", "n" } },
             },
           },
         },
       },
-      indent = { animate = { enabled = false }, blank = { char = "·" } },
+      indent = { enabled = false, animate = { enabled = false }, blank = { char = "·" } },
       bigfile = { enabled = true },
       quickfile = { enabled = true },
     },
