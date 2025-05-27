@@ -50,8 +50,6 @@ in
         ++ [
           (getName pkgs.vesktop)
           "com.mitchellh.ghostty.desktop"
-          (getName pkgs.vesktop)
-          "com.mitchellh.ghostty.desktop"
         ];
     };
     "org/gnome/desktop/interface" = {
