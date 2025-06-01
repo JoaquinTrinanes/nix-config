@@ -18,7 +18,7 @@ in
 
   config = lib.mkIf cfg.enable {
     services.displayManager.sddm.wayland.enable = lib.mkDefault true;
-    services.xserver.displayManager.gdm.wayland = lib.mkDefault true;
+    services.displayManager.gdm.wayland = lib.mkDefault true;
 
     environment.systemPackages = with pkgs; [
       wl-clipboard

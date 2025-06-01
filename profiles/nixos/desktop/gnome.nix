@@ -17,9 +17,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.xserver = {
-      desktopManager.gnome.enable = lib.mkDefault true;
-      desktopManager.gnome.sessionPath = [
+    services.desktopManager.gnome = {
+      enable = lib.mkDefault true;
+      sessionPath = [
         inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers
       ];
     };

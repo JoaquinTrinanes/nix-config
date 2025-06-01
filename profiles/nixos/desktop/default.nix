@@ -34,10 +34,8 @@ in
       scrollMethod = "twofinger";
       naturalScrolling = true;
     };
-    services.xserver = {
-      enable = lib.mkDefault true;
-      displayManager.gdm.enable = lib.mkDefault true;
-    };
+
+    services.displayManager.gdm.enable = lib.mkDefault true;
 
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs)
