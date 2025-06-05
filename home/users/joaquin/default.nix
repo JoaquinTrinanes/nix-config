@@ -25,9 +25,6 @@
       address = "hi@joaquint.io";
       realName = "Joaquín Triñanes";
     };
-    vh = {
-      address = "joaquin@veganhacktivists.org";
-    };
   };
 
   impurePath = lib.mkDefault {

@@ -103,17 +103,10 @@
         ];
         "https://gitlab.com/".insteadOf = "gl:";
         "git@github.com:".insteadOf = "ghs:";
-        "git@github.com:veganhacktivists/".insteadOf = "vh:";
       };
     };
     includes = [
       { path = "config.local"; }
-      {
-        condition = "gitdir:~/Documents/veganhacktivists/";
-        contents = {
-          user.email = config.accounts.email.accounts.vh.address;
-        };
-      }
     ];
 
     ignores = [
