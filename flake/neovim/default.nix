@@ -132,6 +132,7 @@
           nil
           nixd
           nodejs
+          prettier
           pyright
           ripgrep
           ruff
@@ -147,7 +148,6 @@
           vtsls
           yaml-language-server
           ;
-        inherit (pkgs.nodePackages) prettier;
       };
       pluginNameOverride = {
         catppuccin-nvim = "catppuccin";
