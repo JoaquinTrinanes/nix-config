@@ -12,6 +12,7 @@ local M = {
         lua = { "stylua" },
         php = { "pint" },
         blade = { "prettier" },
+        typst = { "typstyle" },
         ["_"] = {
           "trim_whitespace",
         },

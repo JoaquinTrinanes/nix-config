@@ -151,6 +151,7 @@ local M = {
         ruff = { mason = false },
         r_language_server = { mason = false },
         biome = { mason = false },
+        tinymist = { mason = false },
       },
       ---@module "lspconfig"
       ---@type table<string, fun(server:string, opts:lspconfig.Config):boolean?>
