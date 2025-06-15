@@ -14,7 +14,6 @@ in
 
   config = lib.mkIf cfg.enable {
     services.pcscd.enable = lib.mkDefault true;
-    services.udev.packages = [ pkgs.yubikey-personalization ];
 
     security.tpm2 = lib.mkDefault {
       enable = true;
@@ -24,8 +23,6 @@ in
     environment.systemPackages = with pkgs; [
       yubikey-manager
       yubioath-flutter
-      yubikey-personalization
-      yubikey-personalization-gui
     ];
 
     # security.pam.yubico = {
