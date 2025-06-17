@@ -222,7 +222,7 @@
       dcdn = "docker compose down";
       dcrm = "docker compose rm";
 
-      nx = "nixos-rebuild --use-remote-sudo --accept-flake-config --option allow-import-from-derivation false";
+      nx = "nixos-rebuild --sudo --accept-flake-config --option allow-import-from-derivation false";
 
       nxs = "nx switch";
       # prevent leaking information from secure files
