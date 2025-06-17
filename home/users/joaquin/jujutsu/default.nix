@@ -127,7 +127,7 @@ in
         "why_immutable(x)" = "x | roots(x:: & immutable_heads())";
       };
       revsets = {
-        short-prefixes = "coalesce(stack(), default())";
+        log = "coalesce(stack() | trunk(), default())";
       };
       merge-tools = {
         hunk = {
@@ -142,11 +142,12 @@ in
       ui = {
         diff-editor = "hunk";
         always-allow-large-revsets = true;
-        default-command = [
-          "log"
-          "-r"
-          "stack() | trunk()"
+        bookmark-list-sort-keys = [
+          "author-date-"
+          "committer-date-"
+          "name"
         ];
+        default-command = [ "log" ];
       };
       colors = {
         "diff added" = {
@@ -198,11 +199,15 @@ in
           "push"
         ];
         h = [ "help" ];
-        l = [ "log" ];
+        l = [
+          "log"
+          "-r"
+          "default()"
+        ];
         la = [
           "log"
           "-r"
-          ".."
+          "::"
         ];
         ll = [
           "log"
@@ -226,7 +231,7 @@ in
         open = [
           "log"
           "-r"
-          "open()"
+          "open() | trunk()"
         ];
         p = [
           "git"
