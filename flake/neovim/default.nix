@@ -1,3 +1,4 @@
+{ inputs, ... }:
 {
   perSystem =
     {
@@ -181,9 +182,13 @@
         ps.magick
       ];
       mkNeovim = pkgs.callPackage ./mkNeovim.nix { };
-      baseNeovim' =
+      baseNeovim =
         let
-          configDir = ../../home/users/joaquin/neovim/files;
+          _self = /. + (builtins.unsafeDiscardStringContext inputs.self);
+          configDir = lib.fileset.toSource {
+            root = _self;
+            fileset = ../../home/users/joaquin/neovim/files;
+          };
         in
         mkNeovim {
           neovim-unwrapped = inputs'.neovim-nightly-overlay.packages.default;
@@ -203,7 +208,6 @@
             require("config.lazy")
           '';
         };
-      baseNeovim = baseNeovim'.overrideAttrs { dontRewriteSymlinks = true; };
     in
     {
       packages = {
