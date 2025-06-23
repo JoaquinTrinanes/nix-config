@@ -27,7 +27,7 @@ in
     };
     colorSchemes."base16" =
       let
-        c = config.colorScheme.palette;
+        c = config.colors.palette;
       in
       {
         ansi = [

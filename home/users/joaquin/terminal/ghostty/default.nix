@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }:
 {
@@ -13,7 +14,7 @@
       '';
     };
     settings = {
-      theme = config.colorScheme.slug;
+      theme = lib.mkIf (config.colors.slug != null) config.colors.slug;
       config-file = "${config.lib.impurePath.mkImpureLink ./config}";
       auto-update = "off";
     };

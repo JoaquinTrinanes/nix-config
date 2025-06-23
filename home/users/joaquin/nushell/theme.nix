@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  colors = lib.mapAttrs (_: color: "#${color}") config.colorScheme.palette;
+  colors = lib.mapAttrs (_: color: "#${color}") config.colors.palette;
 in
 {
   programs.nushell.extraConfig = with colors; ''
