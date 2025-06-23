@@ -1,8 +1,9 @@
+{ inputs, lib, ... }:
 {
   parts.nixpkgs.overlays = [
     (final: _prev: {
       my = {
-        mkWrapper = final.callPackage ./mkWrapper.nix { };
+        mkWrapper = inputs.wrapper-manager.lib.wrapWith final;
       };
     })
   ];

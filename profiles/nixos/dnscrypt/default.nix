@@ -127,7 +127,7 @@ in
     environment.systemPackages = [
       (pkgs.my.mkWrapper {
         basePackage = pkgs.dnscrypt-proxy;
-        flags = [
+        prependFlags = [
           "-config"
           config.services.dnscrypt-proxy2.configFile
         ];

@@ -550,7 +550,8 @@
         "nix-colors": "nix-colors",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_2",
-        "nushell-nightly": "nushell-nightly"
+        "nushell-nightly": "nushell-nightly",
+        "wrapper-manager": "wrapper-manager"
       }
     },
     "rust-overlay": {
@@ -650,6 +651,21 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "wrapper-manager": {
+      "locked": {
+        "lastModified": 1750605920,
+        "narHash": "sha256-H7aKzVWtX2Efp8DwCuMrZex+IiXII2/PF5rO+Mu5oYU=",
+        "owner": "viperML",
+        "repo": "wrapper-manager",
+        "rev": "238d49c10383cd1db56d694bff9d573684c71526",
+        "type": "github"
+      },
+      "original": {
+        "owner": "viperML",
+        "repo": "wrapper-manager",
         "type": "github"
       }
     }
