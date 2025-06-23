@@ -11,9 +11,6 @@ rec {
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
 
-    nix-colors.url = "github:misterio77/nix-colors";
-    nix-colors.inputs.nixpkgs-lib.follows = "nixpkgs";
-
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 

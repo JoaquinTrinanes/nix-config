@@ -5,7 +5,7 @@
   ...
 }:
 let
-  colors = lib.mapAttrs (_: color: "#${color}") config.colorScheme.palette;
+  colors = lib.mapAttrs (_: color: "#${color}") config.colors.palette;
   theme = with colors; {
     background = base00;
     foreground = base05;
@@ -105,5 +105,6 @@ in
   };
   # xdg.configFile."kitty/pass_keys.py".source = "${smart-splits-nvim}/kitty/pass_keys.py";
   xdg.configFile."kitty/relative_resize.py".source = "${smart-splits-nvim}/kitty/relative_resize.py";
-  xdg.configFile."kitty/neighboring_window.py".source = "${smart-splits-nvim}/kitty/neighboring_window.py";
+  xdg.configFile."kitty/neighboring_window.py".source =
+    "${smart-splits-nvim}/kitty/neighboring_window.py";
 }
