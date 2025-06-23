@@ -33,6 +33,8 @@ rec {
 
     jj.url = "github:jj-vcs/jj";
     jj.inputs.nixpkgs.follows = "nixpkgs";
+
+    wrapper-manager.url = "github:viperML/wrapper-manager";
   };
 
   nixConfig = {
