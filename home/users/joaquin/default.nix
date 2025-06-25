@@ -165,8 +165,6 @@
     };
   };
 
-  programs.home-manager.enable = lib.mkDefault (!config.submoduleSupport.enable);
-
   programs.bash.enable = true;
 
   programs.bash.initExtra = lib.mkMerge [
@@ -355,7 +353,6 @@
     package = pkgs.adwaita-icon-theme;
     size = 24;
   };
-
 
   home.stateVersion = "25.05";
 }
