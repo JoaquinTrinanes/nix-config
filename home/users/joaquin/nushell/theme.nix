@@ -1,27 +1,27 @@
 { config, lib, ... }:
 let
-  colors = lib.mapAttrs (_: color: "#${color}") config.colors.palette;
+  c = lib.mapAttrs (_: color: "#${color}") config.colors.palette;
 in
 {
-  programs.nushell.extraConfig = with colors; ''
+  programs.nushell.extraConfig = ''
     export-env {
         let colors = {
-            base00: "${base00}" # Default Background
-            base01: "${base01}" # Lighter Background (Used for status bars, line number and folding marks)
-            base02: "${base02}" # Selection Background
-            base03: "${base03}" # Comments, Invisibles, Line Highlighting
-            base04: "${base04}" # Dark Foreground (Used for status bars)
-            base05: "${base05}" # Default Foreground, Caret, Delimiters, Operators
-            base06: "${base06}" # Light Foreground (Not often used)
-            base07: "${base07}" # Light Background (Not often used)
-            base08: "${base08}" # Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-            base09: "${base09}" # Integers, Boolean, Constants, XML Attributes, Markup Link Url
-            base0a: "${base0A}" # Classes, Markup Bold, Search Text Background
-            base0b: "${base0B}" # Strings, Inherited Class, Markup Code, Diff Inserted
-            base0c: "${base0C}" # Support, Regular Expressions, Escape Characters, Markup Quotes
-            base0d: "${base0D}" # Functions, Methods, Attribute IDs, Headings
-            base0e: "${base0E}" # Keywords, Storage, Selector, Markup Italic, Diff Changed
-            base0f: "${base0F}" # Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
+            base00: "${c.base00}" # Default Background
+            base01: "${c.base01}" # Lighter Background (Used for status bars, line number and folding marks)
+            base02: "${c.base02}" # Selection Background
+            base03: "${c.base03}" # Comments, Invisibles, Line Highlighting
+            base04: "${c.base04}" # Dark Foreground (Used for status bars)
+            base05: "${c.base05}" # Default Foreground, Caret, Delimiters, Operators
+            base06: "${c.base06}" # Light Foreground (Not often used)
+            base07: "${c.base07}" # Light Background (Not often used)
+            base08: "${c.base08}" # Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
+            base09: "${c.base09}" # Integers, Boolean, Constants, XML Attributes, Markup Link Url
+            base0a: "${c.base0A}" # Classes, Markup Bold, Search Text Background
+            base0b: "${c.base0B}" # Strings, Inherited Class, Markup Code, Diff Inserted
+            base0c: "${c.base0C}" # Support, Regular Expressions, Escape Characters, Markup Quotes
+            base0d: "${c.base0D}" # Functions, Methods, Attribute IDs, Headings
+            base0e: "${c.base0E}" # Keywords, Storage, Selector, Markup Italic, Diff Changed
+            base0f: "${c.base0F}" # Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
         }
 
         def relative_luminance [color] {
@@ -137,15 +137,8 @@ in
             shape_custom: {attr: b}
         }
 
-        load-env {
-            colors: $colors
-            config: (
-                $env.config?
-                | default {}
-                | upsert color_config ($env.config?.color_config? | default {} | merge $theme)
-                | upsert menus ($env.config?.menus? | default [] | each {|it| $it | upsert style $menu_style })
-            )
-        }
+        $env.config.color_config = ($env.config.color_config | merge $theme)
+        $env.config.menus = ($env.config.menus | each {|it| $it | update style {|menu| $menu.style | merge $menu_style } })
     }
   '';
 }
