@@ -9,6 +9,13 @@
     ./aliases.nix
   ];
 
+  home.packages = builtins.attrValues {
+    inherit (pkgs)
+      git-branchless
+      git-extras
+      ;
+  };
+
   programs.git = {
     enable = true;
     signing = {
@@ -61,7 +68,7 @@
         autoSetupRemote = true;
         followTags = true;
       };
-      help.autocorrect = "immedate";
+      help.autocorrect = "immediate";
       rebase = {
         autoSquash = true;
         autoStash = true;
@@ -100,6 +107,9 @@
         "https://github.com/".insteadOf = [
           "gh:"
           "github:"
+        ];
+        "git@github.com/".pushInsteadOf = [
+          "https://github.com/"
         ];
         "https://gitlab.com/".insteadOf = "gl:";
         "git@github.com:".insteadOf = "ghs:";

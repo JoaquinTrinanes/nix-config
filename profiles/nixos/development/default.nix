@@ -31,7 +31,6 @@ in
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs)
         file
-        git-extras
         hyperfine
         nixfmt-rfc-style
         pnpm
