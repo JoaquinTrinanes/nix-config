@@ -72,7 +72,6 @@
                       "nix-command"
                       "flakes"
                       "auto-allocate-uids"
-                      "ca-derivations"
                     ]
                     ++ lib.optionals isLix [
                       "pipe-operator"
