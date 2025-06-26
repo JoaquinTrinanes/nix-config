@@ -1,11 +1,9 @@
 local M = {
   {
     "stevearc/oil.nvim",
+    enabled = false,
     event = "VeryLazy",
     cmd = { "Oil" },
-    keys = {
-      -- { "-", "<cmd>Oil<cr>", desc = "Open Oil" },
-    },
     ---@module 'oil'
     ---@type oil.SetupOpts
     opts = {
@@ -71,7 +69,6 @@ local M = {
   },
   {
     "echasnovski/mini.files",
-    -- optional = true,
     opts = {
       windows = {
         preview = true,
