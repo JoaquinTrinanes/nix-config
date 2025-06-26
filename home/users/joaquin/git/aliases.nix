@@ -1,7 +1,7 @@
 {
   home.shellAliases = {
-    "g" = "git";
-    "ga" = "git add";
+    g = "git";
+    ga = "git add";
     gaa = "git add --all";
     gapa = "git add --patch";
     gau = "git add --update";
@@ -40,10 +40,6 @@
 
     gcl = "git clone --recurse-submodules";
     gclean = "git clean --interactive -d";
-    #   gpristine [] {
-    #     git reset --hard
-    #     git clean -d --force -x
-    # }
     gcmsg = "git commit --message";
     gco = "git checkout";
     gcor = "git checkout --recurse-submodules";
@@ -93,9 +89,6 @@
     gpd = "git push --dry-run";
     gpf = "git push --force-with-lease";
     "gpf!" = "git push --force";
-    #   gpoat [] {
-    #     git push origin --all; git push origin --tags
-    # }
     gpr = "git pull --rebase";
     gpu = "git push upstream";
     gpv = "git push --verbose";
@@ -150,9 +143,6 @@
     gswc = "git switch --create";
 
     gts = "git tag --sign";
-    #   gtv [] {
-    #     git tag | lines | sort
-    # }
 
     gunignore = "git update-index --no-assume-unchanged";
     gup = "git pull --rebase";
@@ -196,7 +186,6 @@
     filelog = "log -u";
     fl = "log -u";
     h = "help";
-    hide = "update-index --skip-worktree";
     hist = "log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short";
     l = "!git log --graph --pretty='tformat:%C(yellow)%h{%C(green)%ar{%C(bold blue)%an{%C(red)%d%C(reset) %s' $* | column -t -s '{' | less -FXRS";
     la = "!git list-aliases";
@@ -215,9 +204,6 @@
     stl = "stash list";
     stp = "stash pop";
     type = "cat-file -t";
-    undo = "reset --soft HEAD^";
-    unhide = "update-index --no-skip-worktree";
-    unhideall = "!git ls-files -v | grep '^h' | sed -e 's/h //g' | xargs git unhide";
     up = "pull --rebase";
   };
 }
