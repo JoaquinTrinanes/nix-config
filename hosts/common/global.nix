@@ -20,6 +20,12 @@ let
       repo = "nixpkgs";
       ref = "HEAD";
     };
+    nixos-unstable-small.to = {
+      type = "github";
+      owner = "NixOS";
+      repo = "nixpkgs";
+      ref = "nixos-unstable-small";
+    };
     p.flake = inputs.nixpkgs;
     templates.to = {
       type = "github";
