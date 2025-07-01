@@ -185,10 +185,12 @@
       baseNeovim =
         let
           _self = /. + (builtins.unsafeDiscardStringContext inputs.self);
-          configDir = lib.fileset.toSource {
-            root = _self;
-            fileset = ../../home/users/joaquin/neovim/files;
-          };
+          configDir =
+            (lib.fileset.toSource {
+              root = _self;
+              fileset = ../../home/users/joaquin/neovim/files;
+            })
+            + /home/users/joaquin/neovim/files;
         in
         mkNeovim {
           neovim-unwrapped = inputs'.neovim-nightly-overlay.packages.default;
@@ -204,7 +206,7 @@
               install.missing = false;
             };
           };
-          luaRcContent = ''
+          customLuaRC = ''
             require("config.lazy")
           '';
         };
@@ -212,11 +214,10 @@
     {
       packages = {
         neovim = baseNeovim.override (prev: {
-          luaRcContent =
-            ''
-              vim.env.LAZY = vim.env.LAZY or ${toLua pkgs.vimPlugins.lazy-nvim}
-            ''
-            + prev.luaRcContent or "";
+          customLuaRC = ''
+            vim.env.LAZY = vim.env.LAZY or ${toLua pkgs.vimPlugins.lazy-nvim}
+            ${prev.customLuaRC or ""}
+          '';
           globals = lib.recursiveUpdate prev.globals {
             pluginPathMap = mkPluginPathMap plugins;
             usePluginsFromStore = true;
@@ -228,10 +229,10 @@
           globals = prev.globals // {
             pluginPathMap = mkPluginPathMap devPlugins;
           };
-          luaRcContent = ''
+          customLuaRC = ''
             vim.opt.runtimepath:append(${toLua treesitterParsers})
             vim.go.packpath = vim.env.VIMRUNTIME
-            ${prev.luaRcContent or ""}
+            ${prev.customLuaRC or ""}
           '';
         });
       };
