@@ -113,6 +113,7 @@
       extraPackages = builtins.attrValues {
         inherit (pkgs)
           bash-language-server
+          biome
           black
           chafa
           code-minimap
