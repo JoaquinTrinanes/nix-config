@@ -21,7 +21,7 @@ vim.g.maplocalleader = "\\"
 
 vim.g.usePluginsFromStore = vim.g.usePluginsFromStore == true or false
 
---- @type LazyConfig
+---@type LazyConfig
 local lazyoptions = {
   spec = {
     { "LazyVim/LazyVim", opts = { news = { lazyvim = false, neovim = false } }, import = "lazyvim.plugins" },
@@ -31,8 +31,6 @@ local lazyoptions = {
     { import = "lazyvim.plugins.extras.editor.dial" },
     { import = "lazyvim.plugins.extras.editor.harpoon2" },
     { import = "lazyvim.plugins.extras.editor.inc-rename" },
-    { import = "lazyvim.plugins.extras.formatting.prettier" },
-    { import = "lazyvim.plugins.extras.formatting.biome" },
     { import = "lazyvim.plugins.extras.linting.eslint" },
     { import = "lazyvim.plugins.extras.ui.mini-indentscope" },
     { import = "lazyvim.plugins.extras.ui.indent-blankline" },
