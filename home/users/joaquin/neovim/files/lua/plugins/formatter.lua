@@ -37,17 +37,6 @@ local M = {
     opts = function(_, opts)
       for ft, formatters in pairs(opts.formatters_by_ft) do
         ---@cast formatters conform.FiletypeFormatterInternal[]
-        if vim.islist(formatters) and vim.list_contains(formatters, "biome") then
-          for i, formatter in ipairs(formatters) do
-            if formatter == "biome" then
-              opts.formatters_by_ft[ft][i] = "biome-check"
-            end
-          end
-        end
-      end
-
-      for ft, formatters in pairs(opts.formatters_by_ft) do
-        ---@cast formatters conform.FiletypeFormatterInternal[]
         if
           vim.islist(formatters)
           and vim.list_contains(formatters, "biome")
