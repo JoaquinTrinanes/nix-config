@@ -26,6 +26,7 @@ local M = {
         php = { "pint" },
         blade = { "prettier" },
         typst = { "typstyle" },
+        nu = { "topiary_nu" },
         ["_"] = {
           "trim_whitespace",
           lsp_format = "prefer",
