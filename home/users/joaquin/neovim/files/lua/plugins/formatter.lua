@@ -1,4 +1,5 @@
-vim.g.lazyvim_prettier_needs_config = true
+---@type conform.FiletypeFormatter
+local biomePrettierFormatters = { "prettier", "biome-check", stop_after_first = true }
 
 local M = {
   {
@@ -9,7 +10,18 @@ local M = {
     opts = {
       default_format_opts = {},
       formatters_by_ft = {
-        html = { "prettier", "biome-check", stop_after_first = true },
+        astro = biomePrettierFormatters,
+        css = biomePrettierFormatters,
+        graphql = biomePrettierFormatters,
+        html = biomePrettierFormatters,
+        javascript = biomePrettierFormatters,
+        javascriptreact = biomePrettierFormatters,
+        json = biomePrettierFormatters,
+        jsonc = biomePrettierFormatters,
+        svelte = biomePrettierFormatters,
+        typescript = biomePrettierFormatters,
+        typescriptreact = biomePrettierFormatters,
+
         lua = { "stylua" },
         php = { "pint" },
         blade = { "prettier" },
@@ -30,26 +42,6 @@ local M = {
         },
       },
     },
-  },
-  {
-    "stevearc/conform.nvim",
-    ---@module "conform.types"
-    ---@param opts conform.setupOpts
-    opts = function(_, opts)
-      for ft, formatters in pairs(opts.formatters_by_ft) do
-        if type(formatters) == "table" then
-          for i, formatter in ipairs(formatters) do
-            if formatter == "biome" then
-              opts.formatters_by_ft[ft][i] = "biome-check"
-              if vim.list_contains(formatters, "prettier") and opts.formatters_by_ft[ft].stop_after_first == nil then
-                opts.formatters_by_ft[ft].stop_after_first = true
-              end
-              break
-            end
-          end
-        end
-      end
-    end,
   },
 }
 
