@@ -138,6 +138,7 @@
           pyright
           ripgrep
           ruff
+          rust-analyzer
           shellcheck
           shfmt
           sqlfluff
