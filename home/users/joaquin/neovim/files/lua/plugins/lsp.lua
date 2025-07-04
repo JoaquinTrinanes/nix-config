@@ -205,7 +205,24 @@ local M = {
     end,
   },
   {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    event = "LazyFile",
+    opts = {
+      enable_autocmd = false,
+    },
+    config = function(_, opts)
+      require("ts_context_commentstring").setup(opts)
+
+      local get_option = vim.filetype.get_option
+      vim.filetype.get_option = function(filetype, option)
+        return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
+          or get_option(filetype, option)
+      end
+    end,
+  },
+  {
     "folke/ts-comments.nvim",
+    enabled = false,
     optional = true,
     opts = {
       lang = {
@@ -223,6 +240,34 @@ local M = {
   },
   {
     "nvim-treesitter/nvim-treesitter",
+    build = {
+      ":TSUpdate",
+      -- patch the JSX highlights so it doesn't inject its own commentstring
+      -- this fixes the native integration of nvim-ts-context-commentstring
+      function(plugin)
+        local query_file = plugin.dir .. "/queries/jsx/highlights.scm"
+
+        if not vim.uv.fs_stat(query_file) or vim.fn.filewritable(query_file) == 0 then
+          return
+        end
+
+        local lines = vim.fn.readfile(query_file)
+        local new_lines = {}
+        local modified = false
+
+        for _, line in ipairs(lines) do
+          local new_line, count = line:gsub("%s*%(#set![^)]*bo%.commentstring[^)]*%)", "")
+          if count > 0 then
+            modified = true
+          end
+          table.insert(new_lines, new_line)
+        end
+
+        if modified then
+          vim.fn.writefile(new_lines, query_file)
+        end
+      end,
+    },
     opts = function(_, opts)
       if vim.g.usePluginsFromStore then
         opts.ensure_installed = {}
