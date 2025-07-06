@@ -205,24 +205,7 @@ local M = {
     end,
   },
   {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    event = "LazyFile",
-    opts = {
-      enable_autocmd = false,
-    },
-    config = function(_, opts)
-      require("ts_context_commentstring").setup(opts)
-
-      local get_option = vim.filetype.get_option
-      vim.filetype.get_option = function(filetype, option)
-        return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
-          or get_option(filetype, option)
-      end
-    end,
-  },
-  {
     "folke/ts-comments.nvim",
-    enabled = false,
     optional = true,
     opts = {
       lang = {
@@ -243,7 +226,7 @@ local M = {
     build = {
       ":TSUpdate",
       -- patch the JSX highlights so it doesn't inject its own commentstring
-      -- this fixes the native integration of nvim-ts-context-commentstring
+      -- this fixes toggling some `//` comments wrapping it around `{/* */}`
       function(plugin)
         local query_file = plugin.dir .. "/queries/jsx/highlights.scm"
 
