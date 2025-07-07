@@ -44,6 +44,28 @@ local M = {
       },
     },
   },
+  {
+    -- disable LazyVim's LSP formatter. That's already handled by conform.nvim
+    "my/formatter-resolver-override",
+    event = "LazyFile",
+    virtual = true,
+    init = function()
+      local format_util = require("lazyvim.util.format")
+
+      local original_resolve = format_util.resolve
+
+      format_util.resolve = function(...)
+        local resolved = original_resolve(...)
+
+        return vim
+          .iter(resolved)
+          :filter(function(formatter)
+            return formatter.name ~= "LSP"
+          end)
+          :totable()
+      end
+    end,
+  },
 }
 
 return M
