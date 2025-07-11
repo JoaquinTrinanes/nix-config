@@ -2,6 +2,10 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+---@param mode string|string[]
+---@param lhs string
+---@param rhs string|function
+---@param opts? vim.keymap.set.Opts
 local function map(mode, lhs, rhs, opts)
   local options = { noremap = true }
   if opts then
@@ -113,3 +117,15 @@ map("n", "<leader>w", "<c-w>", { desc = "Windows", remap = true })
 map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
+
+map("n", "<Tab>", function()
+  local line = vim.fn.line(".")
+  local fold_level = vim.fn.foldlevel(line)
+
+  -- Only toggle if there's a fold on this line
+  if fold_level > 0 then
+    vim.cmd("normal! za")
+  end
+end, {
+  desc = "Toggle fold under cursor",
+})
