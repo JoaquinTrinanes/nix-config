@@ -127,14 +127,18 @@ in
     age-plugin-yubikey
     coreutils
     fd
+    findutils.locate
     fzf
     git
     htop
     jc
     jq
     ldns
+    lm_sensors
     lshw
     lsof
+    man-pages
+    minisign
     openssl
     pciutils
     powertop
@@ -142,6 +146,7 @@ in
     sd
     srm
     unzip
+    usbutils
     wget
   ];
 

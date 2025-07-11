@@ -123,6 +123,9 @@
       inherit (pkgs)
         ast-grep
         enpass
+        glow
+        ffmpeg
+        imagemagick
         mergiraf
         ;
       topiary =
