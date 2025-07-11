@@ -110,7 +110,54 @@ local M = {
       return opts
     end,
   },
-  { "julienvincent/hunk.nvim", cmd = { "DiffEditor" }, opts = {} },
+  {
+    "julienvincent/hunk.nvim",
+    cmd = { "DiffEditor" },
+    opts = {
+      hooks = {
+        ---@class HunkTree
+        ---@class HunkChangeset
+        ---@field filepath string
+        ---@field hunks { left: [number, number]; right: [number, number] }[]
+        ---@field left_filepath string
+        ---@field right_filepath string
+        ---@field selected boolean
+        ---@field selected_lines { left: integer[]; right: integer[]; }
+        ---@field type "added" | "modified" | "deleted"
+        ---@class HunkTreeMountOpts
+        ---@field changeset table<string, HunkChangeset>
+        ---@field on_open fun(change: HunkChangeset, opts: {tree: HunkTree?; })
+        ---@class HunkContext
+        ---@field buf integer
+        ---@field opts HunkTreeMountOpts
+        ---@field tree table
+        ---@param context HunkContext
+        on_tree_mount = function(context)
+          vim.keymap.set("n", "<space>ff", function()
+            Snacks.picker.pick({
+              items = vim
+                .iter(context.opts.changeset)
+                ---@param v HunkChangeset
+                :map(function(k, v)
+                  ---@type snacks.picker.Item
+                  return { file = v.filepath, text = k, change = v }
+                end)
+                :totable(),
+              confirm = function(picker, item)
+                context.opts.on_open(item.change, { tree = context.tree })
+              end,
+            })
+          end, { desc = "Find files in diff" })
+        end,
+      },
+      ui = {
+        tree = {
+          mode = "flat",
+          -- width = 100,
+        },
+      },
+    },
+  },
   {
     "echasnovski/mini.splitjoin",
     opts = { mappings = { toggle = "gS", split = "", join = "" } },
