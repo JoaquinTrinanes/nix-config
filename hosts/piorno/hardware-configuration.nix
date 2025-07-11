@@ -16,6 +16,8 @@
 
   hardware.amdgpu.opencl.enable = true;
 
+  services.switcherooControl.enable = true;
+
   boot.initrd.systemd.enable = true;
 
   environment.systemPackages = builtins.attrValues { inherit (pkgs.nvtopPackages) amd; };
