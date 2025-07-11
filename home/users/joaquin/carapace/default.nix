@@ -16,7 +16,6 @@ in
 {
   programs.carapace = {
     enable = true;
-    enableFishIntegration = false;
     package = pkgs.my.mkWrapper {
       basePackage = pkgs.carapace;
       pathAdd = [ config.programs.fish.package ];

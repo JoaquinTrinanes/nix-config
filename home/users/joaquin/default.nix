@@ -18,6 +18,10 @@
     ./wireplumber
   ];
 
+  home.shell = {
+    enableFishIntegration = false;
+  };
+
   accounts.email.accounts = {
     primary = {
       primary = true;
