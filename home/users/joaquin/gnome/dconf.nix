@@ -33,6 +33,15 @@ in
       two-finger-scrolling-enabled = true;
       natural-scroll = true;
     };
+    "org/gnome/settings-daemon/plugins/power" = {
+      ambient-enabled = false;
+      power-saver-profile-on-low-battery = true;
+    };
+    "org/gnome/TextEditor" = {
+      highlight-current-line = true;
+      show-line-numbers = true;
+      show-map = true;
+    };
     "org/gnome/tweaks" = {
       show-extensions-notice = false;
     };
@@ -45,9 +54,9 @@ in
               or (if ((lib.length (pkg.desktopItems or [ ])) != 0) then lib.head pkg.desktopItems else null);
           getName = pkg: (getDesktopItem pkg).name;
         in
-        [ "org.gnome.Nautilus.desktop" ]
-        ++ [ (getName inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.firefox) ]
-        ++ [
+        [
+          "org.gnome.Nautilus.desktop"
+          (getName inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.firefox)
           (getName pkgs.vesktop)
           "com.mitchellh.ghostty.desktop"
         ];
@@ -64,6 +73,14 @@ in
       icon-theme = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
       gtk-theme = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
       cursor-size = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
+    };
+    "org/gnome/desktop/a11y/interface" = {
+      enable-animations = true;
+      high-contrast = false;
+    };
+    "org/gnome/desktop/a11y/keyboard" = {
+      togglekeys-enable = false;
+      show-status-shapes = false;
     };
     "org/gnome/mutter" = {
       edge-tiling = true;
