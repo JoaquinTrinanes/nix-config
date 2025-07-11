@@ -207,16 +207,23 @@
     enable = true;
     settings = {
       add_newline = true;
+      # continuation_prompt = "::: ";
       continuation_prompt = "    ";
       character = {
-        success_symbol = "[;](bold fg:green)";
-        error_symbol = "[;](bold fg:blue)";
+        success_symbol = "[➜](bold fg:green)";
+        error_symbol = "[➜](bold fg:blue)";
+        # success_symbol = "[;](bold fg:green)";
+        # error_symbol = "[;](bold fg:blue)";
       };
       aws.disabled = true;
       directory.truncation_length = 5;
-      php.format = "via [$symbol]($style)";
 
-      python.format = "via [\${symbol}\${pyenv_prefix}(\${version})]($style) ";
+      git_branch = {
+        only_attached = true;
+      };
+      git_status = {
+        disabled = true;
+      };
       status = {
         disabled = false;
         symbol = "✘";
@@ -226,6 +233,7 @@
         nu_indicator = "";
       };
     };
+
   };
 
   xdg.configFile."pnpm/rc".source =
