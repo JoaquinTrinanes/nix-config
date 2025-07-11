@@ -19,8 +19,10 @@
   services.tailscale.enable = false;
   services.tailscale.extraUpFlags = [ "--advertise-tags=tag:desktop" ];
 
-  boot.tmp.cleanOnBoot = true;
-  boot.tmp.useTmpfs = false;
+  boot.tmp = lib.mkDefault {
+    cleanOnBoot = true;
+    useTmpfs = false;
+  };
 
   nix.settings.trusted-users = [ "@wheel" ];
 
@@ -31,6 +33,8 @@
       argument = "${config.users.users."joaquin".home}/Documents/nix-config/flake.nix";
     };
   };
+
+  environment.systemPackages = builtins.attrValues { inherit (pkgs) bubblewrap; };
 
   users.groups = {
     "joaquin" = {
