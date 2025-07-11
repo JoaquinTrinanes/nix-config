@@ -63,6 +63,13 @@ in
   xdg.configFile."tridactyl/tridactylrc".text =
     let
       ytRegex = "${lib.escapeRegex "youtube.com/watch?"}v=.*";
+      urlsToIgnore = map lib.escapeRegex [
+        "figma.com"
+        "discourse.nixos.org"
+        "web.stremio.com"
+        "https://console.hetzner.cloud/console/"
+        "https://typst.app/project/"
+      ];
     in
     # vim
     ''
@@ -81,9 +88,20 @@ in
       unbindurl ${ytRegex} t
       unbindurl ${ytRegex} f
       unbindurl ${ytRegex} <Space>
+      seturl ${ytRegex} modeindicator false
 
       seturl ${ytRegex} modeindicator false
 
+      unbindurl ${lib.escapeRegex "figma.com"}
+
+      ${lib.concatLines (
+        map (url: ''
+          blacklistadd ${url}
+          seturl ${url} modeindicator false
+        '') urlsToIgnore
+      )}
+
+      seturl ^https?://localhost noiframe true
       " seturl localhost superignore true
 
       " Whether to allow pages (not necessarily github) to override /, which is a default Firefox binding.
