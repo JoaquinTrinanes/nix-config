@@ -316,6 +316,7 @@
     daemon.enable = true;
     settings = {
       auto_sync = false;
+      sync_address = "https://atuin.joaquint.io";
       sync.records = true;
       dotfiles.enable = true;
       history_filter = [ "^\\s+" ];
