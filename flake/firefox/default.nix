@@ -26,6 +26,7 @@
                 "{9a41dee2-b924-4161-a971-7fb35c053a4a}" # enhanced-h264ify.
                 "idcac-pub@guus.ninja" # I still don't care about cookies
                 "redirector@einaregilsson.com"
+                "{b5501fd1-7084-45c5-9aa6-567c2fcf5dc6}" # Ruffle flash emulator
               ];
             in
             (lib.genAttrs hiddenExtensions (name: mkExtension { inherit name; }))
@@ -103,7 +104,7 @@
 
               "security.ssl.treat_unsafe_negotiation_as_broken" = true;
 
-              # Unhide the “add exception” button on the SSL error page, allowing users to directly accept a bad certificate
+              # Unhide the "add exception" button on the SSL error page, allowing users to directly accept a bad certificate
               "browser.xul.error_pages.expert_bad_cert" = true;
 
               "app.normandy.enabled" = false;
@@ -112,6 +113,7 @@
               "breakpad.reportURL" = "";
               "datareporting.healthreport.uploadEnabled" = false;
               "devtools.screenshot.audio.enabled" = false;
+              # "privacy.resistFingerprinting" = true;
               "privacy.donottrackheader.enabled" = true;
               "privacy.globalprivacycontrol.enabled" = true;
 
@@ -281,6 +283,33 @@
               # "network.http.referer.spoofSource" = false; # false=real referer, true=spoof referer (use target URI as referer)
               # "network.http.referer.trimmingPolicy" = 2; # 0 = full URI, 1 = scheme+host+port+path, 2 = scheme+host+port
 
+              "media.eme.enabled" = true; # enable DRM, needed for playing MP4 videos :(
+
+              "browser.tabs.groups.enabled" = true;
+
+              "sidebar.revamp" = true;
+              "sidebar.revamp.round-content-area" = true;
+              "sidebar.verticalTabs" = true;
+              "sidebar.position_start" = true;
+
+              "intl.accept_languages" = lib.concatStringsSep ", " [
+                "en-US"
+                "en"
+              ];
+              "extensions.webextensions.restrictedDomains" = lib.concatStringsSep "" [
+                # "accounts-static.cdn.mozilla.net"
+                # "accounts.firefox.com"
+                # "addons.cdn.mozilla.net"
+                # "addons.mozilla.org"
+                # "api.accounts.firefox.com"
+                # "content.cdn.mozilla.net"
+                # "discovery.addons.mozilla.org"
+                # "install.mozilla.org"
+                # "oauth.accounts.firefox.com"
+                # "profile.accounts.firefox.com"
+                # "support.mozilla.org"
+                # "sync.services.mozilla.com"
+              ];
             }
           );
       };
@@ -329,7 +358,7 @@
           status ? "user",
         }:
         ''
-          ${statusFunctionName.${status}}("${name}", ${builtins.toJSON value});
+          ${statusFunctionName.${status}}(${builtins.toJSON name}, ${builtins.toJSON value});
         '';
     in
     {
