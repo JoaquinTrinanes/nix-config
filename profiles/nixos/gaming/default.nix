@@ -51,11 +51,15 @@ in
       ++ builtins.attrValues {
         inherit (pkgs)
           heroic
-          itch
           lutris
           mangohud
           wine
           ;
+        itch = pkgs.my.mkWrapper {
+          basePackage = pkgs.itch;
+          pathAdd = [ pkgs.firejail ];
+        };
+        inherit (pkgs.wineWowPackages) stable;
       };
   };
 }
