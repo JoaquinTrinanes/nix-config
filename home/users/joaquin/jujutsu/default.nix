@@ -35,6 +35,7 @@ in
         auto-local-bookmark = false;
         private-commits = "private()";
         sign-on-push = config.programs.git.signing.signByDefault;
+        push-new-bookmarks = false;
       };
       fix.tools = {
         prettier = {
@@ -92,8 +93,6 @@ in
 
         "user(x)" = "author(x) | committer(x)";
 
-        "undescribed()" = ''description(exact:"")'';
-
         # useful for overriding in repo config
         "original_private()" = ''description(glob:"private:*") & mine()'';
         "private()" = "original_private()";
@@ -128,6 +127,7 @@ in
       };
       revsets = {
         log = "coalesce(stack() | trunk(), default())";
+        short-prefixes = "stack() | trunk() | heads(default())";
       };
       merge-tools = {
         hunk = {
@@ -140,7 +140,6 @@ in
         };
       };
       ui = {
-        diff-editor = "hunk";
         always-allow-large-revsets = true;
         bookmark-list-sort-keys = [
           "author-date-"
@@ -148,6 +147,7 @@ in
           "name"
         ];
         default-command = [ "log" ];
+        diff-editor = "hunk";
       };
       colors = {
         "diff added" = {
@@ -159,6 +159,10 @@ in
         bookmarks = {
           bold = true;
           fg = "magenta";
+        };
+        "text link" = {
+          fg = "blue";
+          underline = true;
         };
       };
       templates = {
@@ -173,6 +177,14 @@ in
       };
       template-aliases = {
         desc = "builtin_log_compact_full_description";
+        "ellipsis(content, width)" = "truncate_end(width, content, '…')";
+        "link(url, text)" = ''
+          concat(
+            raw_escape_sequence("\e]8;;" ++ url ++ "\e\\"),
+            label("text link", text),
+            raw_escape_sequence("\e]8;;\e\\"),
+          )
+        '';
       };
       aliases = {
         a = [ "abandon" ];
@@ -214,8 +226,15 @@ in
           "-r"
           "::@"
         ];
-        # jls = [
+        ls = [
+          "file"
+          "list"
+        ];
         n = [ "new" ];
+        nt = [
+          "new"
+          "trunk()"
+        ];
         na = [
           "new"
           "--no-edit"
@@ -238,6 +257,25 @@ in
           "push"
         ];
         r = [ "rebase" ];
+        reheat = [
+          "rebase"
+          "-d"
+          "trunk()"
+          "-s"
+          "all:roots(trunk()..stack(@))"
+        ];
+        retrunk = [
+          "rebase"
+          "-d"
+          "trunk()"
+        ];
+        reheat-all = [
+          "rebase"
+          "-s"
+          "all:roots(open())"
+          "-d"
+          "trunk()"
+        ];
         s = [ "status" ];
         sq = [ "squash" ];
         squp = [
@@ -249,9 +287,6 @@ in
           "log"
           "-r"
           ''author_date(after:"yesterday") & mine()''
-          "--no-graph"
-          "-T"
-          "builtin_log_comfortable"
         ];
         t = [ "tug" ];
         tug = [
@@ -261,13 +296,6 @@ in
           "closest_public_bookmarks(@)"
           "--to"
           "closest_pushable(@)"
-        ];
-        up = [
-          "rebase"
-          "-b"
-          "@"
-          "-d"
-          "trunk()"
         ];
       };
     };
@@ -279,10 +307,9 @@ in
 
   programs.git.ignores = lib.mkIf config.programs.jujutsu.enable [ ".jj/" ];
 
-  programs.starship.settings = {
+  programs.starship.settings = lib.mkIf config.programs.jujutsu.enable {
     custom = {
       jj-op = {
-        when = "jj --ignore-working-copy workspace root";
         detect_folders = [ ".jj" ];
         format = ''(\[[$symbol](blue) [$output]($style)\] )'';
         symbol = "op";
