@@ -290,6 +290,7 @@ in
           ls .jj/repo/op_heads/heads | head -c 4
         '';
         shell = "bash";
+        description = "Current jj operation id";
       };
     };
   };
