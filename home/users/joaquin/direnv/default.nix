@@ -15,22 +15,9 @@
       ''
     ];
     config = {
-      # bash_path = "";
-
-      # disable_stdin = false;
-      load_dotenv = true;
-
-      # load with set -euo pipefail
+      # load_dotenv = true;
       strict_env = true;
-
-      # warn_timeout = "5s";
-
       hide_env_diff = true;
-
-      # whitelist = {
-      #   prefix = [];
-      #   exact = [];
-      # };
     };
   };
 
