@@ -15,19 +15,18 @@ in
   config = lib.mkIf cfg.enable {
     fonts.packages = with pkgs; [
       nerd-fonts.fira-code
-      maple-mono.variable
       dejavu_fonts
       joypixels
       noto-fonts
       noto-fonts-cjk-sans
       unscii
       nerd-fonts.symbols-only
+      fira-code
     ];
     fonts.fontconfig = lib.mkDefault {
       defaultFonts = {
         monospace = [
           "FiraCode Nerd Font"
-          "Maple Mono"
           "Noto Sans Mono CJK HK"
           "Noto Sans Mono CJK JP"
           "Noto Sans Mono CJK SC"
@@ -76,13 +75,12 @@ in
             ''
               <match target="font">
                 <test name="family" compare="eq" ignore-blanks="true">
-                  <string>${font}</string>
+                  <string>${lib.escapeXML font}</string>
                 </test>
                 <edit name="fontfeatures" mode="append">
                   ${lib.concatMapAttrsStringSep "\n" (
-                    name: value: "<string>${name} ${if value then "on" else "off"}</string>"
+                    name: value: lib.escapeXML "<string>${name} ${if value then "on" else "off"}</string>"
                   ) features}
-                  <!-- @ style -->
                 </edit>
               </match>
             '';
