@@ -107,7 +107,12 @@
   ];
 
   home = {
-    sessionVariables = lib.mkIf config.programs.neovim.enable { MANPAGER = "nvim +Man!"; };
+    sessionVariables = lib.mkMerge [
+      (lib.mkIf config.programs.neovim.enable { MANPAGER = "nvim +Man!"; })
+      {
+        CARGO_HOME = "${config.xdg.dataHome}/cargo";
+      }
+    ];
 
     packages = builtins.attrValues {
       nr = pkgs.writeShellScriptBin "nr" ''
