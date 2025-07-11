@@ -36,6 +36,7 @@
           treesitterParsers
         ];
       };
+      setPluginName = plugin: pname: plugin // { inherit pname; };
       devPlugins = builtins.attrValues {
         inherit (pkgs.vimPlugins)
           blink-cmp
@@ -50,7 +51,7 @@
           LazyVim
           SchemaStore-nvim
           bufferline-nvim
-          catppuccin-nvim
+          (setPluginName catppuccin-nvim "catppuccin")
           clangd_extensions-nvim
           conform-nvim
           crates-nvim
@@ -60,14 +61,14 @@
           gitsigns-nvim
           grug-far-nvim
           hardtime-nvim
-          harpoon2
+          (setPluginName harpoon2 "harpoon")
           hunk-nvim
           indent-blankline-nvim
           lazy-nvim
           lazydev-nvim
           lualine-lsp-progress
           lualine-nvim
-          luasnip
+          (setPluginName luasnip "LuaSnip")
           marks-nvim
           mason-lspconfig-nvim
           mason-nvim
@@ -87,6 +88,7 @@
           nvim-dap-ui
           nvim-lint
           nvim-lspconfig
+          nvim-navic
           nvim-nio
           nvim-snippets
           nvim-treesitter-context
@@ -152,31 +154,22 @@
           yaml-language-server
           ;
       };
-      pluginNameOverride = {
-        catppuccin-nvim = "catppuccin";
-        LuaSnip = "luasnip";
-        tailwindcss-colorizer-cmp = "tailwindcss-colorizer-cmp.nvim";
-        harpoon = "harpoon2";
-      };
       mkPluginPathMap =
         plugins:
         let
           getPluginSpecName =
             plugin:
-            let
-              name = plugin.pname or plugin.name;
-            in
-            if lib.hasAttr name pluginNameOverride then
-              pluginNameOverride.${name}
-            else if
-              lib.hasAttrByPath [
-                "src"
-                "repo"
-              ] plugin
-            then
-              "${plugin.src.owner}/${plugin.src.repo}"
-            else
-              name;
+            plugin.pname or (
+              if
+                lib.hasAttrByPath [
+                  "src"
+                  "repo"
+                ] plugin
+              then
+                "${plugin.src.owner}/${plugin.src.repo}"
+              else
+                lib.getName plugin
+            );
         in
         lib.listToAttrs (map (p: lib.nameValuePair (getPluginSpecName p) p) plugins);
       extraLuaPackages = ps: [
