@@ -22,6 +22,9 @@
 
   environment.systemPackages = builtins.attrValues { inherit (pkgs.nvtopPackages) amd; };
 
+  # fix flickering while promting for LUKS password, NixOS/nixpkgs#202846
+  hardware.amdgpu.initrd.enable = false;
+
   boot.loader.systemd-boot = {
     enable = true;
     configurationLimit = 10;
