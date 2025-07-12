@@ -23,7 +23,7 @@ local M = {
         typescriptreact = biomePrettierFormatters,
 
         lua = { "stylua" },
-        php = { "pint" },
+        php = { "pint", "php_cs_fixer", stop_after_first = true },
         blade = { "prettier" },
         typst = { "typstyle" },
         terraform = { "tofu_fmt", "terraform_fmt", stop_after_first = true },
