@@ -23,10 +23,6 @@ def 'nu-complete pnpm installed packages' [] {
     package_json | transpose depType deps | where depType =~ '(?i)dependencies$' | get deps | each {|it| $it | items {|k, v| {value: $k description: $v} } } | flatten | sort
 }
 
-def 'nu-complete pnpm cached packages' [] {
-    []
-}
-
 def 'nu-complete pnpm package binaries' [] {
     try {
         # more correct but orders of magnitude slower
@@ -53,14 +49,6 @@ def 'nu-complete pnpm' [] {
         ...$script_completions
     ] | uniq-by value | sort-by value
 }
-
-export extern rm [
-    package?: string@'nu-complete pnpm installed packages'
-]
-
-export extern install [
-    package?: string@'nu-complete pnpm cached packages'
-]
 
 export extern main [
     command?: string@'nu-complete pnpm'

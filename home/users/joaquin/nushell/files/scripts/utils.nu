@@ -1,7 +1,15 @@
-export def 'list intersection' [a: list, b: list] {
-    $a | where $it in $b | where $it in $b | uniq | each {|common|
-        let count_a = $a | where $it == $common | length
-        let count_b = $b | where $it == $common | length
+# Return the common values shared between two lists, including duplicates.
+#
+# Each value is kept as many times as it appears in both lists (based on the lower count).
+# Values not shared by both lists are removed.
+@example "Shared values between two lists" { [1 1 2 3 3 3] | intersection [1 3 3 4] } --result [1 3 3]
+@example "Shared values based on minimum count in both lists" { [1 1 2 3 3 3] | intersection [1 3 3 4] } --result [1 3 3]
+@example "Intersection of two ranges" { 4..10 | intersection 1..6 } --result [2 2]
+export def intersection [other]: [list -> list range -> range] {
+    let input = $in
+    $input | where $it in $other | where $it in $other | uniq | each {|common|
+        let count_a = $input | where $it == $common | length
+        let count_b = $other | where $it == $common | length
 
         [$count_a $count_b] | math min | 1..($in) | each { $common }
     } | flatten

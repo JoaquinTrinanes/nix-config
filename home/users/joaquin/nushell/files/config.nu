@@ -16,10 +16,7 @@ export-env {
         "INFOPATH": $esep_list_converter
         "LIBEXEC_PATH": $esep_list_converter
         "LS_COLORS": $esep_list_converter
-        "NU_LIB_DIRS": $esep_list_converter
-        "NU_PLUGIN_DIRS": $esep_list_converter
-        "PATH": $esep_list_converter
-        "Path": $esep_list_converter
+        "path": $esep_list_converter
         "QTWEBKIT_PLUGIN_PATH": $esep_list_converter
         "SESSION_MANAGER": $esep_list_converter
         "TERMINFO_DIRS": $esep_list_converter
@@ -47,7 +44,7 @@ let carapace_completer = {|spans|
 }
 
 let fish_completer = {|spans: list<string>|
-    fish --command $'complete "--do-complete=($spans | str join " ")"'
+    fish --command $"complete '--do-complete=($spans | str join ' ')'"
     | $"value(char tab)description(char newline)" + $in
     | from tsv --flexible --no-infer
 }
@@ -68,6 +65,8 @@ let external_completer = {|spans: list<string>|
         gpg => $fish_completer
         jj => $fish_completer
         nix => $fish_completer
+        pnpm => $fish_completer
+        man => null
         _ => $default_completer
     }
 
