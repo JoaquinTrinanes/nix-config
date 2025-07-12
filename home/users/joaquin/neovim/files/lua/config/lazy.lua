@@ -88,7 +88,7 @@ local lazyoptions = {
 }
 
 for name, path in pairs(vim.g.pluginPathMap or {}) do
-  table.insert(lazyoptions.spec, 1, { name, dir = path })
+  lazyoptions.spec[#lazyoptions.spec + 1] = { name, dir = path }
 end
 
 require("lazy").setup(vim.tbl_deep_extend("force", lazyoptions, vim.g.lazyOptions or {}))
