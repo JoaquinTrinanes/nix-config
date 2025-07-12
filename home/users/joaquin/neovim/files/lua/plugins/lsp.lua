@@ -68,13 +68,6 @@ local M = {
         },
         ["rust_analyzer"] = {
           mason = false,
-          checkOnSave = {
-            extraArgs = {
-              -- -- prevent blocking compilation while indexing
-              -- "--target-dir",
-              -- "/tmp/rust-analyzer-check",
-            },
-          },
         },
         intelephense = {
           mason = false,

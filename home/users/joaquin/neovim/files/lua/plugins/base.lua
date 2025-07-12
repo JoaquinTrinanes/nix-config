@@ -2,6 +2,20 @@ local M = {
   {
     "folke/snacks.nvim",
     optional = true,
+    keys = {
+      {
+        "<leader>n",
+        function()
+          if Snacks.config.picker and Snacks.config.picker.enabled then
+            -- added the { confirm = { ... } } part
+            Snacks.picker.notifications({ confirm = { "copy", "close" } })
+          else
+            Snacks.notifier.show_history()
+          end
+        end,
+        desc = "Notification History",
+      },
+    },
     ---@module 'snacks'
     ---@type snacks.Config
     opts = {
@@ -15,20 +29,6 @@ local M = {
 ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
 ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
 ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
-          --  header = [[
-          --        ⠀⠀⢀⣀⣠⣤⣤⣶⣶⣿⣷⣆⠀⠀⠀⠀
-          -- ⠀⠀⠀⢀⣤⣤⣶⣶⣾⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⡆⠀⠀⠀
-          -- ⠀⢀⣴⣿⣿⣿⣿⣿⣿⡿⠛⠉⠉⠀⠀⠀⣿⣿⣿⣿⣷⠀⠀⠀
-          -- ⣠⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⢤⣶⣾⠿⢿⣿⣿⣿⣿⣇⠀⠀
-          -- ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠈⠉⠀⠀⠀⣿⣿⣿⣿⣿⡆⠀
-          -- ⢸⣿⣿⣿⣏⣿⣿⣿⣿⣿⣷⠀⠀⢠⣤⣶⣿⣿⣿⣿⣿⣿⣿⡀
-          -- ⠀⢿⣿⣿⣿⡸⣿⣿⣿⣿⣿⣇⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣧
-          -- ⠀⠸⣿⣿⣿⣷⢹⣿⣿⣿⣿⣿⣄⣀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿
-          -- ⠀⠀⢻⣿⣿⣿⡇⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-          -- ⠀⠀⠘⣿⣿⣿⣿⠘⠻⠿⢛⣛⣭⣽⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿
-          -- ⠀⠀⠀⢹⣿⣿⠏⠀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠋
-          -- ⠀⠀⠀⠈⣿⠏⠀⣰⣿⣿⣿⣿⣿⣿⠿⠟⠛⠋⠉⠀⠀⠀⠀⠀
-          -- ⠀⠀⠀⠀⠀⠀⢠⡿⠿⠛⠋⠉⠀⠀⠀⠀        ]],
         },
       },
       image = { enabled = false },
@@ -45,16 +45,10 @@ local M = {
           },
         },
         win = {
-          list = {
-            keys = {
-              ["<C-y>"] = { "confirm", mode = { "n", "i" } },
-            },
-          },
           input = {
             keys = {
               ["<C-y>"] = { "confirm", mode = { "n", "i" } },
 
-              -- ["<a-p>"] = { "" },
               ["<A-f>"] = false,
               ["<A-h>"] = false,
               ["<A-i>"] = false,
@@ -64,7 +58,6 @@ local M = {
               ["<C-h>"] = { "toggle_hidden", mode = { "i", "n" } },
               ["<C-i>"] = { "toggle_ignored", mode = { "i", "n" } },
               ["<C-m>"] = { "toggle_maximize", mode = { "i", "n" } },
-              -- ["<C-c>"] = { "", mode = { "i", "n" } },
             },
           },
         },
@@ -133,6 +126,20 @@ local M = {
         ---@field tree table
         ---@param context HunkContext
         on_tree_mount = function(context)
+          if vim.fn.hasmapto("j", "n") == 1 then
+            vim.keymap.set({ "n", "x" }, "j", "j", {
+              nowait = true,
+              buffer = context.buf,
+            })
+          end
+
+          if vim.fn.hasmapto("k", "n") == 1 then
+            vim.keymap.set({ "n", "x" }, "k", "k", {
+              nowait = true,
+              buffer = context.buf,
+            })
+          end
+
           vim.keymap.set("n", "<space>ff", function()
             Snacks.picker.pick({
               items = vim
@@ -155,6 +162,22 @@ local M = {
           mode = "flat",
           -- width = 100,
         },
+      },
+    },
+  },
+  {
+    "ibhagwan/fzf-lua",
+    optional = true,
+    opts = {
+      "hide",
+      "fzf-native",
+      lsp = { code_actions = { winopts = { relative = "cursor", backdrop = 100, row = 1 } } },
+      keymap = {
+        builtin = { true, ["<C-c>"] = "hide" },
+        fzf = { true, ["ctrl-y"] = "accept" },
+      },
+      fzf_opts = {
+        ["--cycle"] = true,
       },
     },
   },
