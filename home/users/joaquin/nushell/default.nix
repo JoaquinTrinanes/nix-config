@@ -20,7 +20,7 @@ let
 
   nushellWrapped =
     let
-      pluginFile =
+      customPluginFile =
         let
           pluginExprs = map (plugin: "plugin add ${lib.getExe plugin}") config.programs.nushell.plugins;
         in
@@ -44,7 +44,7 @@ let
         in
         [
           "--plugin-config"
-          pluginFile
+          customPluginFile
         ]
         ++ lib.optionals configFileSource.success [
           "--config"
@@ -72,6 +72,10 @@ in
   programs.nushell = {
     enable = lib.mkDefault true;
     package = nushellWrapped;
+
+    shellAliases = {
+      fg = "job unfreeze";
+    };
 
     plugins = builtins.attrValues {
       inherit (nushellNightlyPkgs)
