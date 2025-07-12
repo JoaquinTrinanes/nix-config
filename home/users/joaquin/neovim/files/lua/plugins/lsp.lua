@@ -5,7 +5,7 @@ local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
 local M = {
   {
     "neovim/nvim-lspconfig",
-    ---@module "lspconfig"
+    ---@module "lazyvim.plugins.lsp"
     ---@type PluginLspOpts
     opts = {
       diagnostics = {
@@ -20,6 +20,7 @@ local M = {
       ---@module "lspconfig"
       ---@type table<string, lspconfig.Config>
       servers = {
+        html = {},
         eslint = {
           settings = {
             rulesCustomizations = {
@@ -54,7 +55,6 @@ local M = {
                   classNamePropNameRegex
                     .. [[\s*[:=]\s*]]
                     .. quotedStringRegex
-                    -- {
                     .. [[\s*}]],
                   -- classNames(...)
                   { [[class[nN]ames\(([^)]*)\)]], quotedStringRegex },
@@ -154,7 +154,7 @@ local M = {
         tinymist = { mason = false },
       },
       ---@module "lspconfig"
-      ---@type table<string, fun(server:string, opts:lspconfig.Config):boolean?>
+      ---@type table<string, fun(server: string, opts: lspconfig.Config): boolean?>
       setup = {},
     },
   },
@@ -163,6 +163,7 @@ local M = {
     opts = {
       linters_by_ft = {
         sh = { "shellcheck" },
+        bash = { "shellcheck" },
         php = {},
         nix = { "statix", "deadnix" },
       },
@@ -177,8 +178,9 @@ local M = {
             if name == nil then
               return false
             end
+            local is_dotenv = name == ".env" or name == ".envrc" or vim.startswith(name, ".env.")
 
-            return name == ".env" or name == ".envrc" or vim.startswith(name, ".env.")
+            return not is_dotenv
           end,
         },
       },
@@ -217,6 +219,8 @@ local M = {
   {
     "folke/noice.nvim",
     optional = true,
+    ---@module 'noice'
+    ---@type NoiceConfig
     opts = {
       lsp = { hover = { silent = true } },
     },
