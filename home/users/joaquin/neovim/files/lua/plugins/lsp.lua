@@ -160,6 +160,20 @@ local M = {
   },
   {
     "mfussenegger/nvim-lint",
+    opts = function()
+      local lint = require("lint")
+      local original_terraform_validate = lint.linters.terraform_validate
+      lint.linters.terraform_validate = function()
+        local terraform_validate = original_terraform_validate()
+        terraform_validate.cmd = vim.env.TERRAFORM_BINARY_NAME
+          or vim.fn.executable("tofu") == 1 and "tofu"
+          or "terraform"
+        return terraform_validate
+      end
+    end,
+  },
+  {
+    "mfussenegger/nvim-lint",
     opts = {
       linters_by_ft = {
         sh = { "shellcheck" },

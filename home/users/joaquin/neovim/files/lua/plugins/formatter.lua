@@ -26,6 +26,7 @@ local M = {
         php = { "pint" },
         blade = { "prettier" },
         typst = { "typstyle" },
+        terraform = { "tofu_fmt", "terraform_fmt", stop_after_first = true },
         nu = { "topiary_nu" },
         ["_"] = {
           "trim_whitespace",
