@@ -34,15 +34,15 @@ local M = {
             sp = colors.subtext0,
           },
           Added = { fg = colors.blue },
+          diffAdded = { link = "Added" },
           DiffAdd = { bg = U.darken(colors.blue, 0.18, colors.base) },
-          -- diffAdded = { link = "Added" },
 
           Removed = { fg = colors.red },
+          diffRemoved = { link = "Removed" },
           DiffDelete = { bg = U.darken(colors.red, 0.18, colors.base) },
-          -- diffRemoved = { link = "Removed" },
 
           Changed = { fg = colors.yellow },
-          -- diffChanged = { link = "Changed" },
+          diffChanged = { link = "Changed" },
           DiffChange = { bg = U.darken(colors.yellow, 0.07, colors.base) },
         }
       end,
