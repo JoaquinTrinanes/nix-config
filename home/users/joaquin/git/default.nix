@@ -5,15 +5,42 @@
   ...
 }:
 {
-  imports = [
-    ./aliases.nix
-  ];
-
   home.packages = builtins.attrValues {
     inherit (pkgs)
       git-branchless
       git-extras
       ;
+  };
+
+  home.shellAliases = {
+    g = "git";
+    ga = "git add";
+
+    gb = "git branch";
+    gbd = "git branch --delete";
+    gbD = "git branch --delete --force";
+
+    gco = "git checkout";
+    gcp = "git cherry-pick";
+
+    gd = "git diff";
+
+    gf = "git fetch";
+
+    gl = "git pull";
+
+    gm = "git merge";
+    gma = "git merge --abort";
+
+    gp = "git push";
+    gpf = "git push --force-with-lease";
+    "gpf!" = "git push --force";
+
+    grb = "git rebase";
+    grba = "git rebase --abort";
+    grbc = "git rebase --continue";
+
+    gs = "git status --short --branch";
   };
 
   programs.git = {
@@ -147,6 +174,19 @@
       "Temporary Items"
       ".apdisk"
     ];
+    aliases = {
+      a = "add";
+      b = "branch -vv";
+      c = "commit";
+      co = "checkout";
+      cp = "cherry-pick";
+      d = "diff";
+      p = "push";
+      pf = "push --force-with-lease";
+      pnv = "push --no-verify";
+      s = "status --short --branch";
+      up = "pull --rebase";
+    };
   };
   programs.lazygit = {
     enable = true;
