@@ -102,21 +102,6 @@ end
 
 config.check_for_updates = false
 
-config.term = "wezterm"
-
-config.front_end = "OpenGL"
--- if os.getenv("VK_ICD_FILENAMES") then
-config.front_end = "WebGpu"
--- end
-
--- if enabled and on WebGpu, fails with 'Failed to create window: no compatible adapter found' error
--- config.webgpu_force_fallback_adapter = true
-
-config.webgpu_power_preference = "LowPower"
-
--- fixes crashing when using fractional scaling
-config.adjust_window_size_when_changing_font_size = true
-
 local mux = wezterm.mux
 wezterm.on("gui-attached", function(domain)
 	-- maximize all displayed windows on startup
@@ -174,12 +159,6 @@ config.font = wezterm.font_with_fallback({
 -- }
 
 config.tab_max_width = 999999
-
--- config.window_decorations = "INTEGRATED_BUTTONS | RESIZE | TITLE"
--- config.window_decorations = "RESIZE|TITLE"
-config.window_decorations = "TITLE | RESIZE"
-config.hide_tab_bar_if_only_one_tab = false -- true
-config.use_fancy_tab_bar = false
 
 config.font_size = 16
 ---@diagnostic disable-next-line: assign-type-mismatch
