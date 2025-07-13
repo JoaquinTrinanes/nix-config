@@ -1,18 +1,12 @@
-# theme = light:catppuccin-latte,dark:catppuccin-frappe
 cursor-click-to-move = true
-# background-opacity = 0.85
-# background-blur-radius = 20
 
-# minimum-contrast = 1.1
-
-# start maximized
 maximize = true
 
 window-padding-y = 4
 window-padding-x = 4
 window-padding-balance = true
 
-font-size = 14
+font-size = 12
 
 keybind = ctrl+alt+minus=new_split:down
 keybind = ctrl+alt+backslash=new_split:right
@@ -26,10 +20,13 @@ keybind = alt+h=goto_split:left
 keybind = alt+j=goto_split:down
 keybind = alt+l=goto_split:right
 
-# keybind = ctrl+k=goto_split:up
-# keybind = ctrl+h=goto_split:left
-# keybind = ctrl+j=goto_split:down
-# keybind = ctrl+l=goto_split:right
+keybind = ctrl+shift+h=resize_split:left,100
+keybind = ctrl+shift+j=resize_split:down,100
+keybind = ctrl+shift+k=resize_split:up,100
+keybind = ctrl+shift+l=resize_split:right,100
+
+keybind = ctrl+alt+h=previous_tab
+keybind = ctrl+alt+l=next_tab
 
 font-family = monospace
 font-feature = ss05
