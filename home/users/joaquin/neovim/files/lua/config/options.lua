@@ -1,5 +1,8 @@
 local opt = vim.opt
 
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
 opt.confirm = true
 
 opt.number = true
@@ -29,7 +32,12 @@ opt.smoothscroll = true
 if vim.env.COLORTERM == nil then
   opt.pumblend = 0 -- Popup blend
   opt.termguicolors = false
+else
+  opt.pumblend = 10
+  opt.termguicolors = true
 end
+
+opt.conceallevel = 0
 
 -- Highlight one character after textwidth
 opt.colorcolumn = "+1"
@@ -37,14 +45,31 @@ opt.colorcolumn = "+1"
 opt.ignorecase = true
 opt.smartcase = true
 
+opt.showmatch = true
+
 opt.signcolumn = "yes"
 
 opt.splitright = true
 opt.splitbelow = true
 
-vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
-end)
+opt.backup = false
+opt.writebackup = false
+opt.swapfile = false
+
+opt.autoread = true
+opt.autowrite = true
+
+opt.hidden = true
+opt.errorbells = false
+opt.backspace = { "indent", "eol", "start" }
+opt.autochdir = false
+opt.mouse = "a"
+
+vim.opt.clipboard = "unnamedplus"
+
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- Use treesitter for folding
+opt.foldlevel = 99
 
 opt.list = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
@@ -57,6 +82,7 @@ opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 opt.scrolloff = 10
+opt.sidescrolloff = 8
 
 vim.api.nvim_create_user_command("Opts", function(args)
   local result = {}
