@@ -13,6 +13,17 @@ opt.expandtab = true -- Use spaces instead of tabs
 opt.shiftround = true -- Round indent
 opt.shiftwidth = 2 -- Size of an indent
 opt.tabstop = 2 -- Number of spaces tabs count for
+opt.fillchars = {
+  foldopen = "",
+  foldclose = "",
+  fold = " ",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
+}
+
+opt.updatetime = 200 -- Save swap file and trigger CursorHold
+opt.timeoutlen = 300
 
 opt.smartindent = true -- Insert indents automatically
 
@@ -22,9 +33,14 @@ opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
 opt.completeopt = "menuone,longest"
 
+opt.wildmode = "longest:full,full" -- Command-line completion mode
+
 opt.wrap = true
 opt.linebreak = true
 opt.smoothscroll = true
+
+opt.undofile = true
+opt.undolevels = 10000
 
 -- Hide the '[No Name]' buffer
 -- vim.opt.hidden = false
@@ -45,16 +61,14 @@ opt.colorcolumn = "+1"
 opt.ignorecase = true
 opt.smartcase = true
 
-opt.showmatch = true
-
 opt.signcolumn = "yes"
 
 opt.splitright = true
 opt.splitbelow = true
 
 opt.backup = false
-opt.writebackup = false
-opt.swapfile = false
+opt.writebackup = true
+opt.swapfile = true
 
 opt.autoread = true
 opt.autowrite = true
@@ -70,6 +84,7 @@ vim.opt.clipboard = "unnamedplus"
 opt.foldmethod = "expr"
 opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- Use treesitter for folding
 opt.foldlevel = 99
+opt.foldtext = ""
 
 opt.list = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
@@ -84,37 +99,7 @@ opt.cursorline = true
 opt.scrolloff = 10
 opt.sidescrolloff = 8
 
-vim.api.nvim_create_user_command("Opts", function(args)
-  local result = {}
-  if #args.fargs == 1 then
-    result = LazyVim.opts(args.fargs[1])
-  else
-    for _, name in ipairs(args.fargs) do
-      local opts = LazyVim.opts(name)
-      result[name] = opts
-    end
-  end
-  vim.print(result)
-end, {
-  nargs = "+",
-  complete = function()
-    return vim.tbl_keys(require("lazy.core.config").spec.plugins)
-  end,
-})
-
-vim.g.snacks_animate = false
-vim.g.root_spec = { "cwd", "lsp", { ".git", "lua" } }
-
----@type 'intelephense'|'phpactor'
-vim.g.lazyvim_php_lsp = "intelephense"
-
----@type 'auto'|'nvim-cmp'|'blink.cmp'
-vim.g.lazyvim_cmp = "auto"
-
----@type 'auto'|'snacks'|'fzf'|'telescope'|nil
-vim.g.lazyvim_picker = "auto"
-
-vim.g.ai_cmp = false
+opt.grepprg = "rg --vimgrep"
 
 vim.g.dbs = {
   {

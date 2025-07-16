@@ -48,7 +48,6 @@
           bundledTreesitter
         ]
         ++ (with pkgs.vimPlugins; [
-          LazyVim
           SchemaStore-nvim
           bufferline-nvim
           (setPluginName catppuccin-nvim "catppuccin")
@@ -70,9 +69,8 @@
           lualine-nvim
           (setPluginName luasnip "LuaSnip")
           marks-nvim
-          mason-lspconfig-nvim
-          mason-nvim
           mini-ai
+          mini-extra
           mini-files
           mini-hipatterns
           mini-icons
@@ -127,6 +125,7 @@
           gcc
           git
           gnumake
+          gopls
           icu
           imagemagick
           intelephense
@@ -221,6 +220,7 @@
         });
         neovim-impure = baseNeovim.override (prev: {
           appName = "nvim";
+          plugins = devPlugins;
           globals = prev.globals // {
             pluginPathMap = mkPluginPathMap devPlugins;
           };
