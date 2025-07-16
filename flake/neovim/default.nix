@@ -48,7 +48,6 @@
           bundledTreesitter
         ]
         ++ (with pkgs.vimPlugins; [
-          LazyVim
           SchemaStore-nvim
           bufferline-nvim
           (setPluginName catppuccin-nvim "catppuccin")
@@ -221,6 +220,7 @@
         });
         neovim-impure = baseNeovim.override (prev: {
           appName = "nvim";
+          plugins = devPlugins;
           globals = prev.globals // {
             pluginPathMap = mkPluginPathMap devPlugins;
           };
