@@ -48,7 +48,6 @@
           bundledTreesitter
         ]
         ++ (with pkgs.vimPlugins; [
-          LazyVim
           SchemaStore-nvim
           bufferline-nvim
           (setPluginName catppuccin-nvim "catppuccin")

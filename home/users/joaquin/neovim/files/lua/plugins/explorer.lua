@@ -43,6 +43,7 @@ local M = {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
+    enabled = false,
     optional = true,
     cmd = { "Neotree" },
     opts = {
@@ -75,6 +76,7 @@ local M = {
         preview = true,
         width_focus = 50,
       },
+      -- TODO: make this work with the default netrw Explore command
       options = { use_as_default_explorer = true },
     },
     keys = {

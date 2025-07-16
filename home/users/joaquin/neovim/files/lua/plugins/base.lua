@@ -1,13 +1,12 @@
 local M = {
   {
     "folke/snacks.nvim",
-    optional = true,
+    lazy = false,
     keys = {
       {
         "<leader>n",
         function()
           if Snacks.config.picker and Snacks.config.picker.enabled then
-            -- added the { confirm = { ... } } part
             Snacks.picker.notifications({ confirm = { "copy", "close" } })
           else
             Snacks.notifier.show_history()
@@ -68,30 +67,10 @@ local M = {
     },
   },
   {
-    "akinsho/bufferline.nvim",
-    optional = true,
-    keys = {
-      -- disable default key
-      { "<leader>br", false },
-      { "<leader>bh", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
-      { "<leader>bl", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
-      { "<leader>bb", "<cmd>BufferLinePick<cr>", desc = "Pick buffer" },
-    },
-  },
-  {
     "lewis6991/gitsigns.nvim",
     opts = {
       current_line_blame = true,
     },
-  },
-  {
-    "nvim-lualine/lualine.nvim",
-    optional = true,
-    opts = function(_, opts)
-      opts.sections = opts.sections or {}
-      -- disable clock
-      opts.sections.lualine_z = {}
-    end,
   },
   {
     "echasnovski/mini.indentscope",
@@ -150,7 +129,7 @@ local M = {
                   return { file = v.filepath, text = k, change = v }
                 end)
                 :totable(),
-              confirm = function(picker, item)
+              confirm = function(_, item)
                 context.opts.on_open(item.change, { tree = context.tree })
               end,
             })
@@ -213,6 +192,7 @@ local M = {
     priority = 1000,
     lazy = false,
   },
+  { "nvim-lua/plenary.nvim", lazy = true },
 }
 
 return M
