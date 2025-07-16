@@ -1,26 +1,47 @@
+local U = require("config.util")
+
 local classNameRegex = "[cC][lL][aA][sS][sS][nN][aA][mM][eE][sS]?"
 local classNamePropNameRegex = "(?:" .. classNameRegex .. "|(?:enter|leave)(?:From|To)?)"
 local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
 
-local M = {
+U.lsp.on_attach(function(client, buffer)
+  if not vim.api.nvim_buf_is_valid(buffer) then
+    return
+  end
+  if client:supports_method("textDocument/inlayHint", buffer) then
+    vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+  end
+end)
+
+vim.diagnostic.config({
+  underline = true,
+  update_in_insert = false,
+  virtual_text = {
+    spacing = 4,
+    source = "if_many",
+    prefix = "●",
+  },
+  severity_sort = true,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = " ",
+      [vim.diagnostic.severity.WARN] = " ",
+      [vim.diagnostic.severity.HINT] = " ",
+      [vim.diagnostic.severity.INFO] = " ",
+    },
+  },
+})
+
+return {
   {
     "neovim/nvim-lspconfig",
-    ---@module "lazyvim.plugins.lsp"
-    ---@type PluginLspOpts
+    event = { "BufReadPre", "LspAttach" },
+    ---@class LspConfig
+    ---@field servers table<string, ExtendedLspConfig>
     opts = {
-      diagnostics = {
-        virtual_text = {
-          prefix = "icons",
-        },
-      },
-      inlay_hints = {
-        enabled = true,
-        exclude = { "typescript", "typescriptreact" },
-      },
-      ---@module "lspconfig"
-      ---@type table<string, lspconfig.Config>
       servers = {
         html = {},
+        taplo = {},
         eslint = {
           settings = {
             rulesCustomizations = {
@@ -29,19 +50,34 @@ local M = {
           },
         },
         lua_ls = {
-          mason = false,
           settings = {
             Lua = {
               diagnostics = {
                 disable = { "incomplete-signature-doc", "trailing-space", "missing-fields" },
               },
+              workspace = {
+                checkThirdParty = false,
+              },
+              codeLens = {
+                enable = true,
+              },
+              completion = {
+                callSnippet = "Replace",
+              },
+              doc = {
+                privateName = { "^_" },
+              },
+              hint = {
+                enable = true,
+                setType = false,
+                paramType = true,
+                paramName = "Disable",
+                semicolon = "Disable",
+                arrayIndex = "Disable",
+              },
             },
           },
         },
-        -- denols = {
-        --   mason = false,
-        --   root_dir = require("lspconfig").util.root_pattern("deno.json", "deno.jsonc"),
-        -- },
         tailwindcss = {
           settings = {
             tailwindCSS = {
@@ -66,11 +102,8 @@ local M = {
             },
           },
         },
-        ["rust_analyzer"] = {
-          mason = false,
-        },
+        ["rust_analyzer"] = {},
         intelephense = {
-          mason = false,
           init_options = {
             globalStoragePath = vim.fn.expand("$XDG_DATA_HOME"),
             licenceKey = vim.fn.expand("$XDG_DATA_HOME/intelephense/licence.txt"),
@@ -84,11 +117,10 @@ local M = {
             ["intelephense.files.maxSize"] = 10000000,
           },
         },
-        nushell = { mason = false },
-        marksman = { mason = false },
+        nushell = {},
+        marksman = {},
         -- Ideally, use only nixd. But it breaks with accents/special chars
         nil_ls = {
-          mason = false,
           settings = {
             ["nil"] = {
               nix = {
@@ -103,7 +135,6 @@ local M = {
           },
         },
         nixd = {
-          mason = false,
           settings = {
             nixd = {
               nixpkgs = {
@@ -141,120 +172,53 @@ local M = {
             bashIde = { shellcheckPath = "" },
           },
         },
-        ruff = { mason = false },
-        r_language_server = { mason = false },
-        biome = { mason = false },
-        tinymist = { mason = false },
+        ruff = {},
+        r_language_server = {},
+        biome = {},
+        tinymist = {},
+        -- vtsls = {},
       },
-      ---@module "lspconfig"
-      ---@type table<string, fun(server: string, opts: lspconfig.Config): boolean?>
-      setup = {},
     },
+    config = function(_, opts)
+      for server, server_config in pairs(opts.servers) do
+        U.lsp.config(server, server_config)
+      end
+
+      U.lsp.on_attach(require("config.lsp-keymaps").on_attach)
+    end,
   },
   {
-    "mfussenegger/nvim-lint",
+    "neovim/nvim-lspconfig",
+    optional = true,
     opts = function()
-      local lint = require("lint")
-      local original_terraform_validate = lint.linters.terraform_validate
-      lint.linters.terraform_validate = function()
-        local terraform_validate = original_terraform_validate()
-        terraform_validate.cmd = vim.env.TERRAFORM_BINARY_NAME
-          or vim.fn.executable("tofu") == 1 and "tofu"
-          or "terraform"
-        return terraform_validate
-      end
+      local Keys = require("config.lsp-keymaps").get()
+      -- stylua: ignore
+      vim.list_extend(Keys, {
+        { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition", has = "definition" },
+        { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
+        { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
+        { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+      })
     end,
   },
-  {
-    "mfussenegger/nvim-lint",
-    opts = {
-      linters_by_ft = {
-        sh = { "shellcheck" },
-        bash = { "shellcheck" },
-        php = {},
-        nix = { "statix", "deadnix" },
-      },
-      ---@module "lint"
-      ---@class lint.Linter
-      ---@field condition fun(ctx: { filename: string, dirname: string }): boolean
-      ---@type table<string, lint.Linter>
-      linters = {
-        shellcheck = {
-          condition = function(ctx)
-            local name = vim.fs.basename(ctx.filename)
-            if name == nil then
-              return false
-            end
-            local is_dotenv = name == ".env" or name == ".envrc" or vim.startswith(name, ".env.")
-
-            return not is_dotenv
-          end,
-        },
-      },
-    },
-  },
-  {
-    "mason-org/mason.nvim",
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      if vim.g.usePluginsFromStore then
-        opts.ensure_installed = {}
-        opts.automatic_installation = false
-        return
-      end
-
-      local servers_to_skip = {
-        "marksman",
-      }
-
-      opts.PATH = "append"
-      opts.ensure_installed = vim.tbl_filter(function(server)
-        return not vim.list_contains(servers_to_skip, server)
-      end, opts.ensure_installed)
-    end,
-  },
-  {
-    "folke/ts-comments.nvim",
-    optional = true,
-    opts = {
-      lang = {
-        -- Fix being unable to uncomment comments
-        phpdoc = { "// %s" },
-      },
-    },
-  },
-  {
-    "folke/noice.nvim",
-    optional = true,
-    ---@module 'noice'
-    ---@type NoiceConfig
-    opts = {
-      lsp = { hover = { silent = true } },
-    },
-  },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      if vim.g.usePluginsFromStore then
-        opts.ensure_installed = {}
-        return
-      end
-
-      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-      parser_config["blade"] = {
-        install_info = {
-          url = "https://github.com/EmranMR/tree-sitter-blade",
-          files = { "src/parser.c" },
-          branch = "main",
-        },
-        filetype = "blade",
-      }
-
-      if type(opts.ensure_installed) == "table" then
-        vim.list_extend(opts.ensure_installed, { "blade", "php", "php_only", "html", "css" })
-      end
-    end,
-  },
+  -- {
+  --   "mason-org/mason.nvim",
+  --   opts = function(_, opts)
+  --     opts.ensure_installed = opts.ensure_installed or {}
+  --     if vim.g.usePluginsFromStore then
+  --       opts.ensure_installed = {}
+  --       opts.automatic_installation = false
+  --       return
+  --     end
+  --
+  --     local servers_to_skip = {
+  --       "marksman",
+  --     }
+  --
+  --     opts.PATH = "append"
+  --     opts.ensure_installed = vim.tbl_filter(function(server)
+  --       return not vim.list_contains(servers_to_skip, server)
+  --     end, opts.ensure_installed)
+  --   end,
+  -- },
 }
-
-return M

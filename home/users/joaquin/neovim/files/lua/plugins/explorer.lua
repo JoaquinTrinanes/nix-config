@@ -43,6 +43,7 @@ local M = {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
+    enabled = false,
     optional = true,
     cmd = { "Neotree" },
     opts = {
