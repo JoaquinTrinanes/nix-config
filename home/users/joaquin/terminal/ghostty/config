@@ -38,3 +38,6 @@ gtk-tabs-location = bottom
 window-padding-y = 2
 window-padding-color = extend
 
+# fix low-contrast catppuccin cursor
+cursor-text =
+
