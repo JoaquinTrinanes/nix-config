@@ -1,18 +1,19 @@
 local opt = vim.opt
+local o = vim.o
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-opt.confirm = true
+o.confirm = true
 
-opt.number = true
-opt.relativenumber = true
+o.number = true
+o.relativenumber = true
 
-opt.smarttab = true
-opt.expandtab = true -- Use spaces instead of tabs
-opt.shiftround = true -- Round indent
-opt.shiftwidth = 2 -- Size of an indent
-opt.tabstop = 2 -- Number of spaces tabs count for
+o.smarttab = true
+o.expandtab = true -- Use spaces instead of tabs
+o.shiftround = true -- Round indent
+o.shiftwidth = 2 -- Size of an indent
+o.tabstop = 2 -- Number of spaces tabs count for
 opt.fillchars = {
   foldopen = "",
   foldclose = "",
@@ -22,84 +23,79 @@ opt.fillchars = {
   eob = " ",
 }
 
-opt.updatetime = 200 -- Save swap file and trigger CursorHold
-opt.timeoutlen = 300
+o.updatetime = 200 -- Save swap file and trigger CursorHold
+o.timeoutlen = 300
 
-opt.smartindent = true -- Insert indents automatically
+o.smartindent = true -- Insert indents automatically
 
-opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+o.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
-opt.completeopt = "menuone,longest"
+opt.completeopt = { "menuone", "longest" }
+opt.wildmode = { "longest:full", "full" } -- Command-line completion mode
 
-opt.wildmode = "longest:full,full" -- Command-line completion mode
+o.wrap = true
+o.linebreak = true
+o.smoothscroll = true
 
-opt.wrap = true
-opt.linebreak = true
-opt.smoothscroll = true
-
-opt.undofile = true
-opt.undolevels = 10000
-
--- Hide the '[No Name]' buffer
--- vim.opt.hidden = false
+o.undofile = true
+o.undolevels = 10000
 
 if vim.env.COLORTERM == nil then
-  opt.pumblend = 0 -- Popup blend
-  opt.termguicolors = false
+  o.pumblend = 0 -- Popup blend
+  o.termguicolors = false
 else
-  opt.pumblend = 10
-  opt.termguicolors = true
+  o.pumblend = 10
+  o.termguicolors = true
 end
 
-opt.conceallevel = 0
+o.conceallevel = 0
 
 -- Highlight one character after textwidth
-opt.colorcolumn = "+1"
+o.colorcolumn = "+1"
 
-opt.ignorecase = true
-opt.smartcase = true
+o.ignorecase = true
+o.smartcase = true
 
-opt.signcolumn = "yes"
+o.signcolumn = "yes"
 
-opt.splitright = true
-opt.splitbelow = true
+o.splitright = true
+o.splitbelow = true
 
-opt.backup = false
-opt.writebackup = true
-opt.swapfile = true
+o.backup = false
+o.writebackup = true
+o.swapfile = true
 
-opt.autoread = true
-opt.autowrite = true
+o.autoread = true
+o.autowrite = true
 
-opt.hidden = true
-opt.errorbells = false
+o.hidden = true
+o.errorbells = false
 opt.backspace = { "indent", "eol", "start" }
-opt.autochdir = false
-opt.mouse = "a"
+o.autochdir = false
+o.mouse = "a"
 
-vim.opt.clipboard = "unnamedplus"
+o.clipboard = "unnamedplus"
 
-opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- Use treesitter for folding
-opt.foldlevel = 99
-opt.foldtext = ""
+o.foldmethod = "expr"
+o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+o.foldlevel = 99
+o.foldtext = ""
 
-opt.list = true
+o.list = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
--- Preview substitutions live, as you type!
-opt.inccommand = "split"
+-- Preview substitutions live
+o.inccommand = "split"
 
--- Show which line your cursor is on
-opt.cursorline = true
+o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-opt.scrolloff = 10
-opt.sidescrolloff = 8
+o.scrolloff = 10
+o.sidescrolloff = 8
 
-opt.grepprg = "rg --vimgrep"
+o.grepprg = "rg --vimgrep"
 
 vim.g.dbs = {
   {
