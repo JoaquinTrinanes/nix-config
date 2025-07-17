@@ -16,7 +16,7 @@ export-env {
         "INFOPATH": $esep_list_converter
         "LIBEXEC_PATH": $esep_list_converter
         "LS_COLORS": $esep_list_converter
-        "path": $esep_list_converter
+        "PATH": $esep_list_converter
         "QTWEBKIT_PLUGIN_PATH": $esep_list_converter
         "SESSION_MANAGER": $esep_list_converter
         "TERMINFO_DIRS": $esep_list_converter
@@ -53,7 +53,7 @@ let default_completer = $carapace_completer
 let fallback_completer = $fish_completer
 
 let external_completer = {|spans: list<string>|
-    let expanded_alias = scope aliases | where name == $spans.0 | get -i 0.expansion
+    let expanded_alias = scope aliases | where name == $spans.0 | get 0?.expansion
     let spans = if $expanded_alias != null {
         $spans | skip 1 | prepend ($expanded_alias | split row ' ')
     } else {

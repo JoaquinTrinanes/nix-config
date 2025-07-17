@@ -38,7 +38,7 @@ export def whichp [
     application: string@"nu-complete from-path" # Application
     --follow (-f) # follow symlinks
 ] {
-    let expanded_alias = scope aliases | where name == $application | get -i 0.expansion
+    let expanded_alias = scope aliases | where name == $application | get 0?.expansion
 
     if ((not $follow) and ($expanded_alias | is-not-empty)) {
         return $expanded_alias
