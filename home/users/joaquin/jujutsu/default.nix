@@ -140,7 +140,6 @@ in
         };
       };
       ui = {
-        always-allow-large-revsets = true;
         bookmark-list-sort-keys = [
           "author-date-"
           "committer-date-"
