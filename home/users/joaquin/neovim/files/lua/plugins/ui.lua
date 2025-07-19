@@ -103,11 +103,11 @@ return {
           lualine_x = {
             {
               "diff",
-              symbols = {
+              symbols = vim.o.termguicolors and {
                 added = icons.git.added,
                 modified = icons.git.modified,
                 removed = icons.git.removed,
-              },
+              } or nil,
               source = function()
                 local gitsigns = vim.b.gitsigns_status_dict
                 if gitsigns then
