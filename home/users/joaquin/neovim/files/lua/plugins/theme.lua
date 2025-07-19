@@ -5,6 +5,9 @@ local M = {
     name = "catppuccin",
     lazy = false,
     priority = 1000,
+    cond = function()
+      return vim.o.termguicolors
+    end,
     config = function(_, opts)
       require("catppuccin").setup(opts)
       vim.cmd.colorscheme("catppuccin")
