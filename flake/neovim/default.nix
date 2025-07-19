@@ -214,7 +214,7 @@
           '';
           globals = lib.recursiveUpdate prev.globals {
             pluginPathMap = mkPluginPathMap plugins;
-            usePluginsFromStore = true;
+            nixPureMode = true;
           };
           appName = "pureNvim";
         });

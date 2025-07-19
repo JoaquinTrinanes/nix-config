@@ -5,7 +5,7 @@ local build_treesitter = ":TSUpdate"
 
 local ts_parser_install_dir = nil
 
-if vim.g.usePluginsFromStore then
+if vim.g.nixPureMode then
   build_treesitter = false
   ts_parser_install_dir = vim.fn.stdpath("data") .. "/treesitter-parsers"
   vim.opt.runtimepath:prepend(ts_parser_install_dir)
