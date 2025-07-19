@@ -50,7 +50,15 @@ end
 return {
   {
     "echasnovski/mini.icons",
-    lazy = true,
-    opts = { lsp = mini_icons_lsp_override },
+    opts = {
+      style = vim.o.termguicolors and "glyph" or "ascii",
+      lsp = mini_icons_lsp_override,
+    },
+    init = function()
+      package.preload["nvim-web-devicons"] = function()
+        require("mini.icons").mock_nvim_web_devicons()
+        return package.loaded["nvim-web-devicons"]
+      end
+    end,
   },
 }
