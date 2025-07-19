@@ -69,7 +69,7 @@ local M = {
             components = {
               kind_icon = {
                 text = function(ctx)
-                  if ctx.kind_icon then
+                  if vim.o.termguicolors and ctx.kind_icon then
                     return ctx.kind_icon
                   end
                   local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
