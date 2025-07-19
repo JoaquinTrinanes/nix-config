@@ -50,6 +50,7 @@
           bufferline-nvim
           (setPluginName catppuccin-nvim "catppuccin")
           clangd_extensions-nvim
+          colorful-menu-nvim
           conform-nvim
           crates-nvim
           dial-nvim
