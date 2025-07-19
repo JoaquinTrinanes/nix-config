@@ -205,7 +205,7 @@ return {
   --   "mason-org/mason.nvim",
   --   opts = function(_, opts)
   --     opts.ensure_installed = opts.ensure_installed or {}
-  --     if vim.g.usePluginsFromStore then
+  --     if vim.g.nixPureMode then
   --       opts.ensure_installed = {}
   --       opts.automatic_installation = false
   --       return
