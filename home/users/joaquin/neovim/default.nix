@@ -29,7 +29,7 @@ let
     vimAlias = true;
     appName = "nvim";
     globals = lib.recursiveUpdate prev.globals {
-      usePluginsFromStore = false;
+      nixPureMode = false;
       lazyOptions = {
         lockfile = mkImpureLink ./files/lazy-lock.json; # "${configDir}/lazy-lock.json";
         install.missing = true;

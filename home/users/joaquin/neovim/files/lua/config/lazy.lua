@@ -16,7 +16,7 @@ end
 
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
-vim.g.usePluginsFromStore = vim.g.usePluginsFromStore == true or false
+vim.g.nixPureMode = vim.g.nixPureMode == true or false
 
 ---@type LazyConfig
 local lazyoptions = {
