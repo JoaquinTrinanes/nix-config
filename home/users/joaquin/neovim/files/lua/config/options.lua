@@ -79,7 +79,6 @@ o.mouse = "a"
 o.clipboard = "unnamedplus"
 
 o.foldmethod = "expr"
-o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 o.foldlevel = 99
 o.foldtext = ""
 

@@ -29,19 +29,16 @@
         name = "nvim-treesitter-parsers";
         paths = treesitter.dependencies;
       };
-      bundledTreesitter = pkgs.symlinkJoin {
-        name = "nvim-treesitter";
-        paths = [
-          treesitter
-          treesitterParsers
-        ];
+      treesitterParsersAndQueries = pkgs.linkFarm "nvim-treesitter-bundle" {
+        queries = "${treesitter}/queries";
+        parser = "${treesitterParsers}/parser";
       };
+
       setPluginName = plugin: pname: plugin // { inherit pname; };
       devPlugins = builtins.attrValues {
         inherit (pkgs.vimPlugins)
           blink-cmp
           ;
-        inherit bundledTreesitter;
       };
       plugins =
         devPlugins
@@ -89,9 +86,7 @@
           nvim-nio
           nvim-snippets
           nvim-treesitter-context
-          nvim-treesitter-textobjects
           nvim-ts-autotag
-          nvim-web-devicons
           oil-nvim
           persistence-nvim
           plenary-nvim
@@ -201,6 +196,7 @@
             };
           };
           customLuaRC = ''
+            vim.opt.runtimepath:append(${toLua treesitterParsersAndQueries})
             require("config.lazy")
           '';
         };
@@ -209,7 +205,6 @@
       packages = {
         neovim = baseNeovim.override (prev: {
           customLuaRC = ''
-            vim.opt.runtimepath:append(${toLua treesitterParsers})
             vim.env.LAZY = vim.env.LAZY or ${toLua pkgs.vimPlugins.lazy-nvim}
             ${prev.customLuaRC or ""}
           '';
