@@ -107,6 +107,9 @@
               # Unhide the "add exception" button on the SSL error page, allowing users to directly accept a bad certificate
               "browser.xul.error_pages.expert_bad_cert" = true;
 
+              # Always show full url when showing search results
+              "browser.urlbar.showSearchTerms.enabled" = false;
+
               "app.normandy.enabled" = false;
               "app.normandy.api_url" = "";
               "app.shield.optoutstudies.enabled" = false;
