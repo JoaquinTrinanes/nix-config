@@ -53,6 +53,18 @@ for name, path in pairs(vim.g.pluginPathMap or {}) do
   lazyoptions.spec[#lazyoptions.spec + 1] = { name, dir = path, pin = true }
 end
 
+-- Disable some deprecation warnings while snacks.nvim is not updated
+if vim.fn.has("nvim-0.12") == 1 then
+  local original_vim_deprecate = vim.deprecate
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.deprecate = function(name, ...)
+    if vim.list_contains({ "client.notify", "client.supports_method" }, name) then
+      return
+    end
+    original_vim_deprecate(name, ...)
+  end
+end
+
 require("config.options")
 require("config.autocmds")
 require("lazy").setup(vim.tbl_deep_extend("force", lazyoptions, vim.g.lazyOptions or {}))
