@@ -1,72 +1,5 @@
 local M = {
   {
-    "folke/snacks.nvim",
-    lazy = false,
-    keys = {
-      {
-        "<leader>n",
-        function()
-          ---@diagnostic disable-next-line: undefined-field
-          if Snacks.config.picker and Snacks.config.picker.enabled then
-            Snacks.picker.notifications({ confirm = { "copy", "close" } })
-          else
-            Snacks.notifier.show_history()
-          end
-        end,
-        desc = "Notification History",
-      },
-    },
-    ---@module 'snacks'
-    ---@type snacks.Config
-    opts = {
-      dashboard = {
-        preset = {
-          header = [[
-███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
-████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
-██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
-██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
-██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
-╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
-        },
-      },
-      image = { enabled = false },
-      picker = {
-        sources = { grep = { jump = { match = true } } },
-        layouts = {
-          select = {
-            layout = {
-              relative = "cursor",
-              -- width = 70,
-              -- min_width = 0,
-              row = 1,
-            },
-          },
-        },
-        win = {
-          input = {
-            keys = {
-              ["<C-y>"] = { "confirm", mode = { "n", "i" } },
-
-              ["<A-f>"] = false,
-              ["<A-h>"] = false,
-              ["<A-i>"] = false,
-              ["<A-m>"] = false,
-
-              ["<C-f>"] = { "toggle_follow", mode = { "i", "n" } },
-              ["<C-h>"] = { "toggle_hidden", mode = { "i", "n" } },
-              ["<C-i>"] = { "toggle_ignored", mode = { "i", "n" } },
-              ["<C-m>"] = { "toggle_maximize", mode = { "i", "n" } },
-            },
-          },
-        },
-      },
-      indent = { enabled = false, animate = { enabled = false }, blank = { char = "·" } },
-      bigfile = { enabled = true },
-      quickfile = { enabled = true },
-    },
-  },
-  {
     "julienvincent/hunk.nvim",
     cmd = { "DiffEditor" },
     opts = {
@@ -143,10 +76,6 @@ local M = {
         ["--cycle"] = true,
       },
     },
-  },
-  {
-    "echasnovski/mini.splitjoin",
-    opts = { mappings = { toggle = "gS", split = "", join = "" } },
   },
   {
     "mrjones2014/smart-splits.nvim",
