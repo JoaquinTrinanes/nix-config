@@ -32,7 +32,7 @@ in
       inherit (pkgs)
         file
         hyperfine
-        nixfmt-rfc-style
+        nixfmt
         pnpm
         scrcpy
         statix
