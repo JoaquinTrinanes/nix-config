@@ -1,4 +1,5 @@
 return {
+  { "echasnovski/mini.splitjoin", opts = { mappings = { toggle = "gS", split = "", join = "" } } },
   -- search/replace in multiple files
   {
     "MagicDuck/grug-far.nvim",
