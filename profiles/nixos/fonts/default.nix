@@ -89,7 +89,7 @@ in
           <?xml version="1.0"?>
           <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
           <fontconfig>
-            ${lib.concatMapAttrsStringSep "\n" mkFontConfig fontConfigByFamily} 
+            ${lib.concatMapAttrsStringSep "\n" mkFontConfig fontConfigByFamily}
           </fontconfig>
         '';
     };

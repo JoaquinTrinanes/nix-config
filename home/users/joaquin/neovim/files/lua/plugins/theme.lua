@@ -1,5 +1,4 @@
 local M = {
-  -- { "vimpostor/vim-lumen" },
   {
     "catppuccin/nvim",
     name = "catppuccin",

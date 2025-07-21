@@ -62,11 +62,6 @@ local M = {
     "folke/snacks.nvim",
     optional = true,
     keys = { { "<leader>e", false }, { "<leader>E", false } },
-    ---@module 'snacks'
-    ---@type snacks.Config
-    opts = {
-      explorer = { replace_netrw = false },
-    },
   },
   {
     "echasnovski/mini.files",
