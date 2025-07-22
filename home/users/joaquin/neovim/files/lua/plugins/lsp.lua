@@ -1,9 +1,5 @@
 local U = require("config.util")
 
-local classNameRegex = "[cC][lL][aA][sS][sS][nN][aA][mM][eE][sS]?"
-local classNamePropNameRegex = "(?:" .. classNameRegex .. "|(?:enter|leave)(?:From|To)?)"
-local quotedStringRegex = [[(?:["'`]([^"'`]*)["'`])]]
-
 U.lsp.on_attach(function(client, buffer)
   if not vim.api.nvim_buf_is_valid(buffer) then
     return
@@ -81,23 +77,18 @@ return {
         tailwindcss = {
           settings = {
             tailwindCSS = {
-              experimental = {
-                classRegex = {
-                  -- classNames="...", classNames: "..."
-                  classNamePropNameRegex
-                    .. [[\s*[:=]\s*]]
-                    .. quotedStringRegex,
-                  -- classNames={...} prop
-                  classNamePropNameRegex
-                    .. [[\s*[:=]\s*]]
-                    .. quotedStringRegex
-                    .. [[\s*}]],
-                  -- classNames(...)
-                  { [[class[nN]ames\(([^)]*)\)]], quotedStringRegex },
-
-                  { "cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
-                  { "cx\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
-                },
+              classAttributes = {
+                "classNames",
+                unpack(vim.lsp.config.tailwindcss.settings.tailwindCSS.classAttributes),
+              },
+              classFunctions = {
+                "tw",
+                "twMerge",
+                "clsx",
+                "cn",
+                "cva",
+                "cx",
+                unpack(vim.lsp.config.tailwindcss.settings.tailwindCSS.classFunctions or {}),
               },
             },
           },
