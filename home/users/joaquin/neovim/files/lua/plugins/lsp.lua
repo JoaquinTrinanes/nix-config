@@ -138,14 +138,13 @@ return {
                 nixos = {
                   expr = string.format(
                     '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations."%s".options',
-                    vim.fn.system("hostname")
+                    vim.fn.hostname()
                   ),
                 },
                 home_manager = {
                   expr = string.format(
-                    '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."%s@%s".options',
-                    vim.fn.expand("$USER"),
-                    vim.fn.systemlist("hostname")[1]
+                    '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."%s".options',
+                    vim.fn.expand("$USER")
                   ),
                 },
                 flake_parts = {
