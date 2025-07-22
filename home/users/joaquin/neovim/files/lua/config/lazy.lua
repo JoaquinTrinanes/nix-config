@@ -65,6 +65,10 @@ if vim.fn.has("nvim-0.12") == 1 then
   end
 end
 
+-- force-load lspconfig, allowing access to default values when configuring it
+local lspconfig_path = vim.g.pluginPathMap["nvim-lspconfig"] or vim.fn.stdpath("data") .. "/lazy/nvim-lspconfig"
+vim.opt.rtp:prepend(lspconfig_path)
+
 require("config.options")
 require("config.autocmds")
 require("lazy").setup(vim.tbl_deep_extend("force", lazyoptions, vim.g.lazyOptions or {}))
