@@ -292,7 +292,7 @@
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
-    pinentry.package = pkgs.pinentry-gnome3;
+    pinentry.package = pkgs.pinentry-tty;
 
     # timeout since last activity
     defaultCacheTtl = 15 * 60; # 15 minutes
@@ -364,9 +364,10 @@
 
   programs.ssh = {
     enable = true;
-    extraConfig = ''
-      SetEnv TERM="xterm-256color"
-    '';
+    # Fix pinentry appearing in wrong terminal
+    # https://wiki.archlinux.org/title/GnuPG#Configure_pinentry_to_use_the_correct_TTY
+    # https://unix.stackexchange.com/questions/280879/how-to-get-pinentry-curses-to-start-on-the-correct-tty/499133#499133
+    matchBlocks."*".match = ''host * exec "gpg-connect-agent UPDATESTARTUPTTY /bye"'';
   };
 
   home.pointerCursor = {
