@@ -94,7 +94,8 @@ in
         "user(x)" = "author(x) | committer(x)";
 
         # useful for overriding in repo config
-        "original_private()" = ''description(glob:"private:*") & mine()'';
+        "original_private()" =
+          ''(subject(glob:"private:*") | subject(glob:"Revert \"private:*\"")) & mine()'';
         "private()" = "original_private()";
 
         "around(x)" = "around(x, 3)";
