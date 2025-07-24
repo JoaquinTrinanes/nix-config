@@ -58,7 +58,6 @@ in
     recursive = true;
   };
   xdg.configFile."nvim/filetype.lua".source = mkImpureLink ./files/filetype.lua;
-  xdg.configFile."nvim/after/queries/blade".source = ./files/after/queries/blade;
 
   xdg.configFile."tridactyl/tridactylrc".text =
     let
