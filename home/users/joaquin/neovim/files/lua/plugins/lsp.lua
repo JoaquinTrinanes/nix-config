@@ -136,14 +136,12 @@ return {
               },
               options = {
                 nixos = {
-                  expr = string.format(
-                    '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations."%s".options',
+                  expr = ('(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations."%s".options'):format(
                     vim.fn.hostname()
                   ),
                 },
                 home_manager = {
-                  expr = string.format(
-                    '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."%s".options',
+                  expr = ('(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."%s".options'):format(
                     vim.fn.expand("$USER")
                   ),
                 },

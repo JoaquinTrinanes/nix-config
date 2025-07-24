@@ -3,6 +3,7 @@ return {
     "folke/snacks.nvim",
     lazy = false,
     priority = 1000,
+    dependencies = { { "folke/persistence.nvim" } },
     ---@module 'snacks'
     ---@type snacks.Config
     opts = {
