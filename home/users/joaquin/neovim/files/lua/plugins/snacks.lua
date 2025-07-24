@@ -3,6 +3,7 @@ return {
     "folke/snacks.nvim",
     lazy = false,
     priority = 1000,
+    dependencies = { { "folke/persistence.nvim" } },
     ---@module 'snacks'
     ---@type snacks.Config
     opts = {
@@ -379,10 +380,6 @@ return {
         desc = "Colorschemes",
       },
     },
-    config = function(_, opts)
-      vim.g.snacks_animate = false
-      require("snacks").setup(opts)
-    end,
     -- config = function(_, opts)
     --   require("snacks").setup(opts)
     --   -- HACK: hide statusline on dashboard

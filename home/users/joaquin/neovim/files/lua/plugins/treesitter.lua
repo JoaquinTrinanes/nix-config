@@ -3,12 +3,11 @@ local U = require("config.util")
 ---@type string|boolean
 local build_treesitter = ":TSUpdate"
 
-local ts_parser_install_dir = nil
+local ts_parser_install_dir = vim.fn.stdpath("data") .. "/treesitter-parsers"
+vim.opt.runtimepath:prepend(ts_parser_install_dir)
 
 if vim.g.nixPureMode then
   build_treesitter = false
-  ts_parser_install_dir = vim.fn.stdpath("data") .. "/treesitter-parsers"
-  vim.opt.runtimepath:prepend(ts_parser_install_dir)
 end
 
 return {

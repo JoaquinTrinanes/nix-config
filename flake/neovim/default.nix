@@ -9,22 +9,22 @@
     }:
     let
       toLua = lib.generators.toLua { };
-      treesitter = pkgs.vimPlugins.nvim-treesitter.withPlugins (
-        _:
-        pkgs.vimPlugins.nvim-treesitter.allGrammars
-        ++ [
-          (pkgs.tree-sitter.buildGrammar {
-            language = "blade";
-            version = "0.10.1";
-            src = pkgs.fetchFromGitHub {
-              owner = "EmranMR";
-              repo = "tree-sitter-blade";
-              rev = "335b2a44b4cdd9446f1c01434226267a61851405";
-              hash = "sha256-wXzmlg79Xva08wn3NoJDJ2cIHuShXPIlf+UK0TsZdbY=";
-            };
-          })
-        ]
-      );
+      treesitter =
+        let
+          tsAllGrammars = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+        in
+        pkgs.symlinkJoin {
+          name = "nvim-treesitter";
+          paths = [ tsAllGrammars ];
+          inherit (tsAllGrammars) meta passthru;
+          # The JSX syntax sets `commentstring` wrong. Remove it and let ts-comments take care of it
+          postBuild = ''
+            query_file="$out/queries/jsx/highlights.scm"
+
+            sed -i '/((jsx_element) @_jsx_element/,/\(#set! @_jsx_element bo.commentstring "{\/\* %s \*\/}"\))/d' "$query_file"
+            sed -i '/((jsx_attribute) @_jsx_attribute/,/\(#set! @_jsx_attribute bo.commentstring "\/\/ %s"\))/d' "$query_file"
+          '';
+        };
       treesitterParsers = pkgs.symlinkJoin {
         name = "nvim-treesitter-parsers";
         paths = treesitter.dependencies;
@@ -41,12 +41,10 @@
         inherit (pkgs.vimPlugins)
           blink-cmp
           ;
+        inherit bundledTreesitter;
       };
       plugins =
         devPlugins
-        ++ [
-          bundledTreesitter
-        ]
         ++ (with pkgs.vimPlugins; [
           SchemaStore-nvim
           bufferline-nvim
@@ -209,6 +207,7 @@
       packages = {
         neovim = baseNeovim.override (prev: {
           customLuaRC = ''
+            vim.opt.runtimepath:append(${toLua treesitterParsers})
             vim.env.LAZY = vim.env.LAZY or ${toLua pkgs.vimPlugins.lazy-nvim}
             ${prev.customLuaRC or ""}
           '';
@@ -224,11 +223,6 @@
           globals = prev.globals // {
             pluginPathMap = mkPluginPathMap devPlugins;
           };
-          customLuaRC = ''
-            vim.opt.runtimepath:append(${toLua treesitterParsers})
-            vim.go.packpath = vim.env.VIMRUNTIME
-            ${prev.customLuaRC or ""}
-          '';
         });
       };
 
