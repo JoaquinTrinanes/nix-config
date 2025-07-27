@@ -82,9 +82,8 @@ in
           ];
         };
       };
-      core = {
-        # enabled per repo
-        fsmonitor = "none";
+      fsmonitor = {
+        backend = "none";
         watchman.register-snapshot-trigger = true;
       };
       revset-aliases = {
