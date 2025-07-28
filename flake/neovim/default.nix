@@ -121,6 +121,7 @@
           fd
           fzf
           gcc
+          ghostscript
           git
           gnumake
           gopls
