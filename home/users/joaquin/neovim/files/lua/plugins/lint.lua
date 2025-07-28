@@ -1,5 +1,6 @@
 local U = require("config.util")
 
+---@type LazyPluginSpec[]
 return {
   {
     "mfussenegger/nvim-lint",
