@@ -10,6 +10,7 @@ if vim.g.nixPureMode then
   build_treesitter = false
 end
 
+---@type LazyPluginSpec[]
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -31,6 +32,7 @@ return {
       { "<bs>", desc = "Decrement Selection", mode = "x" },
     },
     opts_extend = { "ensure_installed" },
+    ---@type TSConfig
     opts = {
       parser_install_dir = ts_parser_install_dir,
       highlight = { enable = true },

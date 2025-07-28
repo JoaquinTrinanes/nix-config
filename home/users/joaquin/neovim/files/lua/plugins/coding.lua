@@ -1,5 +1,6 @@
 local U = require("config.util")
 
+---@type LazyPluginSpec[]
 return {
   { "echasnovski/mini.extra", lazy = true },
   -- Better text-objects

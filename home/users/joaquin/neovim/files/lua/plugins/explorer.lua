@@ -1,4 +1,5 @@
-local M = {
+---@type LazyPluginSpec[]
+return {
   {
     "stevearc/oil.nvim",
     enabled = false,
@@ -314,5 +315,3 @@ local M = {
     end,
   },
 }
-
-return M

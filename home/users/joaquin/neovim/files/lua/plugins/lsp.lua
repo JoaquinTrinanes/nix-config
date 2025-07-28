@@ -28,6 +28,7 @@ vim.diagnostic.config({
   },
 })
 
+---@type LazyPluginSpec[]
 return {
   {
     "neovim/nvim-lspconfig",

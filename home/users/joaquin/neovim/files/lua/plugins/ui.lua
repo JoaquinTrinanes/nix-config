@@ -2,6 +2,7 @@ local U = require("config.util")
 
 local diagnostics_signs = vim.diagnostic.config().signs.text or {}
 
+---@type LazyPluginSpec[]
 return {
   {
     "akinsho/bufferline.nvim",

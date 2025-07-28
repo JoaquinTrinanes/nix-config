@@ -85,6 +85,7 @@ snacks_toggle(true):map("<leader>uF")
 ---@type conform.FiletypeFormatter
 local biomePrettierFormatters = { "prettier", "biome-check", stop_after_first = true }
 
+---@type LazyPluginSpec[]
 return {
   {
     "stevearc/conform.nvim",
@@ -109,6 +110,8 @@ return {
         desc = "Format Injected Langs",
       },
     },
+    ---@module 'conform'
+    ---@type conform.setupOpts
     opts = {
       default_format_opts = {
         async = false,
@@ -156,7 +159,10 @@ return {
           command = "topiary",
           args = { "format", "--language", "nu" },
         },
-        injected = { options = { ignore_errors = true } },
+        injected = {
+          ---@type conform.InjectedFormatterOptions
+          options = { ignore_errors = true },
+        },
       },
     },
   },
