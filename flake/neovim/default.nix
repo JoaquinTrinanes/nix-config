@@ -122,6 +122,7 @@
           fd
           fzf
           gcc
+          ghostscript
           git
           gnumake
           icu

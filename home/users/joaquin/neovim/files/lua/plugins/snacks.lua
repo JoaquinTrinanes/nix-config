@@ -1,3 +1,14 @@
+---@type snacks.image.Config
+local image_config = {}
+
+if not vim.o.termguicolors then
+  -- The picker image previewer doesn't check if the terminal is supported,
+  -- just if the image is of a supported format. Set to empty table to prevent
+  -- the preview from being triggered in that case
+  image_config.formats = {}
+  image_config.enabled = false
+end
+
 return {
   {
     "folke/snacks.nvim",
@@ -7,7 +18,7 @@ return {
     ---@module 'snacks'
     ---@type snacks.Config
     opts = {
-      image = { enabled = false },
+      image = image_config,
       picker = {
         layouts = {
           select = {
