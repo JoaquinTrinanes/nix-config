@@ -38,7 +38,7 @@ return {
               ["<A-i>"] = false,
               ["<A-m>"] = false,
 
-              ["<C-f>"] = { "toggle_follow", mode = { "i", "n" } },
+              -- ["<C-f>"] = { "toggle_follow", mode = { "i", "n" } },
               ["<C-h>"] = { "toggle_hidden", mode = { "i", "n" } },
               ["<C-i>"] = { "toggle_ignored", mode = { "i", "n" } },
               ["<C-m>"] = { "toggle_maximize", mode = { "i", "n" } },
