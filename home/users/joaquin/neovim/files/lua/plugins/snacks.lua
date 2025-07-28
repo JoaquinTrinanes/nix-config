@@ -9,6 +9,7 @@ if not vim.o.termguicolors then
   image_config.enabled = false
 end
 
+---@type LazyPluginSpec[]
 return {
   {
     "folke/snacks.nvim",

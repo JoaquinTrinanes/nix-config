@@ -1,4 +1,5 @@
-local M = {
+---@type LazyPluginSpec[]
+return {
   {
     -- will never be loaded, only used for types
     "justinsgithub/wezterm-types",
@@ -131,5 +132,3 @@ local M = {
     },
   },
 }
-
-return M

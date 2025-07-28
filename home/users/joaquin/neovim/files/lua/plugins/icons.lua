@@ -47,6 +47,7 @@ for kind, icon in pairs(kind_icons) do
   mini_icons_lsp_override[kind] = { glyph = icon }
 end
 
+---@type LazyPluginSpec[]
 return {
   {
     "echasnovski/mini.icons",
