@@ -125,6 +125,15 @@ return {
           require("gitsigns").toggle_signs(state)
         end,
       }):map("<leader>uG")
+      Snacks.toggle({
+        name = "Current Line Blame",
+        get = function()
+          return require("gitsigns.config").config.current_line_blame
+        end,
+        set = function(state)
+          require("gitsigns").toggle_current_line_blame(state)
+        end,
+      }):map("<leader>uB")
     end,
   },
   {
