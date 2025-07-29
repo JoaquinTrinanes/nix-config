@@ -9,22 +9,33 @@ U.lsp.on_attach(function(client, buffer)
   end
 end)
 
+local diagnostic_signs = vim.o.termguicolors
+    and {
+      [vim.diagnostic.severity.ERROR] = " ",
+      [vim.diagnostic.severity.WARN] = " ",
+      [vim.diagnostic.severity.HINT] = " ",
+      [vim.diagnostic.severity.INFO] = " ",
+    }
+  or {
+    [vim.diagnostic.severity.ERROR] = "E",
+    [vim.diagnostic.severity.WARN] = "W",
+    [vim.diagnostic.severity.HINT] = "H",
+    [vim.diagnostic.severity.INFO] = "I",
+  }
+
 vim.diagnostic.config({
   underline = true,
   update_in_insert = false,
   virtual_text = {
     spacing = 4,
     source = "if_many",
-    prefix = "●",
+    prefix = function(diagnostic)
+      return diagnostic_signs[diagnostic.severity]
+    end,
   },
   severity_sort = true,
   signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = " ",
-      [vim.diagnostic.severity.WARN] = " ",
-      [vim.diagnostic.severity.HINT] = " ",
-      [vim.diagnostic.severity.INFO] = " ",
-    },
+    text = diagnostic_signs,
   },
 })
 
