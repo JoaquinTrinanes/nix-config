@@ -107,23 +107,6 @@ return {
       fuzzy = { prebuilt_binaries = { download = false } },
     },
   },
-  -- lazydev
-  {
-    "saghen/blink.cmp",
-    opts = {
-      sources = {
-        default = { "lazydev" },
-        providers = {
-          lazydev = {
-            name = "LazyDev",
-            module = "lazydev.integrations.blink",
-            score_offset = 100, -- show at a higher priority than lsp
-          },
-        },
-      },
-    },
-  },
-  -- catppuccin support
   {
     "catppuccin",
     optional = true,
