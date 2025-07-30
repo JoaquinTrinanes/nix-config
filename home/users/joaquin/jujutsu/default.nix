@@ -261,7 +261,7 @@ in
           "-d"
           "trunk()"
           "-s"
-          "all:roots(trunk()..stack(@))"
+          "roots(trunk()..stack(@))"
         ];
         retrunk = [
           "rebase"
@@ -271,7 +271,7 @@ in
         reheat-all = [
           "rebase"
           "-s"
-          "all:roots(open())"
+          "roots(open())"
           "-d"
           "trunk()"
         ];
