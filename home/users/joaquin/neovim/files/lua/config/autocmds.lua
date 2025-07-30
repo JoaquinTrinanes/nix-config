@@ -124,3 +124,16 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
   end,
 })
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  group = augroup("disable_colorcolum"),
+  desc = "Disable colorcolumn when buffer is not modifiable",
+  callback = function(event)
+    local buf = event.buf
+    local bo = vim.bo[buf]
+
+    if not bo.modifiable then
+      vim.wo.colorcolumn = ""
+    end
+  end,
+})
