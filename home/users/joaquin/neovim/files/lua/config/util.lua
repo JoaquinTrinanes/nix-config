@@ -61,8 +61,10 @@ function U.opts(plugin_name)
   return Plugin.values(plugin, "opts", false)
 end
 
----@param fn function
+---@generic T : function
+---@param fn T
 ---@param ms number
+---@return T
 function U.debounce(fn, ms)
   local timer = vim.uv.new_timer()
   ---@cast timer uv.uv_timer_t
@@ -98,6 +100,25 @@ function U.on_load(name, fn)
       end,
     })
   end
+end
+
+---@param parent string
+---@param child string
+---@return boolean
+function U.is_subpath(parent, child)
+  parent = vim.uv.fs_realpath(parent) or ""
+  child = vim.uv.fs_realpath(child) or ""
+
+  if not parent or not child then
+    return false
+  end
+
+  -- Add trailing slash to parent to avoid partial matches
+  if not parent:match("/$") then
+    parent = parent .. "/"
+  end
+
+  return child == parent or child:sub(1, #parent) == parent
 end
 
 return U

@@ -218,9 +218,4 @@ return {
 
   -- ui components
   { "MunifTanjim/nui.nvim", lazy = true },
-  {
-    "folke/persistence.nvim",
-    event = "BufReadPre",
-    opts = {},
-  },
 }
