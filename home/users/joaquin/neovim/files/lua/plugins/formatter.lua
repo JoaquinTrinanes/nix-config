@@ -92,6 +92,9 @@ return {
     lazy = true,
     cmd = "ConformInfo",
     event = { "BufWritePre" },
+    init = function()
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    end,
     keys = {
       {
         "<leader>cf",
