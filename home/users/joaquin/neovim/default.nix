@@ -48,6 +48,8 @@ in
     impureNeovim
   ];
 
+  xdg.configFile."nvim/snippets".source = mkImpureLink ./files/snippets;
+
   xdg.configFile."tridactyl/tridactylrc".text =
     let
       ytRegex = "${lib.escapeRegex "youtube.com/watch?"}v=.*";
