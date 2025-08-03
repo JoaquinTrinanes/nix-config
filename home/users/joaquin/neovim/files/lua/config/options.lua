@@ -126,3 +126,34 @@ vim.g.dbs = {
     end,
   },
 }
+
+vim.api.nvim_create_user_command("FtPlugin", function(opts)
+  local filetype = opts.args
+  local rtp = vim.opt.runtimepath:get()
+
+  local already_opened_file = false
+  local open = function(...)
+    if already_opened_file then
+      return vim.cmd.badd(...)
+    else
+      already_opened_file = true
+      return vim.cmd.edit(...)
+    end
+  end
+
+  for _, path in ipairs(rtp) do
+    local plugin_path = path .. "/ftplugin/" .. filetype .. ".vim"
+    local plugin_lua_path = path .. "/ftplugin/" .. filetype .. ".lua"
+
+    if vim.fn.filereadable(plugin_path) == 1 then
+      open(plugin_path)
+    end
+    if vim.fn.filereadable(plugin_lua_path) == 1 then
+      open(plugin_lua_path)
+      -- vim.print(plugin_lua_path)
+    end
+  end
+end, {
+  nargs = 1,
+  complete = "filetype",
+})
