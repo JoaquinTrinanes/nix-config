@@ -31,7 +31,7 @@ let
     globals = lib.recursiveUpdate prev.globals {
       nixPureMode = false;
       lazyOptions = {
-        lockfile = mkImpureLink ./files/lazy-lock.json; # "${configDir}/lazy-lock.json";
+        lockfile = mkImpureLink ./files/lazy-lock.json;
         install.missing = true;
       };
     };
@@ -47,17 +47,6 @@ in
     pureNeovim
     impureNeovim
   ];
-
-  xdg.configFile."nvim/lua" = {
-    source = mkImpureLink ./files/lua;
-    recursive = true;
-  };
-  xdg.configFile."nvim/lazy-lock.json".source = mkImpureLink ./files/lazy-lock.json;
-  xdg.configFile."nvim/ftplugin" = {
-    source = ./files/ftplugin;
-    recursive = true;
-  };
-  xdg.configFile."nvim/filetype.lua".source = mkImpureLink ./files/filetype.lua;
 
   xdg.configFile."tridactyl/tridactylrc".text =
     let
