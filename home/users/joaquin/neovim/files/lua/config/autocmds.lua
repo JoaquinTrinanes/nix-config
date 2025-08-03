@@ -137,3 +137,42 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     end
   end,
 })
+
+local executable_on_shebang_group = augroup("executable_on_shebang")
+
+vim.api.nvim_create_autocmd("BufNewFile", {
+  desc = "On new file, check for shebang after first write",
+  group = executable_on_shebang_group,
+  callback = function(newFileEvent)
+    vim.api.nvim_create_autocmd("BufWritePost", {
+      buffer = newFileEvent.buf,
+      desc = "Make new file executable if it has a shebang",
+      group = executable_on_shebang_group,
+      once = true,
+      callback = function(event)
+        local filepath = vim.api.nvim_buf_get_name(event.buf)
+        local first_line = vim.api.nvim_buf_get_lines(event.buf, 0, 1, false)[1]
+        if not first_line or not first_line:match("^#!/") then
+          return
+        end
+
+        local perms = vim.fn.getfperm(filepath)
+        if perms:sub(3, 3) == "x" then
+          -- already executable by owner
+          return
+        end
+
+        local new_perms = perms:sub(1, 2) .. "x" .. perms:sub(4)
+        vim.fn.setfperm(filepath, new_perms)
+
+        vim.fn.setfperm(filepath, new_perms)
+
+        vim.notify(
+          "Made '" .. vim.fn.fnamemodify(filepath, ":t") .. "' executable",
+          vim.log.levels.INFO,
+          { title = "Shebang Detected" }
+        )
+      end,
+    })
+  end,
+})
