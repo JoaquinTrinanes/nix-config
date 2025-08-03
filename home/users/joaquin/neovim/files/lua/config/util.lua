@@ -14,7 +14,11 @@ function U.dedup(tbl)
   return result
 end
 
-local lsp_attach = vim.api.nvim_create_augroup("lsp_attach", { clear = true })
+---@param name string
+---@param opts? vim.api.keyset.create_augroup
+function U.augroup(name, opts)
+  return vim.api.nvim_create_augroup(name, vim.tbl_deep_extend("force", { clear = true }, opts or {}))
+end
 
 U.lsp = {}
 
@@ -40,7 +44,7 @@ function U.lsp.on_attach(on_attach, name)
     name = nil
   end
   return vim.api.nvim_create_autocmd("LspAttach", {
-    group = lsp_attach,
+    group = U.augroup("lsp_attach"),
     callback = function(args)
       local buffer = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)

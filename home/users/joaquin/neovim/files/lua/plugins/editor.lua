@@ -229,7 +229,7 @@ return {
         "<leader>E",
         function()
           if not require("mini.files").close() then
-            require("mini.files").open(vim.uv.cwd(), true)
+            require("mini.files").open(vim.fn.getcwd(), true)
           end
         end,
         desc = "Explorer mini.files (cwd)",

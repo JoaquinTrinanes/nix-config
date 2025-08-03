@@ -1,3 +1,5 @@
+local U = require("config.util")
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -101,7 +103,7 @@ return {
         "<leader>E",
         function()
           if not require("mini.files").close() then
-            require("mini.files").open(vim.uv.cwd(), true)
+            require("mini.files").open(vim.fn.getcwd(), true)
           end
         end,
         desc = "Explorer mini.files (cwd)",
@@ -277,12 +279,8 @@ return {
         gitStatusCache = {}
       end
 
-      local function augroup(name)
-        return vim.api.nvim_create_augroup("MiniFiles_" .. name, { clear = true })
-      end
-
       autocmd("User", {
-        group = augroup("start"),
+        group = U.augroup("MiniFiles_start"),
         pattern = "MiniFilesExplorerOpen",
         callback = function(args)
           -- local bufnr = vim.api.nvim_get_current_buf()
@@ -292,7 +290,7 @@ return {
       })
 
       autocmd("User", {
-        group = augroup("close"),
+        group = U.augroup("MiniFiles_close"),
         pattern = "MiniFilesExplorerClose",
         callback = function()
           clearCache()
@@ -300,7 +298,7 @@ return {
       })
 
       autocmd("User", {
-        group = augroup("update"),
+        group = U.augroup("MiniFiles_update"),
         pattern = "MiniFilesBufferUpdate",
         callback = function(args)
           local bufnr = args.data.buf_id

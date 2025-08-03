@@ -56,7 +56,7 @@ return {
       lint.linters_by_ft = opts.linters_by_ft
 
       vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
-        group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
+        group = U.augroup("nvim-lint"),
         callback = U.debounce(function(event)
           local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
           linters = vim.list_extend({}, linters)

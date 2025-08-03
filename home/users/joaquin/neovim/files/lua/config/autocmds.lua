@@ -1,6 +1,6 @@
-local function augroup(name)
-  return vim.api.nvim_create_augroup(name, { clear = true })
-end
+local U = require("config.util")
+
+local augroup = U.augroup
 
 -- Check if we need to reload the file when it changed
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
