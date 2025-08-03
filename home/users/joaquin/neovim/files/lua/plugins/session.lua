@@ -62,7 +62,7 @@ local function update_session_state()
   end
 end
 
-local persistence_group = vim.api.nvim_create_augroup("persistence_setup", { clear = true })
+local persistence_group = U.augroup("persistence_setup")
 
 return {
   {
