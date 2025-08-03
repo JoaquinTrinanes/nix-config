@@ -147,6 +147,7 @@ in
         ];
         default-command = [ "log" ];
         diff-editor = "hunk";
+        diff-instructions = false;
       };
       colors = {
         "diff added" = {
