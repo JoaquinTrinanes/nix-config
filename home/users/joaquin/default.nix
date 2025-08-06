@@ -19,7 +19,7 @@
   ];
 
   home.shell = {
-    enableFishIntegration = false;
+    enableShellIntegration = false;
   };
 
   accounts.email.accounts = {
@@ -87,6 +87,8 @@
 
   programs.mise = {
     enable = true;
+    enableBashIntegration = true;
+    enableNushellIntegration = true;
     globalConfig = {
       settings = {
         all_compile = false;
@@ -203,6 +205,8 @@
 
   programs.zoxide = {
     enable = true;
+    enableBashIntegration = true;
+    enableNushellIntegration = true;
     options = [ "--cmd=z" ];
   };
 
@@ -217,6 +221,10 @@
 
   programs.starship = {
     enable = true;
+
+    enableBashIntegration = true;
+    enableNushellIntegration = true;
+
     settings = {
       add_newline = true;
       # continuation_prompt = "::: ";
@@ -332,6 +340,10 @@
 
   programs.atuin = {
     enable = true;
+
+    enableBashIntegration = true;
+    enableNushellIntegration = true;
+
     flags = [ "--disable-up-arrow" ];
     daemon.enable = true;
     settings = {
