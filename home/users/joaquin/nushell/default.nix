@@ -59,10 +59,6 @@ let
 in
 {
   imports = [ ./theme.nix ];
-  programs.carapace.enableNushellIntegration = false;
-
-  # breaks nushell lsp due to not checking if shell is interactive
-  services.gpg-agent.enableNushellIntegration = false;
 
   # config files are added to the wrapper
   home.file."${configFile}".enable = false;

@@ -85,8 +85,6 @@ in
           };
         };
       };
-    enableBashIntegration = false;
-    enableZshIntegration = false;
   };
   xdg.configFile."wezterm/wezterm.lua".source =
     config.lib.impurePath.mkImpureLink ./files/wezterm.lua;
