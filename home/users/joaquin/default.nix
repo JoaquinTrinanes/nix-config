@@ -16,6 +16,8 @@
     ./nushell
     ./terminal
     ./wireplumber
+
+    inputs.nix-index-database.homeModules.nix-index
   ];
 
   home.shell = {

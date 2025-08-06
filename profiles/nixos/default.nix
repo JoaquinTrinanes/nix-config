@@ -12,7 +12,6 @@
     ./gaming
     ./hardware-acceleration
     ./jellyfin
-    ./nix-index
     ./printing
     ./samba
     ./ssh
