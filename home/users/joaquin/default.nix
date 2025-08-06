@@ -95,6 +95,7 @@
       settings = {
         all_compile = false;
         experimental = true;
+        not_found_auto_install = false;
         idiomatic_version_file_enable_tools = [
           "node"
           "rust"
