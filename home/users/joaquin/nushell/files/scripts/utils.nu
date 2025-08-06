@@ -15,19 +15,16 @@ export def intersection [other]: [list -> list range -> range] {
     } | flatten
 }
 
+# Completes executables in PATH, as well as aliases
 export def "nu-complete from-path" [] {
-    $env.PATH
-    | where { path exists }
-    | ls --full-paths ...$in
-    | where type != dir
-    | get name
+    fd --follow --type executable . --max-depth 1 ...($env.PATH | where { path exists })
+    | lines
     | wrap description
-    | insert value { $in.description | path basename }
+    | insert value { get description | path basename }
     | append (
         scope aliases
-        | select name expansion
-        | rename value description
-        | update description { $"Alias for '($in)'" }
+        | select name description
+        | rename --column {name: value}
     )
     | sort-by -n value
     | uniq-by value
