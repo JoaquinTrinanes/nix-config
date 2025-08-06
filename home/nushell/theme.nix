@@ -138,7 +138,7 @@ in
         }
 
         $env.config.color_config = ($env.config.color_config | merge $theme)
-        $env.config.menus = ($env.config.menus | each {|it| $it | update style {|menu| $menu.style | merge $menu_style } })
+        $env.config.menus = ($env.config.menus | each { update style { merge $menu_style } })
     }
   '';
 }

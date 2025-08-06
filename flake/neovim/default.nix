@@ -177,9 +177,9 @@
           configDir =
             (lib.fileset.toSource {
               root = _self;
-              fileset = ../../home/users/joaquin/neovim/files;
+              fileset = ../../home/neovim/files;
             })
-            + /home/users/joaquin/neovim/files;
+            + /home/neovim/files;
         in
         mkNeovim {
           neovim-unwrapped = inputs'.neovim-nightly-overlay.packages.default;

@@ -8,7 +8,7 @@
         ];
         home-manager = {
           enable = true;
-          modules = [ ../home/users/joaquin ];
+          modules = [ ../home ];
         };
       };
     };
