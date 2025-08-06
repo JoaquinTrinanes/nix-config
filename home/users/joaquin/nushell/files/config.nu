@@ -88,7 +88,7 @@ $env.config.table.mode = "compact"
 $env.config.table.header_on_separator = true
 $env.config.table.trim.truncating_suffix = "…"
 
-$env.config.filesize.unit = "metric"
+$env.config.filesize.unit = "binary"
 
 $env.config.cursor_shape.emacs = "line"
 $env.config.cursor_shape.vi_insert = "line"
