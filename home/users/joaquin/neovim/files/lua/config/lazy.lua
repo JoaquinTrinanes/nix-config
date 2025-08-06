@@ -50,7 +50,7 @@ local lazyoptions = {
 }
 
 for name, path in pairs(vim.g.pluginPathMap or {}) do
-  lazyoptions.spec[#lazyoptions.spec + 1] = { name, dir = path, pin = true }
+  lazyoptions.spec[#lazyoptions.spec + 1] = { name, dir = path, pin = true, optional = true }
 end
 
 -- Disable some deprecation warnings while snacks.nvim is not updated
