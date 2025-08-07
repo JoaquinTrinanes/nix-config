@@ -22,6 +22,8 @@ end
 
 U.lsp = {}
 
+local lsp_attach_group = U.augroup("lsp_attach")
+
 ---@class ExtendedLspConfig: vim.lsp.Config
 ---@field enabled? boolean
 
@@ -32,19 +34,14 @@ function U.lsp.config(server, server_config)
   local enabled = server_config.enabled ~= false
   vim.lsp.config(server, server_config)
 
-  if server ~= "*" then
-    vim.lsp.enable(server, enabled)
-  end
+  vim.lsp.enable(server, enabled)
 end
 
 ---@param on_attach fun(client: vim.lsp.Client, buffer: number)
 ---@param name? string
 function U.lsp.on_attach(on_attach, name)
-  if name == "*" then
-    name = nil
-  end
   return vim.api.nvim_create_autocmd("LspAttach", {
-    group = U.augroup("lsp_attach"),
+    group = lsp_attach_group,
     callback = function(args)
       local buffer = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
