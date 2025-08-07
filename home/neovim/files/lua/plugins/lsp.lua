@@ -39,6 +39,16 @@ vim.diagnostic.config({
   },
 })
 
+U.lsp.on_attach(function(client, buffer)
+  if client:supports_method("textDocument/codeLens", buffer) then
+    vim.lsp.codelens.refresh()
+    -- vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+    --   buffer = buffer,
+    --   callback = vim.lsp.codelens.refresh,
+    -- })
+  end
+end)
+
 ---@type LazyPluginSpec[]
 return {
   {
