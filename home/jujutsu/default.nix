@@ -86,6 +86,8 @@ in
         backend = "none";
         watchman.register-snapshot-trigger = true;
       };
+      # Don't track files in the repo root
+      snapshot.auto-track = "glob:*/**/*";
       revset-aliases = {
         "default()" = "default(@)";
         "default(x)" = "present(x) | ancestors(immutable_heads().., 2) | present(trunk())";
