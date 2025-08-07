@@ -30,7 +30,7 @@ local lazyoptions = {
   },
   local_spec = true,
   checker = { enabled = false }, -- automatically check for plugin updates
-  change_detection = { notify = false },
+  change_detection = { enabled = false, notify = false },
   performance = {
     rtp = {
       reset = false,
