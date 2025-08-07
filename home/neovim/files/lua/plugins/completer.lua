@@ -4,12 +4,15 @@ return {
     -- will never be loaded, only used for types
     "justinsgithub/wezterm-types",
     lazy = true,
-  },
-  {
-    "folke/lazydev.nvim",
-    opts = {
-      library = {
-        { path = "wezterm-types", mods = { "wezterm" } },
+    specs = {
+      {
+        "folke/lazydev.nvim",
+        optional = true,
+        opts = {
+          library = {
+            { path = "wezterm-types", mods = { "wezterm" } },
+          },
+        },
       },
     },
   },
@@ -28,8 +31,21 @@ return {
           {
             "rafamadriz/friendly-snippets",
             config = function()
-              require("luasnip.loaders.from_vscode").lazy_load()
-              require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+              local paths = vim
+                .iter({
+                  "package.{json,jsonc}",
+                  "snippets/package.{json,jsonc}",
+                })
+                :map(function(pattern)
+                  return vim.api.nvim_get_runtime_file(pattern, true)
+                end)
+                :flatten()
+                :map(function(file)
+                  return vim.fn.fnamemodify(file, ":h")
+                end)
+                :totable()
+
+              require("luasnip.loaders.from_vscode").lazy_load({ paths = paths })
             end,
           },
         },
