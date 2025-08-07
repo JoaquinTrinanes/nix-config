@@ -161,7 +161,7 @@ $env.config.menus ++= [
             selection_rows: 4
             description_rows: 10
         }
-        source: {|buffer, position|
+        source: {|buffer position|
             scope commands
             | where name =~ $buffer
             | each {|it| {value: $it.name description: $it.usage} }

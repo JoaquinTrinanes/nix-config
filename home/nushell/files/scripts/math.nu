@@ -19,7 +19,7 @@ export def factor [n: int]: nothing -> list<int> {
     | sort
 }
 
-def gcd-pair [a: int, b: int]: nothing -> int {
+def gcd-pair [a: int b: int]: nothing -> int {
     mut x = $a
     mut y = $b
 
@@ -36,7 +36,7 @@ def gcd-pair [a: int, b: int]: nothing -> int {
 @example "GCD of two numbers" { gcd 10 5 } --result 5
 @example "GCD of many numbers" { gcd 9 6 21 } --result 3
 export def gcd [...nums: int]: nothing -> int {
-    $nums | reduce --fold 0 {|it, acc|
+    $nums | reduce --fold 0 {|it acc|
         if $it < 0 {
             error make {
                 msg: "Invalid value"
@@ -51,7 +51,7 @@ export def gcd [...nums: int]: nothing -> int {
 }
 
 # Least common multiple of two numbers
-def lcm-pair [a: int, b: int]: nothing -> int {
+def lcm-pair [a: int b: int]: nothing -> int {
     ($a * $b) // (gcd $a $b)
 }
 
@@ -59,7 +59,7 @@ def lcm-pair [a: int, b: int]: nothing -> int {
 @example "GCD of two numbers" { lcm 4 5 } --result 20
 @example "GCD of many numbers" { lcm 9 6 21 } --result 126
 export def lcm [...nums: int]: nothing -> int {
-    $nums | reduce --fold 1 {|it, acc|
+    $nums | reduce --fold 1 {|it acc|
         if $it < 0 {
             error make {
                 msg: "Invalid value"
