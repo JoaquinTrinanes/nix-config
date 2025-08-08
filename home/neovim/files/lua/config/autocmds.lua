@@ -176,3 +176,22 @@ vim.api.nvim_create_autocmd("BufNewFile", {
     })
   end,
 })
+
+vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
+  group = augroup("disable_undofile"),
+  callback = function(event)
+    local fname = vim.fn.resolve(event.file)
+    local bo = vim.bo[event.buf]
+
+    if
+      not bo.modifiable
+      or bo.buftype ~= ""
+      or vim.startswith(fname, "/tmp/")
+      or fname:match("/node_modules/")
+      or vim.startswith(fname, "/nix/store/")
+      or fname:match("COMMIT_EDITMSG$")
+    then
+      bo.undofile = false
+    end
+  end,
+})
