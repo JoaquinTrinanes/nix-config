@@ -39,24 +39,25 @@ in
       };
       fix.tools = {
         prettier = {
+          enabled = false;
           command = [
             "prettier"
             "--stdin-filepath"
             "$path"
           ];
           patterns = [
-            "glob:'**/*.js'"
-            "glob:'**/*.json'"
-            "glob:'**/*.jsonc'"
-            "glob:'**/*.jsx'"
-            "glob:'**/*.md'"
-            "glob:'**/*.mdx'"
-            "glob:'**/*.scss'"
-            "glob:'**/*.ts'"
-            "glob:'**/*.tsx'"
-            "glob:'**/*.vue'"
-            "glob:'**/*.yaml'"
-            "glob:'**/*.yml'"
+            "glob:**/*.js"
+            "glob:**/*.json"
+            "glob:**/*.jsonc"
+            "glob:**/*.jsx"
+            "glob:**/*.md"
+            "glob:**/*.mdx"
+            "glob:**/*.scss"
+            "glob:**/*.ts"
+            "glob:**/*.tsx"
+            "glob:**/*.vue"
+            "glob:**/*.yaml"
+            "glob:**/*.yml"
           ];
         };
         biome = {
@@ -67,19 +68,44 @@ in
             "--write"
           ];
           patterns = [
-            "glob:'**/*.js'"
-            "glob:'**/*.json'"
-            "glob:'**/*.jsonc'"
-            "glob:'**/*.jsx'"
-            "glob:'**/*.md'"
-            "glob:'**/*.mdx'"
-            "glob:'**/*.scss'"
-            "glob:'**/*.ts'"
-            "glob:'**/*.tsx'"
-            "glob:'**/*.vue'"
-            "glob:'**/*.yaml'"
-            "glob:'**/*.yml'"
+            "glob:**/*.js"
+            "glob:**/*.json"
+            "glob:**/*.jsonc"
+            "glob:**/*.jsx"
+            "glob:**/*.scss"
+            "glob:**/*.ts"
+            "glob:**/*.tsx"
+            "glob:**/*.vue"
           ];
+        };
+        topiary-nu = {
+          command = [
+            "topiary"
+            "format"
+            "--language"
+            "nu"
+          ];
+          patterns = [ "glob:**/*.nu" ];
+        };
+        nixfmt = {
+          command = [
+            "nixfmt"
+            "--filename=$path"
+          ];
+          patterns = [ "glob:**/*.nix" ];
+        };
+        stylua = {
+          command = [
+            "stylua"
+            "--stdin-filepath"
+            "$path"
+            "-"
+          ];
+          patterns = [ "glob:**/*.lua" ];
+        };
+        rustfmt = {
+          command = "rustfmt";
+          patterns = [ "glob:**/*.rs" ];
         };
       };
       fsmonitor = {
