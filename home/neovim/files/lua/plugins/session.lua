@@ -37,7 +37,7 @@ local function should_enable_persistence()
 
   -- Disable if all buffers are outside cwd
   local loaded_bufs = vim.tbl_filter(function(buffer)
-    return vim.api.nvim_buf_is_loaded(buffer) -- and vim.bo[buffer].buflisted
+    return vim.bo[buffer].buflisted and vim.bo[buffer].buftype == ""
   end, vim.api.nvim_list_bufs())
   if #loaded_bufs == 0 then
     return true
@@ -73,9 +73,12 @@ return {
       local persistence = require("persistence")
       persistence.setup(opts)
 
-      vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged", "BufReadPost" }, {
+      vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged", "BufReadPost", "BufDelete" }, {
         group = persistence_group,
-        callback = update_session_state,
+        callback = function()
+          -- schedule is needed to run the callback after buffers are actually deleted
+          vim.schedule(update_session_state)
+        end,
       })
 
       Snacks.toggle({
