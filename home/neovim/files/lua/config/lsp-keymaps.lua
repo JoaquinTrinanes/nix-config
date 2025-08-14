@@ -6,7 +6,7 @@ local M = {}
 M._keys = nil
 
 ---@alias LazyKeysLspSpec LazyKeysSpec|{has?:string|string[], cond?:fun():boolean}
----@alias LazyKeysLsp LazyKeys|{has?:string|string[], cond?:fun():boolean}
+---@alias LazyKeysLsp LazyKeys|{has?:vim.lsp.protocol.Method.ClientToServer|vim.lsp.protocol.Method.ClientToServer[], cond?:fun():boolean}
 
 ---@return LazyKeysLspSpec[]
 function M.get()
@@ -16,19 +16,18 @@ function M.get()
     -- stylua: ignore
     M._keys = {
       { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
-      { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "definition" },
+      { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "textDocument/definition" },
       { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
       { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
       { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
       { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
-      { "K", function() return vim.lsp.buf.hover() end, desc = "Hover" },
-      { "gK", function() return vim.lsp.buf.signature_help() end, desc = "Signature Help", has = "signatureHelp" },
-      { "<c-k>", function() return vim.lsp.buf.signature_help() end, mode = "i", desc = "Signature Help", has = "signatureHelp" },
-      { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "codeAction" },
-      { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" },
-      { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
+      { "gK", function() return vim.lsp.buf.signature_help() end, desc = "Signature Help", has = "textDocument/signatureHelp" },
+      { "<c-k>", function() return vim.lsp.buf.signature_help() end, mode = "i", desc = "Signature Help", has = "textDocument/signatureHelp" },
+      { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "textDocument/codeAction" },
+      { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "textDocument/codeLens" },
+      { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "textDocument/codeLens" },
       { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File", mode ={"n"}, has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
-      { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+      { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "textDocument/rename" },
       { "<leader>cA", function()
         vim.lsp.buf.code_action({
           apply = true,
@@ -37,21 +36,22 @@ function M.get()
             diagnostics = {},
           },
         })
-        end, desc = "Source Action", has = "codeAction" },
-      { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "documentHighlight",
+        end, desc = "Source Action", has = "textDocument/codeAction" },
+      { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "textDocument/documentHighlight",
         desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
-      { "[[", function() Snacks.words.jump(-vim.v.count1) end, has = "documentHighlight",
+      { "[[", function() Snacks.words.jump(-vim.v.count1) end, has = "textDocument/documentHighlight",
         desc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
-      { "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, has = "documentHighlight",
+      { "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, has = "textDocument/documentHighlight",
         desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
-      { "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, has = "documentHighlight",
+      { "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, has = "textDocument/documentHighlight",
         desc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
     }
 
   return M._keys
 end
 
----@param method string|string[]
+---@param buffer integer
+---@param method vim.lsp.protocol.Method.ClientToServer|vim.lsp.protocol.Method.ClientToServer[]
 function M.has(buffer, method)
   if type(method) == "table" then
     for _, m in ipairs(method) do
@@ -61,7 +61,6 @@ function M.has(buffer, method)
     end
     return false
   end
-  method = method:find("/") and method or "textDocument/" .. method
   local clients = vim.lsp.get_clients({ bufnr = buffer })
   for _, client in ipairs(clients) do
     if client:supports_method(method) then
