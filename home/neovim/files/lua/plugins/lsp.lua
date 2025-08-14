@@ -193,6 +193,8 @@ return {
     opts = function()
       -- stylua: ignore
       require'config.lsp-keymaps'.add({
+        { "<leader>ce",function() U.lsp.select_command() end, desc= "Pick LSP Command" },
+        { "<leader>cE", function() U.lsp.select_command({ prompt_for_args = true }) end, desc = "Pick LSP Command with arguments" },
         { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
         { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "textDocument/definition" },
         { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
