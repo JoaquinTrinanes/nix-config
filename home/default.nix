@@ -81,7 +81,7 @@
 
   programs.less = {
     enable = true;
-    keys = ''
+    config = ''
       #env
       LESS = --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen
     '';
