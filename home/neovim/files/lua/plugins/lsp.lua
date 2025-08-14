@@ -191,9 +191,38 @@ return {
     "neovim/nvim-lspconfig",
     optional = true,
     opts = function()
-      local Keys = require("config.lsp-keymaps").get()
       -- stylua: ignore
-      vim.list_extend(Keys, {
+      require'config.lsp-keymaps'.add({
+        { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
+        { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "textDocument/definition" },
+        { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
+        { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
+        { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
+        { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
+        { "gK", function() return vim.lsp.buf.signature_help() end, desc = "Signature Help", has = "textDocument/signatureHelp" },
+        { "<c-k>", function() return vim.lsp.buf.signature_help() end, mode = "i", desc = "Signature Help", has = "textDocument/signatureHelp" },
+        { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "textDocument/codeAction" },
+        { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "textDocument/codeLens" },
+        { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "textDocument/codeLens" },
+        { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File", mode ={"n"}, has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
+        { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "textDocument/rename" },
+        { "<leader>cA", function()
+          vim.lsp.buf.code_action({
+            apply = true,
+            context = {
+              only = { "source" },
+              diagnostics = {},
+            },
+          })
+          end, desc = "Source Action", has = "textDocument/codeAction" },
+        { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "textDocument/documentHighlight",
+          desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
+        { "[[", function() Snacks.words.jump(-vim.v.count1) end, has = "textDocument/documentHighlight",
+          desc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
+        { "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, has = "textDocument/documentHighlight",
+          desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
+        { "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, has = "textDocument/documentHighlight",
+        desc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
         { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition", has = "textDocument/definition" },
         { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
         { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
