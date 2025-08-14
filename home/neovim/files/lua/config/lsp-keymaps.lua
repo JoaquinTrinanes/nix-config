@@ -2,60 +2,23 @@ local U = require("config.util")
 
 local M = {}
 
----@type LazyKeysLspSpec[]|nil
-M._keys = nil
+---@type LazyKeysLspSpec[]
+local _keys = {}
 
----@alias LazyKeysLspSpec LazyKeysSpec|{has?:string|string[], cond?:fun():boolean}
----@alias LazyKeysLsp LazyKeys|{has?:vim.lsp.protocol.Method.ClientToServer|vim.lsp.protocol.Method.ClientToServer[], cond?:fun():boolean}
+---@class CustomLazyKeysLspFields
+---@field has? vim.lsp.protocol.Method.ClientToServer|vim.lsp.protocol.Method.ClientToServer[]
+---@field cond? boolean|fun():boolean
 
----@return LazyKeysLspSpec[]
-function M.get()
-  if M._keys then
-    return M._keys
-  end
-    -- stylua: ignore
-    M._keys = {
-      { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
-      { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "textDocument/definition" },
-      { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
-      { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
-      { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
-      { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
-      { "gK", function() return vim.lsp.buf.signature_help() end, desc = "Signature Help", has = "textDocument/signatureHelp" },
-      { "<c-k>", function() return vim.lsp.buf.signature_help() end, mode = "i", desc = "Signature Help", has = "textDocument/signatureHelp" },
-      { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "textDocument/codeAction" },
-      { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "textDocument/codeLens" },
-      { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "textDocument/codeLens" },
-      { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File", mode ={"n"}, has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
-      { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "textDocument/rename" },
-      { "<leader>cA", function()
-        vim.lsp.buf.code_action({
-          apply = true,
-          context = {
-            only = { "source" },
-            diagnostics = {},
-          },
-        })
-        end, desc = "Source Action", has = "textDocument/codeAction" },
-      { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "textDocument/documentHighlight",
-        desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
-      { "[[", function() Snacks.words.jump(-vim.v.count1) end, has = "textDocument/documentHighlight",
-        desc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
-      { "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, has = "textDocument/documentHighlight",
-        desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
-      { "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, has = "textDocument/documentHighlight",
-        desc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
-    }
+---@class LazyKeysLspSpec : LazyKeysSpec, CustomLazyKeysLspFields
 
-  return M._keys
-end
+---@class LazyKeysLsp : LazyKeys, CustomLazyKeysLspFields
 
 ---@param buffer integer
 ---@param method vim.lsp.protocol.Method.ClientToServer|vim.lsp.protocol.Method.ClientToServer[]
-function M.has(buffer, method)
+local function supports_method(buffer, method)
   if type(method) == "table" then
     for _, m in ipairs(method) do
-      if M.has(buffer, m) then
+      if supports_method(buffer, m) then
         return true
       end
     end
@@ -71,12 +34,12 @@ function M.has(buffer, method)
 end
 
 ---@return LazyKeysLsp[]
-function M.resolve(buffer)
+local function resolve_keymaps(buffer)
   local Keys = require("lazy.core.handler.keys")
   if not Keys.resolve then
     return {}
   end
-  local spec = vim.tbl_extend("force", {}, M.get())
+  local spec = vim.tbl_extend("force", {}, _keys)
   local opts = U.opts("nvim-lspconfig")
   local clients = vim.lsp.get_clients({ bufnr = buffer })
   for _, client in ipairs(clients) do
@@ -88,10 +51,10 @@ end
 
 function M.on_attach(_, buffer)
   local Keys = require("lazy.core.handler.keys")
-  local keymaps = M.resolve(buffer)
+  local keymaps = resolve_keymaps(buffer)
 
   for _, keys in pairs(keymaps) do
-    local has = not keys.has or M.has(buffer, keys.has)
+    local has = not keys.has or supports_method(buffer, keys.has)
     local cond = not (keys.cond == false or ((type(keys.cond) == "function") and not keys.cond()))
 
     if has and cond then
@@ -106,6 +69,11 @@ function M.on_attach(_, buffer)
       vim.keymap.set(keys.mode or "n", keys.lhs, keys.rhs, opts)
     end
   end
+end
+
+---@param spec LazyKeysLspSpec[]
+function M.add(spec)
+  vim.list_extend(_keys, spec)
 end
 
 return M
