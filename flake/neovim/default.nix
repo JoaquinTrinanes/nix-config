@@ -103,7 +103,18 @@
           vim-dadbod-ui
           vim-sleuth
           which-key-nvim
-        ]);
+        ])
+        ++ [
+          (pkgs.vimPlugins.nvim-treesitter-textobjects.overrideAttrs (_: {
+            version = "2025-8-28";
+            src = builtins.fetchTree {
+              type = "github";
+              owner = "nvim-treesitter";
+              repo = "nvim-treesitter-textobjects";
+              rev = "1b2d85d3de6114c4bcea89ffb2cd1ce9e3a19931";
+            };
+          }))
+        ];
       extraPackages = builtins.attrValues {
         inherit (pkgs)
           bash-language-server
