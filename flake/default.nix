@@ -14,7 +14,6 @@ in
     ./substituters.nix
     ./templates
     ./lib
-    ./firefox
     ./neovim
   ];
 

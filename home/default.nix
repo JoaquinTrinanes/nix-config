@@ -324,7 +324,7 @@
   xdg.mimeApps.defaultApplications =
     let
       defaultWebBrowser = lib.mkAfter [
-        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.firefox.desktopItem.name
+        pkgs.firefox.desktopItem.name
       ];
     in
     {
