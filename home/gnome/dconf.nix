@@ -56,7 +56,7 @@ in
         in
         [
           "org.gnome.Nautilus.desktop"
-          (getName inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.firefox)
+          (getName pkgs.firefox)
           (getName pkgs.vesktop)
           "com.mitchellh.ghostty.desktop"
         ];
