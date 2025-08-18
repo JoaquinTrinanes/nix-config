@@ -33,9 +33,10 @@ in
       };
       git = {
         auto-local-bookmark = false;
+        colocate = true;
         private-commits = "private()";
-        sign-on-push = config.programs.git.signing.signByDefault;
         push-new-bookmarks = false;
+        sign-on-push = config.programs.git.signing.signByDefault;
       };
       fix.tools = {
         prettier = {
@@ -224,7 +225,6 @@ in
         clone = [
           "git"
           "clone"
-          "--colocate"
         ];
         d = [ "diff" ];
         dup = [ "duplicate" ];
