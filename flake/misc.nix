@@ -24,30 +24,18 @@
       ];
     };
 
-    home-manager.modules = [
-      {
-        _file = ./misc.nix;
-        nix.gc = lib.mkDefault {
-          automatic = true;
-          frequency = "weekly";
-          options = "--delete-older-than 30d";
-
-        };
-      }
-    ];
-    nixos.modules = [
-      {
-        _file = ./misc.nix;
-        nix.gc = lib.mkDefault {
-          automatic = true;
-          dates = "weekly";
-          options = "--delete-older-than 30d";
-        };
-
-      }
-    ];
-
     common = {
+      modules = [
+        {
+          _file = ./misc.nix;
+          nix.gc = lib.mkDefault {
+            automatic = true;
+            dates = "weekly";
+            options = "--delete-older-than 30d";
+          };
+
+        }
+      ];
       specialArgs = {
         inherit inputs;
       };
@@ -70,15 +58,14 @@
                   fallback = lib.mkDefault true;
                   log-lines = lib.mkDefault 50;
                   auto-optimise-store = lib.mkDefault true;
-                  experimental-features =
-                    [
-                      "nix-command"
-                      "flakes"
-                      "auto-allocate-uids"
-                    ]
-                    ++ lib.optionals isLix [
-                      "pipe-operator"
-                    ];
+                  experimental-features = [
+                    "nix-command"
+                    "flakes"
+                    "auto-allocate-uids"
+                  ]
+                  ++ lib.optionals isLix [
+                    "pipe-operator"
+                  ];
                   keep-outputs = lib.mkDefault true;
                   auto-allocate-uids = lib.mkDefault true;
                   narinfo-cache-negative-ttl = lib.mkDefault 0;
