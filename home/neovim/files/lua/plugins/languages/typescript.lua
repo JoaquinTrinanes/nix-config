@@ -1,10 +1,9 @@
+---@type LazyPluginSpec[]
 return {
-  -- correctly setup lspconfig
   {
     "neovim/nvim-lspconfig",
     optional = true,
     opts = {
-      -- make sure mason installs the server
       servers = {
         vtsls = {
           settings = {
@@ -81,7 +80,10 @@ return {
                 vim.lsp.buf.code_action({
                   apply = true,
                   context = {
-                    only = { "source.addMissingImports.ts" },
+                    only = {
+                      ---@diagnostic disable-next-line: assign-type-mismatch
+                      "source.addMissingImports.ts",
+                    },
                     diagnostics = {},
                   },
                 })
@@ -94,7 +96,10 @@ return {
                 vim.lsp.buf.code_action({
                   apply = true,
                   context = {
-                    only = { "source.removeUnused.ts" },
+                    only = {
+                      ---@diagnostic disable-next-line: assign-type-mismatch
+                      "source.removeUnused.ts",
+                    },
                     diagnostics = {},
                   },
                 })
@@ -107,7 +112,10 @@ return {
                 vim.lsp.buf.code_action({
                   apply = true,
                   context = {
-                    only = { "source.fixAll.ts" },
+                    only = {
+                      ---@diagnostic disable-next-line: assign-type-mismatch
+                      "source.fixAll.ts",
+                    },
                     diagnostics = {},
                   },
                 })
@@ -256,6 +264,7 @@ return {
   -- Filetype icons
   {
     "echasnovski/mini.icons",
+    optional = true,
     opts = {
       file = {
         [".eslintrc.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },

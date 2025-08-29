@@ -105,7 +105,6 @@ return {
             },
           },
         },
-        ["rust_analyzer"] = {},
         intelephense = {
           init_options = {
             globalStoragePath = vim.fn.expand("$XDG_DATA_HOME"),
@@ -176,7 +175,6 @@ return {
         r_language_server = {},
         biome = {},
         tinymist = {},
-        -- vtsls = {},
       },
     },
     config = function(_, opts)

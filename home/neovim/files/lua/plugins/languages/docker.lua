@@ -1,9 +1,5 @@
+---@type LazyPluginSpec[]
 return {
-  {
-    "nvim-treesitter/nvim-treesitter",
-    optional = true,
-    opts = { ensure_installed = { "dockerfile" } },
-  },
   {
     "mfussenegger/nvim-lint",
     optional = true,

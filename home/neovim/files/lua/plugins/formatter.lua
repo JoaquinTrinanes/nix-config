@@ -139,6 +139,7 @@ return {
         typescript = biomePrettierFormatters,
         typescriptreact = biomePrettierFormatters,
 
+        yaml = { "prettier" },
         lua = { "stylua" },
         fish = { "fish_indent" },
         sh = { "shfmt" },
