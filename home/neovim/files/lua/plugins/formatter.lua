@@ -83,7 +83,7 @@ snacks_toggle():map("<leader>uf")
 snacks_toggle(true):map("<leader>uF")
 
 ---@type conform.FiletypeFormatter
-local biomePrettierFormatters = { "prettier", "biome-check", stop_after_first = true }
+local biomePrettierFormatters = { "prettier_cwd", "biome-check", stop_after_first = true }
 
 ---@type LazyPluginSpec[]
 return {
@@ -155,9 +155,6 @@ return {
       },
       formatters = {
         sqlfluff = { require_cwd = false },
-        prettier = { require_cwd = true },
-        biome = { require_cwd = false },
-        ["biome-check"] = { require_cwd = false },
         topiary_nu = {
           command = "topiary",
           args = { "format", "--language", "nu" },
@@ -168,5 +165,17 @@ return {
         },
       },
     },
+  },
+  {
+    "stevearc/conform.nvim",
+    optional = true,
+    opts = function(_, opts)
+      local prettier_cwd = vim.deepcopy(require("conform.formatters.prettier"))
+
+      prettier_cwd = vim.tbl_deep_extend("force", prettier_cwd, { require_cwd = true })
+
+      opts.formatters = opts.formatters or {}
+      opts.formatters.prettier_cwd = prettier_cwd
+    end,
   },
 }
