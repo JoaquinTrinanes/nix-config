@@ -257,9 +257,9 @@ return {
       },
     },
   },
-  { "echasnovski/mini.extra", lazy = true },
+  { "nvim-mini/mini.extra", lazy = true },
   {
-    "echasnovski/mini.ai",
+    "nvim-mini/mini.ai",
     event = "VeryLazy",
     opts = function()
       local ai = require("mini.ai")

@@ -67,7 +67,7 @@ return {
     keys = { { "<leader>e", false }, { "<leader>E", false } },
   },
   {
-    "echasnovski/mini.files",
+    "nvim-mini/mini.files",
     lazy = false,
     opts = {
       windows = {
@@ -193,7 +193,7 @@ return {
   },
   {
     -- add git highligts
-    "echasnovski/mini.files",
+    "nvim-mini/mini.files",
     optional = true,
     opts = function()
       -- adapted from https://gist.github.com/bassamsdata/eec0a3065152226581f8d4244cce9051

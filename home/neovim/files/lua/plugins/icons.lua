@@ -50,7 +50,7 @@ end
 ---@type LazyPluginSpec[]
 return {
   {
-    "echasnovski/mini.icons",
+    "nvim-mini/mini.icons",
     opts = {
       style = vim.o.termguicolors and "glyph" or "ascii",
       lsp = mini_icons_lsp_override,
