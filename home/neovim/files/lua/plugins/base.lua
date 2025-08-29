@@ -106,7 +106,6 @@ local M = {
     priority = 1000,
     lazy = false,
   },
-  { "nvim-lua/plenary.nvim", lazy = true },
 }
 
 return M
