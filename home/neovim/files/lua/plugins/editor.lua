@@ -148,6 +148,15 @@ return {
       { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
     },
   },
+  {
+    "b0o/SchemaStore.nvim",
+    lazy = true,
+    version = false,
+    optional = true,
+    opts_extend = { "extra", "select", "ignore" },
+    opts = {},
+    config = function() end,
+  },
 
   -- Finds and lists all of the TODO, HACK, BUG, etc comment
   -- in your project and loads them into a browsable list.
