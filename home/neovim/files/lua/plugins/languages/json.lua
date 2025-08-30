@@ -1,19 +1,20 @@
+local U = require("config.util")
+
 ---@type LazyPluginSpec[]
 return {
-  {
-    "b0o/SchemaStore.nvim",
-    lazy = true,
-    version = false,
-  },
+  { "b0o/SchemaStore.nvim" },
   {
     "neovim/nvim-lspconfig",
     optional = true,
     opts = {
       servers = {
         jsonls = {
-          on_new_config = function(new_config)
-            new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-            vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+          before_init = function(_, config)
+            config.settings.json.schemas = config.settings.json.schemas or {}
+            vim.list_extend(
+              config.settings.json.schemas,
+              require("schemastore").json.schemas(U.opts("SchemaStore.nvim"))
+            )
           end,
           settings = {
             json = {
