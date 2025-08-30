@@ -1,21 +1,20 @@
+local U = require("config.util")
+
 ---@type LazyPluginSpec[]
 return {
-  {
-    "b0o/SchemaStore.nvim",
-    lazy = true,
-    version = false,
-  },
+  { "b0o/SchemaStore.nvim" },
   {
     "neovim/nvim-lspconfig",
     optional = true,
     opts = {
       servers = {
         yamlls = {
-          on_new_config = function(new_config)
-            new_config.settings.yaml.schemas = vim.tbl_deep_extend(
+          before_init = function(_, config)
+            config.settings.yaml.schemas = config.settings.yaml.schemas or {}
+            config.settings.yaml.schemas = vim.tbl_extend(
               "force",
-              new_config.settings.yaml.schemas or {},
-              require("schemastore").yaml.schemas()
+              require("schemastore").yaml.schemas(U.opts("SchemaStore.nvim")),
+              config.settings.yaml.schemas
             )
           end,
           settings = {
