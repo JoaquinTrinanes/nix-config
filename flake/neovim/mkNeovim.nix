@@ -13,6 +13,7 @@ let
       extraPackages ? [ ], # Extra runtime dependencies (e.g. ripgrep, ...)
       configDir ? null,
       globals ? { },
+      initLuaSrc ? null,
       ...
     }@allMkNeovimArgs:
     let
@@ -20,6 +21,7 @@ let
         "appName"
         "configDir"
         "extraPackages"
+        "initLuaSrc"
       ];
       inherit (pkgs-wrapNeovim) neovimUtils;
       toLua = lib.generators.toLua { };
@@ -47,7 +49,8 @@ let
             vim.opt.runtimepath:prepend(${toLua [ (toString configDir) ]})
             vim.opt.runtimepath:append(${toLua (map (p: "${p}/after") [ (toString configDir) ])})
           ''
-          + baseConfig.luaRcContent;
+          + baseConfig.luaRcContent
+          + lib.optionalString (initLuaSrc != null) "dofile(${toLua "${configDir}/init.lua"})";
       };
     in
     pkgs-wrapNeovim.wrapNeovimUnstable neovim-unwrapped config;
