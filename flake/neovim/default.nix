@@ -206,9 +206,9 @@
               install.missing = false;
             };
           };
+          initLuaSrc = "${configDir}/init.lua";
           customLuaRC = ''
             vim.opt.runtimepath:append(${toLua treesitterParsersAndQueries})
-            require("config.lazy")
           '';
         };
     in

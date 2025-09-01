@@ -25,6 +25,7 @@ let
   # vim, nvim
   impureNeovim = packages.neovim-impure.override (prev: {
     configDir = mkImpureLink ./files;
+    initLuaSrc = mkImpureLink ./files/init.lua;
     viAlias = false;
     vimAlias = true;
     appName = "nvim";
