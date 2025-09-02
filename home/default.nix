@@ -326,6 +326,7 @@
       defaultWebBrowser = lib.mkAfter [
         pkgs.firefox.desktopItem.name
       ];
+      defaultEditor = lib.mkAfter [ "nvim.desktop" ];
     in
     {
       "x-scheme-handler/http" = defaultWebBrowser;
@@ -339,6 +340,23 @@
       "application/xhtml+xml" = defaultWebBrowser;
       "application/x-extension-xhtml" = defaultWebBrowser;
       "application/x-extension-xht" = defaultWebBrowser;
+
+      # any other editor that defines these mimetypes in its desktop file could take precedence, so they are explicitly declared
+      "text/plain" = defaultEditor;
+      "text/english" = defaultEditor;
+      "text/x-makefile" = defaultEditor;
+      "text/x-c++hdr" = defaultEditor;
+      "text/x-c++src" = defaultEditor;
+      "text/x-chdr" = defaultEditor;
+      "text/x-csrc" = defaultEditor;
+      "text/x-java" = defaultEditor;
+      "text/x-moc" = defaultEditor;
+      "text/x-pascal" = defaultEditor;
+      "text/x-tcl" = defaultEditor;
+      "text/x-tex" = defaultEditor;
+      "application/x-shellscript" = defaultEditor;
+      "text/x-c" = defaultEditor;
+      "text/x-c++" = defaultEditor;
     };
 
   programs.atuin = {

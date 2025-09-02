@@ -66,10 +66,5 @@ in
         pinentry-gnome3
         ;
     };
-
-    # TODO: see if this works after reboot (ensure .config/mimeapps.list doesn't exist)
-    xdg.mime.defaultApplications = {
-      "text/plain" = "gnome-text-editor.desktop";
-    };
   };
 }
