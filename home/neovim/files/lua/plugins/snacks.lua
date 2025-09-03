@@ -15,7 +15,7 @@ return {
     "folke/snacks.nvim",
     lazy = false,
     priority = 1000,
-    dependencies = { { "folke/persistence.nvim" } },
+    dependencies = { { "folke/persistence.nvim", optional = true } },
     ---@module 'snacks'
     ---@type snacks.Config
     opts = {
@@ -49,24 +49,28 @@ return {
       },
       indent = { animate = { enabled = false } },
       bigfile = {},
-      quickfile = {},
       notifier = {},
       scope = {},
       statuscolumn = {},
       words = {},
       dashboard = {
         preset = {
-          -- stylua: ignore
-          ---@type snacks.dashboard.Item[]
+          header = "nvim",
           keys = {
-            { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-            { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-            { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-            { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-            { icon = " ", key = "s", desc = "Restore Session", section = "session", action = ":lua require('persistence').load()" },
-            { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
-            { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+            { key = "s", desc = "Restore Session", section = "session", action = ":lua require('persistence').load()" },
+            { key = "n", desc = "New File", action = ":enew" },
+            { key = "q", desc = "Quit", action = ":qa" },
+            {
+              key = "<C-c>",
+              desc = "Close dashboard",
+              action = "<leader>bd",
+              hidden = true,
+            },
           },
+        },
+        sections = {
+          { section = "header" },
+          { section = "keys" },
         },
       },
     },
@@ -150,7 +154,7 @@ return {
       {
         "<leader>fF",
         function()
-          Snacks.picker.pick("files", { root = false })
+          Snacks.picker.pick("files", { cwd = vim.lsp.buf.list_workspace_folders()[1] })
         end,
         desc = "Find Files (cwd)",
       },
@@ -229,7 +233,7 @@ return {
       {
         "<leader>sG",
         function()
-          Snacks.picker.pick("live_grep", { root = false })
+          Snacks.picker.pick("live_grep", { cwd = vim.lsp.buf.list_workspace_folders()[1] })
         end,
         desc = "Grep (cwd)",
       },
@@ -251,7 +255,7 @@ return {
       {
         "<leader>sW",
         function()
-          Snacks.picker.pick("grep_word", { root = false })
+          Snacks.picker.pick("grep_word", { cwd = vim.lsp.buf.list_workspace_folders()[1] })
         end,
         desc = "Visual selection or word (cwd)",
         mode = { "n", "x" },
