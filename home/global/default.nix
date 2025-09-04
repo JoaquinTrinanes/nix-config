@@ -12,6 +12,7 @@
   };
 
   programs.ssh = {
+    enableDefaultConfig = false;
     includes = [ "local.conf" ];
   };
 
