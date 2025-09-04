@@ -239,10 +239,6 @@ if vim.fn.has("nvim-0.11") == 0 then
   end, { expr = true, desc = "Jump Previous" })
 end
 
--- don't copy text when deleting single characters
-map("n", "x", [["_x]])
-map("n", "X", [["_X]])
-
 map("n", "Q", "@qj")
 map("x", "Q", ":norm @q<CR>")
 
@@ -273,7 +269,6 @@ end, { desc = "Copy file path" })
 
 map("i", "<C-c>", "<Esc>")
 
--- OLD
 -- Buffers. Only set if no other plugin does
 safe_keymap_set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 safe_keymap_set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
@@ -288,10 +283,7 @@ map("n", "<leader>l", "<cmd>Lazy<cr>")
 
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
+-- CTRL+<hjkl> to switch between windows (:h wincmd)
 map("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 map("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 map("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
@@ -322,4 +314,14 @@ end, {
   desc = "Toggle fold under cursor",
 })
 
-map({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yanking" })
+-- Don't copy text when deleting single characters
+map("n", "x", [["_x]])
+map("n", "X", [["_X]])
+
+-- Yank, paste and delete without affecting the system clipboard
+map({ "n", "v" }, "<leader>y", '"*y')
+map("n", "<leader>Y", '"*y$')
+map({ "n", "v" }, "<leader>p", '"*p')
+map({ "n", "v" }, "<leader>P", '"*P')
+map({ "n", "v" }, "<leader>d", '"*d')
+map("n", "<leader>D", '"*D')
