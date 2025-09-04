@@ -2,6 +2,20 @@ local U = require("config.util")
 
 local diagnostics_signs = vim.diagnostic.config().signs.text or {}
 
+local icons = {
+  diagnostics = {
+    error = diagnostics_signs[vim.diagnostic.severity.ERROR],
+    warn = diagnostics_signs[vim.diagnostic.severity.WARN],
+    hint = diagnostics_signs[vim.diagnostic.severity.HINT],
+    info = diagnostics_signs[vim.diagnostic.severity.INFO],
+  },
+  git = {
+    added = " ",
+    modified = " ",
+    removed = " ",
+  },
+}
+
 ---@type LazyPluginSpec[]
 return {
   {
@@ -12,13 +26,13 @@ return {
       { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
       { "<leader>bh", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
       { "<leader>bl", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
-      { "<leader>bb", "<cmd>BufferLinePick<cr>", desc = "Pick buffer" },
-      { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
-      { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
-      { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
-      { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
-      { "[B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
-      { "]B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
+      { "<leader>bb", "<cmd>BufferLinePick<CR>", desc = "Pick buffer" },
+      { "<S-h>", "<Cmd>BufferLineCyclePrev<CR>", desc = "Prev Buffer" },
+      { "<S-l>", "<Cmd>BufferLineCycleNext<CR>", desc = "Next Buffer" },
+      { "[b", "<Cmd>BufferLineCyclePrev<CR>", desc = "Prev Buffer" },
+      { "]b", "<Cmd>BufferLineCycleNext<CR>", desc = "Next Buffer" },
+      { "[B", "<Cmd>BufferLineMovePrev<CR>", desc = "Move buffer prev" },
+      { "]B", "<Cmd>BufferLineMoveNext<CR>", desc = "Move buffer next" },
     },
     opts = {
       options = {
@@ -59,79 +73,138 @@ return {
       })
     end,
   },
-
-  -- statusline
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    opts = function(_, opts)
-      local icons = {
-        diagnostics = {
-          error = diagnostics_signs[vim.diagnostic.severity.ERROR],
-          warn = diagnostics_signs[vim.diagnostic.severity.WARN],
-          hint = diagnostics_signs[vim.diagnostic.severity.HINT],
-          info = diagnostics_signs[vim.diagnostic.severity.INFO],
-        },
-        git = {
-          added = " ",
-          modified = " ",
-          removed = " ",
-        },
-      }
-
-      local new_opts = {
-        options = {
-          theme = "auto",
-          globalstatus = true,
-          disabled_filetypes = { statusline = { "dashboard", "alpha" } },
-        },
-        sections = {
-          lualine_a = { "mode" },
-          lualine_b = { "branch" },
-          lualine_c = {
-            {
-              "diagnostics",
-              symbols = {
-                error = icons.diagnostics.error,
-                warn = icons.diagnostics.warn,
-                info = icons.diagnostics.info,
-                hint = icons.diagnostics.hint,
-              },
-            },
-            { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-            { "filename", path = 1 },
-          },
-          lualine_x = {
-            {
-              "diff",
-              symbols = vim.o.termguicolors and {
-                added = icons.git.added,
-                modified = icons.git.modified,
-                removed = icons.git.removed,
-              } or nil,
-              source = function()
-                local gitsigns = vim.b.gitsigns_status_dict
-                if gitsigns then
-                  return {
-                    added = gitsigns.added,
-                    modified = gitsigns.changed,
-                    removed = gitsigns.removed,
-                  }
-                end
-              end,
+    opts_extend = {
+      "sections.lualine_a",
+      "sections.lualine_b",
+      "sections.lualine_c",
+      "sections.lualine_x",
+      "sections.lualine_y",
+      "sections.lualine_z",
+    },
+    opts = {
+      options = {
+        theme = "auto",
+        globalstatus = true,
+        disabled_filetypes = { statusline = { "dashboard", "alpha" } },
+        icons_enabled = vim.o.termguicolors,
+      },
+      ---@class LualineSectionItem
+      ---@field [1] string|fun():string
+      ---@field icons_enabled? boolean
+      ---@field icon? string | {[1]:string, color:table}
+      ---@field separator? string | {left:string, right:string}
+      ---@field cond? fun():boolean
+      ---@field draw_empty? boolean
+      ---@field color? string|fun(section:LualineSectionItem[])|table
+      ---@field type? string
+      ---@field padding? number|{left?:number, right?: number}
+      ---@field fmt? fun(content:string, ctx: table):string
+      ---@field on_click? fun(n_clicks:integer, mouse_button:string, modifiers:string)
+      ---@type table<string, (string|(fun():string)|LualineSectionItem)[]>
+      sections = {
+        lualine_a = { "mode" },
+        lualine_b = { "branch" },
+        lualine_c = {
+          {
+            "diagnostics",
+            symbols = {
+              error = icons.diagnostics.error,
+              warn = icons.diagnostics.warn,
+              info = icons.diagnostics.info,
+              hint = icons.diagnostics.hint,
             },
           },
-          lualine_y = {
-            { "progress", separator = " ", padding = { left = 1, right = 0 } },
-            { "location", padding = { left = 0, right = 1 } },
+          { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+          {
+            "filename",
+            path = 1,
+            padding = { left = 0, right = 1 },
           },
-          lualine_z = {},
         },
-        extensions = { "neo-tree", "lazy" },
-      }
-
-      return vim.tbl_deep_extend("force", opts, new_opts)
-    end,
+        lualine_x = {
+          {
+            -- show size of visual selection
+            function()
+              local mode = vim.fn.mode(true)
+              local line_start, col_start = tonumber(vim.fn.line("v")) or 0, tonumber(vim.fn.col("v")) or 0
+              local line_end, col_end = tonumber(vim.fn.line(".")) or 0, tonumber(vim.fn.col(".")) or 0
+              if mode:match("\22") then
+                return string.format("%dL %dC", math.abs(line_start - line_end) + 1, math.abs(col_start - col_end) + 1)
+              elseif mode:match("V") or line_start ~= line_end then
+                return tostring(math.abs(line_start - line_end) + 1) .. "L"
+              else
+                return ""
+              end
+            end,
+            cond = function()
+              local mode = vim.fn.mode(true)
+              return mode == "v" or mode == "V" or mode == "\22"
+            end,
+          },
+          {
+            -- show number of selected characters and words
+            function()
+              local wordcount = vim.fn.wordcount()
+              return ("%d words %d chars"):format(wordcount.visual_words, wordcount.visual_chars)
+            end,
+            cond = function()
+              local mode = vim.fn.mode(true)
+              return mode == "v" or mode == "V" or mode == "\22"
+            end,
+          },
+          {
+            function()
+              return "recording @" .. vim.fn.reg_recording()
+            end,
+            cond = function()
+              return vim.fn.reg_recording() ~= ""
+            end,
+          },
+          {
+            "encoding",
+            cond = function()
+              return vim.bo.fileencoding ~= "utf-8"
+            end,
+          },
+          {
+            "fileformat",
+            icons_enabled = false,
+            cond = function()
+              return vim.bo.fileformat ~= "unix"
+            end,
+          },
+          {
+            "diff",
+            colored = vim.o.termguicolors,
+            symbols = vim.o.termguicolors and {
+              added = icons.git.added,
+              modified = icons.git.modified,
+              removed = icons.git.removed,
+            } or nil,
+            source = function()
+              local gitsigns = vim.b.gitsigns_status_dict
+              if not gitsigns then
+                return
+              end
+              return {
+                added = gitsigns.added,
+                modified = gitsigns.changed,
+                removed = gitsigns.removed,
+              }
+            end,
+          },
+        },
+        lualine_y = {
+          { "progress", separator = " ", padding = { left = 1, right = 0 } },
+          { "location", padding = { left = 0, right = 1 } },
+        },
+        lualine_z = {},
+      },
+      extensions = { "lazy" },
+    },
   },
   {
     "SmiteshP/nvim-navic",
@@ -154,21 +227,16 @@ return {
       separator = " ",
       highlight = true,
       depth_limit = 5,
-      -- icons = LazyVim.config.icons.kinds,
       lazy_update_context = true,
     },
     specs = {
       {
         "nvim-lualine/lualine.nvim",
         optional = true,
-        opts = function(_, opts)
-          table.insert(opts.sections.lualine_c, { "navic", color_correction = "dynamic" })
-        end,
+        opts = { sections = { lualine_c = { { "navic", color_correction = "dynamic" } } } },
       },
     },
   },
-
-  -- Highly experimental plugin that completely replaces the UI for messages, cmdline and the popupmenu.
   {
     "folke/noice.nvim",
     event = "VeryLazy",

@@ -14,8 +14,7 @@ end
 -- not create a keymap if a lazy key handler exists.
 -- It will also set `silent` to true by default.
 local function safe_keymap_set(mode, lhs, rhs, opts)
-  local keys = require("lazy.core.handler").handlers.keys
-  ---@cast keys LazyKeysHandler
+  local keys = require("lazy.core.handler").handlers.keys --[[@as LazyKeysHandler]]
   local modes = type(mode) == "string" and { mode } or mode
 
   ---@param m string
@@ -35,7 +34,7 @@ local function safe_keymap_set(mode, lhs, rhs, opts)
   end
 end
 
--- better up/down
+-- Handle wrapped lines with normal movement
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
