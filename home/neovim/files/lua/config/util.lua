@@ -139,8 +139,7 @@ end
 ---@param ms number
 ---@return T
 function U.debounce(fn, ms)
-  local timer = vim.uv.new_timer()
-  ---@cast timer uv.uv_timer_t
+  local timer = vim.uv.new_timer() --[[@as uv.uv_timer_t]]
 
   return function(...)
     local argv = { ... }
