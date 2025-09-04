@@ -47,33 +47,33 @@ map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 
 -- Resize window using <ctrl> arrow keys
-map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
-map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
-map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
-map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+map("n", "<C-Up>", "<Cmd>resize +2<CR>", { desc = "Increase Window Height" })
+map("n", "<C-Down>", "<Cmd>resize -2<CR>", { desc = "Decrease Window Height" })
+map("n", "<C-Left>", "<Cmd>vertical resize -2<CR>", { desc = "Decrease Window Width" })
+map("n", "<C-Right>", "<Cmd>vertical resize +2<CR>", { desc = "Increase Window Width" })
 
 -- Move Lines
-map("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
-map("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
-map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
-map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+map("n", "<A-j>", "<Cmd>execute 'move .+' . v:count1<CR>==", { desc = "Move Down" })
+map("n", "<A-k>", "<Cmd>execute 'move .-' . (v:count1 + 1)<CR>==", { desc = "Move Up" })
+map("i", "<A-j>", "<esc><Cmd>m .+1<CR>==gi", { desc = "Move Down" })
+map("i", "<A-k>", "<esc><Cmd>m .-2<CR>==gi", { desc = "Move Up" })
 map("v", "<A-j>", [[<Cmd>execute "'<,'>move '>+" . v:count1<CR>gv=gv]], { desc = "Move Down" })
 map("v", "<A-k>", [[<Cmd>execute "'<,'>move '<-" . (v:count1 + 1)<CR>gv=gv]], { desc = "Move Up" })
 
 -- buffers
-map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-map("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
-map("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+map("n", "<S-h>", "<Cmd>bprevious<CR>", { desc = "Prev Buffer" })
+map("n", "<S-l>", "<Cmd>bnext<CR>", { desc = "Next Buffer" })
+map("n", "[b", "<Cmd>bprevious<CR>", { desc = "Prev Buffer" })
+map("n", "]b", "<Cmd>bnext<CR>", { desc = "Next Buffer" })
+map("n", "<leader>bb", "<Cmd>e #<CR>", { desc = "Switch to Other Buffer" })
+map("n", "<leader>`", "<Cmd>e #<CR>", { desc = "Switch to Other Buffer" })
 map("n", "<leader>bd", function()
   require("snacks").bufdelete()
 end, { desc = "Delete Buffer" })
 map("n", "<leader>bo", function()
   require("snacks").bufdelete.other()
 end, { desc = "Delete Other Buffers" })
-map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
+map("n", "<leader>bD", "<Cmd>:bd<CR>", { desc = "Delete Buffer and Window" })
 
 -- Clear search and stop snippet on escape
 map({ "i", "n", "s" }, "<esc>", function()
@@ -119,26 +119,26 @@ map("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 map("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
 -- Add undo break-points
-map("i", ",", ",<c-g>u")
-map("i", ".", ".<c-g>u")
-map("i", ";", ";<c-g>u")
+map("i", ",", ",<C-g>u")
+map("i", ".", ".<C-g>u")
+map("i", ";", ";<C-g>u")
 
 --keywordprg
-map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
+map("n", "<leader>K", "<Cmd>norm! K<CR>", { desc = "Keywordprg" })
 
 -- keep selection after indenting
 map("v", "<", "<gv")
 map("v", ">", ">gv")
 
 -- commenting
-map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
-map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
+map("n", "gco", "o<esc>Vcx<esc><Cmd>normal gcc<CR>fxa<bs>", { desc = "Add Comment Below" })
+map("n", "gcO", "O<esc>Vcx<esc><Cmd>normal gcc<CR>fxa<bs>", { desc = "Add Comment Above" })
 
 -- lazy
-map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
+map("n", "<leader>l", "<Cmd>Lazy<CR>", { desc = "Lazy" })
 
 -- new file
-map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
+map("n", "<leader>fn", "<Cmd>enew<CR>", { desc = "New File" })
 
 -- location list
 map("n", "<leader>xl", function()
@@ -194,7 +194,7 @@ end
 -- end, { desc = "Git Browse (copy)" })
 
 -- quit
-map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
+map("n", "<leader>qq", "<Cmd>qa<CR>", { desc = "Quit All" })
 
 -- highlights under cursor
 map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
@@ -206,12 +206,12 @@ end, { desc = "Inspect Tree" })
 -- floating terminal
 -- map("n", "<leader>fT", function() Snacks.terminal() end, { desc = "Terminal (cwd)" })
 -- map("n", "<leader>ft", function() Snacks.terminal(nil, { cwd = LazyVim.root() }) end, { desc = "Terminal (Root Dir)" })
--- map("n", "<c-/>",      function() Snacks.terminal(nil, { cwd = LazyVim.root() }) end, { desc = "Terminal (Root Dir)" })
--- map("n", "<c-_>",      function() Snacks.terminal(nil, { cwd = LazyVim.root() }) end, { desc = "which_key_ignore" })
+-- map("n", "<C-/>",      function() Snacks.terminal(nil, { cwd = LazyVim.root() }) end, { desc = "Terminal (Root Dir)" })
+-- map("n", "<C-_>",      function() Snacks.terminal(nil, { cwd = LazyVim.root() }) end, { desc = "which_key_ignore" })
 
 -- Terminal Mappings
-map("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
-map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
+map("t", "<C-/>", "<Cmd>close<CR>", { desc = "Hide Terminal" })
+map("t", "<C-_>", "<Cmd>close<CR>", { desc = "which_key_ignore" })
 
 -- windows
 map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
@@ -221,21 +221,21 @@ map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 -- Snacks.toggle.zen():map("<leader>uz")
 
 -- tabs
-map("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Last Tab" })
-map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
-map("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "First Tab" })
-map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
-map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
-map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("n", "<leader><Tab>l", "<Cmd>tablast<CR>", { desc = "Last Tab" })
+map("n", "<leader><Tab>o", "<Cmd>tabonly<CR>", { desc = "Close Other Tabs" })
+map("n", "<leader><Tab>f", "<Cmd>tabfirst<CR>", { desc = "First Tab" })
+map("n", "<leader><Tab><Tab>", "<Cmd>tabnew<CR>", { desc = "New Tab" })
+map("n", "<leader><Tab>]", "<Cmd>tabnext<CR>", { desc = "Next Tab" })
+map("n", "<leader><Tab>d", "<Cmd>tabclose<CR>", { desc = "Close Tab" })
+map("n", "<leader><Tab>[", "<Cmd>tabprevious<CR>", { desc = "Previous Tab" })
 
 -- native snippets. only needed on < 0.11, as 0.11 creates these by default
 if vim.fn.has("nvim-0.11") == 0 then
   map("s", "<Tab>", function()
-    return vim.snippet.active({ direction = 1 }) and "<cmd>lua vim.snippet.jump(1)<cr>" or "<Tab>"
+    return vim.snippet.active({ direction = 1 }) and "<Cmd>lua vim.snippet.jump(1)<CR>" or "<Tab>"
   end, { expr = true, desc = "Jump Next" })
   map({ "i", "s" }, "<S-Tab>", function()
-    return vim.snippet.active({ direction = -1 }) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<S-Tab>"
+    return vim.snippet.active({ direction = -1 }) and "<Cmd>lua vim.snippet.jump(-1)<CR>" or "<S-Tab>"
   end, { expr = true, desc = "Jump Previous" })
 end
 
@@ -270,16 +270,16 @@ end, { desc = "Copy file path" })
 map("i", "<C-c>", "<Esc>")
 
 -- Buffers. Only set if no other plugin does
-safe_keymap_set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-safe_keymap_set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-safe_keymap_set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-safe_keymap_set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+safe_keymap_set("n", "<S-h>", "<Cmd>bprevious<CR>", { desc = "Prev Buffer" })
+safe_keymap_set("n", "<S-l>", "<Cmd>bnext<CR>", { desc = "Next Buffer" })
+safe_keymap_set("n", "[b", "<Cmd>bprevious<CR>", { desc = "Prev Buffer" })
+safe_keymap_set("n", "]b", "<Cmd>bnext<CR>", { desc = "Next Buffer" })
 
-map("n", "<Esc>", "<cmd>nohlsearch<CR>")
+map("n", "<Esc>", "<Cmd>nohlsearch<CR>")
 
 map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
-map("n", "<leader>l", "<cmd>Lazy<cr>")
+map("n", "<leader>l", "<Cmd>Lazy<CR>")
 
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
@@ -297,7 +297,7 @@ map(
   { desc = "Redraw / Clear hlsearch / Diff Update" }
 )
 
-map("n", "<leader>w", "<c-w>", { desc = "Windows", remap = true })
+map("n", "<leader>w", "<C-w>", { desc = "Windows", remap = true })
 map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })

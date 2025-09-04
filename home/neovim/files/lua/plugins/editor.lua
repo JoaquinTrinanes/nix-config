@@ -46,7 +46,8 @@ return {
       spec = {
         {
           mode = { "n", "v" },
-          { "<leader><tab>", group = "tabs" },
+          { "<leader><Tab>", group = "tabs" },
+          { "<leader>b", group = "buffers" },
           { "<leader>c", group = "code" },
           { "<leader>d", group = "debug" },
           { "<leader>f", group = "file/find" },
