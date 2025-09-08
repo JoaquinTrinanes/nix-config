@@ -18,11 +18,9 @@ let
       {
         substituters = lib.mkAfter [
           "https://numtide.cachix.org"
-          "https://cache.garnix.io"
         ];
         trusted-public-keys = [
           "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
-          "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
         ];
       }
     ];
