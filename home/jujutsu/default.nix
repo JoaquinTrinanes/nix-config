@@ -189,10 +189,6 @@ in
           bold = true;
           fg = "magenta";
         };
-        "text link" = {
-          fg = "blue";
-          underline = true;
-        };
       };
       templates = {
         draft_commit_description = ''
@@ -207,13 +203,6 @@ in
       template-aliases = {
         desc = "builtin_log_compact_full_description";
         "ellipsis(content, width)" = "truncate_end(width, content, '…')";
-        "link(url, text)" = ''
-          concat(
-            raw_escape_sequence("\e]8;;" ++ url ++ "\e\\"),
-            label("text link", text),
-            raw_escape_sequence("\e]8;;\e\\"),
-          )
-        '';
       };
       aliases = {
         a = [ "abandon" ];
