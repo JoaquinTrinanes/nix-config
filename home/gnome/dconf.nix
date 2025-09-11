@@ -41,6 +41,8 @@ in
       highlight-current-line = true;
       show-line-numbers = true;
       show-map = true;
+      tab-width = 4;
+      restore-session = false;
     };
     "org/gnome/tweaks" = {
       show-extensions-notice = false;
