@@ -16,7 +16,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.dnscrypt-proxy2 = lib.mkDefault {
+    services.dnscrypt-proxy = lib.mkDefault {
       enable = true;
       settings =
         let
@@ -118,7 +118,7 @@ in
     };
 
     programs.firefox = {
-      policies = lib.mkIf config.services.dnscrypt-proxy2.enable {
+      policies = lib.mkIf config.services.dnscrypt-proxy.enable {
         # force to use the system DNS
         DNSOverHTTPS.Enabled = lib.mkDefault false;
       };
@@ -129,7 +129,7 @@ in
         basePackage = pkgs.dnscrypt-proxy;
         prependFlags = [
           "-config"
-          config.services.dnscrypt-proxy2.configFile
+          config.services.dnscrypt-proxy.configFile
         ];
       })
     ];
