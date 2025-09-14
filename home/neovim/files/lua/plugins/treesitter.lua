@@ -236,25 +236,6 @@ return {
         mode = { "n", "x", "o" },
         desc = "Go to next parameter end",
       },
-      --
-
-      -- Repeat last move
-      {
-        ";",
-        function()
-          return require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_next()
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Repeat last move",
-      },
-      {
-        ",",
-        function()
-          return require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_previous()
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Repeat last move opposite",
-      },
     },
   },
   { "nvim-mini/mini.extra", lazy = true },
@@ -330,8 +311,6 @@ return {
             around_last = "al",
             inside_last = "il",
           }, opts.mappings or {})
-          mappings.goto_left = nil
-          mappings.goto_right = nil
 
           for name, prefix in pairs(mappings) do
             name = name:gsub("^around_", ""):gsub("^inside_", "")
