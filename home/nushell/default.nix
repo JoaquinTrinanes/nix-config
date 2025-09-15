@@ -127,7 +127,7 @@ in
           LOGIN_OPTIONS+=('--login') 
         fi
         # if nu errors, don't lock out of bash
-        if ${lib.getExe config.programs.nushell.package} "''${LOGIN_OPTIONS[@]}"; then
+        if SHLVL="$((SHLVL - 1))" ${lib.getExe config.programs.nushell.package} "''${LOGIN_OPTIONS[@]}"; then
           exit 0
         fi
     fi
