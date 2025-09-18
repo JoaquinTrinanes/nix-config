@@ -137,106 +137,37 @@ return {
       move = { set_jumps = true },
       select = { lookahead = true, include_surrounding_whitespace = false },
     },
-    keys = {
-      {
-        "[f",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to previous function start",
-      },
-      {
-        "]f",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to next function start",
-      },
-      {
-        "[F",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_previous_end("@function.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to previous function end",
-      },
-      {
-        "]F",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_next_end("@function.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to next function end",
-      },
-
-      {
-        "[c",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_previous_start("@class.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to previous class start",
-      },
-      {
-        "]c",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_next_start("@class.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to next class start",
-      },
-      {
-        "[C",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_previous_end("@class.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to previous class end",
-      },
-      {
-        "]C",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_next_end("@class.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to next class end",
-      },
-
-      {
-        "[a",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_previous_start("@parameter.inner")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to previous parameter start",
-      },
-      {
-        "]a",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_next_start("@parameter.inner")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to next parameter start",
-      },
-      {
-        "[A",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_previous_end("@parameter.inner")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to previous parameter end",
-      },
-      {
-        "]A",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_next_end("@parameter.inner")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Go to next parameter end",
-      },
-    },
+    keys = function()
+      local moves = {
+        goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
+        goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
+        goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
+        goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
+      }
+      local ret = {} ---@type LazyKeysSpec[]
+      for method, keymaps in pairs(moves) do
+        for key, query in pairs(keymaps) do
+          local desc = query:gsub("@", ""):gsub("%..*", "")
+          desc = desc:sub(1, 1):upper() .. desc:sub(2)
+          desc = (key:sub(1, 1) == "[" and "Prev " or "Next ") .. desc
+          desc = desc .. (key:sub(2, 2) == key:sub(2, 2):upper() and " End" or " Start")
+          ret[#ret + 1] = {
+            key,
+            function()
+              -- don't use treesitter if in diff mode and the key is one of the c/C keys
+              -- if vim.wo.diff and key:find("[cC]") then
+              --   return vim.cmd("normal! " .. key)
+              -- end
+              require("nvim-treesitter-textobjects.move")[method](query, "textobjects")
+            end,
+            desc = desc,
+            mode = { "n", "x", "o" },
+            silent = true,
+          }
+        end
+      end
+      return ret
+    end,
   },
   { "nvim-mini/mini.extra", lazy = true },
   {
