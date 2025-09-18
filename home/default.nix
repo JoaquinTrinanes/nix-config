@@ -218,7 +218,7 @@
     enable = false;
     arguments = [
       "--smart-case"
-      "--auto-hybrid-regex"
+      "--engine=auto"
     ];
   };
 
