@@ -173,7 +173,7 @@ return {
             "n",
             opts.mappings and opts.mappings.change_cwd or "gc",
             files_set_cwd,
-            { buffer = args.data.buf_id, desc = "Set cwd" }
+            { buffer = buf_id, desc = "Set cwd" }
           )
 
           map_split(buf_id, opts.mappings and opts.mappings.go_in_horizontal or "<C-w>s", "horizontal", false)
