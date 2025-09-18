@@ -229,16 +229,6 @@ map("n", "<leader><Tab>]", "<Cmd>tabnext<CR>", { desc = "Next Tab" })
 map("n", "<leader><Tab>d", "<Cmd>tabclose<CR>", { desc = "Close Tab" })
 map("n", "<leader><Tab>[", "<Cmd>tabprevious<CR>", { desc = "Previous Tab" })
 
--- native snippets. only needed on < 0.11, as 0.11 creates these by default
-if vim.fn.has("nvim-0.11") == 0 then
-  map("s", "<Tab>", function()
-    return vim.snippet.active({ direction = 1 }) and "<Cmd>lua vim.snippet.jump(1)<CR>" or "<Tab>"
-  end, { expr = true, desc = "Jump Next" })
-  map({ "i", "s" }, "<S-Tab>", function()
-    return vim.snippet.active({ direction = -1 }) and "<Cmd>lua vim.snippet.jump(-1)<CR>" or "<S-Tab>"
-  end, { expr = true, desc = "Jump Previous" })
-end
-
 map("n", "Q", "@qj")
 map("x", "Q", ":norm @q<CR>")
 
