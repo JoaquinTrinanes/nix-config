@@ -17,11 +17,9 @@ in
       nerd-fonts.fira-code
       dejavu_fonts
       joypixels
-      noto-fonts
       noto-fonts-cjk-sans
       unscii
       nerd-fonts.symbols-only
-      fira-code
     ];
     fonts.fontconfig = lib.mkDefault {
       defaultFonts = {
@@ -35,9 +33,11 @@ in
         ];
         emoji = [
           "JoyPixels"
-          "Symbols Nerd Font Mono"
+          "Symbols Nerd Font"
           "unscii-16-full"
         ];
+        serif = [ "DejaVu Serif" ];
+        sansSerif = [ "DejaVu Sans" ];
       };
       localConf =
         let
@@ -45,24 +45,6 @@ in
             "FiraCode Nerd Font" = {
               features = {
                 # @ style
-                ss05 = true;
-              };
-            };
-            "Maple Mono" = {
-              features = {
-                # @,#,$,%... style
-                cv01 = true;
-                # a style
-                cv03 = true;
-                # @ style
-                cv04 = true;
-                # == ligatures
-                ss01 = true;
-                # [TODO] pills
-                ss02 = false;
-                # <= ligatures
-                ss04 = true;
-                # {{ }} ligatures
                 ss05 = true;
               };
             };
@@ -79,7 +61,7 @@ in
                 </test>
                 <edit name="fontfeatures" mode="append">
                   ${lib.concatMapAttrsStringSep "\n" (
-                    name: value: lib.escapeXML "<string>${name} ${if value then "on" else "off"}</string>"
+                    name: value: "<string>${lib.escapeXML name} ${if value then "on" else "off"}</string>"
                   ) features}
                 </edit>
               </match>
