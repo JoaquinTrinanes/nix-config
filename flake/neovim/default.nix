@@ -123,7 +123,7 @@
           chafa
           code-minimap
           deadnix
-          dockerfile-language-server-nodejs
+          dockerfile-language-server
           dotenv-linter
           fd
           fzf
@@ -132,6 +132,7 @@
           git
           gnumake
           gopls
+          hadolint
           icu
           imagemagick
           intelephense
