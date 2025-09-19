@@ -11,6 +11,7 @@ let
 in
 {
   options.colors = {
+    name = lib.mkOption { type = types.nullOr types.str; };
     palette = lib.mkOption {
       type = types.attrsOf (types.coercedTo types.str (lib.removePrefix "#") hexColorType);
       default = { };
@@ -33,5 +34,9 @@ in
         if builtins.substring 0 1 cfg.palette.base00 < "5" then "dark" else "light";
       '';
     };
+  };
+
+  config.colors = {
+    name = lib.mkOptionDefault cfg.slug;
   };
 }
