@@ -175,6 +175,7 @@ return {
         r_language_server = {},
         biome = {},
         tinymist = {},
+        zls = {},
       },
     },
     config = function(_, opts)
