@@ -50,6 +50,7 @@
   programs.password-store.enable = true;
 
   colors = {
+    name = "Catppuccin Frappe";
     slug = "catppuccin-frappe";
     palette = {
       base00 = "#303446"; # base

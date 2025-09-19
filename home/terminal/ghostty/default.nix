@@ -14,7 +14,7 @@
       '';
     };
     settings = {
-      theme = lib.mkIf (config.colors.slug != null) config.colors.slug;
+      theme = lib.mkIf (config.colors.name != null) config.colors.name;
       config-file = "${config.lib.impurePath.mkImpureLink ./config}";
       auto-update = "off";
     };
