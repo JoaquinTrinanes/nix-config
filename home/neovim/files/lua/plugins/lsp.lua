@@ -7,6 +7,11 @@ U.lsp.on_attach(function(client, buffer)
   if client:supports_method("textDocument/inlayHint", buffer) then
     vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
   end
+  if client:supports_method("textDocument/foldingRange", buffer) then
+    local win = vim.api.nvim_get_current_win()
+    vim.wo[win].foldmethod = "expr"
+    vim.wo[win].foldexpr = "v:lua.vim.lsp.foldexpr()"
+  end
 end)
 
 local diagnostic_signs = vim.o.termguicolors
