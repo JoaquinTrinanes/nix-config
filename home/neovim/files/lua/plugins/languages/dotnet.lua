@@ -44,8 +44,8 @@ return {
     optional = true,
     opts = function()
       local dap = require("dap")
-      if not dap.adapters["netcoredbg"] then
-        require("dap").adapters["netcoredbg"] = {
+      if not dap.adapters.netcoredbg then
+        dap.adapters.netcoredbg = {
           type = "executable",
           command = vim.fn.exepath("netcoredbg"),
           args = { "--interpreter=vscode" },
@@ -54,21 +54,30 @@ return {
           },
         }
       end
+      dap.adapters.coreclr = dap.adapters.coreclr or dap.adapters.netcoredbg
       for _, lang in ipairs({ "cs", "fsharp", "vb" }) do
-        if not dap.configurations[lang] then
-          dap.configurations[lang] = {
+        dap.configurations[lang] = dap.configurations[lang]
+          or {
             {
               type = "netcoredbg",
               name = "Launch file",
               request = "launch",
-              ---@diagnostic disable-next-line: redundant-parameter
               program = function()
-                return vim.fn.input("Path to dll: ", vim.fn.getcwd() .. "/", "file")
+                return vim.fn.input("Path to dll: ", vim.fn.getcwd() .. "/bin/Debug/", "file")
               end,
               cwd = "${workspaceFolder}",
             },
+            {
+              type = "netcoredbg",
+              name = "Attach",
+              processId = require("dap.utils").pick_process,
+              request = "attach",
+              -- program = function()
+              --   return vim.fn.input("Path to dll: ", vim.fn.getcwd() .. "/", "file")
+              -- end,
+              cwd = "${workspaceFolder}",
+            },
           }
-        end
       end
     end,
   },

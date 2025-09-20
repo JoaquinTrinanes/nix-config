@@ -71,10 +71,13 @@
           noice-nvim
           nui-nvim
           nvim-dap
+          nvim-dap-go
           nvim-dap-ui
+          nvim-dap-virtual-text
           nvim-lint
           nvim-lspconfig
           nvim-navic
+          nvim-nio
           nvim-treesitter-context
           nvim-ts-autotag
           persistence-nvim
@@ -109,7 +112,6 @@
           bash-language-server
           biome
           black
-          omnisharp-roslyn
           dockerfile-language-server
           fd
           fzf
@@ -123,25 +125,29 @@
           imagemagick
           intelephense
           lazygit
+          lldb
           lua-language-server
           marksman
+          netcoredbg
           nil
           nixd
           nixfmt
           nodejs
+          omnisharp-roslyn
           prettier
           ripgrep
           roslyn-ls
           ruff
           rust-analyzer
           shellcheck
-          tofu-ls
           shfmt
           sqlfluff
           statix
           stylua
           tailwindcss-language-server
           taplo
+          tofu-ls
+          vscode-js-debug
           vscode-langservers-extracted
           vtsls
           vue-language-server

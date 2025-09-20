@@ -39,7 +39,16 @@ local M = {
       servers = {
         clangd = {
           keys = {
-            { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+            { "<leader>ch", "<Cmd>LspClangdSwitchSourceHeader<CR>", desc = "Switch Source/Header (C/C++)" },
+          },
+          cmd = {
+            "clangd",
+            "--background-index",
+            -- "--clang-tidy",
+            "--header-insertion=iwyu",
+            "--completion-style=detailed",
+            "--function-arg-placeholders",
+            "--fallback-style=llvm",
           },
         },
       },
@@ -48,45 +57,54 @@ local M = {
   {
     "mfussenegger/nvim-dap",
     optional = true,
-    dependencies = {
-      "mason-org/mason.nvim",
-      optional = true,
-      opts = { ensure_installed = { "codelldb" } },
-    },
     opts = function()
       local dap = require("dap")
-      if not dap.adapters["codelldb"] then
-        require("dap").adapters["codelldb"] = {
-          type = "server",
-          host = "localhost",
-          port = "${port}",
-          executable = {
-            command = "codelldb",
-            args = {
-              "--port",
-              "${port}",
-            },
-          },
+      if not dap.adapters["lldb"] then
+        require("dap").adapters["lldb"] = {
+          type = "executable",
+          command = "lldb",
+          name = "lldb",
+
+          -- host = "localhost",
+          -- port = "${port}",
+          -- executable = {
+          --   command = "codelldb",
+          --   args = {
+          --     "--port",
+          --     "${port}",
+          --   },
+          -- },
         }
       end
       for _, lang in ipairs({ "c", "cpp" }) do
         dap.configurations[lang] = {
           {
-            type = "codelldb",
+            name = "Launch",
+            type = "lldb",
             request = "launch",
-            name = "Launch file",
             program = function()
               return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
             end,
             cwd = "${workspaceFolder}",
+            stopOnEntry = false,
+            args = {},
           },
-          {
-            type = "codelldb",
-            request = "attach",
-            name = "Attach to process",
-            pid = require("dap.utils").pick_process,
-            cwd = "${workspaceFolder}",
-          },
+          -- {
+          --   type = "codelldb",
+          --   request = "launch",
+          --   name = "Launch file",
+          --   program = function()
+          --     return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+          --   end,
+          --   cwd = "${workspaceFolder}",
+          -- },
+          -- {
+          --   type = "codelldb",
+          --   request = "attach",
+          --   name = "Attach to process",
+          --   pid = require("dap.utils").pick_process,
+          --   cwd = "${workspaceFolder}",
+          -- },
         }
       end
     end,

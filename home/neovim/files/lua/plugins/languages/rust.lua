@@ -1,5 +1,3 @@
-local U = require("config.util")
-
 ---@type LazyPluginSpec[]
 return {
   {
@@ -20,16 +18,7 @@ return {
     },
   },
   {
-    "mason-org/mason.nvim",
-    optional = true,
-    opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
-      vim.list_extend(opts.ensure_installed, { "codelldb" })
-    end,
-  },
-  {
     "mrcjkb/rustaceanvim",
-    ft = { "rust" },
     ---@module 'rustaceanvim'
     ---@type rustaceanvim.Config
     opts = {
@@ -75,18 +64,6 @@ return {
       },
     },
     config = function(_, opts)
-      if U.has("mason.nvim") then
-        local package_path = require("mason-registry").get_package("codelldb"):get_install_path()
-        local codelldb = package_path .. "/extension/adapter/codelldb"
-        local library_path = package_path .. "/extension/lldb/lib/liblldb.dylib"
-        local uname = io.popen("uname"):read("*l")
-        if uname == "Linux" then
-          library_path = package_path .. "/extension/lldb/lib/liblldb.so"
-        end
-        opts.dap = {
-          adapter = require("rustaceanvim.config").get_codelldb_adapter(codelldb, library_path),
-        }
-      end
       vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, opts or {})
     end,
   },

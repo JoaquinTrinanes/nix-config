@@ -31,19 +31,9 @@ return {
     },
   },
   {
-    "mason-org/mason.nvim",
-    optional = true,
-    opts = { ensure_installed = { "goimports", "gofumpt" } },
-  },
-  {
     "mfussenegger/nvim-dap",
     optional = true,
     dependencies = {
-      {
-        "mason-org/mason.nvim",
-        optional = true,
-        opts = { ensure_installed = { "delve" } },
-      },
       {
         "leoluz/nvim-dap-go",
         opts = {},

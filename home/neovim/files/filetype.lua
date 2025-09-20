@@ -4,4 +4,7 @@ vim.filetype.add({
     ["docker-compose.yml"] = "yaml.docker-compose",
     ["docker-compose.yaml"] = "yaml.docker-compose",
   },
+  pattern = {
+    [".*/%.vscode/.*%.json"] = "jsonc",
+  },
 })
