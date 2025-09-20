@@ -96,32 +96,28 @@ o.sidescrolloff = 8
 
 o.grepprg = "rg --vimgrep"
 
+---@type {name:string, url:(fun():string?)|string|nil}[]
 vim.g.dbs = {
   {
     name = "local",
     url = function()
-      return vim.env.DATABASE_URL
-        or ("%s://%s:%s@%s:%s/%s"):format(
-          vim.env.DB_PROTOCOL or vim.env.DATABASE_PROTOCOL or "postgres",
-          vim.env.DB_USER or vim.env.DATABASE_USER,
-          vim.env.DB_PASSWORD or vim.env.DATABASE_PASSWORD,
-          vim.env.DB_HOST or vim.env.DATABASE_HOST or "localhost",
-          vim.env.DB_PORT or vim.env.DATABASE_PORT or "5432",
-          vim.env.DB_NAME or vim.env.DATABASE_NAME
-        )
-    end,
-  },
-  {
-    name = "local postgres",
-    url = function()
-      return vim.env.PG_URL
-        or ("postgresql://%s:%s@%s:%s/%s"):format(
-          vim.env.PGUSER,
-          vim.env.PGPASSWORD,
-          vim.env.PGHOST or "localhost",
-          vim.env.PGPORT or "5432",
-          vim.env.PGDATABASE
-        )
+      local proto = vim.env.DB_PROTOCOL or vim.env.DATABASE_PROTOCOL or "postgresql"
+      local user = vim.env.PGUSER or vim.env.DB_USER or vim.env.DB_USERNAME or vim.env.DATABASE_USER
+      local pass = vim.env.PGPASSWORD or vim.env.DB_PASSWORD or vim.env.DATABASE_PASSWORD
+      local host = vim.env.PGHOST or vim.env.DB_HOST or vim.env.DATABASE_HOST
+      local port = vim.env.PGPORT or vim.env.DB_PORT or vim.env.DATABASE_PORT or "5432"
+      local name = vim.env.PGDATABASE or vim.env.DB_NAME or vim.env.DB_DATABASE or vim.env.DATABASE_NAME
+
+      if not (user and pass and name and host) then
+        return nil
+      end
+
+      local is_bare_host = host ~= "localhost" and not host:find("%.") and not host:find(":")
+      if is_bare_host then
+        host = "127.0.0.1"
+      end
+
+      return string.format("%s://%s:%s@%s:%s/%s", proto, user, pass, host, port, name)
     end,
   },
 }
