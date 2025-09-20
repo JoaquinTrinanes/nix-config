@@ -1,10 +1,8 @@
 local U = require("config.util")
 
-local augroup = U.augroup
-
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
   desc = "Check if file needs reloading when changed",
-  group = augroup("checktime"),
+  group = U.augroup("checktime"),
   callback = function()
     if vim.o.buftype ~= "nofile" then
       vim.cmd.checktime()
@@ -14,7 +12,7 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight on yank",
-  group = augroup("highlight_yank"),
+  group = U.augroup("highlight_yank"),
   callback = function()
     vim.hl.on_yank()
   end,
@@ -22,7 +20,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 vim.api.nvim_create_autocmd({ "VimResized" }, {
   desc = "Resize splits if window got resized",
-  group = augroup("resize_splits"),
+  group = U.augroup("resize_splits"),
   callback = function()
     local current_tab = vim.fn.tabpagenr()
     vim.cmd("tabdo wincmd =")
@@ -33,7 +31,7 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 -- go to last loc when opening a buffer
 -- TODO: compare against plugin-less nvim config
 -- vim.api.nvim_create_autocmd("BufReadPost", {
---   group = augroup("last_loc"),
+--   group = U.augroup("last_loc"),
 --   callback = function(event)
 --     local exclude = { "gitcommit" }
 --     local buf = event.buf
@@ -51,7 +49,7 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Close some filetypes with <q>",
-  group = augroup("close_with_q"),
+  group = U.augroup("close_with_q"),
   pattern = {
     "PlenaryTestPopup",
     "checkhealth",
@@ -87,7 +85,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Make it easier to close man-files when opened inline",
-  group = augroup("man_unlisted"),
+  group = U.augroup("man_unlisted"),
   pattern = { "man" },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -96,20 +94,20 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Wrap and check for spell in text filetypes",
-  group = augroup("wrap_spell"),
+  group = U.augroup("wrap_spell"),
   pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
   callback = function(event)
     if vim.bo[event.buf].buftype ~= "" then
       return
     end
-    vim.opt_local.wrap = true
-    vim.opt_local.spell = true
+    vim.wo[0][0].wrap = true
+    vim.wo[0][0].spell = true
   end,
 })
 
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   desc = "Auto create dir when saving a file, in case some intermediate directory does not exist",
-  group = augroup("auto_create_dir"),
+  group = U.augroup("auto_create_dir"),
   callback = function(event)
     if event.match:match("^%w%w+:[\\/][\\/]") then
       return
@@ -121,7 +119,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
   desc = "Disable colorcolumn when buffer is not modifiable",
-  group = augroup("disable_colorcolum"),
+  group = U.augroup("disable_colorcolum"),
   callback = function(event)
     local buf = event.buf
     local bo = vim.bo[buf]
@@ -132,7 +130,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
   end,
 })
 
-local executable_on_shebang_group = augroup("executable_on_shebang")
+local executable_on_shebang_group = U.augroup("executable_on_shebang")
 
 vim.api.nvim_create_autocmd("BufNewFile", {
   desc = "On new file, check for shebang after first write",
@@ -171,7 +169,7 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   desc = "Disable undofile for some paths",
-  group = augroup("disable_undofile"),
+  group = U.augroup("disable_undofile"),
   callback = function(event)
     local fname = vim.fn.resolve(event.file)
     local bo = vim.bo[event.buf]
