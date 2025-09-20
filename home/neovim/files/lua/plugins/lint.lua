@@ -23,7 +23,7 @@ return {
         sh = { "shellcheck" },
         bash = { "shellcheck" },
         php = {},
-        nix = { "statix", "deadnix" },
+        nix = { "statix" },
       },
       ---@module "lint"
       ---@class lint.Linter

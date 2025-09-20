@@ -30,14 +30,13 @@ in
     };
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs)
+        dbeaver-bin
         file
+        gnome-boxes
         hyperfine
-        nixfmt
         pnpm
         scrcpy
-        statix
         yarn-berry
-        dbeaver-bin
         ;
     };
 

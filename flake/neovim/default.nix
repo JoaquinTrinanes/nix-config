@@ -55,27 +55,17 @@
           friendly-snippets
           gitsigns-nvim
           grug-far-nvim
-          hardtime-nvim
-          (setPluginName harpoon2 "harpoon")
           hunk-nvim
-          indent-blankline-nvim
           lazy-nvim
           lazydev-nvim
-          lualine-lsp-progress
           lualine-nvim
           (setPluginName luasnip "LuaSnip")
-          marks-nvim
           mini-ai
           mini-extra
           mini-files
-          mini-hipatterns
           mini-icons
-          mini-indentscope
-          mini-nvim
           mini-splitjoin
           mini-surround
-          minimap-vim
-          neo-tree-nvim
           noice-nvim
           nui-nvim
           nvim-dap
@@ -83,18 +73,13 @@
           nvim-lint
           nvim-lspconfig
           nvim-navic
-          nvim-nio
-          nvim-snippets
           nvim-treesitter-context
           nvim-ts-autotag
-          oil-nvim
           persistence-nvim
           plenary-nvim
-          project-nvim
           render-markdown-nvim
           rustaceanvim
           snacks-nvim
-          tailwindcss-colors-nvim
           todo-comments-nvim
           trouble-nvim
           ts-comments-nvim
@@ -117,14 +102,11 @@
         ];
       extraPackages = builtins.attrValues {
         inherit (pkgs)
+          basedpyright
           bash-language-server
           biome
           black
-          chafa
-          code-minimap
-          deadnix
           dockerfile-language-server
-          dotenv-linter
           fd
           fzf
           gcc
@@ -141,9 +123,9 @@
           marksman
           nil
           nixd
+          nixfmt
           nodejs
           prettier
-          pyright
           ripgrep
           ruff
           rust-analyzer
@@ -154,7 +136,6 @@
           stylua
           tailwindcss-language-server
           taplo
-          typescript-language-server
           vscode-langservers-extracted
           vtsls
           yaml-language-server
