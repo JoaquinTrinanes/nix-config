@@ -13,7 +13,11 @@
       };
     };
     home-manager = {
-      modules = [ ../home/global ] ++ builtins.attrValues inputs.self.modules.homeManager;
+      modules = [
+        ../home/global
+        ../profiles/home-manager
+      ]
+      ++ builtins.attrValues inputs.self.modules.homeManager;
       standaloneModules = [ ../home/global/standalone.nix ];
     };
   };
