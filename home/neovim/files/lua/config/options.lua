@@ -78,7 +78,7 @@ o.mouse = "a"
 
 o.clipboard = "unnamedplus"
 
-o.foldmethod = "expr"
+o.foldmethod = "indent"
 o.foldlevel = 99
 o.foldtext = ""
 
