@@ -253,16 +253,22 @@ in
           "trunk()"
         ];
         na = [
+          "nA"
+          "@"
+        ];
+        nA = [
           "new"
           "--no-edit"
           "--after"
-          "@"
         ];
         nb = [
+          "nB"
+          "@"
+        ];
+        nB = [
           "new"
           "--no-edit"
           "--before"
-          "@"
         ];
         open = [
           "log"
@@ -331,7 +337,7 @@ in
         format = ''(\[[$symbol](blue) [$output]($style)\] )'';
         symbol = "op";
         command = ''
-          ls .jj/repo/op_heads/heads | head -c 4
+          ls .jj/repo/op_heads/heads | head -c 5
         '';
         shell = "bash";
         description = "Current jj operation id";
@@ -352,7 +358,9 @@ in
     jll = "jj ll";
     jn = "jj n";
     jna = "jj na";
+    jnA = "jj nA";
     jnb = "jj nb";
+    jnB = "jj nB";
     jp = "jj p";
     jr = "jj r";
     js = "jj s";
