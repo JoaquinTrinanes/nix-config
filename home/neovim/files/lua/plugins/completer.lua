@@ -2,7 +2,7 @@
 return {
   {
     -- will never be loaded, only used for types
-    "justinsgithub/wezterm-types",
+    "DrKJeff16/wezterm-types",
     lazy = true,
     specs = {
       {

@@ -40,11 +40,11 @@ map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr =
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
--- Move to window using the <ctrl> hjkl keys
-map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
-map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
-map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
-map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
+-- CTRL+<hjkl> to switch between windows (:h wincmd)
+safe_keymap_set("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
+safe_keymap_set("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
+safe_keymap_set("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
+safe_keymap_set("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 
 -- Resize window using <ctrl> arrow keys
 map("n", "<C-Up>", "<Cmd>resize +2<CR>", { desc = "Increase Window Height" })
@@ -272,12 +272,6 @@ map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]ui
 map("n", "<leader>l", "<Cmd>Lazy<CR>")
 
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-
--- CTRL+<hjkl> to switch between windows (:h wincmd)
-map("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
-map("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
-map("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-map("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- Clear search, diff update and redraw
 map(

@@ -79,6 +79,7 @@
           plenary-nvim
           render-markdown-nvim
           rustaceanvim
+          smart-splits-nvim
           snacks-nvim
           todo-comments-nvim
           trouble-nvim

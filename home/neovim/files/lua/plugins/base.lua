@@ -80,6 +80,7 @@ local M = {
   },
   {
     "mrjones2014/smart-splits.nvim",
+    cond = vim.env.TERM_PROGRAM == "WezTerm" or vim.env.TERM == "xterm-kitty",
     keys = {
       -- stylua: ignore start
       -- Resizing splits
@@ -93,15 +94,8 @@ local M = {
       { "<C-j>", function() require("smart-splits").move_cursor_down() end, desc = "Move to split below" },
       { "<C-k>", function() require("smart-splits").move_cursor_up() end, desc = "Move to split above" },
       { "<C-l>", function() require("smart-splits").move_cursor_right() end, desc = "Move to right split" },
-
-      -- Swapping buffers between windows
-      { "<leader><leader>h>", function() require("smart-splits").swap_buf_left() end, desc = "Swap buffer with left split" },
-      { "<leader><leader>j>", function() require("smart-splits").swap_buf_down() end, desc = "Swap buffer with split below" },
-      { "<leader><leader>k>", function() require("smart-splits").swap_buf_up() end, desc = "Swap buffer with split above" },
-      { "<leader><leader>l>", function() require("smart-splits").swap_buf_right() end, desc = "Swap buffer with right split" },
       -- stylua: ignore end
     },
-    enabled = false,
     version = "*",
     priority = 1000,
     lazy = false,
