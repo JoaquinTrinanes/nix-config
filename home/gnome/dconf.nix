@@ -2,6 +2,7 @@
   lib,
   pkgs,
   inputs,
+  config,
   ...
 }:
 let
@@ -30,8 +31,11 @@ in
     "org/gnome/desktop/peripherals/touchpad" = {
       disable-while-typing = false;
       tap-to-click = true;
+      click-method = "areas";
       two-finger-scrolling-enabled = true;
+      edge-scrolling-enabled = false;
       natural-scroll = true;
+      speed = 0.0;
     };
     "org/gnome/settings-daemon/plugins/power" = {
       ambient-enabled = false;
@@ -60,7 +64,7 @@ in
           "org.gnome.Nautilus.desktop"
           (getName pkgs.firefox)
           (getName pkgs.vesktop)
-          "com.mitchellh.ghostty.desktop"
+          (lib.head config.xdg.terminal-exec.settings.default)
         ];
     };
     "org/gnome/desktop/interface" = {
