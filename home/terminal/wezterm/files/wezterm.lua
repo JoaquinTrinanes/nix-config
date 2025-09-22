@@ -1,26 +1,5 @@
----@diagnostic disable: inject-field
-
+---@type Wezterm
 local wezterm = require("wezterm")
-
----@param key string
----@param mods "ALT" | "CTRL" | "SHIFT" | "CTRL|SHIFT" | nil
----@param action fun()
----@param get_should_execute fun(win: Window, pane: Pane): boolean
----@param default KeyAssignment?
-local conditional_map = function(key, mods, action, get_should_execute, default)
-	return {
-		key = key,
-		mods = mods,
-		action = wezterm.action_callback(function(win, pane)
-			if get_should_execute(win, pane) then
-				win:perform_action(action, pane)
-			else
-				win:perform_action(default or wezterm.action.DisableDefaultAssignment, pane)
-				-- win:perform_action(wezterm.action.SendKey({ key = key, mods = mods }), pane)
-			end
-		end),
-	}
-end
 
 ---@param pane Pane
 local get_process_name = function(pane)
@@ -73,8 +52,7 @@ local function split_nav(resize_or_move, key)
 				win:perform_action({
 					SendKey = {
 						key = key,
-						-- zellij doesn't support Ctrl+j, so we override with Alt
-						mods = has_foreground_process("zellij", pane) and "ALT" or mods,
+						mods = mods,
 					},
 				}, pane)
 			else
@@ -88,13 +66,6 @@ local function split_nav(resize_or_move, key)
 	}
 end
 
-local zellij_only_map = function(key, mods, action, default)
-	return conditional_map(key, mods, action, function(_, pane)
-		return has_foreground_process("zellij", pane)
-	end, default)
-end
-
----@type Config
 local config = {}
 if wezterm.config_builder then
 	config = wezterm.config_builder()
@@ -113,6 +84,9 @@ wezterm.on("gui-attached", function(domain)
 	end
 end)
 
+config.font_size = 14
+config.term = "wezterm"
+
 config.enable_wayland = os.getenv("XDG_SESSION_TYPE") == "wayland"
 
 config.color_scheme = "base16"
@@ -129,38 +103,8 @@ config.font = wezterm.font_with_fallback({
 	"unscii-16-full",
 })
 
--- config.font_rules = {
--- 	{
--- 		intensity = "Bold",
--- 		italic = true,
--- 		font = wezterm.font({
--- 			family = "VictorMono Nerd Font",
--- 			weight = "Bold",
--- 			style = "Italic",
--- 		}),
--- 	},
--- 	{
--- 		italic = true,
--- 		intensity = "Half",
--- 		font = wezterm.font({
--- 			family = "VictorMono Nerd Font",
--- 			weight = "DemiBold",
--- 			style = "Italic",
--- 		}),
--- 	},
--- 	{
--- 		italic = true,
--- 		intensity = "Normal",
--- 		font = wezterm.font({
--- 			family = "VictorMono Nerd Font",
--- 			style = "Italic",
--- 		}),
--- 	},
--- }
-
 config.tab_max_width = 999999
 
-config.font_size = 16
 ---@diagnostic disable-next-line: assign-type-mismatch
 config.default_cursor_style = "SteadyBar"
 config.cursor_blink_rate = 0
@@ -174,13 +118,6 @@ config.enable_kitty_keyboard = true
 config.scrollback_lines = 50000
 
 config.keys = {
-	zellij_only_map(
-		"c",
-		"CTRL|SHIFT",
-		wezterm.action.SendKey({ key = "c", mods = "ALT" }),
-		wezterm.action.CopyTo("Clipboard")
-	),
-	-- mux.zellij_map("t", "ALT", wezterm.action.DisableDefaultAssignment),
 	{
 		key = "\\",
 		mods = "CTRL|ALT",
