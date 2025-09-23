@@ -15,7 +15,7 @@
     ./neovim
     ./nushell
     ./terminal
-    ./wireplumber
+    ./sound
 
     inputs.nix-index-database.homeModules.nix-index
   ];
