@@ -4,6 +4,9 @@
   lib,
   ...
 }:
+let
+  cfg = config.programs.ghostty;
+in
 {
   programs.ghostty = {
     enable = true;
@@ -18,5 +21,11 @@
       config-file = "${config.lib.impurePath.mkImpureLink ./config}";
       auto-update = "off";
     };
+  };
+  xdg.configFile."systemd/user/graphical-session.target.wants/app-com.mitchellh.ghostty.service" = {
+    enable =
+      config.programs.ghostty.enable
+      && (lib.head config.xdg.terminal-exec.settings.default) == "com.mitchellh.ghostty.desktop";
+    source = "${cfg.package}/share/systemd/user/app-com.mitchellh.ghostty.service";
   };
 }

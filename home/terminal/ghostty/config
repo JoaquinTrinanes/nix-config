@@ -42,5 +42,8 @@ font-family = monospace
 font-feature = ss05
 font-style-bold = SemiBold
 
+# when running as systemd service, don't exit instantly
+quit-after-last-window-closed = true
+quit-after-last-window-closed-delay = 5m
 
 
