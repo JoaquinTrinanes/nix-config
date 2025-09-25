@@ -66,6 +66,26 @@
     };
   };
 
+  systemd.tmpfiles.settings."stash" = {
+    "/stash/joaquin"."D" = {
+      mode = "0700";
+      user = config.users.users.joaquin.name;
+      inherit (config.users.users.joaquin) group;
+    };
+  };
+  fileSystems."/stash" = {
+    fsType = "tmpfs";
+    options = [
+      "defaults"
+      "size=2G"
+      "noswap"
+      "mode=1777"
+      "noatime"
+      "nofail"
+    ];
+    noCheck = true;
+  };
+
   networking = {
     wireless.iwd.enable = true;
     nftables.enable = true;
