@@ -33,7 +33,7 @@ o.virtualedit = "block" -- Allow cursor to move where there is no text in visual
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
 opt.completeopt = { "menuone", "longest" }
-opt.wildmode = { "longest:full", "full" } -- Command-line completion mode
+opt.wildmode = { "noselect:list", "full" }
 
 o.wrap = true
 o.linebreak = true

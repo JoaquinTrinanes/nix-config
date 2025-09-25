@@ -27,7 +27,9 @@ return {
     "folke/flash.nvim",
     event = "VeryLazy",
     ---@type Flash.Config
-    opts = {},
+    opts = {
+      modes = { char = { enabled = false } },
+    },
     -- stylua: ignore
     keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
@@ -41,6 +43,8 @@ return {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts_extend = { "spec" },
+    ---@module 'which-key'
+    ---@type wk.Opts
     opts = {
       preset = "helix",
       spec = {
