@@ -49,22 +49,20 @@
       isNormalUser = true;
       group = "joaquin";
       openssh.authorizedKeys.keys = [ ];
-      extraGroups =
-        [
-          "users"
-          "wheel"
-          "networkmanager"
+      extraGroups = [
+        "users"
+        "wheel"
+        "networkmanager"
 
-          # allow connecting to arduino
-          "dialout"
-        ]
-        ++ lib.optionals config.programs.adb.enable [ "adbusers" ]
-        ++ lib.optionals config.services.printing.enable [ "lp" ]
-        ++ lib.optionals config.virtualisation.docker.enable [
-          "docker"
-        ]
-        ++ lib.optionals config.virtualisation.podman.enable [ "podman" ]
-        ++ lib.optionals config.security.tpm2.enable [ "tss" ];
+        "dialout" # allow connecting to arduino
+      ]
+      ++ lib.optionals config.programs.adb.enable [ "adbusers" ]
+      ++ lib.optionals config.services.printing.enable [ "lp" ]
+      ++ lib.optionals config.virtualisation.docker.enable [
+        "docker"
+      ]
+      ++ lib.optionals config.virtualisation.podman.enable [ "podman" ]
+      ++ lib.optionals config.security.tpm2.enable [ "tss" ];
     };
   };
 
