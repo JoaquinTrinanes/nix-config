@@ -16,20 +16,12 @@ local M = {
     ---@type CatppuccinOptions
     opts = {
       integrations = {
-        aerial = true,
-        alpha = true,
-        cmp = true,
         dashboard = true,
         flash = true,
         fzf = true,
         grug_far = true,
         gitsigns = false,
-        headlines = true,
-        illuminate = true,
-        indent_blankline = { enabled = true },
-        leap = true,
         lsp_trouble = true,
-        mason = true,
         markdown = true,
         mini = true,
         native_lsp = {
