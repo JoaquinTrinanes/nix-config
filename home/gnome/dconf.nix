@@ -28,14 +28,19 @@ in
       sort-directories-first = true;
       show-hidden = true;
     };
+    "org/gnome/desktop/peripherals/mouse" = {
+      accel-profile = "default";
+    };
     "org/gnome/desktop/peripherals/touchpad" = {
       disable-while-typing = false;
       tap-to-click = true;
+      # both double-finger-tap and corner-click work on this mode
       click-method = "areas";
       two-finger-scrolling-enabled = true;
       edge-scrolling-enabled = false;
       natural-scroll = true;
-      speed = 0.0;
+      speed = 0.3;
+      accel-profile = "default";
     };
     "org/gnome/settings-daemon/plugins/power" = {
       ambient-enabled = false;
@@ -73,6 +78,7 @@ in
       text-scaling-factor = lib.mkDefault 1.25;
       show-battery-percentage = true;
       enable-hot-corners = false;
+      gtk-enable-primary-paste = true; # middle click paste
 
       # Remove invalid values if theme changes
       cursor-theme = lib.mkDefault (lib.hm.gvariant.mkNothing "s");
@@ -107,6 +113,9 @@ in
 
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";
+      action-double-click-titlebar = "toggle-maximize";
+      action-right-click-titlebar = "menu";
+      focus-mode = "click";
     };
     "org/gnome/nautilus/preferences" = {
       # Editable address bar
