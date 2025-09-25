@@ -28,10 +28,6 @@ export-env {
     }
 }
 
-if (is-terminal --stdin) {
-    $env.GPG_TTY = (tty)
-}
-
 load-env {
     PROMPT_INDICATOR_VI_NORMAL: ""
     PROMPT_INDICATOR_VI_INSERT: ""

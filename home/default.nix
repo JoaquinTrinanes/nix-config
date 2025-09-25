@@ -304,6 +304,8 @@
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
+    enableBashIntegration = true;
+    enableNushellIntegration = true;
     pinentry.package = pkgs.pinentry-tty;
 
     # timeout since last activity
