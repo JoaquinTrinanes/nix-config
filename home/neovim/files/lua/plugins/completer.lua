@@ -23,7 +23,7 @@ return {
   },
   {
     "saghen/blink.cmp",
-    event = "InsertEnter",
+    event = "VeryLazy",
     dependencies = {
       {
         "L3MON4D3/LuaSnip",
@@ -65,9 +65,28 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
+      cmdline = {
+        enabled = true,
+        keymap = { preset = "cmdline" },
+        completion = {
+          list = { selection = { preselect = false } },
+          menu = {
+            auto_show = function(ctx)
+              return vim.fn.getcmdtype() == ":"
+            end,
+          },
+          ghost_text = { enabled = true },
+        },
+      },
       snippets = { preset = "luasnip" },
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
+        providers = {
+          path = {
+            ---@type blink.cmp.PathOpts
+            opts = { trailing_slash = false },
+          },
+        },
       },
       completion = {
         documentation = {
