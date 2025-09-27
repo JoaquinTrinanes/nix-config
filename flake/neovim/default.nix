@@ -176,7 +176,7 @@
             })
             + /home/neovim/files;
         in
-        (mkNeovim {
+        mkNeovim {
           neovim-unwrapped = inputs'.neovim-nightly-overlay.packages.default;
           inherit
             plugins
@@ -194,15 +194,7 @@
           customLuaRC = ''
             vim.opt.runtimepath:append(${toLua treesitterParsersAndQueries})
           '';
-        }).overrideAttrs
-          (
-            _final: prev: {
-              # fix xdg-open, nautilus... failing to open files with spaces or quotes
-              postBuild = prev.postBuild or "" + ''
-                substituteInPlace "$out/share/applications/nvim.desktop" --replace-fail 'Exec=nvim %F' 'Exec=nvim "%F"'
-              '';
-            }
-          );
+        };
     in
     {
       packages = {
