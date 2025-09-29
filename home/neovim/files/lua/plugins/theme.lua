@@ -15,6 +15,14 @@ local M = {
     ---@module "catppuccin"
     ---@type CatppuccinOptions
     opts = {
+      lsp_styles = {
+        underlines = {
+          errors = { "undercurl" },
+          hints = { "undercurl" },
+          warnings = { "undercurl" },
+          information = { "undercurl" },
+        },
+      },
       integrations = {
         dashboard = true,
         flash = true,
@@ -24,15 +32,6 @@ local M = {
         lsp_trouble = true,
         markdown = true,
         mini = true,
-        native_lsp = {
-          enabled = true,
-          underlines = {
-            errors = { "undercurl" },
-            hints = { "undercurl" },
-            warnings = { "undercurl" },
-            information = { "undercurl" },
-          },
-        },
         navic = { enabled = true, custom_bg = "lualine" },
         neotest = true,
         neotree = true,
@@ -79,7 +78,7 @@ local M = {
         optional = true,
         opts = function(_, opts)
           if (vim.g.colors_name or ""):find("catppuccin") then
-            opts.highlights = require("catppuccin.groups.integrations.bufferline").get_theme()
+            opts.highlights = require("catppuccin.special.bufferline").get_theme()
           end
         end,
       },
