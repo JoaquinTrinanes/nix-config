@@ -27,6 +27,8 @@
 
   xdg.configFile."direnv/lib/laravel.sh".source = ./lib/laravel.sh;
   xdg.configFile."direnv/lib/my-flake.sh".source = ./lib/my-flake.sh;
+  xdg.configFile."direnv/lib/dot-direnv-outside-project.sh".source =
+    ./lib/dot-direnv-outside-project.sh;
 
   programs.git.ignores = [
     ".direnv"
