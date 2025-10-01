@@ -58,8 +58,6 @@ let
     };
 in
 {
-  imports = [ ./theme.nix ];
-
   # config files are added to the wrapper
   home.file."${configFile}".enable = false;
   home.file."${envFile}".enable = false;
