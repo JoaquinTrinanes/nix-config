@@ -28,6 +28,74 @@ export-env {
     }
 }
 
+export-env {
+    def relative_luminance [color] {
+        def relative_luminance_helper [x: float] {
+            if $x <= 0.03928 {
+                $x / 12.92
+            } else {
+                ((($x + 0.055) / 1.055) ** 2.4)
+            }
+        }
+
+        let rgb = $color
+        | str trim -c '#' --left
+        | split chars
+        | window 2 --stride 2
+        | each { str join }
+        | into int --radix 16
+        | each {|v| relative_luminance_helper ($v / 255) }
+
+        let r = $rgb.0
+        let b = $rgb.1
+        let g = $rgb.2
+
+        (0.2126 * $r) + (0.7152 * $g) + (0.0722 * $b)
+    }
+
+    def contrast [color1 color2] {
+        let l1 = relative_luminance $color1
+        let l2 = relative_luminance $color2
+
+        let lighter = [$l1 $l2] | math max
+        let darker = [$l1 $l2] | math min
+
+        ($lighter + 0.05) / ($darker + 0.05)
+    }
+
+    let theme_show_color = {|str|
+        if $str =~ '^#[a-fA-F\d]{6}$' {
+            let contrast_black = contrast $str "#000000"
+            let contrast_white = contrast $str "#ffffff"
+
+            {bg: $str fg: (if ($contrast_black > $contrast_white) { "black" } else { "white" })}
+        } else {
+            "default"
+        }
+    }
+
+    $env.config.color_config.string = $theme_show_color
+}
+
+$env.config.color_config.separator = "black"
+$env.config.color_config.row_index = "teal"
+$env.config.color_config.filesize = {||
+    if $in == 0b {
+        "black"
+    } else if $in < 1mb {
+        "cyan"
+    } else if $in > 0.5gb {
+        {fg: "yellow" attr: b}
+    } else { "blue" }
+}
+$env.config.color_config.bool = {|| if $in { "light_cyan" } else { "red" } }
+$env.config.color_config.leading_trailing_space_bg = {bg: dark_gray}
+$env.config.color_config.header = "green"
+$env.config.color_config.shape_variable = "blue"
+$env.config.color_config.shape_int = "light_magenta"
+$env.config.color_config.shape_float = "light_magenta"
+$env.config.color_config.shape_garbage = {fg: red attr: u}
+
 load-env {
     PROMPT_INDICATOR_VI_NORMAL: ""
     PROMPT_INDICATOR_VI_INSERT: ""
@@ -205,7 +273,15 @@ $env.config.menus ++= [
             correct_cursor_pos: false
         }
     }
-] | each {|menu| $menu | upsert style {} }
+] | each {|menu|
+    $menu | upsert style {
+        text: default
+        description_text: light_gray_dimmed
+        selected_text: {fg: default bg: black attr: b}
+        match_text: {attr: u}
+        selected_match_text: {bg: black attr: urb}
+    }
+}
 
 $env.config.display_errors.termination_signal = false
 $env.config.display_errors.exit_code = false
