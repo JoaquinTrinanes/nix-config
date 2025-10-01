@@ -57,6 +57,7 @@ in
       show-extensions-notice = false;
     };
     "org/gnome/shell" = {
+      disable-user-extensions = false;
       favorite-apps =
         let
           getDesktopItem =
