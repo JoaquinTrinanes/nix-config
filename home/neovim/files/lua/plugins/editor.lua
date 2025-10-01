@@ -1,5 +1,6 @@
 ---@type LazyPluginSpec[]
 return {
+  { "tpope/vim-sleuth", lazy = false },
   { "nvim-mini/mini.splitjoin", opts = { mappings = { toggle = "gS", split = "", join = "" } } },
   -- search/replace in multiple files
   {
