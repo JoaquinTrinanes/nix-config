@@ -222,6 +222,14 @@ in
           "git"
           "fetch"
         ];
+        tp = [ "tug_private" ];
+        tug_private = [
+          "rebase"
+          "-r"
+          "stack(@, 1)::@- & private()"
+          "--before"
+          "@"
+        ];
         g = [ "git" ];
         gp = [
           "git"
@@ -366,5 +374,6 @@ in
     js = "jj s";
     jsq = "jj sq";
     jt = "jj t";
+    jtp = "jj tp";
   };
 }
