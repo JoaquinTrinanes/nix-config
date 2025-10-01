@@ -157,10 +157,22 @@ in
       ];
     };
     "org/gnome/shell/extensions/dash-to-panel" = {
+      click-action = "CYCLE-MIN";
+      group-apps = true;
       hide-overview-on-startup = true;
+      intellihide = false;
+      isolate-monitors = false;
+      isolate-workspaces = false;
+      multi-monitors = true;
       overview-click-to-exit = true;
-      trans-use-custom-opacity = true;
+      progress-show-count = true;
+      show-favorites = true;
+      show-favorites-all-monitors = true;
+      show-running-apps = true;
+      show-tooltip = true;
+      show-window-previews = true;
       trans-panel-opacity = 0.2;
+      trans-use-custom-opacity = true;
     };
     # "org/gnome/desktop/datetime" = {
     #   automatic-timezone = true;
