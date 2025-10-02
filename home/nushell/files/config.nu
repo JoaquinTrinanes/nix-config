@@ -231,50 +231,8 @@ $env.config.menus ++= [
             | each {|it| {value: $it.name description: $it.usage} }
         }
     }
-    # {
-    #     name: abbr_menu
-    #     only_buffer_difference: false
-    #     marker: "👀 "
-    #     type: {
-    #         layout: columnar
-    #         columns: 1
-    #         col_width: 20
-    #         col_padding: 2
-    #     }
-    #     source: { |buffer, position|
-    #         scope aliases
-    #         | where name == $buffer
-    #         | each { |it| {value: $it.expansion }}
-    #     }
-    # }
-    {
-        name: ide_completion_menu
-        only_buffer_difference: false
-        marker: "| "
-        type: {
-            layout: ide
-            min_completion_width: 0
-            max_completion_width: 50
-            # max_completion_height: 10, # will be limited by the available lines in the terminal
-            padding: 0
-            border: false
-            cursor_offset: 0
-            description_mode: "prefer_right"
-            min_description_width: 0
-            max_description_width: 50
-            max_description_height: 10
-            description_offset: 1
-            # If true, the cursor pos will be corrected, so the suggestions match up with the typed text
-            #
-            # C:\> str
-            #      str join
-            #      str trim
-            #      str split
-            correct_cursor_pos: false
-        }
-    }
-] | each {|menu|
-    $menu | upsert style {
+] | each {
+    upsert style {
         text: default
         description_text: light_gray_dimmed
         selected_text: {fg: default bg: black attr: b}
@@ -345,36 +303,11 @@ $env.config.keybindings ++= [
         }
     }
     {
-        name: copy_selection
-        modifier: control_shift
-        keycode: char_c
-        mode: emacs
-        event: null # { edit: copyselection }
-    }
-    # {
-    #     name: abbr
-    #     modifier: control
-    #     keycode: space
-    #     mode: [emacs, vi_normal, vi_insert]
-    #     event: [
-    #         { send: menu name: abbr_menu }
-    #         { edit: insertchar, value: ' '}
-    #     ]
-    # }
-    {
         name: ide_completion_menu
         modifier: control
         keycode: space
-        # modifier: control
-        # keycode: char_n
         mode: [emacs vi_normal vi_insert]
-        event: {
-            until: [
-                {send: menu name: ide_completion_menu}
-                {send: menunext}
-                {edit: complete}
-            ]
-        }
+        event: null
     }
     {
         name: zoxide_jump
