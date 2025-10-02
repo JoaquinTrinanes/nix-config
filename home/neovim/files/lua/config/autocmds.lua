@@ -98,7 +98,10 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "Wrap and check for spell in text filetypes",
   group = augroup("wrap_spell"),
   pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
-  callback = function()
+  callback = function(event)
+    if vim.bo[event.buf].buftype ~= "" then
+      return
+    end
     vim.opt_local.wrap = true
     vim.opt_local.spell = true
   end,
