@@ -98,6 +98,7 @@
         experimental = true;
         not_found_auto_install = false;
         idiomatic_version_file_enable_tools = [
+          "go"
           "node"
           "rust"
         ];
@@ -117,6 +118,7 @@
       (lib.mkIf config.programs.neovim.enable { MANPAGER = "nvim +Man!"; })
       {
         CARGO_HOME = "${config.xdg.dataHome}/cargo";
+        RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
       }
     ];
 
