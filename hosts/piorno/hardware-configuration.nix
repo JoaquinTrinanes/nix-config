@@ -18,6 +18,9 @@
 
   services.switcherooControl.enable = true;
 
+  services.tuned.enable = true;
+  services.tlp.enable = false;
+
   boot.initrd.systemd.enable = true;
 
   environment.systemPackages = builtins.attrValues { inherit (pkgs.nvtopPackages) amd; };
