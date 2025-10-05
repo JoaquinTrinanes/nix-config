@@ -100,22 +100,23 @@ in
     })
   ];
 
-  networking.timeServers = [
-    "0.pool.ntp.org"
-    "1.pool.ntp.org"
-    "2.pool.ntp.org"
-    "3.pool.ntp.org"
-  ];
+  networking.timeServers = [ "pool.ntp.org" ];
 
-  services.chrony = {
+  services.ntpd-rs = {
     enable = true;
-    enableNTS = true;
-    servers = [
-      "nts1.roa.es"
-      "time.cloudflare.com"
-      "ntppool1.time.nl"
-      "ntppool2.time.nl"
-    ];
+    useNetworkingTimeServers = true;
+    settings = {
+      source = [
+        {
+          address = "time.cloudflare.com";
+          mode = "nts";
+        }
+        {
+          address = "ntppool1.time.nl";
+          mode = "nts";
+        }
+      ];
+    };
   };
 
   environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = lib.mkIf config.nixpkgs.config.allowUnfree "1";
