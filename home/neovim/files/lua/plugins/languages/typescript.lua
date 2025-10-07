@@ -7,7 +7,6 @@ return {
       servers = {
         vtsls = {
           settings = {
-            complete_function_calls = true,
             vtsls = {
               enableMoveToFileCodeAction = true,
               autoUseWorkspaceTsdk = true,
@@ -26,8 +25,9 @@ return {
               inlayHints = {
                 enumMemberValues = { enabled = true },
                 functionLikeReturnTypes = { enabled = true },
-                parameterNames = { enabled = "literals" },
-                parameterTypes = { enabled = true },
+                -- This slows down the server a LOT
+                -- parameterNames = { enabled = "literals" },
+                parameterTypes = { enabled = false },
                 propertyDeclarationTypes = { enabled = true },
                 variableTypes = { enabled = false },
               },
