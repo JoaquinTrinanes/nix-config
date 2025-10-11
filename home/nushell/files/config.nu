@@ -77,11 +77,11 @@ export-env {
     $env.config.color_config.string = $theme_show_color
 }
 
-$env.config.color_config.separator = "black"
+$env.config.color_config.separator = "dark_gray_dimmed"
 $env.config.color_config.row_index = "teal"
 $env.config.color_config.filesize = {||
     if $in == 0b {
-        "black"
+        "dark_gray_dimmed"
     } else if $in < 1mb {
         "cyan"
     } else if $in > 0.5gb {
@@ -235,9 +235,9 @@ $env.config.menus ++= [
     upsert style {
         text: default
         description_text: light_gray_dimmed
-        selected_text: {fg: default bg: black attr: b}
+        selected_text: {fg: default bg: dark_gray_dimmed attr: b}
         match_text: {attr: u}
-        selected_match_text: {bg: black attr: urb}
+        selected_match_text: {bg: dark_gray_dimmed attr: urb}
     }
 }
 
