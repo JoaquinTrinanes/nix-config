@@ -12,6 +12,7 @@ let
   };
 in
 {
+  programs.git.signing.signByDefault = lib.mkIf config.programs.jujutsu.enable (lib.mkForce false);
   programs.jujutsu = {
     enable = lib.mkDefault true;
     package = jj;
@@ -21,14 +22,15 @@ in
         email = config.programs.git.userEmail;
       };
 
-      signing = lib.mkIf config.programs.git.signing.signByDefault {
+      signing = {
         inherit (config.programs.git.signing) key;
         backends.gpg.program = lib.getExe pkgs.sequoia-chameleon-gnupg;
         backend =
-          if (config.programs.git.signing.format == "openpgp") then
-            "gpg"
-          else
-            config.programs.git.signing.format;
+          {
+            openpgp = "gpg";
+            ssh = "ssh";
+          }
+          .${config.programs.git.signing.format} or "none";
         behavior = "drop";
       };
       git = {
@@ -36,7 +38,7 @@ in
         colocate = true;
         private-commits = "private()";
         push-new-bookmarks = false;
-        sign-on-push = config.programs.git.signing.signByDefault;
+        sign-on-push = true;
       };
       fix.tools = {
         prettier = {
