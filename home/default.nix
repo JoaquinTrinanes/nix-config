@@ -233,13 +233,10 @@
 
     settings = {
       add_newline = true;
-      # continuation_prompt = "::: ";
       continuation_prompt = "    ";
       character = {
         success_symbol = "[➜](bold fg:green)";
-        error_symbol = "[➜](bold fg:blue)";
-        # success_symbol = "[;](bold fg:green)";
-        # error_symbol = "[;](bold fg:blue)";
+        error_symbol = "[➜](bold fg:red)";
       };
       aws.disabled = true;
       directory.truncation_length = 5;
