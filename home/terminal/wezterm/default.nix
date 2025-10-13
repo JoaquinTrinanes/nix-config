@@ -1,16 +1,8 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }:
-let
-  shellIntegrationStr = ''
-    if [[ $TERM_PROGRAM = "WezTerm" ]]; then
-      source "${config.programs.wezterm.package}/etc/profile.d/wezterm.sh"
-    fi
-  '';
-in
 {
   programs.wezterm = {
     enable = true;
@@ -19,11 +11,6 @@ in
       postBuild = ''
         rm -rf $out/share/nautilus-python
       '';
-      # env = lib.optionalAttrs (config.hardware.nvidia.prime.nvidiaBusNvidia != "") {
-      #   # prevent dGPU not powering off when front_end = "WebGpu"
-      #   VK_ICD_FILENAMES.value = "${pkgs.mesa.drivers}/share/vulkan/icd.d/radeon_icd.x86_64.json";
-      # };
-
     };
     colorSchemes."base16" =
       let
@@ -88,8 +75,4 @@ in
   };
   xdg.configFile."wezterm/wezterm.lua".source =
     config.lib.impurePath.mkImpureLink ./files/wezterm.lua;
-
-  programs.bash.initExtra = lib.mkAfter shellIntegrationStr;
-  programs.zsh.initExtra = lib.mkAfter shellIntegrationStr;
-
 }
