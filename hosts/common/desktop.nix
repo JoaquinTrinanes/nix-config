@@ -99,8 +99,10 @@
       enable = true;
       wifi = {
         scanRandMacAddress = true;
+        macAddress = "random";
         backend = "iwd";
       };
+      ethernet.macAddress = "random";
     };
   };
 
