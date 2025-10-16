@@ -100,7 +100,12 @@ in
     })
   ];
 
-  networking.timeServers = [ "pool.ntp.org" ];
+  networking = {
+    timeServers = [ "pool.ntp.org" ];
+    enableIPv6 = lib.mkDefault true;
+    tempAddresses = lib.mkDefault "default"; # enable IPv6 privacy extensions
+    usePredictableInterfaceNames = lib.mkDefault true;
+  };
 
   services.ntpd-rs = {
     enable = true;
@@ -120,8 +125,6 @@ in
   };
 
   environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = lib.mkIf config.nixpkgs.config.allowUnfree "1";
-
-  networking.usePredictableInterfaceNames = lib.mkDefault true;
 
   environment.systemPackages = with pkgs; [
     age
