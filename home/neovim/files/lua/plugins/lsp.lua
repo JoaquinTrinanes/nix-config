@@ -96,7 +96,7 @@ return {
             tailwindCSS = {
               classAttributes = {
                 "classNames",
-                unpack(vim.lsp.config.tailwindcss.settings.tailwindCSS.classAttributes),
+                unpack(vim.tbl_get(vim.lsp.config, "tailwindcss", "settings", "tailwindCSS", "classAttributes") or {}),
               },
               classFunctions = {
                 "tw",
@@ -105,7 +105,7 @@ return {
                 "cn",
                 "cva",
                 "cx",
-                unpack(vim.lsp.config.tailwindcss.settings.tailwindCSS.classFunctions or {}),
+                unpack(vim.tbl_get(vim.lsp.config, "tailwindcss", "settings", "tailwindCSS", "classFunctions") or {}),
               },
             },
           },
