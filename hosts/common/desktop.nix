@@ -33,7 +33,25 @@
     };
   };
 
-  environment.systemPackages = builtins.attrValues { inherit (pkgs) bubblewrap; };
+  environment.systemPackages = builtins.attrValues {
+    inherit (pkgs)
+      age
+      bubblewrap
+      htop
+      jc
+      jq
+      ldns
+      lm_sensors
+      lshw
+      lsof
+      man-pages
+      pciutils
+      powertop
+      srm
+      usbutils
+      wget
+      ;
+  };
 
   users.groups = {
     "joaquin" = {

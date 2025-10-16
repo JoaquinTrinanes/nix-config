@@ -127,31 +127,14 @@ in
   environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = lib.mkIf config.nixpkgs.config.allowUnfree "1";
 
   environment.systemPackages = with pkgs; [
-    age
-    age-plugin-yubikey
     coreutils
     fd
     findutils.locate
     fzf
     git
-    htop
-    jc
-    jq
-    ldns
-    lm_sensors
-    lshw
-    lsof
-    man-pages
-    minisign
     openssl
-    pciutils
-    powertop
     ripgrep
-    sd
-    srm
     unzip
-    usbutils
-    wget
   ];
 
   programs.neovim = lib.mkDefault {
