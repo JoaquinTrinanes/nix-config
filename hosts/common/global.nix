@@ -38,7 +38,7 @@ in
 {
   system.stateVersion = lib.mkDefault "25.05";
 
-  environment.binsh = lib.mkDefault (lib.getExe pkgs.dash);
+  environment.binsh = lib.getExe pkgs.dash;
 
   boot.kernelPackages = lib.mkDefault pkgs.linuxKernel.packageAliases.linux_default;
 
