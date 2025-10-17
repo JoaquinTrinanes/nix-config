@@ -101,52 +101,41 @@ load-env {
     PROMPT_INDICATOR_VI_INSERT: ""
 }
 
-let carapace_completer = {|spans|
+def carapace-completer [spans: list<string>] {
     carapace $spans.0 nushell ...$spans
     | from json
     | if ($in | default [] | where value =~ $"($spans | last)ERR_?" | is-empty) { $in } else { null }
 }
 
-let fish_completer = {|spans: list<string>|
-    fish --command $"complete '--do-complete=($spans | str join ' ')'"
-    | $"value(char tab)description(char newline)" + $in
-    | from tsv --flexible --no-infer
+def fish-completer [spans: list<string>] {
+    (
+        ^fish
+        --init-command
+        $"
+        function commandline
+            builtin commandline --input='($spans | str join ' ')' $argv 
+        end
+        "
+        --command $"complete '--do-complete=($spans | str replace --all "'" "\\'" | str join ' ')'"
+        | from tsv --flexible --noheaders --no-infer
+        | rename value description
+        | update value {|row|
+            let value = $row.value
+            let need_quote = ['\' ',' '[' ']' '(' ')' ' ' '\t' "'" '"' "`"] | any { $in in $value }
+            if ($need_quote and ($value | path exists)) {
+                let expanded_path = if ($value starts-with ~) { $value | path expand --no-symlink } else { $value }
+                $'"($expanded_path | str replace --all "\"" "\\\"")"'
+            } else { $value }
+        }
+    )
 }
-
-let default_completer = $carapace_completer
-let fallback_completer = $fish_completer
 
 let external_completer = {|spans: list<string>|
-    let expanded_alias = scope aliases | where name == $spans.0 | get 0?.expansion
-    let spans = if $expanded_alias != null {
-        $spans | skip 1 | prepend ($expanded_alias | split row ' ')
-    } else {
-        $spans
-    }
-
-    let completer = match $spans.0 {
-        git => $fish_completer
-        gpg => $fish_completer
-        jj => $fish_completer
-        nix => $fish_completer
-        pnpm => $fish_completer
-        man => null
-        _ => $default_completer
-    }
-
-    if ($completer == null) { return null }
-
-    do $completer $spans
-    | if (($in | is-empty) and ($fallback_completer != null)) {
-        do $fallback_completer $spans
-    } else {
-        $in
-    }
+    carapace-completer $spans 
+    | default --empty { fish-completer $spans }
     # avoid empty result preventing native file completion
-    | if ($in | is-empty) { null } else { $in }
+    | default --empty null
 }
-
-# $env.config.ls.clickable_links = false
 
 $env.config.table.mode = "compact"
 $env.config.table.header_on_separator = true
