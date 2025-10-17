@@ -40,25 +40,26 @@ in
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs)
         vesktop
-        discord-canary
         qbittorrent
         telegram-desktop
         vlc
         ;
     };
-    programs.dconf.enable = lib.mkDefault true;
-    programs.dconf.profiles.gdm.databases = [
-      {
-        settings = {
-          "org/gnome/desktop/peripherals/touchpad" = {
-            tap-to-click = true;
+    programs.dconf = {
+      enable = lib.mkDefault true;
+      profiles.gdm.databases = [
+        {
+          settings = {
+            "org/gnome/desktop/peripherals/touchpad" = {
+              tap-to-click = true;
+            };
+            "org/gnome/login-screen" = {
+              logo = "";
+            };
           };
-          "org/gnome/login-screen" = {
-            logo = "";
-          };
-        };
-      }
-    ];
+        }
+      ];
+    };
 
     nix.daemonCPUSchedPolicy = lib.mkDefault "idle";
 
