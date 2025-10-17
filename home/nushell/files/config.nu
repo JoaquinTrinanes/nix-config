@@ -141,6 +141,37 @@ let external_completer = {|spans: list<string>|
     | default --empty null
 }
 
+# HACK: @complete doesn't work with aliases (without the expand_alias hack)
+def expand_alias [spans: list<string>] {
+    let expanded_alias = scope aliases | where name == $spans.0 | get 0?.expansion
+
+    if $expanded_alias != null {
+        $spans | skip 1 | prepend ($expanded_alias | split row ' ')
+    } else {
+        $spans
+    }
+}
+
+def carapace-completer-alias [spans: list<string>] {
+    carapace-completer (expand_alias $spans)
+}
+
+def fish-completer-alias [spans: list<string>] {
+    fish-completer (expand_alias $spans)
+}
+
+@complete fish-completer-alias
+extern git []
+
+@complete fish-completer-alias
+extern gpg []
+
+@complete fish-completer-alias
+extern jj []
+
+@complete fish-completer-alias
+extern nix []
+
 @complete sudo-completer
 extern sudo []
 
