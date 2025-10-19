@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ config, ... }:
 {
   parts = {
     users = {
@@ -12,7 +12,7 @@
         ../home/global
         ../profiles/home-manager
       ]
-      ++ builtins.attrValues inputs.self.modules.homeManager;
+      ++ builtins.attrValues config.flake.modules.homeManager;
       standaloneModules = [ ../home/global/standalone.nix ];
     };
   };
