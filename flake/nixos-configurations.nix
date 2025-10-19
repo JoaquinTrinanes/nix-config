@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ config, lib, ... }:
 {
   parts.nixos = {
     hosts = {
@@ -21,7 +21,7 @@
     };
 
     modules = lib.mkMerge [
-      (builtins.attrValues inputs.self.modules.nixos)
+      (builtins.attrValues config.flake.modules.nixos)
       [
         ../hosts/common/global.nix
         ../profiles/nixos
