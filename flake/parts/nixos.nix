@@ -60,9 +60,9 @@ let
           (lib.mapAttrsToList (
             userName: userConfig:
             let
-              userHostConfig = userConfig.home-manager.hosts.${config.name} or { };
+              userHostConfig = userConfig.hosts.${config.name} or { };
             in
-            lib.mkIf (userHostConfig.enable or userConfig.home-manager.enable) {
+            lib.mkIf (userHostConfig.enable or userConfig.enable) {
               _file = ./nixos.nix;
               imports = [ home-manager.input.nixosModules.home-manager ];
               users.users."${userName}" = {
@@ -70,11 +70,11 @@ let
               };
               home-manager = {
                 users."${userName}" = {
-                  imports = userConfig.home-manager.finalModules ++ userHostConfig.modules or [ ];
+                  imports = userConfig.finalModules ++ userHostConfig.modules or [ ];
                 };
                 useUserPackages = lib.mkDefault true;
                 useGlobalPkgs = lib.mkDefault true;
-                extraSpecialArgs = lib.recursiveUpdate common.specialArgs userConfig.home-manager.specialArgs;
+                extraSpecialArgs = lib.recursiveUpdate common.specialArgs userConfig.specialArgs;
               };
             }
           ) users)

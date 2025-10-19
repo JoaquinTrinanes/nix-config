@@ -3,10 +3,8 @@
   parts = {
     users = {
       "joaquin" = {
-        home-manager = {
-          enable = true;
-          modules = [ ../home ];
-        };
+        enable = true;
+        modules = [ ../home ];
       };
     };
     home-manager = {
