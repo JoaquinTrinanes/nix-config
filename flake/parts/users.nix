@@ -131,10 +131,6 @@ let
           type = types.str;
           default = name;
         };
-        sshPublicKeys = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-        };
         home-manager = mkOption {
           type = mkHomeManagerUserConfigType config;
           default = { };

@@ -25,11 +25,17 @@
     ];
   };
 
-  services.switcherooControl.enable = true;
+  services.switcherooControl.enable = lib.mkDefault true;
 
-  profiles.hardware-acceleration = {
-    enable = true;
-    cpuType = "amd";
+  environment.sessionVariables = {
+    VDPAU_DRIVER = lib.mkDefault "radeonsi";
+    LIBVA_DRIVER_NAME = lib.mkDefault "radeonsi";
+  };
+
+  hardware.graphics = {
+    enable = lib.mkDefault true;
+    extraPackages = builtins.attrValues { inherit (pkgs) libva-vdpau-driver libvdpau-va-gl; };
+    enable32Bit = lib.mkDefault true;
   };
 
   boot.initrd.systemd.enable = true;
