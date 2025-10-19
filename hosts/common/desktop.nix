@@ -11,12 +11,8 @@
     development.enable = true;
     gaming.enable = true;
     printing.enable = true;
-    tailscale.enable = true;
     yubikey.enable = true;
   };
-
-  services.tailscale.enable = false;
-  services.tailscale.extraUpFlags = [ "--advertise-tags=tag:desktop" ];
 
   boot.tmp = lib.mkDefault {
     cleanOnBoot = true;

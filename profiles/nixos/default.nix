@@ -10,12 +10,8 @@
     ./firefox
     ./fonts
     ./gaming
-    ./hardware-acceleration
-    ./jellyfin
     ./printing
-    ./samba
     ./ssh
-    ./tailscale
     ./yubikey
   ];
 }
