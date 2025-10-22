@@ -50,9 +50,11 @@
       key = "6E1446DD451C6BAF";
       signByDefault = true;
     };
-    userName = config.accounts.email.accounts.primary.realName;
-    userEmail = config.accounts.email.accounts.primary.address;
-    extraConfig = {
+    settings = {
+      user = {
+        name = config.accounts.email.accounts.primary.realName;
+        email = config.accounts.email.accounts.primary.address;
+      };
       gpg.program = lib.getExe pkgs.sequoia-chameleon-gnupg;
       core = {
         filemode = false;
@@ -141,6 +143,20 @@
         "https://gitlab.com/".insteadOf = "gl:";
         "git@github.com:".insteadOf = "ghs:";
       };
+      alias = {
+        a = "add";
+        b = "branch -vv";
+        c = "commit";
+        co = "checkout";
+        cp = "cherry-pick";
+        d = "diff";
+        p = "push";
+        pf = "push --force-with-lease";
+        pnv = "push --no-verify";
+        s = "status --short --branch";
+        up = "pull --rebase";
+      };
+
     };
     includes = [
       { path = "config.local"; }
@@ -174,19 +190,6 @@
       "Temporary Items"
       ".apdisk"
     ];
-    aliases = {
-      a = "add";
-      b = "branch -vv";
-      c = "commit";
-      co = "checkout";
-      cp = "cherry-pick";
-      d = "diff";
-      p = "push";
-      pf = "push --force-with-lease";
-      pnv = "push --no-verify";
-      s = "status --short --branch";
-      up = "pull --rebase";
-    };
   };
   programs.lazygit = {
     enable = true;

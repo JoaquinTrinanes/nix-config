@@ -18,8 +18,8 @@ in
     package = jj;
     settings = {
       user = {
-        name = config.programs.git.userName;
-        email = config.programs.git.userEmail;
+        name = config.accounts.email.accounts.primary.realName;
+        email = config.accounts.email.accounts.primary.address;
       };
 
       signing = {
@@ -130,8 +130,6 @@ in
         "around(x, n)" = "ancestors(x, n) | descendants(x, n)";
 
         "between(x, y)" = "roots(x | y)::heads(x | y)";
-
-
 
         "stack()" = "stack(@)";
         "stack(x)" = "stack(x, 2)";
