@@ -140,22 +140,7 @@ in
       switch-applications-backward = [ "<Shift><Super>Tab" ];
     };
     "org/gnome/desktop/input-sources" = {
-      xkb-options = [
-        "terminate:ctrl_alt_bksp"
-        "lv3:ralt_switch"
-        "caps:escape"
-      ];
       show-all-sources = true;
-      sources = [
-        (mkTuple [
-          "xkb"
-          "us"
-        ])
-        (mkTuple [
-          "xkb"
-          "es"
-        ])
-      ];
     };
     "org/gnome/shell/extensions/dash-to-panel" = {
       click-action = "CYCLE-MIN";
