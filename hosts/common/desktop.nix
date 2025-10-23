@@ -19,6 +19,16 @@
     useTmpfs = false;
   };
 
+  services.xserver.xkb = {
+    layout = "us,es";
+    options = lib.mkMerge [
+      "terminate:ctrl_alt_bksp"
+      "lv3:ralt_switch"
+      "caps:escape"
+    ];
+  };
+  console.useXkbConfig = true;
+
   nix.settings.trusted-users = [ "@wheel" ];
 
   environment.etc."nixos/current-config".source = inputs.self;
