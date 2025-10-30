@@ -44,9 +44,12 @@ in
 
   documentation.nixos.enable = false;
 
-  security.sudo.extraConfig = ''
-    Defaults lecture = never
-  '';
+  security.sudo = {
+    execWheelOnly = lib.mkDefault true;
+    extraConfig = ''
+      Defaults lecture = never
+    '';
+  };
 
   nix.registry = lib.mkMerge [
     flakeAliases
