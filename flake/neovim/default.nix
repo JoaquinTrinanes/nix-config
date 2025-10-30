@@ -131,6 +131,7 @@
           ruff
           rust-analyzer
           shellcheck
+          tofu-ls
           shfmt
           sqlfluff
           statix
