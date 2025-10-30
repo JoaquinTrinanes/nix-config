@@ -48,6 +48,7 @@ vim.diagnostic.config({
 return {
   {
     "neovim/nvim-lspconfig",
+    lazy = false,
     event = { "BufReadPre", "LspAttach" },
     ---@class LspConfig
     ---@field servers table<string, ExtendedLspConfig>
@@ -181,6 +182,8 @@ return {
         biome = {},
         tinymist = {},
         zls = {},
+        terraformls = { enabled = vim.fn.executable("terraform") == 1 },
+        tofu_ls = { enabled = vim.fn.executable("terraform") == 0 },
       },
     },
     config = function(_, opts)
