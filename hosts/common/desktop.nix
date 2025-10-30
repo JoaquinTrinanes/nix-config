@@ -39,6 +39,8 @@
     };
   };
 
+  programs.firejail.enable = true;
+
   environment.systemPackages = builtins.attrValues {
     inherit (pkgs)
       age

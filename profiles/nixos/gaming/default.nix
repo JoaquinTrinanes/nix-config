@@ -46,19 +46,39 @@ in
       enable = true;
       package = steam;
     };
+
+    programs.firejail.wrappedBinaries =
+      let
+        wine = pkgs.wineWowPackages.stable;
+        sandboxedWineProfile = pkgs.writeText "wine.profile" ''
+          blacklist ''${HOME}
+          include ${pkgs.firejail}/etc/firejail/wine.profile
+        '';
+      in
+      {
+        wine = {
+          executable = lib.getExe' wine "wine";
+          profile = sandboxedWineProfile;
+        };
+        wine64 = {
+          executable = lib.getExe wine;
+          profile = sandboxedWineProfile;
+        };
+        wineboot = {
+          executable = lib.getExe' wine "wineboot";
+        };
+      };
+
     environment.systemPackages =
       lib.optionals cfg.steamNoInternet.enable [ steamNoInternet ]
       ++ builtins.attrValues {
         inherit (pkgs)
           heroic
+          itch
           lutris
           mangohud
-          wine
+          winetricks
           ;
-        itch = pkgs.my.mkWrapper {
-          basePackage = pkgs.itch;
-          pathAdd = [ pkgs.firejail ];
-        };
         inherit (pkgs.wineWowPackages) stable;
       };
   };
