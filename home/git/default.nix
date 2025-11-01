@@ -45,6 +45,9 @@
 
   programs.git = {
     enable = true;
+
+    lfs.enable = true;
+
     signing = {
       format = "openpgp";
       key = "6E1446DD451C6BAF";
