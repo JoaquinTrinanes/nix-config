@@ -57,13 +57,19 @@ return {
 
       vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
         group = U.augroup("nvim-lint"),
+        ---@param event vim.api.keyset.create_autocmd.callback_args
         callback = U.debounce(function(event)
-          local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
+          local buf = event.buf
+          if not vim.api.nvim_buf_is_valid(buf) then
+            return
+          end
+          local linters = lint._resolve_linter_by_ft(vim.bo[buf].filetype)
           linters = vim.list_extend({}, linters)
 
           -- Filter out linters that don't exist or don't match the condition.
-          local ctx = { filename = vim.api.nvim_buf_get_name(0) }
-          ctx.dirname = vim.fn.fnamemodify(ctx.filename, ":h")
+          local filename = vim.fn.fnamemodify(event.file, ":p")
+          local ctx = { filename = filename, dirname = vim.fn.fnamemodify(filename, ":h") }
+
           linters = vim.tbl_filter(function(name)
             local linter = lint.linters[name]
             if not linter then
