@@ -282,7 +282,7 @@
 
       nxs = "nx switch";
       # prevent leaking information from secure files
-      svim = "${lib.getExe config.programs.neovim.package} -n --cmd 'au BufRead * setlocal nobackup nomodeline noshelltemp noswapfile noundofile nowritebackup shadafile=NONE'";
+      svim = "nvim -n -i NONE --cmd 'set sessionoptions= secure backupskip=* viewoptions= | au BufRead,BufNewFile * setlocal nobackup nomodeline noshelltemp noswapfile noundofile nowritebackup noautowrite noautowriteall'";
     }
     (lib.mkIf config.programs.home-manager.enable {
       hm = "home-manager";
