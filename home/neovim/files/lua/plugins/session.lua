@@ -8,6 +8,10 @@ local function should_enable_persistence()
     return session_enabled_user_override
   end
 
+  if #vim.opt.sessionoptions:get() == 0 then
+    return false
+  end
+
   local cwd = vim.fn.getcwd()
 
   if vim.o.diff or vim.fn.has("headless") == 1 then

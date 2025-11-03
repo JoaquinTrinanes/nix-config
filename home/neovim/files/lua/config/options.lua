@@ -13,7 +13,7 @@ o.smarttab = true
 o.expandtab = true -- Use spaces instead of tabs
 o.shiftround = true -- Round indent
 o.shiftwidth = 2 -- Size of an indent
-o.tabstop = 2 -- Number of spaces tabs count for
+o.tabstop = o.shiftwidth -- Number of spaces tabs count for
 opt.fillchars = {
   foldopen = "",
   foldclose = "",
@@ -68,7 +68,7 @@ o.writebackup = true
 o.swapfile = true
 
 o.autoread = true
-o.autowrite = true
+o.autowrite = false
 
 o.hidden = true
 o.errorbells = false
