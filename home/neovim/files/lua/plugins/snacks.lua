@@ -21,6 +21,10 @@ return {
     opts = {
       image = image_config,
       picker = {
+        sources = {
+          ---@type snacks.picker.files.Config
+          files = { hidden = true },
+        },
         layouts = {
           select = {
             layout = {
@@ -111,7 +115,7 @@ return {
       {
         "<leader>/",
         function()
-          Snacks.picker.pick("grep")
+          Snacks.picker.grep()
         end,
         desc = "Grep (Root Dir)",
       },
@@ -121,13 +125,6 @@ return {
           Snacks.picker.command_history()
         end,
         desc = "Command History",
-      },
-      {
-        "<leader><space>",
-        function()
-          Snacks.picker.pick("files")
-        end,
-        desc = "Find Files (Root Dir)",
       },
       -- find
       {
@@ -147,14 +144,14 @@ return {
       {
         "<leader>ff",
         function()
-          Snacks.picker.pick("files")
+          Snacks.picker.files()
         end,
         desc = "Find Files (Root Dir)",
       },
       {
         "<leader>fF",
         function()
-          Snacks.picker.pick("files", { cwd = vim.lsp.buf.list_workspace_folders()[1] })
+          Snacks.picker.files({ cwd = vim.lsp.buf.list_workspace_folders()[1] })
         end,
         desc = "Find Files (cwd)",
       },
@@ -168,16 +165,16 @@ return {
       {
         "<leader>fr",
         function()
-          Snacks.picker.pick("oldfiles")
+          Snacks.picker.recent({ filter = { cwd = true } })
         end,
-        desc = "Recent",
+        desc = "Recent (cwd)",
       },
       {
         "<leader>fR",
         function()
-          Snacks.picker.recent({ filter = { cwd = true } })
+          Snacks.picker.recent()
         end,
-        desc = "Recent (cwd)",
+        desc = "Recent",
       },
       {
         "<leader>fp",
@@ -225,13 +222,6 @@ return {
       },
       {
         "<leader>sg",
-        function()
-          Snacks.picker.pick("live_grep")
-        end,
-        desc = "Grep (Root Dir)",
-      },
-      {
-        "<leader>sG",
         function()
           Snacks.picker.pick("live_grep", { cwd = vim.lsp.buf.list_workspace_folders()[1] })
         end,
