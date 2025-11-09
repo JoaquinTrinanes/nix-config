@@ -24,6 +24,7 @@ rec {
     autofirma-nix.url = "github:nix-community/autofirma-nix";
     autofirma-nix.inputs.flake-parts.follows = "flake-parts";
     autofirma-nix.inputs.nixpkgs.follows = "nixpkgs";
+    autofirma-nix.inputs.home-manager.follows = "home-manager";
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
