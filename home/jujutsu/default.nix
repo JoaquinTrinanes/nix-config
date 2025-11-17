@@ -13,6 +13,7 @@ let
 in
 {
   programs.git.signing.signByDefault = lib.mkIf config.programs.jujutsu.enable (lib.mkForce false);
+
   programs.jujutsu = {
     enable = lib.mkDefault true;
     package = jj;
@@ -21,6 +22,12 @@ in
         name = config.accounts.email.accounts.primary.realName;
         email = config.accounts.email.accounts.primary.address;
       };
+      "--scope" = [
+        {
+          "--when".repositories = [ "~/Documents/cawa/" ];
+          user.email = config.accounts.email.accounts.cawa.address;
+        }
+      ];
 
       signing = {
         inherit (config.programs.git.signing) key;
