@@ -16,6 +16,10 @@ in
     programs.virt-manager.enable = lib.mkDefault true;
     virtualisation.libvirtd.enable = lib.mkDefault true;
 
+    networking.hosts = {
+      "127.0.0.1" = [ "local.dev.cawa.tech" ];
+    };
+
     virtualisation.docker = lib.mkDefault {
       enable = !(config.virtualisation.podman.enable && config.virtualisation.podman.dockerCompat);
       logDriver = "local";
