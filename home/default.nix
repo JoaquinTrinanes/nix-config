@@ -30,6 +30,9 @@
       address = "hi@joaquint.io";
       realName = "Joaquín Triñanes";
     };
+    cawa = {
+      address = "joaquin@cawa.tech";
+    };
   };
 
   impurePath = lib.mkDefault {

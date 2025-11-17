@@ -163,6 +163,12 @@
     };
     includes = [
       { path = "config.local"; }
+      {
+        condition = "gitdir:~/Documents/cawa/";
+        contents = {
+          user.email = config.accounts.email.accounts.cawa.address;
+        };
+      }
     ];
 
     ignores = [
