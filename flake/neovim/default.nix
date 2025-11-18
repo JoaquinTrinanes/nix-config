@@ -76,6 +76,7 @@
           nvim-navic
           nvim-treesitter-context
           nvim-ts-autotag
+          omnisharp-extended-lsp-nvim
           persistence-nvim
           plenary-nvim
           render-markdown-nvim
@@ -108,6 +109,7 @@
           bash-language-server
           biome
           black
+          omnisharp-roslyn
           dockerfile-language-server
           fd
           fzf
