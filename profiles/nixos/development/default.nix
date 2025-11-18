@@ -30,6 +30,7 @@ in
     };
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs)
+        amp-cli
         dbeaver-bin
         file
         gnome-boxes
