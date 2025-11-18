@@ -108,6 +108,7 @@
           bash-language-server
           biome
           black
+          omnisharp-roslyn
           dockerfile-language-server
           fd
           fzf
@@ -129,6 +130,7 @@
           nodejs
           prettier
           ripgrep
+          roslyn-ls
           ruff
           rust-analyzer
           shellcheck
