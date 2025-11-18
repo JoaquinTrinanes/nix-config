@@ -44,6 +44,7 @@
         devPlugins
         ++ (with pkgs.vimPlugins; [
           SchemaStore-nvim
+          amp-nvim
           bufferline-nvim
           (setPluginName catppuccin-nvim "catppuccin")
           clangd_extensions-nvim
