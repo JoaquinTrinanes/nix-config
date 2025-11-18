@@ -108,6 +108,7 @@
           bash-language-server
           biome
           black
+          omnisharp-roslyn
           dockerfile-language-server
           fd
           fzf
