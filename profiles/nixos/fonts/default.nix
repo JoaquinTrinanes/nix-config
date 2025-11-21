@@ -20,6 +20,7 @@ in
       noto-fonts-cjk-sans
       unscii
       nerd-fonts.symbols-only
+      recursive
     ];
     fonts.fontconfig = lib.mkDefault {
       defaultFonts = {
@@ -45,6 +46,17 @@ in
             "FiraCode Nerd Font" = {
               features = {
                 ss05 = true; # @ style
+              };
+            };
+            Recursive = {
+              variables = {
+                MONO = 1;
+                CASL = 1;
+              };
+              features = {
+                aalt = true; # alternate l
+                dlig = true; # enable ligatures
+                ss12 = true; # alternate @
               };
             };
           };
