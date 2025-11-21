@@ -44,8 +44,7 @@ in
           fontConfigByFamily = {
             "FiraCode Nerd Font" = {
               features = {
-                # @ style
-                ss05 = true;
+                ss05 = true; # @ style
               };
             };
           };
@@ -53,17 +52,30 @@ in
             font:
             {
               features ? { },
+              variables ? { },
             }:
             ''
               <match target="font">
                 <test name="family" compare="eq" ignore-blanks="true">
                   <string>${lib.escapeXML font}</string>
                 </test>
-                <edit name="fontfeatures" mode="append">
-                  ${lib.concatMapAttrsStringSep "\n" (
-                    name: value: "<string>${lib.escapeXML name} ${if value then "on" else "off"}</string>"
-                  ) features}
-                </edit>
+                ${lib.optionalString (features != { }) ''
+                  <edit name="fontfeatures" mode="append">
+                    ${lib.concatMapAttrsStringSep "\n" (
+                      name: value:
+                      "<string>${lib.escapeXML name} ${
+                        if lib.isBool value then (if value then "on" else "off") else (toString value)
+                      }</string>"
+                    ) features}
+                  </edit>
+                ''}
+                ${lib.optionalString (variables != { }) ''
+                  <edit name="fontvariations" mode="append">
+                    ${lib.concatMapAttrsStringSep "\n" (
+                      name: value: "<string>${lib.escapeXML name}=${lib.escapeXML (toString value)}</string>"
+                    ) variables}
+                  </edit>
+                ''}
               </match>
             '';
         in
