@@ -40,8 +40,11 @@ keybind = ctrl+alt+l=next_tab
 keybind = ctrl+,=unbind
 
 font-family = monospace
-font-feature = ss05
 font-style-bold = SemiBold
+font-feature = ss05
+
+font-family-italic = Recursive Mono Casual Static
+font-family-bold-italic = Recursive Mono Casual Static
 
 
 
