@@ -67,7 +67,7 @@ return {
             {
               key = "<C-c>",
               desc = "Close dashboard",
-              action = "<leader>bd",
+              action = ":bdelete",
               hidden = true,
             },
           },
@@ -91,6 +91,20 @@ return {
       --   end,
       --   desc = "Notification History",
       -- },
+      {
+        "<leader>bd",
+        function()
+          require("snacks").bufdelete()
+        end,
+        desc = "Delete Buffer",
+      },
+      {
+        "<leader>bo",
+        function()
+          require("snacks").bufdelete.other()
+        end,
+        desc = "Delete Other Buffers",
+      },
       {
         "<leader>n",
         function()

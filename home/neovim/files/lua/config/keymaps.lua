@@ -67,12 +67,6 @@ map("n", "[b", "<Cmd>bprevious<CR>", { desc = "Prev Buffer" })
 map("n", "]b", "<Cmd>bnext<CR>", { desc = "Next Buffer" })
 map("n", "<leader>bb", "<Cmd>e #<CR>", { desc = "Switch to Other Buffer" })
 map("n", "<leader>`", "<Cmd>e #<CR>", { desc = "Switch to Other Buffer" })
-map("n", "<leader>bd", function()
-  require("snacks").bufdelete()
-end, { desc = "Delete Buffer" })
-map("n", "<leader>bo", function()
-  require("snacks").bufdelete.other()
-end, { desc = "Delete Other Buffers" })
 map("n", "<leader>bD", "<Cmd>:bd<CR>", { desc = "Delete Buffer and Window" })
 
 -- Clear search and stop snippet on escape
@@ -263,6 +257,7 @@ end, { desc = "Copy file path" })
 map("i", "<C-c>", "<Esc>")
 
 -- Buffers. Only set if no other plugin does
+safe_keymap_set("n", "<leader>bd", "<Cmd>bdelete<CR>", { desc = "Delete Buffer" })
 safe_keymap_set("n", "<S-h>", "<Cmd>bprevious<CR>", { desc = "Prev Buffer" })
 safe_keymap_set("n", "<S-l>", "<Cmd>bnext<CR>", { desc = "Next Buffer" })
 safe_keymap_set("n", "[b", "<Cmd>bprevious<CR>", { desc = "Prev Buffer" })
