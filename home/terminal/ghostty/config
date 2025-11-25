@@ -43,8 +43,10 @@ font-family = monospace
 font-style-bold = SemiBold
 font-feature = ss05
 
-font-family-italic = Recursive Mono Casual Static
-font-family-bold-italic = Recursive Mono Casual Static
+font-family-italic = monospace
+font-family-bold-italic = monospace
+font-style-italic = Italic
+font-style-bold-italic = Bold Italic
 
 
 
