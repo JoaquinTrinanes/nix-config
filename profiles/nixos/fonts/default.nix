@@ -42,11 +42,23 @@ in
       };
       localConf =
         let
-          fontConfigByFamily = {
+          fontConfig = {
             "FiraCode Nerd Font" = {
               features = {
                 ss05 = true; # @ style
               };
+            };
+            monospace = {
+              overrides = [
+                {
+                  tests.style = "Italic";
+                  edits.family = "Recursive Mono Casual Static";
+                }
+                {
+                  tests.style = "Bold Italic";
+                  edits.family = "Recursive Mono Casual Static";
+                }
+              ];
             };
             Recursive = {
               variables = {
@@ -65,13 +77,14 @@ in
             {
               features ? { },
               variables ? { },
+              overrides ? [ ],
             }:
             ''
-              <match target="font">
-                <test name="family" compare="eq" ignore-blanks="true">
-                  <string>${lib.escapeXML font}</string>
-                </test>
-                ${lib.optionalString (features != { }) ''
+              ${lib.optionalString (features != { }) ''
+                <match target="font">
+                  <test name="family" compare="eq" ignore-blanks="true">
+                    <string>${lib.escapeXML font}</string>
+                  </test>
                   <edit name="fontfeatures" mode="append">
                     ${lib.concatMapAttrsStringSep "\n" (
                       name: value:
@@ -80,22 +93,50 @@ in
                       }</string>"
                     ) features}
                   </edit>
-                ''}
-                ${lib.optionalString (variables != { }) ''
+                  </match>
+              ''}
+              ${lib.optionalString (variables != { }) ''
+                <match target="font">
+                  <test name="family" compare="eq" ignore-blanks="true">
+                    <string>${lib.escapeXML font}</string>
+                  </test>
                   <edit name="fontvariations" mode="append">
                     ${lib.concatMapAttrsStringSep "\n" (
                       name: value: "<string>${lib.escapeXML name}=${lib.escapeXML (toString value)}</string>"
                     ) variables}
                   </edit>
-                ''}
-              </match>
+                </match>
+              ''}
+              ${lib.concatMapStringsSep "\n" (
+                {
+                  tests ? { },
+                  edits ? { },
+                }:
+                ''
+                  <match>
+                    <test name="family" qual="any">
+                      <string>${lib.escapeXML font}</string>
+                    </test>
+                    ${lib.concatMapAttrsStringSep "\n" (name: value: ''
+                      <test name="${lib.escapeXML name}" qual="any">
+                        <string>${lib.escapeXML value}</string>
+                      </test>
+                    '') tests}
+                    ${lib.concatMapAttrsStringSep "\n" (name: value: ''
+                      <edit name="${lib.escapeXML name}" mode="assign" binding="strong">
+                        <string>${lib.escapeXML value}</string>
+                      </edit>
+                    '') edits}
+                  </match>
+                ''
+              ) overrides}
             '';
         in
         ''
           <?xml version="1.0"?>
           <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
           <fontconfig>
-            ${lib.concatMapAttrsStringSep "\n" mkFontConfig fontConfigByFamily}
+            ${lib.concatMapAttrsStringSep "\n" mkFontConfig fontConfig}
           </fontconfig>
         '';
     };
