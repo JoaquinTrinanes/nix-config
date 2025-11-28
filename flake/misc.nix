@@ -65,14 +65,15 @@
                   ]
                   ++ lib.optionals isLix [
                     "pipe-operator"
-                  ];
+                  ]
+                  ++ lib.optionals pkgs.stdenv.isLinux [ "cgroups" ];
                   keep-outputs = lib.mkDefault true;
                   auto-allocate-uids = lib.mkDefault true;
+                  use-cgroups = lib.mkIf pkgs.stdenv.isLinux (lib.mkDefault true);
                   narinfo-cache-negative-ttl = lib.mkDefault 0;
                   use-xdg-base-directories = lib.mkDefault true;
                   warn-dirty = lib.mkDefault false;
-                  # remove global registry
-                  flake-registry = lib.mkDefault "";
+                  flake-registry = lib.mkDefault ""; # remove global registry
                   sync-before-registering = true;
                   accept-flake-config = lib.mkIf isLix (lib.mkDefault false);
                   repl-overlays = lib.mkIf isLix [
