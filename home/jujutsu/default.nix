@@ -41,10 +41,8 @@ in
         behavior = "drop";
       };
       git = {
-        auto-local-bookmark = false;
         colocate = true;
         private-commits = "private()";
-        push-new-bookmarks = false;
         sign-on-push = true;
       };
       fix.tools = {
@@ -182,6 +180,7 @@ in
         default-command = [ "log" ];
         diff-editor = "hunk";
         diff-instructions = false;
+        revsets-use-glob-by-default = true;
       };
       colors = {
         "diff added" = {
@@ -196,6 +195,7 @@ in
         };
       };
       templates = {
+        git_push_bookmark = ''"jt/push-" ++ change_id.short()'';
         draft_commit_description = ''
           separate(
             "\n",
@@ -295,21 +295,21 @@ in
         r = [ "rebase" ];
         reheat = [
           "rebase"
-          "-d"
+          "-o"
           "trunk()"
           "-s"
           "roots(trunk()..stack(@))"
         ];
         retrunk = [
           "rebase"
-          "-d"
+          "-o"
           "trunk()"
         ];
         reheat-all = [
           "rebase"
           "-s"
           "roots(open())"
-          "-d"
+          "-o"
           "trunk()"
         ];
         s = [ "status" ];
