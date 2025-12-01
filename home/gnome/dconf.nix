@@ -82,6 +82,7 @@ in
           "org.gnome.Nautilus.desktop"
           (getName pkgs.firefox)
           (getName pkgs.vesktop)
+          "slack.desktop"
           (lib.head config.xdg.terminal-exec.settings.default)
         ];
     };
