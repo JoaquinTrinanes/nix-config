@@ -7,6 +7,7 @@ let
       caffeine
       color-picker
       dash-to-panel
+      do-not-disturb-while-screen-sharing-or-recording
       night-theme-switcher
       user-themes
       ;
