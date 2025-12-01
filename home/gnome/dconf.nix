@@ -28,6 +28,18 @@ in
       sort-directories-first = true;
       show-hidden = true;
     };
+    "org/gnome/desktop/search-providers" = {
+      disabled = [
+        "org.gnome.Epiphany.desktop" # web search
+        "org.gnome.Nautilus.desktop" # file search
+      ];
+    };
+    "org/gnome/desktop/notifications" = {
+      show-in-lock-screen = false;
+    };
+    "org/gnome/desktop/screensaver" = {
+      restart-enabled = true;
+    };
     "org/gnome/desktop/peripherals/mouse" = {
       accel-profile = "default";
     };
@@ -141,6 +153,11 @@ in
     };
     "org/gnome/desktop/input-sources" = {
       show-all-sources = true;
+    };
+
+    "org/gnome/shell/extensions/do-not-disturb-while-screen-sharing-or-recording" = {
+      dnd-on-screen-recording = true;
+      dnd-on-screen-sharing = true;
     };
     "org/gnome/shell/extensions/dash-to-panel" = {
       click-action = "CYCLE-MIN";
