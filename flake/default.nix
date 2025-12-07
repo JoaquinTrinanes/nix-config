@@ -6,7 +6,7 @@ in
   _class = "flake";
 
   imports = builtins.attrValues flakeModules ++ [
-    inputs.flake-parts.flakeModules.flakeModules
+    inputs.flake-parts.flakeModules.modules
     ./parts
     ./home-configurations.nix
     ./misc.nix
