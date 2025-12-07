@@ -97,12 +97,14 @@
     enableNushellIntegration = true;
     globalConfig = {
       settings = {
+        python.uv_venv_auto = true;
         all_compile = false;
         experimental = true;
         not_found_auto_install = false;
         idiomatic_version_file_enable_tools = [
           "go"
           "node"
+          "python"
           "rust"
         ];
       };
