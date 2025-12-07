@@ -155,6 +155,7 @@ return {
         },
       },
       formatters = {
+        prettier_cwd = { inherit = "prettier", require_cwd = true },
         sqlfluff = { require_cwd = false },
         topiary_nu = {
           command = "topiary",
@@ -166,17 +167,5 @@ return {
         },
       },
     },
-  },
-  {
-    "stevearc/conform.nvim",
-    optional = true,
-    opts = function(_, opts)
-      local prettier_cwd = vim.deepcopy(require("conform.formatters.prettier"))
-
-      prettier_cwd = vim.tbl_deep_extend("force", prettier_cwd, { require_cwd = true })
-
-      opts.formatters = opts.formatters or {}
-      opts.formatters.prettier_cwd = prettier_cwd
-    end,
   },
 }
