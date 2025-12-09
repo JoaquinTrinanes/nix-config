@@ -231,6 +231,16 @@
     ];
   };
 
+  programs.brave = {
+    enable = true;
+    package = pkgs.my.mkWrapper {
+      basePackage = pkgs.brave;
+      # Unencrypted, but password saving is disabled in the policies
+      # This prevents a prompt to unlock the keyring on every launch if it's locked
+      prependFlags = [ "--password-store=basic" ];
+    };
+  };
+
   programs.starship = {
     enable = true;
 
@@ -335,7 +345,7 @@
   xdg.mimeApps.defaultApplications =
     let
       defaultWebBrowser = lib.mkAfter [
-        pkgs.firefox.desktopItem.name
+        "brave-browser.desktop"
       ];
       defaultEditor = lib.mkAfter [ "nvim.desktop" ];
     in

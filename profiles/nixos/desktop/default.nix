@@ -27,6 +27,63 @@ in
     profiles.audio.enable = lib.mkDefault true;
     profiles.autofirma.enable = lib.mkDefault true;
 
+    programs.chromium = {
+      enable = true;
+      extraOpts = {
+        BraveRewardsDisabled = true;
+        BraveWalletDisabled = true;
+        BraveVPNDisabled = true;
+        BraveAIChatEnabled = false;
+        BraveNewsDisabled = true;
+        BraveTalkDisabled = true;
+        BraveP3AEnabled = false;
+        BraveStatsPingEnabled = false;
+
+        ForcedLanguages = [ "en-US" ];
+        HomepageIsNewTabPage = true;
+        MetricsReportingEnabled = false;
+        PasswordManagerEnabled = false;
+        PaymentMethodQueryEnabled = false;
+        SSLErrorOverrideAllowed = true;
+
+        DefaultSearchProviderEnabled = true;
+        DefaultSearchProviderSearchURL = "https://duckduckgo.com/?q={searchTerms}";
+        DefaultSearchProviderKeyword = ":d";
+        DefaultSearchProviderName = "DuckDuckGo";
+
+        ExtensionSettings =
+          lib.mapAttrs
+            (
+              _: ext:
+              {
+                installation_mode = "force_installed";
+                update_url = "https://clients2.google.com/service/update2/crx";
+              }
+              // ext
+            )
+            {
+              "dbepggeogbaibhgnhhndojpepiihcmeb" = { }; # vimium
+              "eimadpbcbfnmbkopoojfekhnkhdbieeh" = { }; # dark reader
+              "jplgfhpmjnbigmhklmmbgecoobifkmpa" = { }; # proton vpn
+              "ghmbeldphafepmbegfdlkpapadhbakde" = {
+                # proton pass
+                toolbar_pin = "force_pinned";
+              };
+              "lioaeidejmlpffbndjhaameocfldlhin" = { }; # redirector
+              "enamippconapkdmgfgjchkhakpfinmaj" = { }; # dearrow
+              "mnjggcdmjocbbbhaepdhchncahnbgone" = { }; # sponsorblock
+            };
+        RestoreOnStartup =
+          {
+            restore = 1;
+            urlList = 4;
+            newTab = 5;
+            urlListAndRestore = 6;
+          }
+          ."restore";
+      };
+    };
+
     time.timeZone = lib.mkDefault "Europe/Madrid";
 
     services.libinput.touchpad = lib.mkDefault {
