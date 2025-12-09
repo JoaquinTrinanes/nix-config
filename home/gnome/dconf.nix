@@ -80,7 +80,7 @@ in
         in
         [
           "org.gnome.Nautilus.desktop"
-          (getName pkgs.firefox)
+          "brave-browser.desktop"
           (getName pkgs.vesktop)
           "slack.desktop"
           (lib.head config.xdg.terminal-exec.settings.default)
