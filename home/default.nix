@@ -257,12 +257,15 @@
         disabled = false;
         symbol = "✘";
       };
+      # increase default by one because atuin spawns one per-prompt
+      jobs = {
+        symbol_threshold = 2;
+      };
       shell = {
         disabled = false;
         nu_indicator = "";
       };
     };
-
   };
 
   xdg.configFile."pnpm/rc".source =
