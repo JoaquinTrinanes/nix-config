@@ -257,12 +257,15 @@
         disabled = false;
         symbol = "✘";
       };
+      jobs = {
+        # atuin spawns one per prompt, so it always shows one background job in nushell
+        disabled = true;
+      };
       shell = {
         disabled = false;
         nu_indicator = "";
       };
     };
-
   };
 
   xdg.configFile."pnpm/rc".source =
