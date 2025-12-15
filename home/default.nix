@@ -85,10 +85,11 @@
 
   programs.less = {
     enable = true;
-    config = ''
-      #env
-      LESS = --ignore-case --RAW-CONTROL-CHARS --quit-if-one-screen
-    '';
+    options = {
+      ignore-case = true;
+      RAW-CONTROL-CHARS = true;
+      quit-if-one-screen = true;
+    };
   };
 
   programs.mise = {
