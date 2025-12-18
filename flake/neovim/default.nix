@@ -142,6 +142,7 @@
           taplo
           vscode-langservers-extracted
           vtsls
+          vue-language-server
           yaml-language-server
           zls
           ;
@@ -192,6 +193,7 @@
               lockfile = "${configDir}/lazy-lock.json";
               install.missing = false;
             };
+            vue_language_server_typescript_plugin_path = "${pkgs.vue-language-server}/lib/language-tools/packages/language-server/node_modules";
           };
           initLuaSrc = "${configDir}/init.lua";
           customLuaRC = ''
