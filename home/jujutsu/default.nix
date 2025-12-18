@@ -180,7 +180,6 @@ in
         default-command = [ "log" ];
         diff-editor = "hunk";
         diff-instructions = false;
-        revsets-use-glob-by-default = true;
       };
       colors = {
         "diff added" = {
@@ -293,7 +292,7 @@ in
           "push"
         ];
         r = [ "rebase" ];
-        reheat = [
+        restack = [
           "rebase"
           "-o"
           "trunk()"
@@ -305,7 +304,7 @@ in
           "-o"
           "trunk()"
         ];
-        reheat-all = [
+        restack-all = [
           "rebase"
           "-s"
           "roots(open())"
@@ -333,6 +332,7 @@ in
           "--to"
           "closest_pushable(@)"
         ];
+        u = [ "undo" ];
       };
     };
   };
@@ -380,5 +380,6 @@ in
     jsq = "jj sq";
     jt = "jj t";
     jtp = "jj tp";
+    ju = "jj u";
   };
 }
