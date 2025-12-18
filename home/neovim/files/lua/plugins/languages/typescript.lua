@@ -3,6 +3,11 @@ return {
   {
     "neovim/nvim-lspconfig",
     optional = true,
+    opts_extend = {
+      "servers.vtsls.settings.typescript.tsserver.pluginPaths",
+      "servers.vtsls.settings.vtsls.tsserver.globalPlugins",
+    },
+    ---@type LspConfig
     opts = {
       servers = {
         vtsls = {
