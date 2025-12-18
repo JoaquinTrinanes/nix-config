@@ -186,6 +186,7 @@ return {
         tofu_ls = { enabled = vim.fn.executable("terraform") == 0 },
       },
     },
+    ---@param opts LspConfig
     config = function(_, opts)
       for server, server_config in pairs(opts.servers) do
         U.lsp.config(server, server_config)

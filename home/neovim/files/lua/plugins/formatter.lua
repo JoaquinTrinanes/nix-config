@@ -138,6 +138,7 @@ return {
         svelte = biomePrettierFormatters,
         typescript = biomePrettierFormatters,
         typescriptreact = biomePrettierFormatters,
+        vue = biomePrettierFormatters,
 
         yaml = { "prettier" },
         lua = { "stylua" },
