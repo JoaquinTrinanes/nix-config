@@ -57,6 +57,7 @@
           gitsigns-nvim
           grug-far-nvim
           hunk-nvim
+          inc-rename-nvim
           lazy-nvim
           lazydev-nvim
           lualine-nvim

@@ -218,4 +218,21 @@ return {
       },
     },
   },
+  {
+    "smjonas/inc-rename.nvim",
+    specs = {
+      { "folke/noice.nvim", optional = true, opts = { presets = { inc_rename = true } } },
+    },
+    opts = {},
+    config = function(_, opts)
+      require("inc_rename").setup(opts)
+      require("config.util").lsp.on_attach(function(client, buffer)
+        if client:supports_method("textDocument/rename", buffer) then
+          vim.keymap.set("n", "<leader>cr", function()
+            return ":" .. require("inc_rename").config.cmd_name .. " " .. vim.fn.expand("<cword>")
+          end, { desc = "Rename (inc-rename.nvim)", expr = true, buffer = buffer, noremap = true })
+        end
+      end)
+    end,
+  },
 }
