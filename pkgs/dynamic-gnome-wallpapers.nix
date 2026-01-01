@@ -16,10 +16,10 @@ let
     let
       parsedName = lib.replaceStrings [ " " ] [ "-" ] name;
       bgProps = ''
-        <?xml version=\"1.0\"?>
-        <!DOCTYPE wallpapers SYSTEM \"gnome-wp-list.dtd\">
+        <?xml version="1.0"?>
+        <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
         <wallpapers>
-          <wallpaper deleted=\"false\">
+          <wallpaper deleted="false">
             <name>${name}</name>
             <filename>@out@/share/backgrounds/light-dark/${parsedName}/${parsedName}-l.png</filename>
             <filename-dark>@out@/share/backgrounds/light-dark/${parsedName}/${parsedName}-d.png</filename-dark>
@@ -53,7 +53,7 @@ let
         export primary_color=$(echo "$COLORS" | sed '1q;d')
         export secondary_color=$(echo "$COLORS" | sed '2q;d')
 
-        echo "${bgProps}" > $out/share/gnome-background-properties/${parsedName}.xml
+        echo "${lib.escapeShellArg bgProps}" > $out/share/gnome-background-properties/${parsedName}.xml
         substituteAllInPlace $out/share/gnome-background-properties/${parsedName}.xml
 
         runHook postInstall
@@ -96,7 +96,7 @@ let
       rev = "45128514ae51c6647ab3e427dda2de40c74a40e5";
       hash =
         if (wallpaperNames == [ ]) then
-          "sha256-gmGtu28QfUP4zTfQm1WBAokQaZEoTJ2jL/Qk4BUNrhU="
+          "sha256-a+SwCi0+yv93r77u+GPyA+xr630FWEhcPyz5DhcHre0="
         else
           dynamicWallpaperHash;
       sparseCheckout =
