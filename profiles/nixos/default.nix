@@ -10,6 +10,7 @@
     ./firefox
     ./fonts
     ./gaming
+    ./hardened
     ./printing
     ./ssh
     ./yubikey

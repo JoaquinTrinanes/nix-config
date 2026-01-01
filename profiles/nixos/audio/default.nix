@@ -10,7 +10,6 @@ in
 {
   options.profiles.audio = {
     enable = lib.mkEnableOption "audio profile";
-
   };
 
   config = lib.mkIf cfg.enable {
