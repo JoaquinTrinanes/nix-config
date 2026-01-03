@@ -20,7 +20,7 @@ in
     services.desktopManager.gnome = {
       enable = lib.mkDefault true;
       sessionPath = [
-        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers
+        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.rancho-wallpaper
       ];
     };
     programs.dconf.enable = lib.mkDefault true;

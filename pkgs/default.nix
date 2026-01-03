@@ -3,9 +3,7 @@
     { pkgs, ... }:
     {
       packages = {
-        dynamic-gnome-wallpapers = pkgs.callPackage ./dynamic-gnome-wallpapers.nix {
-          withDynamic = false;
-        };
+        rancho-wallpaper = pkgs.callPackage ./rancho-wallpaper.nix { };
       };
     };
 }
