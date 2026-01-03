@@ -19,6 +19,7 @@ in
       enable = true;
       execWheelOnly = true;
     };
+
     boot.kernelPackages = lib.mkDefault pkgs.linuxKernel.packages.linux_hardened;
 
     security = {

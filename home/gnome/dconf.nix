@@ -12,7 +12,7 @@ in
   imports = [
     {
       dconf.settings =
-        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.dynamic-gnome-wallpapers.Rancho.dconfSettings;
+        inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.rancho-wallpaper.dconfSettings;
     }
   ];
 
