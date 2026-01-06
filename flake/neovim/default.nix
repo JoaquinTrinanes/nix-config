@@ -19,7 +19,7 @@
           inherit (tsAllGrammars) meta passthru;
           # The JSX syntax sets `commentstring` wrong. Remove it and let ts-comments take care of it
           postBuild = ''
-            query_file="$out/queries/jsx/highlights.scm"
+            query_file="$out/runtime/queries/jsx/highlights.scm"
 
             sed -i '/((jsx_element) @_jsx_element/,/\(#set! @_jsx_element bo.commentstring "{\/\* %s \*\/}"\))/d' "$query_file"
             sed -i '/((jsx_attribute) @_jsx_attribute/,/\(#set! @_jsx_attribute bo.commentstring "\/\/ %s"\))/d' "$query_file"
@@ -30,7 +30,7 @@
         paths = treesitter.dependencies;
       };
       treesitterParsersAndQueries = pkgs.linkFarm "nvim-treesitter-bundle" {
-        queries = "${treesitter}/queries";
+        queries = "${treesitter}/runtime/queries";
         parser = "${treesitterParsers}/parser";
       };
 
