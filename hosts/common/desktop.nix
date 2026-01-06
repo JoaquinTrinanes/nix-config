@@ -82,7 +82,6 @@
 
         "dialout" # allow connecting to arduino
       ]
-      ++ lib.optionals config.programs.adb.enable [ "adbusers" ]
       ++ lib.optionals config.services.printing.enable [ "lp" ]
       ++ lib.optionals config.virtualisation.docker.enable [
         "docker"
