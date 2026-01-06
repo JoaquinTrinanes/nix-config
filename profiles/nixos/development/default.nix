@@ -35,6 +35,7 @@ in
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs)
         amp-cli
+        android-tools
         dbeaver-bin
         file
         gnome-boxes
@@ -44,8 +45,5 @@ in
         yarn-berry
         ;
     };
-
-    # includes android-tools
-    programs.adb.enable = true;
   };
 }
