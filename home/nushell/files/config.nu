@@ -39,12 +39,12 @@ export-env {
         }
 
         let rgb = $color
-        | str trim -c '#' --left
-        | split chars
-        | window 2 --stride 2
-        | each { str join }
-        | into int --radix 16
-        | each {|v| relative_luminance_helper ($v / 255) }
+            | str trim -c '#' --left
+            | split chars
+            | window 2 --stride 2
+            | each { str join }
+            | into int --radix 16
+            | each {|v| relative_luminance_helper ($v / 255) }
 
         let r = $rgb.0
         let b = $rgb.1
@@ -135,7 +135,7 @@ def sudo-completer [spans: list<string>] {
 }
 
 let external_completer = {|spans: list<string>|
-    carapace-completer $spans 
+    carapace-completer $spans
     | default --empty { fish-completer $spans }
     # avoid empty result preventing native file completion
     | default --empty null
@@ -259,14 +259,14 @@ $env.config.menus ++= [
         }
     }
 ] | each {
-    upsert style {
-        text: default
-        description_text: light_gray_dimmed
-        selected_text: {fg: default bg: dark_gray_dimmed attr: b}
-        match_text: {attr: u}
-        selected_match_text: {bg: dark_gray_dimmed attr: urb}
+        upsert style {
+            text: default
+            description_text: light_gray_dimmed
+            selected_text: {fg: default bg: dark_gray_dimmed attr: b}
+            match_text: {attr: u}
+            selected_match_text: {bg: dark_gray_dimmed attr: urb}
+        }
     }
-}
 
 $env.config.display_errors.termination_signal = false
 $env.config.display_errors.exit_code = false
