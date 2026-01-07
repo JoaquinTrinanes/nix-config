@@ -153,19 +153,9 @@
             type = "github";
             owner = "blindFS";
             repo = "topiary-nushell";
-            rev = "7f836bc14e0a435240c190b89ea02846ac883632";
+            rev = "71460ddb383a83286437ea951f946131ccca7e3f";
           };
-          tree-sitter-nu = pkgs.tree-sitter.buildGrammar {
-            language = "nu";
-            version = "0.0.0+rev=d5c71a10";
-            src = builtins.fetchTree {
-              type = "github";
-              owner = "nushell";
-              repo = "tree-sitter-nu";
-              rev = "d5c71a10b4d1b02e38967b05f8de70e847448dd1";
-            };
-            meta.homepage = "https://github.com/nushell/tree-sitter-nu";
-          };
+          inherit (inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}) tree-sitter-nu;
         in
         pkgs.my.mkWrapper {
           basePackage = pkgs.topiary;
