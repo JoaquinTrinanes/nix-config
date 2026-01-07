@@ -41,10 +41,10 @@ export def whichp [
         return $expanded_alias
     }
     let alias_path = scope aliases
-    | where name == $application
-    | get expansion
-    | split words
-    | each { first }
+        | where name == $application
+        | get expansion
+        | split words
+        | each { first }
 
     let result = if ($alias_path | is-not-empty) {
         $alias_path | which -a $in.0? ...($in | skip 1) | where path != ''
