@@ -349,10 +349,8 @@ in
         detect_folders = [ ".jj" ];
         format = ''(\[[$symbol](blue) [$output]($style)\] )'';
         symbol = "op";
-        command = ''
-          ls .jj/repo/op_heads/heads | head -c 5
-        '';
-        shell = "bash";
+        command = ''set -- .jj/repo/op_heads/heads/*; printf '%.5s\n' "''${1##*/}"'';
+        shell = lib.getExe pkgs.dash;
         description = "Current jj operation id";
       };
     };
