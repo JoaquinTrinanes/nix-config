@@ -134,6 +134,7 @@
           sqlfluff
           statix
           stylua
+          systemd-lsp
           tailwindcss-language-server
           taplo
           tofu-ls
