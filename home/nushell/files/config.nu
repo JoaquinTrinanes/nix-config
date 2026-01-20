@@ -271,6 +271,10 @@ $env.config.menus ++= [
 $env.config.display_errors.termination_signal = false
 $env.config.display_errors.exit_code = false
 
+$env.config.hooks.display_output = {
+    if (term size).columns >= 100 { table --expand --icons } else { table --icons }
+}
+
 $env.config.keybindings ++= [
     {
         # fix shift+backspace not working with the kitty keyboard protocol
