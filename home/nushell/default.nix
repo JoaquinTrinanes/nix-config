@@ -7,14 +7,10 @@
 }:
 let
   inherit (config.lib.impurePath) mkImpureLink;
-  configDir =
-    if pkgs.stdenv.isDarwin then
-      "Library/Application Support/nushell"
-    else
-      "${config.xdg.configHome}/nushell";
-  configFile = "${configDir}/config.nu";
-  envFile = "${configDir}/env.nu";
-  pluginFile = "${configDir}/plugin.msgpackz";
+  cfg = config.programs.nushell;
+  configFile = "${cfg.configDir}/config.nu";
+  envFile = "${cfg.configDir}/env.nu";
+  pluginFile = "${cfg.configDir}/plugin.msgpackz";
   nushellNightlyPkgs = inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system};
   inherit (nushellNightlyPkgs) nushell;
 
@@ -39,10 +35,14 @@ let
       basePackage = nushell;
       prependFlags =
         let
-          envFileSource = builtins.tryEval config.home.file."${envFile}".source;
-          configFileSource = builtins.tryEval config.home.file."${configFile}".source;
+          envFileSource = builtins.tryEval (
+            config.home.file."${envFile}".source or (throw "Missing env file")
+          );
+          configFileSource = builtins.tryEval (
+            config.home.file."${configFile}".source or (throw "Missing config file")
+          );
         in
-        [
+        lib.optionals (cfg.plugins != [ ]) [
           "--plugin-config"
           customPluginFile
         ]
