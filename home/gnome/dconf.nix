@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (lib.gvariant) mkTuple;
+  inherit (lib) gvariant;
 in
 {
   imports = [
@@ -56,7 +56,15 @@ in
     };
     "org/gnome/settings-daemon/plugins/power" = {
       ambient-enabled = false;
+      idle-dim = false;
       power-saver-profile-on-low-battery = true;
+      sleep-inactive-ac-timeout = 15 * 60;
+      sleep-inactive-ac-type = "suspend";
+      sleep-inactive-battery-timeout = 15 * 60;
+      sleep-inactive-battery-type = "suspend";
+    };
+    "org/gnome/desktop/session" = {
+      idle-delay = gvariant.mkUint32 (5 * 60);
     };
     "org/gnome/TextEditor" = {
       highlight-current-line = true;
@@ -108,15 +116,20 @@ in
       togglekeys-enable = false;
       show-status-shapes = false;
     };
+    "org/gnome/shell/app-switcher" = {
+      current-workspace-only = true;
+    };
     "org/gnome/mutter" = {
+      dynamic-workspaces = true;
       edge-tiling = true;
       experimental-features = [ "scale-monitor-framebuffer" ];
+      workspaces-only-on-primary = true;
     };
     "org/gnome/shell/extensions/caffeine" = {
       show-notifications = false;
     };
     "org/gnome/shell/extensions/nightthemeswitcher/time" = {
-      location = mkTuple [
+      location = gvariant.mkTuple [
         42.87672
         (-8.547082)
       ];
