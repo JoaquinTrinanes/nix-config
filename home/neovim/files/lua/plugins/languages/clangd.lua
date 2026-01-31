@@ -1,40 +1,9 @@
-local U = require("config.util")
-
 ---@type LazyPluginSpec[]
 local M = {
   {
-    "p00f/clangd_extensions.nvim",
-    lazy = true,
-    config = function() end,
-    opts = {
-      inlay_hints = {
-        inline = false,
-      },
-      ast = {
-        --These require codicons (https://github.com/microsoft/vscode-codicons)
-        role_icons = {
-          type = "",
-          declaration = "",
-          expression = "",
-          specifier = "",
-          statement = "",
-          ["template argument"] = "",
-        },
-        kind_icons = {
-          Compound = "",
-          Recovery = "",
-          TranslationUnit = "",
-          PackExpansion = "",
-          TemplateTypeParm = "",
-          TemplateTemplateParm = "",
-          TemplateParamObject = "",
-        },
-      },
-    },
-  },
-  {
     "neovim/nvim-lspconfig",
     optional = true,
+    ---@type LspConfig
     opts = {
       servers = {
         clangd = {
@@ -59,45 +28,27 @@ local M = {
     optional = true,
     opts = function()
       local dap = require("dap")
-      if not dap.adapters["lldb"] then
-        require("dap").adapters["lldb"] = {
+      if not dap.adapters["codelldb"] then
+        dap.adapters["codelldb"] = {
           type = "executable",
-          command = "lldb",
-          name = "lldb",
-
-          -- host = "localhost",
-          -- port = "${port}",
-          -- executable = {
-          --   command = "codelldb",
-          --   args = {
-          --     "--port",
-          --     "${port}",
-          --   },
-          -- },
+          command = "codelldb",
         }
       end
       for _, lang in ipairs({ "c", "cpp" }) do
         dap.configurations[lang] = {
           {
-            name = "Launch",
-            type = "lldb",
+            type = "codelldb",
             request = "launch",
+            name = "Launch File",
             program = function()
               return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
             end,
             cwd = "${workspaceFolder}",
-            stopOnEntry = false,
-            args = {},
+            -- TODO: check if projects that don't need this fallback gracefully
+            sourceMap = {
+              [vim.fn.getcwd() .. "/build"] = vim.fn.getcwd(),
+            },
           },
-          -- {
-          --   type = "codelldb",
-          --   request = "launch",
-          --   name = "Launch file",
-          --   program = function()
-          --     return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-          --   end,
-          --   cwd = "${workspaceFolder}",
-          -- },
           -- {
           --   type = "codelldb",
           --   request = "attach",
@@ -110,13 +61,5 @@ local M = {
     end,
   },
 }
-
-U.lsp.on_attach(function(client, buffer)
-  if not U.has("clangd_extensions.nvim") then
-    return
-  end
-  local clangd_ext_opts = U.opts("clangd_extensions.nvim")
-  require("clangd_extensions").setup(vim.tbl_deep_extend("force", clangd_ext_opts or {}, { server = client.config }))
-end, "clangd")
 
 return M

@@ -114,7 +114,6 @@
           imagemagick
           intelephense
           lazygit
-          lldb
           lua-language-server
           marksman
           netcoredbg
@@ -122,7 +121,6 @@
           nixd
           nixfmt
           nodejs
-          omnisharp-roslyn
           prettier
           ripgrep
           roslyn-ls
@@ -145,6 +143,7 @@
           yaml-language-server
           zls
           ;
+        codelldb = pkgs.vscode-extensions.vadimcn.vscode-lldb.adapter;
       };
       mkPluginPathMap =
         plugins:
