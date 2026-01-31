@@ -136,6 +136,7 @@
           systemd-lsp
           tailwindcss-language-server
           taplo
+          terraform-ls
           tofu-ls
           vscode-js-debug
           vscode-langservers-extracted
