@@ -349,7 +349,16 @@ in
         detect_folders = [ ".jj" ];
         format = ''(\[[$symbol](blue) [$output]($style)\] )'';
         symbol = "op";
-        command = ''set -- .jj/repo/op_heads/heads/*; printf '%.5s\n' "''${1##*/}"'';
+        command = ''
+          repo=.jj/repo
+
+          # If .jj/repo is a file, read the real repo path
+          [ -f "$repo" ] && IFS= read -r repo <"$repo"
+
+          set -- "$repo"/op_heads/heads/*
+          [ "$1" = "$repo/op_heads/heads/*" ] && exit 0
+          printf '%.5s\n' "''${1##*/}"
+        '';
         shell = lib.getExe pkgs.dash;
         description = "Current jj operation id";
       };
