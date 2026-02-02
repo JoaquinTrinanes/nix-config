@@ -108,26 +108,32 @@ def carapace-completer [spans: list<string>] {
 }
 
 def fish-completer [spans: list<string>] {
-    (
-        ^fish
-        --init-command
-        $"
-        function commandline
-            builtin commandline --input='($spans | str join ' ')' $argv 
-        end
-        "
-        --command $"complete '--do-complete=($spans | str replace --all "'" "\\'" | str join ' ')'"
-        | from tsv --flexible --noheaders --no-infer
-        | rename value description
-        | update value {|row|
-            let value = $row.value
-            let need_quote = ['\' ',' '[' ']' '(' ')' ' ' '\t' "'" '"' "`"] | any { $in in $value }
-            if ($need_quote and ($value | path exists)) {
-                let expanded_path = if ($value starts-with ~) { $value | path expand --no-symlink } else { $value }
-                $'"($expanded_path | str replace --all "\"" "\\\"")"'
-            } else { $value }
-        }
-    )
+    let escaped_spans = $spans
+        | str replace --all '\' '\\'
+        | str replace --all "'" "\\'"
+
+    ^fish --command $"complete '--do-complete=($escaped_spans | str join ' ')'"
+    | from tsv --flexible --noheaders --no-infer
+    | rename value description
+    | update value {|row|
+        let value = $row.value
+        let need_quote = [
+            '\'
+            '['
+            ']'
+            '('
+            ')'
+            (char space)
+            (char tab)
+            (char single_quote)
+            (char double_quote)
+            '`'
+        ] | any { $in in $value }
+        if ($need_quote and ($value | path exists)) {
+            let expanded_path = if ($value starts-with (char home)) { $value | path expand --no-symlink } else { $value }
+            '"' ++ ($expanded_path | str replace --all '"' '\"') ++ '"'
+        } else { $value }
+    }
 }
 
 def sudo-completer [spans: list<string>] {
