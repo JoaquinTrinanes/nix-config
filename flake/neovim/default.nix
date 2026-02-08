@@ -35,16 +35,13 @@
       };
 
       setPluginName = plugin: pname: plugin // { inherit pname; };
-      devPlugins = builtins.attrValues {
-        inherit (pkgs.vimPlugins)
-          blink-cmp
-          ;
-      };
+      devPlugins = builtins.attrValues { };
       plugins =
         devPlugins
         ++ (with pkgs.vimPlugins; [
           SchemaStore-nvim
           amp-nvim
+          blink-cmp
           bufferline-nvim
           (setPluginName catppuccin-nvim "catppuccin")
           clangd_extensions-nvim

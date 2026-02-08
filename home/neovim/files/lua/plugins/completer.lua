@@ -24,6 +24,7 @@ return {
   {
     "saghen/blink.cmp",
     event = "VeryLazy",
+    version = "1.*",
     dependencies = {
       {
         "L3MON4D3/LuaSnip",
@@ -139,7 +140,6 @@ return {
         preset = "default",
         ["<C-n>"] = { "select_next", "show", "fallback_to_mappings" },
       },
-      fuzzy = { prebuilt_binaries = { download = false } },
     },
   },
   {
