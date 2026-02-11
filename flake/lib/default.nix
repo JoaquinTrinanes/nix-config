@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ lib, ... }:
 {
   parts.nixpkgs.overlays = [
     (final: _prev: {
@@ -17,7 +17,15 @@
               else
                 module;
           in
-          inputs.wrapper-manager.lib.wrapWith final finalModule;
+          (lib.evalModules {
+            modules = [
+              ./wrapper.nix
+              finalModule
+            ];
+            specialArgs = {
+              pkgs = final;
+            };
+          }).config.wrapped;
       };
     })
   ];
