@@ -49,7 +49,7 @@ in
 
     programs.firejail.wrappedBinaries =
       let
-        wine = pkgs.wineWowPackages.stable;
+        wine = pkgs.wineWow64Packages.stable;
         sandboxedWineProfile = pkgs.writeText "wine.profile" ''
           blacklist ''${HOME}
           include ${pkgs.firejail}/etc/firejail/wine.profile
@@ -79,7 +79,7 @@ in
           mangohud
           winetricks
           ;
-        inherit (pkgs.wineWowPackages) stable;
+        inherit (pkgs.wineWow64Packages) stable;
       };
   };
 }
