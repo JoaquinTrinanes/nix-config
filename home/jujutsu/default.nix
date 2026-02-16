@@ -198,9 +198,27 @@ in
         draft_commit_description = ''
           separate(
             "\n",
+            if(
+              !description && parents.len() > 1,
+              concat(separate(" ",
+                "Merge",
+                if(parents.len() > 2, "branches", "branch"),
+                parents.skip(1).map(|p| coalesce(
+                  p.bookmarks().map(|b|
+                    surround("'", "'", b.name())
+                  ).join(", "),
+                  p.commit_id().short(),
+                )).join(", "),
+                "into",
+                coalesce(
+                  parents.first().bookmarks().map(|b| b.name()).join(", "),
+                  parents.first().commit_id().short(),
+                ),
+              )),
+            ),
             builtin_draft_commit_description,
             "JJ: ignore-rest\n",
-            diff.git()
+            diff.git(),
           )
         '';
       };
