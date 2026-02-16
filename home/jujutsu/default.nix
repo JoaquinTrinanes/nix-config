@@ -219,12 +219,28 @@ in
           "git"
           "clone"
         ];
+        conf = [
+          "config"
+          "edit"
+          "--repo"
+        ];
         d = [ "diff" ];
         dup = [ "duplicate" ];
         e = [ "edit" ];
         f = [
           "git"
           "fetch"
+        ];
+        gh = [
+          "util"
+          "exec"
+          "--"
+          (lib.getExe pkgs.dash)
+          "-c"
+          ''
+            GIT_DIR="$(jj --ignore-working-copy git root)" gh "$@"
+          ''
+          ""
         ];
         tp = [ "tug_private" ];
         tug_private = [
@@ -333,6 +349,63 @@ in
           "closest_pushable(@)"
         ];
         u = [ "undo" ];
+        ws = [ "workspace" ];
+        wsa = [
+          "workspace"
+          "add"
+        ];
+        wsd = [
+          "workspace"
+          "forget"
+        ];
+        # "workspace run": create a temporal workspace and run a command on it
+        wsr = [
+          "util"
+          "exec"
+          "--"
+          (lib.getExe pkgs.dash)
+          "-c"
+          # sh
+          ''
+            set -euo pipefail
+
+            REPO_NAME="$(basename "$JJ_WORKSPACE_ROOT")"
+            WSDIR="$(mktemp --directory --suffix "-$REPO_NAME")"
+            WSNAME="$(basename "$WSDIR")"
+
+            trap "rm -rf $WSDIR" EXIT
+
+            OUTPUT_FILE=$(mktemp --suffix "-$REPO_NAME-jj-output")
+
+            jj --quiet workspace add "$WSDIR" --name "$WSNAME" --message "private: Temporal workspace $WSDIR
+
+            Command: $@
+            Output: $OUTPUT_FILE
+            "
+
+            trap "jj --quiet workspace forget $WSNAME" EXIT
+
+            for file in .envrc .direnv .env .env.local; do
+              if [ -e "$file" ]; then
+                  cp -a -r "$file" "$WSDIR"
+              fi
+            done
+
+            cd "$WSDIR"
+
+            if [ -f .envrc ]; then
+              direnv allow
+              if command -v nix-direnv-reload >/dev/null 2>&1; then
+                nix-direnv-reload
+              fi
+            fi
+
+            jj --quiet config set --workspace snapshot.auto-track "all()"
+
+            GIT_DIR="$(jj --quiet --ignore-working-copy git root)" script --quiet --log-out "$OUTPUT_FILE" --return --command "$*" 2>&1
+          ''
+          ""
+        ];
       };
     };
   };
