@@ -370,40 +370,23 @@ export-env {
         text/x-toml: toml
     }
 
-    def classify []: record -> record {
-        let md = $in
-        let head = try { view span $md.span.start $md.span.end }
-        match $md.content_type? {
-            null => {table: true}
-            # $mimetype if $mimetype starts-with 'image' => {image: true}
-            # $mimetype if $mimetype starts-with 'video' => {video: true}
-            "application/x-nuscript" | "application/x-nuon" | "text/x-nushell" | "application/json" => {nu: true}
-            $mimetype if $mimetype in $mime_to_lang => {bat: ($mime_to_lang | get $mimetype)}
-            _ => {table: true}
-        }
-        | insert head $head
-        | insert source $md.source?
-    }
-
     $env.config.hooks.display_output = {
         metadata access {|meta|
             do {|class|
                 match $class {
-                    {nu: true} => { nu-highlight }
-                    {bat: $lang} => { ^bat --color=always --paging=never --style=plain --language=($lang) }
-                    # {source: ls head: ls} => { enumerate | flatten item | sort-by type name }
+                    {content_type: $content_type} if $content_type in [
+                        "application/x-nuscript"
+                        "application/x-nuon"
+                        "text/x-nushell"
+                        "application/json"
+                    ] => { nu-highlight }
+                    {content_type: $content_type} if $content_type in $mime_to_lang => { ^bat --color=always --paging=never --style=plain --language=($mime_to_lang | get $content_type) }
                     {source: ls head: l} => { sort-by type? name? | grid --icons --color }
-                    {source: ls} => { sort-by type? name? }
-                    # {source: $source} if ($source | is-not-empty) => { ^bat --color=always --paging=never --style=plain --file-name $source }
+                    {source: ls head: ls} => { sort-by type? name? }
                     _ => { }
                 }
-                | match $class {
-                    # {video: true} => { ^mpv --vo=kitty --really-quiet "-" }
-                    # {image: true} => { kitty +kitten icat --stdin }
-                    _ if (term size).columns >= 100 => { table --expand --icons }
-                    _ => { table --icons }
-                }
-            } ($meta | classify)
+            } {...$meta head: (try { view span $meta.span.start $meta.span.end })}
+            | if (term size).columns >= 100 { table --expand --icons } else { table --icons }
         }
     }
 }
