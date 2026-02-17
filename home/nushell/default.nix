@@ -84,38 +84,12 @@ in
     '';
     extraConfig =
       let
-        nix = if config.nix.package == null then pkgs.nix else lib.getExe config.nix.package;
-        # formatter = lib.getExe inputs.self.formatter.${pkgs.stdenv.hostPlatform.system};
-        formatter = lib.getExe pkgs.nixfmt;
+        scriptsDir = mkImpureLink ./files/scripts;
       in
-      lib.mkMerge [
-        # nu
-        ''
-          # Parse text as nix expression
-          def "from nix" []: string -> any {
-              ${nix} eval --json -f - | from json
-          }
-
-          # Convert table data into a nix expression
-          def "to nix" [
-              --format(-f) # Format the result
-          ]: any -> string {
-              to json --raw
-              | str replace --all "''$" $"(char single_quote)(char single_quote)$"
-              | nix eval --expr $"builtins.fromJSON '''($in)'''"
-              | if $format { ${formatter} - | ${lib.getExe pkgs.bat} --paging=never --style=plain -l nix } else { $in }
-          }
-        ''
-        (
-          let
-            scriptsDir = mkImpureLink ./files/scripts;
-          in
-          lib.mkOrder 9999 ''
-            use ${scriptsDir} *
-            overlay use ${scriptsDir}/completions
-          ''
-        )
-      ];
+      lib.mkOrder 9999 ''
+        use ${scriptsDir} *
+        overlay use ${scriptsDir}/completions
+      '';
   };
 
   programs.bash.initExtra = lib.mkBefore ''
