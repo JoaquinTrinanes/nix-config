@@ -412,7 +412,16 @@
     # https://wiki.archlinux.org/title/GnuPG#Configure_pinentry_to_use_the_correct_TTY
     # https://unix.stackexchange.com/questions/280879/how-to-get-pinentry-curses-to-start-on-the-correct-tty/499133#499133
     matchBlocks."*".match = ''host * exec "gpg-connect-agent UPDATESTARTUPTTY /bye"'';
+
+    matchBlocks."*" = {
+      controlMaster = "auto";
+      controlPersist = "no";
+      controlPath = "~/.ssh/sockets/socket-%C";
+      userKnownHostsFile = "~/.ssh/known_hosts";
+    };
   };
+
+  systemd.user.tmpfiles.rules = [ "D %h/.ssh/sockets 0700 - - - -" ];
 
   home.pointerCursor = {
     name = "Adwaita";
