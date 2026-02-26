@@ -136,10 +136,6 @@ def fish-completer [spans: list<string>] {
     }
 }
 
-def sudo-completer [spans: list<string>] {
-    do $env.config.completions.external.completer ($spans | skip 1)
-}
-
 let external_completer = {|spans: list<string>|
     carapace-completer $spans
     | default --empty { fish-completer $spans }
@@ -177,9 +173,6 @@ extern jj []
 
 @complete fish-completer-alias
 extern nix []
-
-@complete sudo-completer
-extern sudo []
 
 $env.config.table.mode = "compact"
 $env.config.table.header_on_separator = true
