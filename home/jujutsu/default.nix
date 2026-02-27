@@ -80,6 +80,7 @@ in
             "glob:**/*.json"
             "glob:**/*.jsonc"
             "glob:**/*.jsx"
+            "glob:**/*.css"
             "glob:**/*.scss"
             "glob:**/*.ts"
             "glob:**/*.tsx"
