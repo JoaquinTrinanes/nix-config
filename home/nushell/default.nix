@@ -54,7 +54,6 @@ let
           "--env-config"
           envFileSource.value
         ];
-      pathAdd = [ pkgs.fish ];
     };
 in
 {

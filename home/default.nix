@@ -7,7 +7,6 @@
 }:
 {
   imports = [
-    ./carapace
     ./direnv
     ./git
     ./gnome
@@ -83,6 +82,8 @@
     };
   };
 
+  programs.carapace.enable = true;
+
   programs.less = {
     enable = true;
     options = {
@@ -140,10 +141,8 @@
         };
       };
       inherit (pkgs)
-        ast-grep
-        enpass
-        glow
         ffmpeg
+        fish
         imagemagick
         mergiraf
         ;
@@ -270,6 +269,9 @@
         disabled = false;
         nu_indicator = "";
       };
+      # don't trigger just because a file exists
+      python.detect_extensions = [ ];
+      java.detect_extensions = [ ];
     };
   };
 
@@ -303,7 +305,6 @@
       hms = "home-manager switch";
     })
     (lib.mkIf config.programs.bat.enable {
-      b = "bat";
       "cat" = "bat -p";
     })
   ];
