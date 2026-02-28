@@ -34,7 +34,6 @@ in
     };
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs)
-        amp-cli
         android-tools
         dbeaver-bin
         file
