@@ -7,7 +7,6 @@
 }:
 {
   imports = [
-    ./carapace
     ./direnv
     ./git
     ./gnome
@@ -83,6 +82,8 @@
     };
   };
 
+  programs.carapace.enable = true;
+
   programs.less = {
     enable = true;
     options = {
@@ -140,10 +141,8 @@
         };
       };
       inherit (pkgs)
-        ast-grep
-        enpass
-        glow
         ffmpeg
+        fish
         imagemagick
         mergiraf
         ;
@@ -253,6 +252,7 @@
       git_status = {
         disabled = true;
       };
+      python.detect_extensions = [ ]; # don't trigger just because a .py file exists
       status = {
         disabled = false;
         symbol = "✘";
@@ -298,7 +298,6 @@
       hms = "home-manager switch";
     })
     (lib.mkIf config.programs.bat.enable {
-      b = "bat";
       "cat" = "bat -p";
     })
   ];
