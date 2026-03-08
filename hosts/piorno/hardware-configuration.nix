@@ -44,10 +44,11 @@
   networking.useDHCP = false;
   networking.usePredictableInterfaceNames = lib.mkDefault true;
 
-  systemd.sleep.extraConfig = ''
-    AllowSuspendThenHibernate=yes
-    HibernateDelaySec=30m
-  '';
+  systemd.sleep.settings.Sleep = {
+    AllowSuspendThenHibernate = true;
+    HibernateDelaySec = "30m";
+
+  };
 
   powerManagement = {
     enable = true;
