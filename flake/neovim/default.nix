@@ -25,13 +25,9 @@
             sed -i '/((jsx_attribute) @_jsx_attribute/,/\(#set! @_jsx_attribute bo.commentstring "\/\/ %s"\))/d' "$query_file"
           '';
         };
-      treesitterParsers = pkgs.symlinkJoin {
-        name = "nvim-treesitter-parsers";
-        paths = treesitter.dependencies;
-      };
-      treesitterParsersAndQueries = pkgs.linkFarm "nvim-treesitter-bundle" {
-        queries = "${treesitter}/runtime/queries";
-        parser = "${treesitterParsers}/parser";
+      treesitterParsersAndQueries = pkgs.symlinkJoin {
+        name = "nvim-treesitter-bundle";
+        paths = [ "${treesitter}/runtime" ] ++ treesitter.dependencies;
       };
 
       setPluginName = plugin: pname: plugin // { inherit pname; };
@@ -74,6 +70,7 @@
           nvim-lspconfig
           nvim-navic
           nvim-nio
+          nvim-treesitter
           nvim-treesitter-context
           nvim-treesitter-textobjects
           nvim-ts-autotag

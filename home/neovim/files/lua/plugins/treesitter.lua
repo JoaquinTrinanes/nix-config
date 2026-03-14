@@ -1,77 +1,7 @@
 local U = require("config.util")
 
-local filetypes = {
-  angular = { "htmlangular" },
-  bash = { "sh" },
-  bibtex = { "bib" },
-  c_sharp = { "cs", "csharp" },
-  commonlisp = { "lisp" },
-  cooklang = { "cook" },
-  devicetree = { "dts" },
-  diff = { "gitdiff" },
-  eex = { "eelixir" },
-  elixir = { "ex" },
-  embedded_template = { "eruby" },
-  erlang = { "erl" },
-  facility = { "fsd" },
-  faust = { "dsp" },
-  gdshader = { "gdshaderinc" },
-  git_config = { "gitconfig" },
-  git_rebase = { "gitrebase" },
-  glimmer = { "handlebars", "html.handlebars" },
-  godot_resource = { "gdresource" },
-  haskell = { "hs" },
-  haskell_persistent = { "haskellpersistent" },
-  idris = { "idris2" },
-  ini = { "confini", "dosini" },
-  janet_simple = { "janet" },
-  javascript = { "javascriptreact", "ecma", "ecmascript", "jsx", "js" },
-  json = { "jsonc" },
-  glimmer_javascript = { "javascript.glimmer" },
-  latex = { "tex" },
-  linkerscript = { "ld" },
-  m68k = { "asm68k" },
-  make = { "automake" },
-  markdown = { "pandoc" },
-  muttrc = { "neomuttrc" },
-  ocaml_interface = { "ocamlinterface" },
-  perl = { "pl" },
-  poe_filter = { "poefilter" },
-  powershell = { "ps1" },
-  properties = { "jproperties" },
-  python = { "py", "gyp" },
-  qmljs = { "qml" },
-  runescript = { "clientscript" },
-  scala = { "sbt" },
-  slang = { "shaderslang" },
-  sqp = { "mysqp" },
-  ssh_config = { "sshconfig" },
-  starlark = { "bzl" },
-  surface = { "sface" },
-  systemverilog = { "verilog" },
-  t32 = { "trace32" },
-  tcl = { "expect" },
-  terraform = { "terraform-vars" },
-  textproto = { "pbtxt" },
-  tlaplus = { "tla" },
-  tsx = { "typescriptreact", "typescript.tsx" },
-  typescript = { "ts" },
-  glimmer_typescript = { "typescript.glimmer" },
-  typst = { "typ" },
-  udev = { "udevrules" },
-  uxntal = { "tal", "uxn" },
-  v = { "vlang" },
-  vhs = { "tape" },
-  xml = { "xsd", "xslt", "svg" },
-  xresources = { "xdefaults" },
-}
-
-for lang, ft in pairs(filetypes) do
-  vim.treesitter.language.register(lang, ft)
-end
-
 vim.api.nvim_create_autocmd("FileType", {
-  group = U.augroup("enable_treesitter_highlights"),
+  group = U.augroup("enable_treesitter"),
   callback = function(args)
     local lang = vim.treesitter.language.get_lang(args.match)
 
@@ -88,16 +18,36 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.wo.foldmethod = "expr"
         vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
       end
-
-      if not vim.api.nvim_get_option_info2("indentexpr", { buf = args.buf }).was_set then
-        vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-      end
     end
   end,
 })
 
 ---@type LazyPluginSpec[]
 return {
+  {
+    "nvim-treesitter/nvim-treesitter",
+    lazy = false,
+    config = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        group = U.augroup("treesitter_indentexpr"),
+        callback = function(args)
+          local lang = vim.treesitter.language.get_lang(args.match)
+
+          if not lang then
+            return
+          end
+
+          if not vim.treesitter.language.add(lang) then
+            return
+          end
+
+          if not vim.api.nvim_get_option_info2("indentexpr", { buf = args.buf }).was_set then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
+    end,
+  },
   {
     "nvim-treesitter/nvim-treesitter-context",
     event = { "BufReadPost" },
@@ -135,7 +85,6 @@ return {
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     lazy = false,
-    branch = "main",
     ---@module 'nvim-treesitter-textobjects'
     ---@type TSTextObjects.UserConfig
     opts = {
