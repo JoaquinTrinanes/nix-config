@@ -161,6 +161,7 @@ in
       revsets = {
         log = "coalesce(stack() | trunk(), default())";
         short-prefixes = "stack() | trunk() | heads(default())";
+        bookmark-advance-to = "closest_pushable(@)";
       };
       merge-tools = {
         hunk = {
@@ -217,9 +218,7 @@ in
                 ),
               )),
             ),
-            builtin_draft_commit_description,
-            "JJ: ignore-rest\n",
-            diff.git(),
+            builtin_draft_commit_description_with_diff,
           )
         '';
       };
@@ -329,6 +328,7 @@ in
         r = [ "rebase" ];
         restack = [
           "rebase"
+          "--simplify-parents"
           "-o"
           "trunk()"
           "-s"
@@ -341,6 +341,7 @@ in
         ];
         restack-all = [
           "rebase"
+          "--simplify-parents"
           "-s"
           "roots(open())"
           "-o"
@@ -361,11 +362,7 @@ in
         t = [ "tug" ];
         tug = [
           "bookmark"
-          "move"
-          "--from"
-          "closest_public_bookmarks(@)"
-          "--to"
-          "closest_pushable(@)"
+          "advance"
         ];
         u = [ "undo" ];
         ws = [ "workspace" ];
