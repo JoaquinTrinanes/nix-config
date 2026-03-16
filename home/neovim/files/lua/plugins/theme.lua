@@ -10,11 +10,16 @@ local M = {
     end,
     config = function(_, opts)
       require("catppuccin").setup(opts)
-      vim.cmd.colorscheme("catppuccin")
+      vim.cmd.colorscheme("catppuccin-nvim")
     end,
     ---@module "catppuccin"
     ---@type CatppuccinOptions
     opts = {
+      flavour = "auto", -- latte, frappe, macchiato, mocha
+      background = {
+        light = "latte",
+        dark = "frappe",
+      },
       lsp_styles = {
         underlines = {
           errors = { "undercurl" },
@@ -23,32 +28,7 @@ local M = {
           information = { "undercurl" },
         },
       },
-      integrations = {
-        dashboard = true,
-        flash = true,
-        fzf = true,
-        grug_far = true,
-        gitsigns = false,
-        lsp_trouble = true,
-        markdown = true,
-        mini = true,
-        navic = { enabled = true, custom_bg = "lualine" },
-        neotest = true,
-        neotree = true,
-        noice = true,
-        notify = true,
-        semantic_tokens = true,
-        snacks = true,
-        telescope = true,
-        treesitter = true,
-        treesitter_context = true,
-        which_key = true,
-      },
-      flavour = "auto", -- latte, frappe, macchiato, mocha
-      background = {
-        light = "latte",
-        dark = "frappe",
-      },
+      auto_integrations = true,
       term_colors = true,
       custom_highlights = function(colors)
         local U = require("catppuccin.utils.colors")
@@ -78,7 +58,16 @@ local M = {
         optional = true,
         opts = function(_, opts)
           if (vim.g.colors_name or ""):find("catppuccin") then
-            opts.highlights = require("catppuccin.special.bufferline").get_theme()
+            opts.highlights = function()
+              local highlights = require("catppuccin.special.bufferline").get_theme({ styles = { "bold" } })()
+              ---@diagnostic disable-next-line: undefined-field
+              highlights.duplicate_selected.italic = true
+              ---@diagnostic disable-next-line: undefined-field
+              highlights.duplicate_visible.italic = true
+              ---@diagnostic disable-next-line: undefined-field
+              highlights.duplicate.italic = true
+              return highlights
+            end
           end
         end,
       },
