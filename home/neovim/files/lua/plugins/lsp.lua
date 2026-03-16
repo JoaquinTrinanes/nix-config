@@ -214,7 +214,7 @@ return {
         { "<C-k>", function() return vim.lsp.buf.signature_help() end, mode = "i", desc = "Signature Help", has = "textDocument/signatureHelp" },
         { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "textDocument/codeAction" },
         { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "textDocument/codeLens" },
-        { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "textDocument/codeLens" },
+        { "<leader>cC", vim.lsp.codelens.enable, desc = "Refresh & Display Codelens", mode = { "n" }, has = "textDocument/codeLens" },
         { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File", mode ={"n"}, has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
         { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "textDocument/rename" },
         { "<leader>cA", function()
