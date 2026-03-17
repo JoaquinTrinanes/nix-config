@@ -16,7 +16,7 @@
     };
     settings = {
       theme = lib.mkIf (config.colors.name != null) config.colors.name;
-      config-file = "${config.lib.impurePath.mkImpureLink ./config}";
+      config-file = "${config.lib.impurePath.mkImpureLink ./config.ghostty}";
       auto-update = "off";
     };
   };

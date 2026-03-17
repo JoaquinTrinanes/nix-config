@@ -47,6 +47,4 @@ font-family-italic = monospace
 font-family-bold-italic = monospace
 font-style-italic = Italic
 font-style-bold-italic = Bold Italic
-
-
-
+font-feature = dlig
