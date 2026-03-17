@@ -16,6 +16,9 @@ return {
     opts = {
       servers = {
         roslyn_ls = {
+          capabilities = {
+            workspace = { didChangeWatchedFiles = { dynamicRegistration = true } },
+          },
           settings = {
             ["csharp|background_analysis"] = {
               -- dotnet_analyzer_diagnostics_scope = "none",
