@@ -33,6 +33,12 @@ let
       repo = "templates";
       ref = "HEAD";
     };
+    nixpkgs-unfree.to = {
+      type = "github";
+      owner = "numtide";
+      repo = "nixpkgs-unfree";
+      ref = "nixpkgs-unstable";
+    };
   };
 in
 {
