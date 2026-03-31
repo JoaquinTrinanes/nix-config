@@ -159,7 +159,9 @@
         s = "status --short --branch";
         up = "pull --rebase";
       };
-
+      blame = {
+        ignoreRevsFile = ":(optional).git-blame-ignore-revs";
+      };
     };
     includes = [
       { path = "config.local"; }
