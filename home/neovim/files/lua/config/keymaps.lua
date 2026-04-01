@@ -55,8 +55,8 @@ map("n", "<C-Right>", "<Cmd>vertical resize +2<CR>", { desc = "Increase Window W
 -- Move Lines
 map("n", "<A-j>", "<Cmd>execute 'move .+' . v:count1<CR>==", { desc = "Move Down" })
 map("n", "<A-k>", "<Cmd>execute 'move .-' . (v:count1 + 1)<CR>==", { desc = "Move Up" })
-map("i", "<A-j>", "<esc><Cmd>m .+1<CR>==gi", { desc = "Move Down" })
-map("i", "<A-k>", "<esc><Cmd>m .-2<CR>==gi", { desc = "Move Up" })
+map("i", "<A-j>", "<Esc><Cmd>m .+1<CR>==gi", { desc = "Move Down" })
+map("i", "<A-k>", "<Esc><Cmd>m .-2<CR>==gi", { desc = "Move Up" })
 map("v", "<A-j>", [[<Cmd>execute "'<,'>move '>+" . v:count1<CR>gv=gv]], { desc = "Move Down" })
 map("v", "<A-k>", [[<Cmd>execute "'<,'>move '<-" . (v:count1 + 1)<CR>gv=gv]], { desc = "Move Up" })
 
@@ -70,10 +70,10 @@ map("n", "<leader>`", "<Cmd>e #<CR>", { desc = "Switch to Other Buffer" })
 map("n", "<leader>bD", "<Cmd>:bd<CR>", { desc = "Delete Buffer and Window" })
 
 -- Clear search and stop snippet on escape
-map({ "i", "n", "s" }, "<esc>", function()
+map({ "i", "n", "s" }, "<Esc>", function()
   vim.cmd("noh")
-  -- LazyVim.cmp.actions.snippet_stop()
-  return "<esc>"
+  vim.snippet.stop()
+  return "<Esc>"
 end, { expr = true, desc = "Escape and Clear hlsearch" })
 
 -- Clear search, diff update and redraw
@@ -125,8 +125,8 @@ map("v", "<", "<gv")
 map("v", ">", ">gv")
 
 -- commenting
-map("n", "gco", "o<esc>Vcx<esc><Cmd>normal gcc<CR>fxa<bs>", { desc = "Add Comment Below" })
-map("n", "gcO", "O<esc>Vcx<esc><Cmd>normal gcc<CR>fxa<bs>", { desc = "Add Comment Above" })
+map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<bs>", { desc = "Add Comment Below" })
+map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<bs>", { desc = "Add Comment Above" })
 
 -- lazy
 map("n", "<leader>l", "<Cmd>Lazy<CR>", { desc = "Lazy" })
