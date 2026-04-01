@@ -188,7 +188,7 @@
             vue_language_server_typescript_plugin_path = "${pkgs.vue-language-server}/lib/language-tools/packages/language-server/node_modules";
           };
           initLuaSrc = "${configDir}/init.lua";
-          customLuaRC = ''
+          luaRcContent = ''
             vim.opt.runtimepath:append(${toLua treesitterParsersAndQueries})
           '';
         };
@@ -196,9 +196,9 @@
     {
       packages = {
         neovim = baseNeovim.override (prev: {
-          customLuaRC = ''
+          luaRcContent = ''
             vim.env.LAZY = vim.env.LAZY or ${toLua pkgs.vimPlugins.lazy-nvim}
-            ${prev.customLuaRC or ""}
+            ${prev.luaRcContent or ""}
           '';
           globals = lib.recursiveUpdate prev.globals {
             pluginPathMap = mkPluginPathMap plugins;

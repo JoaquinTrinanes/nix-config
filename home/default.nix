@@ -49,8 +49,6 @@
     mimeApps.enable = true;
   };
 
-  programs.password-store.enable = true;
-
   colors = {
     name = "Catppuccin Frappe";
     slug = "catppuccin-frappe";

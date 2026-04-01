@@ -23,13 +23,11 @@ let
         "extraPackages"
         "initLuaSrc"
       ];
-      inherit (pkgs-wrapNeovim) neovimUtils;
       toLua = lib.generators.toLua { };
       toLuaBindings = lib.generators.toLua { asBindings = true; };
-      baseConfig = neovimUtils.makeNeovimConfig restMkNeovimArgs;
-      config = lib.recursiveUpdate baseConfig {
+      config = lib.recursiveUpdate restMkNeovimArgs {
         wrapperArgs =
-          baseConfig.wrapperArgs
+          restMkNeovimArgs.wrapperArgs or [ ]
           ++ lib.optionals (appName != null) [
             "--set-default"
             "NVIM_APPNAME"
@@ -49,7 +47,7 @@ let
             vim.opt.runtimepath:prepend(${toLua [ (toString configDir) ]})
             vim.opt.runtimepath:append(${toLua (map (p: "${p}/after") [ (toString configDir) ])})
           ''
-          + baseConfig.luaRcContent
+          + restMkNeovimArgs.luaRcContent or ""
           + lib.optionalString (initLuaSrc != null) "dofile(${toLua "${configDir}/init.lua"})";
       };
     in
