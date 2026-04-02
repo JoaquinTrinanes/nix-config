@@ -9,9 +9,9 @@ return {
     },
     ---@type LspConfig
     opts = {
-      ---@type table<string, ExtendedLspConfig>
       servers = {
         vtsls = {
+          ---@type lspconfig.settings.vtsls
           settings = {
             vtsls = {
               enableMoveToFileCodeAction = true,

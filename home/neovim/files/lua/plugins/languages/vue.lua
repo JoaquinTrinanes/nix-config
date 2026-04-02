@@ -8,6 +8,7 @@ return {
       servers = {
         vue_ls = {},
         vtsls = {
+          ---@type lspconfig.settings.vtsls
           settings = {
             typescript = {
               tsserver = {

@@ -57,6 +57,7 @@ return {
         html = {},
         taplo = {},
         eslint = {
+          ---@type lspconfig.settings.eslint
           settings = {
             rulesCustomizations = {
               { rule = "prettier/prettier", severity = "off" },
@@ -64,6 +65,7 @@ return {
           },
         },
         lua_ls = {
+          ---@type lspconfig.settings.lua_ls
           settings = {
             Lua = {
               diagnostics = {
@@ -93,6 +95,7 @@ return {
           },
         },
         tailwindcss = {
+          ---@type lspconfig.settings.tailwindcss
           settings = {
             tailwindCSS = {
               classAttributes = {
@@ -116,6 +119,7 @@ return {
             globalStoragePath = vim.fn.expand("$XDG_DATA_HOME"),
             licenceKey = vim.fn.expand("$XDG_DATA_HOME/intelephense/licence.txt"),
           },
+          ---@type lspconfig.settings.intelephense
           settings = {
             intelephense = {
               files = {
@@ -173,6 +177,7 @@ return {
           },
         },
         bashls = {
+          ---@type lspconfig.settings.bashls
           settings = {
             bashIde = { shellcheckPath = "" },
           },

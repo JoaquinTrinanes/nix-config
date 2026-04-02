@@ -17,6 +17,7 @@ return {
               config.settings.yaml.schemas
             )
           end,
+          ---@type lspconfig.settings.yamlls
           settings = {
             redhat = { telemetry = { enabled = false } },
             yaml = {
