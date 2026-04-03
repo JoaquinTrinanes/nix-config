@@ -146,11 +146,11 @@
         ;
       topiary =
         let
-          topiary-nushell = builtins.fetchTree {
+          topiary-nushell = fetchTree {
             type = "github";
             owner = "blindFS";
             repo = "topiary-nushell";
-            rev = "71460ddb383a83286437ea951f946131ccca7e3f";
+            rev = "6e2f9b339a664a46e4015fa5d79e537807fefa39";
           };
           inherit (inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}) tree-sitter-nu;
         in
@@ -172,7 +172,7 @@
                     },
                   }
                 '';
-            TOPIARY_LANGUAGE_DIR.value = "${topiary-nushell}/languages";
+            TOPIARY_LANGUAGE_DIR.value = "${topiary-nushell}/queries";
           };
         };
     };
