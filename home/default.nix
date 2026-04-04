@@ -318,7 +318,7 @@
     enableSshSupport = true;
     enableBashIntegration = true;
     enableNushellIntegration = true;
-    pinentry.package = pkgs.pinentry-tty;
+    pinentry.package = pkgs.pinentry-gnome3;
 
     # timeout since last activity
     defaultCacheTtl = 15 * 60; # 15 minutes
@@ -412,11 +412,6 @@
 
   programs.ssh = {
     enable = true;
-    # Fix pinentry appearing in wrong terminal
-    # https://wiki.archlinux.org/title/GnuPG#Configure_pinentry_to_use_the_correct_TTY
-    # https://unix.stackexchange.com/questions/280879/how-to-get-pinentry-curses-to-start-on-the-correct-tty/499133#499133
-    matchBlocks."*".match = ''host * exec "gpg-connect-agent UPDATESTARTUPTTY /bye"'';
-
     matchBlocks."*" = {
       controlMaster = "auto";
       controlPersist = "no";
