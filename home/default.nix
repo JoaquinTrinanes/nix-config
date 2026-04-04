@@ -80,7 +80,21 @@
     };
   };
 
-  programs.carapace.enable = true;
+  programs.carapace = {
+    enable = true;
+    package = pkgs.my.mkWrapper {
+      basePackage = pkgs.carapace;
+      env =
+        lib.mapAttrs
+          (_: value: {
+            value = toString value;
+            force = false;
+          })
+          {
+            CARAPACE_LENIENT = 1; # Allow unknown flags
+          };
+    };
+  };
 
   programs.less = {
     enable = true;

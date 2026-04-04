@@ -104,7 +104,6 @@ load-env {
 def carapace-completer [spans: list<string>] {
     carapace $spans.0 nushell ...$spans
     | from json
-    | if ($in | default [] | where value =~ $"($spans | last)ERR_?" | is-empty) { $in } else { null }
 }
 
 def fish-completer [spans: list<string>] {
