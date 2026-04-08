@@ -18,6 +18,7 @@ in
       dejavu_fonts
       joypixels
       noto-fonts-cjk-sans
+      noto-fonts
       unscii
       nerd-fonts.symbols-only
       recursive
