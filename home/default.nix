@@ -395,7 +395,6 @@
     enableNushellIntegration = true;
 
     flags = [ "--disable-up-arrow" ];
-    daemon.enable = true;
     settings = {
       auto_sync = false;
       sync_address = "https://atuin.joaquint.io";
