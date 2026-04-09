@@ -20,7 +20,7 @@ in
       execWheelOnly = true;
     };
 
-    boot.kernelPackages = lib.mkDefault pkgs.linuxKernel.packages.linux_hardened;
+    boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
     security = {
       forcePageTableIsolation = lib.mkDefault true;
