@@ -172,9 +172,8 @@ extern jj []
 
 @complete fish-completer-alias
 extern nix []
-
-$env.config.table.mode = "compact"
-$env.config.table.header_on_separator = true
+$env.config.table.mode = "frameless"
+$env.config.table.header_on_separator = false
 $env.config.table.trim.truncating_suffix = "…"
 
 $env.config.filesize.unit = "binary"
