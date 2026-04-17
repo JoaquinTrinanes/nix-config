@@ -133,13 +133,10 @@
   ];
 
   home = {
-    sessionVariables = lib.mkMerge [
-      (lib.mkIf config.programs.neovim.enable { MANPAGER = "nvim +Man!"; })
-      {
-        CARGO_HOME = "${config.xdg.dataHome}/cargo";
-        RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
-      }
-    ];
+    sessionVariables = {
+      CARGO_HOME = "${config.xdg.dataHome}/cargo";
+      RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
+    };
 
     packages = builtins.attrValues {
       nr = pkgs.writeShellScriptBin "nr" ''
@@ -317,7 +314,7 @@
       hms = "home-manager switch";
     })
     (lib.mkIf config.programs.bat.enable {
-      "cat" = "bat -p";
+      "cat" = "bat --plain";
     })
   ];
 
