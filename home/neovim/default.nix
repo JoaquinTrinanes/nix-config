@@ -42,6 +42,7 @@ in
   programs.neovim.package = impureNeovim;
   home.sessionVariables = {
     EDITOR = config.programs.neovim.package.meta.mainProgram or "nvim";
+    MANPAGER = "nvim +Man!";
   };
 
   home.packages = [
