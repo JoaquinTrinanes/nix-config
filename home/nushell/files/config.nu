@@ -372,8 +372,8 @@ export-env {
                         "application/json"
                     ] => { nu-highlight }
                     {content_type: $content_type} if $content_type in $mime_to_lang => { ^bat --color=always --paging=never --style=plain --language=($mime_to_lang | get $content_type) }
-                    {source: ls head: l} => { sort-by type? name? | grid --icons --color }
-                    {source: ls head: ls} => { sort-by type? name? }
+                    {source: ls head: l} => { enumerate | flatten item | sort-by type? name? | grid --icons --color }
+                    {source: ls head: ls} => { enumerate | flatten item | sort-by type? name? }
                     _ => { }
                 }
             } {...$meta head: (try { view span $meta.span.start $meta.span.end })}
