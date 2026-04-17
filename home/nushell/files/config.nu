@@ -370,10 +370,8 @@ export-env {
                         "application/x-nuon"
                         "text/x-nushell"
                         "application/json"
-                    ] => { nu-highlight }
-                    {content_type: $content_type} if $content_type in $mime_to_lang => { ^bat --color=always --paging=never --style=plain --language=($mime_to_lang | get $content_type) }
-                    {source: ls head: l} => { enumerate | flatten item | sort-by type? name? | grid --icons --color }
-                    {source: ls head: ls} => { enumerate | flatten item | sort-by type? name? }
+                    ] and (config use-colors) => { nu-highlight }
+                    {content_type: $content_type} if $content_type in $mime_to_lang => { ^bat --color=(if (config use-colors) { "always" } else { "never" }) --paging=never --style=plain --language=($mime_to_lang | get $content_type) }
                     _ => { }
                 }
             } {...$meta head: (try { view span $meta.span.start $meta.span.end })}
