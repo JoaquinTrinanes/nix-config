@@ -69,7 +69,6 @@ let
             "78272b6fa58f4a1abaac99321d503a20@proton.me" # proton pass
             "CanvasBlocker@kkapsner.de"
             "addon@darkreader.org"
-            "firefox-enpass@enpass.io"
             "smart-referer@meh.paranoid.pk"
             "uBlock0@raymondhill.net"
             "vpn@proton.ch"
@@ -352,7 +351,7 @@ let
             "en-US"
             "en"
           ];
-          "extensions.webextensions.restrictedDomains" = lib.concatStringsSep "" [
+          "extensions.webextensions.restrictedDomains" = lib.concatStringsSep "," [
             # "accounts-static.cdn.mozilla.net"
             # "accounts.firefox.com"
             # "addons.cdn.mozilla.net"
