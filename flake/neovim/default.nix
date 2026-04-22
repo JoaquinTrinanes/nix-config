@@ -70,7 +70,6 @@
           nvim-lspconfig
           nvim-navic
           nvim-nio
-          nvim-treesitter
           nvim-treesitter-context
           nvim-treesitter-textobjects
           nvim-ts-autotag
