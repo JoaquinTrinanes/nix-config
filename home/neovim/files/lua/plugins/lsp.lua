@@ -192,6 +192,7 @@ return {
         terraformls = { enabled = vim.fn.executable("terraform") == 1 },
         tofu_ls = { enabled = vim.fn.executable("terraform") == 0 },
         systemd_lsp = {},
+        vue_ls = {},
       },
     },
     ---@param opts LspConfig

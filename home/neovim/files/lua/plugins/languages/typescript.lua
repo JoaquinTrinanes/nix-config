@@ -3,198 +3,25 @@ return {
   {
     "neovim/nvim-lspconfig",
     optional = true,
-    opts_extend = {
-      "servers.vtsls.settings.typescript.tsserver.pluginPaths",
-      "servers.vtsls.settings.vtsls.tsserver.globalPlugins",
-    },
     ---@type LspConfig
     opts = {
       servers = {
-        vtsls = {
-          ---@module 'lspconfig'
-          ---@type lspconfig.settings.vtsls
+        tsc = {
           settings = {
-            vtsls = {
-              enableMoveToFileCodeAction = true,
-              autoUseWorkspaceTsdk = true,
-              experimental = {
-                maxInlayHintLength = 30,
-                completion = {
-                  enableServerSideFuzzyMatch = true,
-                },
-              },
-            },
-            typescript = {
-              updateImportsOnFileMove = { enabled = "always" },
-              suggest = {
-                completeFunctionCalls = true,
-              },
+            ["js/ts"] = {
               inlayHints = {
                 enumMemberValues = { enabled = true },
-                functionLikeReturnTypes = { enabled = true },
-                -- This slows down the server a LOT
-                -- parameterNames = { enabled = "literals" },
+                functionLikeReturnTypes = { enabled = false },
+                parameterNames = {
+                  enabled = "literals",
+                  suppressWhenArgumentMatchesName = true,
+                },
                 parameterTypes = { enabled = false },
                 propertyDeclarationTypes = { enabled = true },
                 variableTypes = { enabled = false },
               },
             },
           },
-          keys = {
-            {
-              "gD",
-              function()
-                local params = vim.lsp.util.make_position_params(0, "utf-8")
-                require("trouble").open({
-                  mode = "lsp_command",
-                  params = {
-                    command = "typescript.goToSourceDefinition",
-                    arguments = { params.textDocument.uri, params.position },
-                  },
-                })
-              end,
-              desc = "Goto Source Definition",
-            },
-            {
-              "gR",
-              function()
-                require("trouble").open({
-                  mode = "lsp_command",
-                  params = {
-                    command = "typescript.findAllFileReferences",
-                    arguments = { vim.uri_from_bufnr(0) },
-                  },
-                })
-              end,
-              desc = "File References",
-            },
-            {
-              "<leader>co",
-              function()
-                vim.lsp.buf.code_action({
-                  apply = true,
-                  context = {
-                    only = { "source.organizeImports" },
-                    diagnostics = {},
-                  },
-                })
-              end,
-              desc = "Organize Imports",
-            },
-            {
-              "<leader>cM",
-              function()
-                vim.lsp.buf.code_action({
-                  apply = true,
-                  context = {
-                    only = {
-                      ---@diagnostic disable-next-line: assign-type-mismatch
-                      "source.addMissingImports.ts",
-                    },
-                    diagnostics = {},
-                  },
-                })
-              end,
-              desc = "Add missing imports",
-            },
-            {
-              "<leader>cu",
-              function()
-                vim.lsp.buf.code_action({
-                  apply = true,
-                  context = {
-                    only = {
-                      ---@diagnostic disable-next-line: assign-type-mismatch
-                      "source.removeUnused.ts",
-                    },
-                    diagnostics = {},
-                  },
-                })
-              end,
-              desc = "Remove unused imports",
-            },
-            {
-              "<leader>cD",
-              function()
-                vim.lsp.buf.code_action({
-                  apply = true,
-                  context = {
-                    only = {
-                      ---@diagnostic disable-next-line: assign-type-mismatch
-                      "source.fixAll.ts",
-                    },
-                    diagnostics = {},
-                  },
-                })
-              end,
-              desc = "Fix all diagnostics",
-            },
-            {
-              "<leader>cV",
-              function()
-                require("trouble").open({
-                  mode = "lsp_command",
-                  params = {
-                    command = "typescript.selectTypeScriptVersion",
-                  },
-                })
-              end,
-              desc = "Select TS workspace version",
-            },
-          },
-          on_attach = function(client, buffer)
-            client.commands["_typescript.moveToFileRefactoring"] = function(command, ctx)
-              local action, uri, range = unpack(command.arguments --[=[@as [string, string, lsp.Range]]=])
-
-              local function move(newf)
-                ---@diagnostic disable-next-line: param-type-mismatch
-                client:request("workspace/executeCommand", {
-                  command = command.command,
-                  arguments = { action, uri, range, newf },
-                })
-              end
-
-              local fname = vim.uri_to_fname(uri)
-              ---@diagnostic disable-next-line: param-type-mismatch
-              client:request("workspace/executeCommand", {
-                command = "typescript.tsserverRequest",
-                arguments = {
-                  "getMoveToRefactoringFileSuggestions",
-                  {
-                    file = fname,
-                    startLine = range.start.line + 1,
-                    startOffset = range.start.character + 1,
-                    endLine = range["end"].line + 1,
-                    endOffset = range["end"].character + 1,
-                  },
-                },
-              }, function(_, result)
-                ---@type string[]
-                local files = result.body.files
-                table.insert(files, 1, "Enter new path...")
-                vim.ui.select(files, {
-                  prompt = "Select move destination:",
-                  format_item = function(f)
-                    return vim.fn.fnamemodify(f, ":~:.")
-                  end,
-                }, function(f)
-                  if f and f:find("^Enter new path") then
-                    vim.ui.input({
-                      prompt = "Enter move destination:",
-                      default = vim.fn.fnamemodify(fname, ":h") .. "/",
-                      completion = "file",
-                    }, function(newf)
-                      if newf then
-                        move(newf)
-                      end
-                    end)
-                  elseif f then
-                    move(f)
-                  end
-                end)
-              end)
-            end
-          end,
         },
       },
     },
