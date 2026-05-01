@@ -11,6 +11,7 @@ return {
     opts = {
       servers = {
         vtsls = {
+          ---@module 'lspconfig'
           ---@type lspconfig.settings.vtsls
           settings = {
             vtsls = {
@@ -143,8 +144,7 @@ return {
           },
           on_attach = function(client, buffer)
             client.commands["_typescript.moveToFileRefactoring"] = function(command, ctx)
-              ---@type string, string, lsp.Range
-              local action, uri, range = unpack(command.arguments)
+              local action, uri, range = unpack(command.arguments --[=[@as [string, string, lsp.Range]]=])
 
               local function move(newf)
                 ---@diagnostic disable-next-line: param-type-mismatch
@@ -184,7 +184,9 @@ return {
                       default = vim.fn.fnamemodify(fname, ":h") .. "/",
                       completion = "file",
                     }, function(newf)
-                      return newf and move(newf)
+                      if newf then
+                        move(newf)
+                      end
                     end)
                   elseif f then
                     move(f)
