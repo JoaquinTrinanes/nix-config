@@ -41,14 +41,20 @@ local M = {
           Added = { fg = colors.blue },
           diffAdded = { link = "Added" },
           DiffAdd = { bg = U.darken(colors.blue, 0.18, colors.base) },
+          GitSignsAdd = { link = "Added" },
+          GitSignsAddInline = { bg = U.darken(colors.blue, 0.14, colors.base) },
 
           Removed = { fg = colors.red },
           diffRemoved = { link = "Removed" },
           DiffDelete = { bg = U.darken(colors.red, 0.18, colors.base) },
+          GitSignsDelete = { link = "Removed" },
+          GitSignsDeleteInline = { bg = U.darken(colors.red, 0.36, colors.base) },
 
           Changed = { fg = colors.yellow },
           diffChanged = { link = "Changed" },
           DiffChange = { bg = U.darken(colors.yellow, 0.07, colors.base) },
+          GitSignsChange = { link = "Changed" },
+          GitSignsChangeInline = { bg = U.darken(colors.yellow, 0.36, colors.base) },
         }
       end,
     },
