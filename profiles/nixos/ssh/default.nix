@@ -14,8 +14,10 @@ in
         PermitEmptyPasswords = lib.mkDefault false;
         PasswordAuthentication = lib.mkDefault false;
         KbdInteractiveAuthentication = lib.mkDefault false;
-        # PermitRootLogin = "yes";
+        PermitRootLogin = lib.mkDefault "no";
       };
     };
+
+    services.fail2ban.enable = lib.mkDefault true;
   };
 }
