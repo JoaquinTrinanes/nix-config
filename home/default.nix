@@ -383,6 +383,8 @@
       "application/x-shellscript" = defaultEditor;
       "text/x-c" = defaultEditor;
       "text/x-c++" = defaultEditor;
+
+      "audio/x-mpegurl" = "vlc.desktop";
     };
 
   programs.atuin = {
