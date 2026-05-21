@@ -78,21 +78,12 @@ in
     };
     "org/gnome/shell" = {
       disable-user-extensions = false;
-      favorite-apps =
-        let
-          getDesktopItem =
-            pkg:
-            pkg.desktopItem
-              or (if ((lib.length (pkg.desktopItems or [ ])) != 0) then lib.head pkg.desktopItems else null);
-          getName = pkg: (getDesktopItem pkg).name;
-        in
-        [
-          "org.gnome.Nautilus.desktop"
-          "brave-browser.desktop"
-          (getName pkgs.vesktop)
-          "slack.desktop"
-          (lib.head config.xdg.terminal-exec.settings.default)
-        ];
+      favorite-apps = [
+        "org.gnome.Nautilus.desktop"
+        "brave-browser.desktop"
+        "slack.desktop"
+        (lib.head config.xdg.terminal-exec.settings.default)
+      ];
     };
     "org/gnome/desktop/interface" = {
       clock-show-weekday = true;
