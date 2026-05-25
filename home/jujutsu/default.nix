@@ -6,7 +6,6 @@
   ...
 }:
 let
-  diffEditor = config.programs.neovim.package;
   jj = inputs.jj.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
     doCheck = false;
   };
@@ -150,9 +149,11 @@ in
         "closest_public_bookmarks()" = "closest_public_bookmarks(@)";
         "closest_public_bookmarks(x)" = "heads(::x & bookmarks() ~ private())";
 
+        "pushable()" = ''(~empty() | merges()) ~ private() ~ description(exact:"") ~ conflicts()'';
+
         "closest_pushable()" = "closest_pushable(@)";
         "closest_pushable(x)" =
-          ''heads(reachable(closest_public_bookmarks(x), closest_public_bookmarks(x)::x ~ private() ~ description(exact:"") & (~empty() | merges())))'';
+          "heads(reachable(closest_public_bookmarks(x), closest_public_bookmarks(x)::x & pushable()))";
 
         "open()" = "stack(trunk().. & mine(), 1)";
 
@@ -165,7 +166,7 @@ in
       };
       merge-tools = {
         hunk = {
-          program = lib.getExe diffEditor;
+          program = lib.getExe config.programs.neovim.package;
           edit-args = [
             "-n"
             "-c"
@@ -264,7 +265,7 @@ in
         tug_private = [
           "rebase"
           "-r"
-          "stack(@, 1)::@- & private()"
+          "stack(@, 1)::@- ~ pushable()"
           "--before"
           "@"
         ];
