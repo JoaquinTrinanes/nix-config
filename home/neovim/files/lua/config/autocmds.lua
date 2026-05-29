@@ -14,11 +14,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight on yank",
   group = U.augroup("highlight_yank"),
   callback = function()
-    vim.hl.on_yank()
+    vim.hl.hl_op()
   end,
 })
 
-vim.api.nvim_create_autocmd({ "VimResized" }, {
+vim.api.nvim_create_autocmd("VimResized", {
   desc = "Resize splits if window got resized",
   group = U.augroup("resize_splits"),
   callback = function()
