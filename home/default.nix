@@ -424,11 +424,13 @@
 
   programs.ssh = {
     enable = true;
-    matchBlocks."*" = {
-      controlMaster = "auto";
-      controlPersist = "no";
-      controlPath = "~/.ssh/sockets/socket-%C";
-      userKnownHostsFile = "~/.ssh/known_hosts";
+    settings = {
+      "*" = {
+        ControlMaster = "auto";
+        ControlPersist = "no";
+        ControlPath = "~/.ssh/sockets/socket-%C";
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+      };
     };
   };
 
