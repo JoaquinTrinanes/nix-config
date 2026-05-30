@@ -8,7 +8,6 @@
   programs.ghostty = {
     enable = true;
     package = pkgs.my.mkWrapper {
-      env."GTK_IM_MODULE".value = "simple";
       basePackage = pkgs.ghostty;
       postBuild = ''
         rm -rf $out/share/nautilus-python
