@@ -58,13 +58,15 @@ in
         ;
     };
 
-    environment.systemPackages = builtins.attrValues {
-      inherit (pkgs)
-        adwaita-icon-theme
-        gnome-tweaks
-        nautilus-python
-        pinentry-gnome3
-        ;
-    };
+    environment.systemPackages =
+      builtins.attrValues {
+        inherit (pkgs)
+          adwaita-icon-theme
+          gnome-tweaks
+          nautilus-python
+          pinentry-gnome3
+          ;
+      }
+      ++ lib.optionals config.services.flatpak.enable [ pkgs.gnome-software ];
   };
 }

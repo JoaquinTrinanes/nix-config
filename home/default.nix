@@ -8,6 +8,7 @@
 {
   imports = [
     ./direnv
+    ./flatpak
     ./git
     ./gnome
     ./jujutsu
