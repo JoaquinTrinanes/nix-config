@@ -13,8 +13,8 @@
     ./jujutsu
     ./neovim
     ./nushell
-    ./terminal
     ./sound
+    ./terminal
 
     inputs.nix-index-database.homeModules.nix-index
   ];
@@ -284,11 +284,11 @@
     };
   };
 
-  xdg.configFile."pnpm/rc".source =
+  xdg.configFile."pnpm/config.yaml".source =
     let
-      keyValue = pkgs.formats.keyValue { };
+      yaml = pkgs.formats.yaml { };
     in
-    keyValue.generate "rc" { update-notifier = false; };
+    yaml.generate "config.yaml" { updateNotifier = false; };
 
   home.shellAliases = lib.mkMerge [
     {
