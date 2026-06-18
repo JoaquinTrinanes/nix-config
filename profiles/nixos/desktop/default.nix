@@ -79,7 +79,14 @@ in
             newTab = 5;
             urlListAndRestore = 6;
           }
-          ."restore";
+          .restore;
+        DeveloperToolsAvailability =
+          {
+            default = 0;
+            allowed = 1;
+            forbidden = 2;
+          }
+          .allowed;
       };
     };
 
