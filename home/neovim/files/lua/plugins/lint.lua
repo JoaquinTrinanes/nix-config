@@ -24,6 +24,7 @@ return {
         bash = { "shellcheck" },
         php = {},
         nix = { "statix" },
+        terraform = { "terraform_validate" },
       },
       ---@module "lint"
       ---@class lint.Linter
@@ -44,6 +45,43 @@ return {
       },
     },
     config = function(_, opts)
+      ---@param linter lint.Linter
+      ---@return lint.Linter
+      local function systemd_run(linter)
+        local cwd = vim.fn.getcwd()
+        local args = {
+          "--user",
+          "--collect",
+          "--same-dir",
+          "--quiet",
+          "--pipe",
+          "-p",
+          "PrivateUsers=true",
+          "-p",
+          "ProtectSystem=true",
+          "-p",
+          "PrivateNetwork=true",
+          "-p",
+          string.format("TemporaryFileSystem=%s:ro", vim.uv.os_homedir()),
+          "-p",
+          string.format("BindReadOnlyPaths='%s':'%s'", cwd, cwd),
+          "-p",
+          "PrivateTmp=true",
+          "-p",
+          "PrivateDevices=true",
+          "-p",
+          "ProtectClock=true",
+          "-E",
+          "PATH=" .. os.getenv("PATH"),
+          linter.cmd,
+        }
+        linter.cmd = "systemd-run"
+        vim.list_extend(args, linter.args or {})
+        linter.args = args
+
+        return linter
+      end
+
       local lint = require("lint")
 
       for name, linter in pairs(opts.linters) do
@@ -79,7 +117,9 @@ return {
           end, linters)
 
           if #linters > 0 then
-            lint.try_lint(linters)
+            lint.try_lint(linters, {
+              wrap_linter = systemd_run,
+            })
           end
         end, 100),
       })
