@@ -17,45 +17,27 @@ export def intersection [other]: [list -> list range -> list] {
 
 # Completes executables in PATH, as well as aliases
 export def "nu-complete from-path" [] {
-    fd --follow --type executable . --max-depth 1 ...($env.PATH | where { path exists })
-    | lines
-    | wrap description
-    | insert value { get description | path basename }
-    | append (
-        scope aliases
-        | select name description
-        | rename --column {name: value}
-    )
-    | sort-by -n value
-    | uniq-by value
+    which -a
+    | where type in [external alias]
+    | update definition? { $"Alias for `($in)`" }
+    | insert description {|it| $it.definition? | default $it.path }
+    | sort-by -n command
+    | uniq-by command
+    | rename -c {command: value}
+    | select value description
+    | insert display_override { get value }
+    | update value { to yaml | str trim }
 }
 
 # Finds a program file, alias or custom command, and returns its path
 export def whichp [
     application: string@"nu-complete from-path" # Application
     --follow (-f) # follow symlinks
+    --all (-a) # list all executables
 ] {
-    let expanded_alias = scope aliases | where name == $application | get 0?.expansion
+    let results = which --all=($all) $application
 
-    if ((not $follow) and ($expanded_alias | is-not-empty)) {
-        return $expanded_alias
-    }
-    let alias_path = scope aliases
-        | where name == $application
-        | get expansion
-        | split words
-        | each { first }
-
-    let result = if ($alias_path | is-not-empty) {
-        $alias_path | which -a $in.0? ...($in | skip 1) | where path != ''
-    } else {
-        which -a $application
-        | where path != ''
-    }
-
-    let result = $result.path?.0?
-
-    if ($result | is-empty) {
+    if ($results | is-empty) {
         error make {
             msg: $"No ($application) in(char nl)($env.PATH | to nuon -i 4)"
             label: {
@@ -64,11 +46,13 @@ export def whichp [
             }
         }
     }
-    if $follow {
-        realpath $result
-    } else {
-        $result
-    }
+
+    $results
+    | update path? {|it| if ($follow) { realpath $it.path } else { $it.path } }
+    | insert value {|it| $it.definition? | default $it.path }
+    | default {|it| $it.path }
+    | get value
+    | str join (char nl)
 }
 
 export alias w = whichp
