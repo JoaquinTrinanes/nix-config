@@ -5,9 +5,9 @@
 @example "Shared values between two lists" { [1 1 2 3 3 3] | intersection [1 3 3 4] } --result [1 3 3]
 @example "Shared values based on minimum count in both lists" { [1 1 2 3 3 3] | intersection [1 3 3 4] } --result [1 3 3]
 @example "Intersection of two ranges" { 4..10 | intersection 1..6 } --result [2 2]
-export def intersection [other]: [list -> list range -> range] {
+export def intersection [other]: [list -> list range -> list] {
     let input = $in
-    $input | where $it in $other | where $it in $other | uniq | each {|common|
+    $input | where $it in $other | uniq | each {|common|
         let count_a = $input | where $it == $common | length
         let count_b = $other | where $it == $common | length
 
