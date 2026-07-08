@@ -90,20 +90,4 @@ in
         overlay use ${scriptsDir}/completions
       '';
   };
-
-  programs.bash.initExtra =
-    lib.mkBefore # bash
-      ''
-        if [ -z "$__INSIDE_NUSHELL" ] && [ -z "$BASH_EXECUTION_STRING" ]; then
-          export __INSIDE_NUSHELL=1
-          LOGIN_OPTIONS=()
-          if shopt -q login_shell; then
-            LOGIN_OPTIONS+=('--login')
-          fi
-          # if nu errors, don't lock out of bash
-          if SHLVL="$((SHLVL - 1))" ${lib.getExe config.programs.nushell.package} "''${LOGIN_OPTIONS[@]}"; then
-            exit 0
-          fi
-        fi
-      '';
 }

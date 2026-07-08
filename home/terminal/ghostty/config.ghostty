@@ -1,3 +1,4 @@
+command = bash -ilc 'nu'
 cursor-click-to-move = true
 font-size = 12
 gtk-tabs-location = bottom
