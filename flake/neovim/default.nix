@@ -106,7 +106,6 @@
           icu
           imagemagick
           intelephense
-          lazygit
           lua-language-server
           marksman
           netcoredbg
