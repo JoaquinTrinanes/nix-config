@@ -181,7 +181,9 @@ in
     };
 
     env = mkOption {
-      type = types.attrsOf (types.submodule envSubmodule);
+      type = types.attrsOf (
+        types.coercedTo types.str (value: { inherit value; }) (types.submodule envSubmodule)
+      );
       default = { };
     };
 
