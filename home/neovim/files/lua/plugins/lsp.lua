@@ -91,6 +91,7 @@ return {
                 semicolon = "Disable",
                 arrayIndex = "Disable",
               },
+              telemetry = { enable = false },
             },
           },
         },
@@ -122,6 +123,7 @@ return {
           ---@type lspconfig.settings.intelephense
           settings = {
             intelephense = {
+              telemetry = { enabled = false },
               files = {
                 maxSize = 10000000,
               },
