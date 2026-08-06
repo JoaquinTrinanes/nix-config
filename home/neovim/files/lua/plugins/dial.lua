@@ -3,12 +3,15 @@ local M = {}
 ---@param increment boolean
 ---@param g? boolean
 function M.dial(increment, g)
-  local mode = vim.fn.mode(true)
-  -- Use visual commands for VISUAL 'v', VISUAL LINE 'V' and VISUAL BLOCK '\22'
+  local mode = vim.api.nvim_get_mode().mode
   local is_visual = mode == "v" or mode == "V" or mode == "\22"
-  local func = (increment and "inc" or "dec") .. (g and "_g" or "_") .. (is_visual and "visual" or "normal")
+  local manipulation = increment and "increment" or "decrement"
+  local target = (g and "g" or "") .. (is_visual and "visual" or "normal")
   local group = vim.g.dials_by_ft[vim.bo.filetype] or "default"
-  return require("dial.map")[func](group)
+  require("dial.map").manipulate(manipulation, target, group)
+  if is_visual then
+    vim.cmd.normal({ "gv", bang = true })
+  end
 end
 
 ---@type LazyPluginSpec[]
@@ -17,10 +20,10 @@ return {
     "monaqa/dial.nvim",
   -- stylua: ignore
   keys = {
-    { "<C-a>", function() return M.dial(true) end, expr = true, desc = "Increment", mode = {"n", "v"} },
-    { "<C-x>", function() return M.dial(false) end, expr = true, desc = "Decrement", mode = {"n", "v"} },
-    { "g<C-a>", function() return M.dial(true, true) end, expr = true, desc = "Increment", mode = {"n", "v"} },
-    { "g<C-x>", function() return M.dial(false, true) end, expr = true, desc = "Decrement", mode = {"n", "v"} },
+    { "<C-a>", function() return M.dial(true) end, desc = "Increment", mode = {"n", "v"} },
+    { "<C-x>", function() return M.dial(false) end, desc = "Decrement", mode = {"n", "v"} },
+    { "g<C-a>", function() return M.dial(true, true) end, desc = "Increment", mode = {"n", "v"} },
+    { "g<C-x>", function() return M.dial(false, true) end, desc = "Decrement", mode = {"n", "v"} },
   },
     opts = function()
       local augend = require("dial.augend")
