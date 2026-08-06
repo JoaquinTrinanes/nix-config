@@ -139,55 +139,57 @@
       RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
     };
 
-    packages = builtins.attrValues {
-      nr = pkgs.writeShellScriptBin "nr" ''
-        nix run nixpkgs#"$@"
-      '';
-      ripgrep = pkgs.my.mkWrapper {
-        basePackage = pkgs.ripgrep;
-        env."RIPGREP_CONFIG_PATH" = {
-          value = pkgs.writeText "ripgreprc" (lib.concatLines config.programs.ripgrep.arguments);
-          force = false;
-        };
-      };
-      inherit (pkgs)
-        ffmpeg
-        fish
-        imagemagick
-        mergiraf
-        ;
-      topiary =
-        let
-          topiary-nushell = fetchTree {
-            type = "github";
-            owner = "blindFS";
-            repo = "topiary-nushell";
-            rev = "6e2f9b339a664a46e4015fa5d79e537807fefa39";
+    packages =
+      builtins.attrValues {
+        nr = pkgs.writeShellScriptBin "nr" ''
+          nix run nixpkgs#"$@"
+        '';
+        ripgrep = pkgs.my.mkWrapper {
+          basePackage = pkgs.ripgrep;
+          env."RIPGREP_CONFIG_PATH" = {
+            value = pkgs.writeText "ripgreprc" (lib.concatLines config.programs.ripgrep.arguments);
+            force = false;
           };
-          inherit (inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}) tree-sitter-nu;
-        in
-        pkgs.my.mkWrapper {
-          basePackage = pkgs.topiary;
-          prependFlags = [ "--merge-configuration" ];
-          env = {
-            TOPIARY_CONFIG_FILE.value =
-              pkgs.writeText "languages.ncl"
-                # nickel
-                ''
-                  {
-                    languages = {
-                      nu = {
-                        indent = "    ", # 4 spaces
-                        extensions = ["nu"],
-                        grammar.source.path = "${tree-sitter-nu}/parser"
+        };
+        inherit (pkgs)
+          ffmpeg
+          fish
+          imagemagick
+          mergiraf
+          ;
+        topiary =
+          let
+            topiary-nushell = fetchTree {
+              type = "github";
+              owner = "blindFS";
+              repo = "topiary-nushell";
+              rev = "6e2f9b339a664a46e4015fa5d79e537807fefa39";
+            };
+            inherit (inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}) tree-sitter-nu;
+          in
+          pkgs.my.mkWrapper {
+            basePackage = pkgs.topiary;
+            prependFlags = [ "--merge-configuration" ];
+            env = {
+              TOPIARY_CONFIG_FILE.value =
+                pkgs.writeText "languages.ncl"
+                  # nickel
+                  ''
+                    {
+                      languages = {
+                        nu = {
+                          indent = "    ", # 4 spaces
+                          extensions = ["nu"],
+                          grammar.source.path = "${tree-sitter-nu}/parser"
+                        },
                       },
-                    },
-                  }
-                '';
-            TOPIARY_LANGUAGE_DIR.value = "${topiary-nushell}/queries";
+                    }
+                  '';
+              TOPIARY_LANGUAGE_DIR.value = "${topiary-nushell}/queries";
+            };
           };
-        };
-    };
+      }
+      ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.inotify-tools ];
   };
 
   programs.bash.enable = true;
