@@ -71,7 +71,7 @@ in
         enable_audio_bell = false;
         touch_scroll_multiplier = 5;
         allow_remote_control = true;
-        listen_on = if pkgs.stdenv.isLinux then "unix:@mykitty" else "/tmp/mykitty";
+        listen_on = if pkgs.stdenv.hostPlatform.isLinux then "unix:@mykitty" else "/tmp/mykitty";
         enabled_layouts = lib.concatStringsSep "," [
           "splits"
           "all"

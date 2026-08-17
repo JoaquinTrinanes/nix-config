@@ -7,7 +7,10 @@
 {
   home = {
     homeDirectory = lib.mkDefault (
-      if pkgs.stdenv.isLinux then "/home/${config.home.username}" else "/Users/${config.home.username}"
+      if pkgs.stdenv.hostPlatform.isLinux then
+        "/home/${config.home.username}"
+      else
+        "/Users/${config.home.username}"
     );
   };
 
