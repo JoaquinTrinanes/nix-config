@@ -16,8 +16,8 @@ in
 
   config = lib.mkIf cfg.enable {
     security.sudo-rs = {
-      enable = true;
-      execWheelOnly = true;
+      enable = lib.mkDefault true;
+      execWheelOnly = lib.mkDefault true;
     };
 
     boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
@@ -25,7 +25,6 @@ in
     security = {
       forcePageTableIsolation = lib.mkDefault true;
       allowSimultaneousMultithreading = lib.mkDefault true;
-      unprivilegedUsernsClone = lib.mkDefault config.virtualisation.containers.enable;
       allowUserNamespaces = lib.mkDefault true;
 
       apparmor = {
