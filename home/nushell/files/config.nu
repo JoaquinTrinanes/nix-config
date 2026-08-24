@@ -331,13 +331,6 @@ $env.config.keybindings ++= [
         }
     }
     {
-        name: ide_completion_menu
-        modifier: control
-        keycode: space
-        mode: [emacs vi_normal vi_insert]
-        event: null
-    }
-    {
         name: zoxide_jump
         modifier: alt
         keycode: char_z
