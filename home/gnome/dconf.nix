@@ -119,12 +119,6 @@ in
     "org/gnome/shell/extensions/caffeine" = {
       show-notifications = false;
     };
-    "org/gnome/shell/extensions/nightthemeswitcher/time" = {
-      location = gvariant.mkTuple [
-        42.87672
-        (-8.547082)
-      ];
-    };
     "org/gnome/shell/extensions/appindicator" = {
       legacy-tray-enabled = false;
     };
