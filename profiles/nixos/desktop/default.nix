@@ -26,8 +26,6 @@ in
     profiles.audio.enable = lib.mkDefault true;
     profiles.autofirma.enable = lib.mkDefault true;
 
-    services.flatpak.enable = lib.mkDefault true;
-
     programs.chromium = {
       enable = true;
       extraOpts = {

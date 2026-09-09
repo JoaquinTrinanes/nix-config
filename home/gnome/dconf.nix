@@ -81,7 +81,7 @@ in
       favorite-apps = [
         "org.gnome.Nautilus.desktop"
         "brave-browser.desktop"
-        "slack.desktop"
+        "com.slack.Slack.desktop"
         (lib.head config.xdg.terminal-exec.settings.default)
       ];
     };

@@ -10,8 +10,6 @@ let
   cfg = desktopCfg.gnome;
 in
 {
-  imports = [ ./wayland.nix ];
-
   options.profiles.desktop.gnome = {
     enable = lib.mkEnableOption "gnome desktop profile";
   };
@@ -24,7 +22,9 @@ in
       ];
     };
     programs.dconf.enable = lib.mkDefault true;
-    services.udev.packages = with pkgs; [ gnome-settings-daemon ];
+    services.udev.packages = [ pkgs.gnome-settings-daemon ];
+
+    programs.kdeconnect.package = lib.mkDefault pkgs.gnomeExtensions.gsconnect;
 
     environment.gnome.excludePackages = builtins.attrValues {
       inherit (pkgs)
@@ -58,15 +58,13 @@ in
         ;
     };
 
-    environment.systemPackages =
-      builtins.attrValues {
-        inherit (pkgs)
-          adwaita-icon-theme
-          gnome-tweaks
-          nautilus-python
-          pinentry-gnome3
-          ;
-      }
-      ++ lib.optionals config.services.flatpak.enable [ pkgs.gnome-software ];
+    environment.systemPackages = builtins.attrValues {
+      inherit (pkgs)
+        adwaita-icon-theme
+        gnome-tweaks
+        nautilus-python
+        pinentry-gnome3
+        ;
+    };
   };
 }
