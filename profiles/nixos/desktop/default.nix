@@ -102,9 +102,6 @@ in
 
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs)
-        vesktop
-        qbittorrent
-        telegram-desktop
         vlc
         ;
     };
