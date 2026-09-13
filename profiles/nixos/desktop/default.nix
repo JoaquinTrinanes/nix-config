@@ -100,6 +100,11 @@ in
 
     services.displayManager.gdm.enable = lib.mkDefault true;
 
+    # Even though flatpak is installed at the user level, nixpkgs' flatpak
+    # is patched with a hardcoded /run/current-system/sw/bin/flatpak path,
+    # breaking D-Bus activatable desktop entries
+    services.flatpak.enable = lib.mkDefault true;
+
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs)
         vlc
