@@ -101,17 +101,18 @@ load-env {
     PROMPT_INDICATOR_VI_INSERT: ""
 }
 
-def carapace-completer [spans: list<string>] {
+def carapace-completer [buffer: string] {
+    let spans = $buffer | split row ' '
     carapace $spans.0 nushell ...$spans
     | from json
 }
 
-def fish-completer [spans: list<string>] {
-    let escaped_spans = $spans
+def fish-completer [buffer: string] {
+    let escaped_spans = $buffer
         | str replace --all '\' '\\'
         | str replace --all "'" "\\'"
 
-    ^fish --command $"complete '--do-complete=($escaped_spans | str join ' ')'"
+    ^fish --command $"complete '--do-complete=($escaped_spans)'"
     | from tsv --flexible --noheaders --no-infer
     | rename value description
     | update value {|row|
@@ -135,15 +136,15 @@ def fish-completer [spans: list<string>] {
     }
 }
 
-let external_completer = {|spans: list<string>|
-    carapace-completer $spans
-    | default --empty { fish-completer $spans }
+let external_completer = {|buffer|
+    carapace-completer $buffer
+    | default --empty { fish-completer $buffer }
     # avoid empty result preventing native file completion
     | default --empty null
 }
 
 # HACK: @complete doesn't work with aliases (without the expand_alias hack)
-def expand_alias [spans: list<string>] {
+def expand_alias [spans: list<string>]: nothing -> list<string> {
     let expanded_alias = scope aliases | where name == $spans.0 | get 0?.expansion
 
     if $expanded_alias != null {
@@ -153,12 +154,12 @@ def expand_alias [spans: list<string>] {
     }
 }
 
-def carapace-completer-alias [spans: list<string>] {
-    carapace-completer (expand_alias $spans)
+def carapace-completer-alias [buffer: string] {
+    carapace-completer (expand_alias ($buffer | split row ' ') | str join ' ')
 }
 
-def fish-completer-alias [spans: list<string>] {
-    fish-completer (expand_alias $spans)
+def fish-completer-alias [buffer: string] {
+    fish-completer (expand_alias ($buffer | split row ' ') | str join ' ')
 }
 
 @complete fish-completer-alias
