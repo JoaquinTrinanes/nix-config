@@ -128,7 +128,7 @@
           taplo
           terraform-ls
           tofu-ls
-          typescript-go
+          typescript
           vscode-js-debug
           vscode-langservers-extracted
           vue-language-server
