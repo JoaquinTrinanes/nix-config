@@ -41,7 +41,7 @@ def 'nu-complete pnpm package binaries' [] {
 }
 
 def 'nu-complete pnpm' [] {
-    let external_completions = do $env.config.completions.external.completer [pnpm '']
+    let external_completions = do $env.config.completions.external.completer ('pnpm ' | commandline complete --input).place
     let script_completions = nu-complete pnpm user scripts
 
     [

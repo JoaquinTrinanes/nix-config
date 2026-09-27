@@ -101,14 +101,13 @@ load-env {
     PROMPT_INDICATOR_VI_INSERT: ""
 }
 
-def carapace-completer [buffer: string] {
-    let spans = $buffer | split row ' '
-    carapace $spans.0 nushell ...$spans
+def carapace-completer [place] {
+    carapace $place.command.0 nushell ...$place.command
     | from json
 }
 
-def fish-completer [buffer: string] {
-    let escaped_spans = $buffer
+def fish-completer [place] {
+    let escaped_spans = $place.command | str join ' '
         | str replace --all '\' '\\'
         | str replace --all "'" "\\'"
 
@@ -136,42 +135,24 @@ def fish-completer [buffer: string] {
     }
 }
 
-let external_completer = {|buffer|
-    carapace-completer $buffer
-    | default --empty { fish-completer $buffer }
+let external_completer = {|place|
+    carapace-completer $place
+    | default --empty { fish-completer $place }
     # avoid empty result preventing native file completion
     | default --empty null
 }
 
-# HACK: @complete doesn't work with aliases (without the expand_alias hack)
-def expand_alias [spans: list<string>]: nothing -> list<string> {
-    let expanded_alias = scope aliases | where name == $spans.0 | get 0?.expansion
 
-    if $expanded_alias != null {
-        $spans | skip 1 | prepend ($expanded_alias | split row ' ')
-    } else {
-        $spans
-    }
-}
-
-def carapace-completer-alias [buffer: string] {
-    carapace-completer (expand_alias ($buffer | split row ' ') | str join ' ')
-}
-
-def fish-completer-alias [buffer: string] {
-    fish-completer (expand_alias ($buffer | split row ' ') | str join ' ')
-}
-
-@complete fish-completer-alias
+@complete fish-completer
 extern git []
 
-@complete fish-completer-alias
+@complete fish-completer
 extern gpg []
 
-@complete fish-completer-alias
+@complete fish-completer
 extern jj []
 
-@complete fish-completer-alias
+@complete fish-completer
 extern nix []
 $env.config.table.mode = "frameless"
 $env.config.table.header_on_separator = false
