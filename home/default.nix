@@ -139,6 +139,8 @@
       RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
     };
 
+    preferXdgDirectories = true;
+
     packages =
       builtins.attrValues {
         nr = pkgs.writeShellScriptBin "nr" ''
