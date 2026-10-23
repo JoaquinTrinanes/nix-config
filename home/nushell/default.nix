@@ -64,6 +64,7 @@ in
 
   programs.nushell = {
     enable = lib.mkDefault true;
+    loadSessionVariables = lib.mkDefault false;
     package = nushellWrapped;
 
     shellAliases = {
