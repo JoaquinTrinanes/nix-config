@@ -12,6 +12,8 @@
     inputs.hardware.nixosModules.framework-16-7040-amd
   ];
 
+  hardware.framework.enableKmod = false;
+
   services.fwupd.enable = true;
 
   hardware.amdgpu.opencl.enable = true;
