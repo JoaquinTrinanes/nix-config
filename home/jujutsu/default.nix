@@ -2,20 +2,13 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
-let
-  jj = inputs.jj.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
-    doCheck = false;
-  };
-in
 {
   programs.git.signing.signByDefault = lib.mkIf config.programs.jujutsu.enable (lib.mkForce false);
 
   programs.jujutsu = {
     enable = lib.mkDefault true;
-    package = jj;
     settings = {
       user = {
         name = config.accounts.email.accounts.primary.realName;
