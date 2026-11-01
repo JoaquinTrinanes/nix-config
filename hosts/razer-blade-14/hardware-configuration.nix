@@ -38,8 +38,6 @@
     enable32Bit = lib.mkDefault true;
   };
 
-  boot.initrd.systemd.enable = true;
-
   # avoid loading amdgpu at stage 1. Might reduce number of crashes on boot
   hardware.amdgpu.initrd.enable = false;
 

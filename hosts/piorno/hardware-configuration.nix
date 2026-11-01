@@ -22,8 +22,6 @@
 
   services.tuned.enable = true;
 
-  boot.initrd.systemd.enable = true;
-
   environment.systemPackages = builtins.attrValues { inherit (pkgs.nvtopPackages) amd; };
 
   # fix flickering while promting for LUKS password, NixOS/nixpkgs#202846
