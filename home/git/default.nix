@@ -140,7 +140,7 @@
           "gh:"
           "github:"
         ];
-        "git@github.com/".pushInsteadOf = [
+        "git@github.com:".pushInsteadOf = [
           "https://github.com/"
         ];
         "https://gitlab.com/".insteadOf = "gl:";
