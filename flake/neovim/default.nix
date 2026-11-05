@@ -112,6 +112,7 @@
           nil
           nixd
           nixfmt
+          nufmt
           nodejs
           prettier
           ripgrep

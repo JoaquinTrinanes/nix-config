@@ -149,7 +149,7 @@ return {
         typst = { "typstyle" },
         terraform = { "tofu_fmt", "terraform_fmt", stop_after_first = true },
         nix = { "nixfmt" },
-        nu = { "topiary_nu" },
+        nu = { "nufmt" },
         ["_"] = {
           "trim_whitespace",
           lsp_format = "prefer",
@@ -158,10 +158,6 @@ return {
       formatters = {
         prettier_cwd = { inherit = "prettier", require_cwd = true },
         sqlfluff = { require_cwd = false },
-        topiary_nu = {
-          command = "topiary",
-          args = { "format", "--language", "nu" },
-        },
         injected = {
           ---@type conform.InjectedFormatterOptions
           options = { ignore_errors = true },

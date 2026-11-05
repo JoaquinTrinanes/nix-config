@@ -159,37 +159,6 @@
           imagemagick
           mergiraf
           ;
-        topiary =
-          let
-            topiary-nushell = fetchTree {
-              type = "github";
-              owner = "blindFS";
-              repo = "topiary-nushell";
-              rev = "6e2f9b339a664a46e4015fa5d79e537807fefa39";
-            };
-            inherit (inputs.nushell-nightly.packages.${pkgs.stdenv.hostPlatform.system}) tree-sitter-nu;
-          in
-          pkgs.my.mkWrapper {
-            basePackage = pkgs.topiary;
-            prependFlags = [ "--merge-configuration" ];
-            env = {
-              TOPIARY_CONFIG_FILE.value =
-                pkgs.writeText "languages.ncl"
-                  # nickel
-                  ''
-                    {
-                      languages = {
-                        nu = {
-                          indent = "    ", # 4 spaces
-                          extensions = ["nu"],
-                          grammar.source.path = "${tree-sitter-nu}/parser"
-                        },
-                      },
-                    }
-                  '';
-              TOPIARY_LANGUAGE_DIR.value = "${topiary-nushell}/queries";
-            };
-          };
       }
       ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.inotify-tools ];
   };
