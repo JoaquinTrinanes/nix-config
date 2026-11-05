@@ -1,8 +1,12 @@
 export-env {
     def converter_by_separator [sep: string] {
         {
-            from_string: {|s| $s | split row $sep }
-            to_string: {|v| $v | str join $sep }
+            from_string: {|s|
+                $s | split row $sep
+            }
+            to_string: {|v|
+                $v | str join $sep
+            }
         }
     }
 
@@ -23,7 +27,6 @@ export-env {
         "XCURSOR_PATH": $esep_list_converter
         "XDG_CONFIG_DIRS": $esep_list_converter
         "XDG_DATA_DIRS": $esep_list_converter
-
         "NIX_PROFILES": $space_list_converter
     }
 }
@@ -39,12 +42,12 @@ export-env {
         }
 
         let rgb = $color
-            | str trim -c '#' --left
-            | split chars
-            | window 2 --stride 2
-            | each { str join }
-            | into int --radix 16
-            | each {|v| relative_luminance_helper ($v / 255) }
+        | str trim -c '#' --left
+        | split chars
+        | window 2 --stride 2
+        | each { str join }
+        | into int --radix 16
+        | each {|v| relative_luminance_helper ($v / 255) }
 
         let r = $rgb.0
         let b = $rgb.1
@@ -53,7 +56,7 @@ export-env {
         (0.2126 * $r) + (0.7152 * $g) + (0.0722 * $b)
     }
 
-    def contrast [color1 color2] {
+    def contrast [color1, color2] {
         let l1 = relative_luminance $color1
         let l2 = relative_luminance $color2
 
@@ -68,7 +71,12 @@ export-env {
             let contrast_black = contrast $str "#000000"
             let contrast_white = contrast $str "#ffffff"
 
-            {bg: $str fg: (if ($contrast_black > $contrast_white) { "black" } else { "white" })}
+            {
+                bg: $str
+                fg: (
+                    if ($contrast_black > $contrast_white) { "black" } else { "white" }
+                )
+            }
         } else {
             "default"
         }
@@ -79,22 +87,20 @@ export-env {
 
 $env.config.color_config.separator = "dark_gray_dimmed"
 $env.config.color_config.row_index = "teal"
-$env.config.color_config.filesize = {||
-    if $in == 0b {
-        "dark_gray_dimmed"
-    } else if $in < 1mb {
-        "cyan"
-    } else if $in > 0.5gb {
-        {fg: "yellow" attr: b}
-    } else { "blue" }
-}
+$env.config.color_config.filesize = {|| if $in == 0b {
+    "dark_gray_dimmed"
+} else if $in < 1mb {
+    "cyan"
+} else if $in > 0.5gb {
+    {fg: "yellow", attr: b}
+} else { "blue" } }
 $env.config.color_config.bool = {|| if $in { "light_cyan" } else { "red" } }
 $env.config.color_config.leading_trailing_space_bg = {bg: dark_gray}
 $env.config.color_config.header = "green"
 $env.config.color_config.shape_variable = "blue"
 $env.config.color_config.shape_int = "light_magenta"
 $env.config.color_config.shape_float = "light_magenta"
-$env.config.color_config.shape_garbage = {fg: red attr: u}
+$env.config.color_config.shape_garbage = {fg: red, attr: u}
 
 load-env {
     PROMPT_INDICATOR_VI_NORMAL: ""
@@ -107,9 +113,10 @@ def carapace-completer [place] {
 }
 
 def fish-completer [place] {
-    let escaped_spans = $place.command | str join ' '
-        | str replace --all '\' '\\'
-        | str replace --all "'" "\\'"
+    let escaped_spans = $place.command
+    | str join ' '
+    | str replace --all '\' '\\'
+    | str replace --all "'" "\\'"
 
     ^fish --command $"complete '--do-complete=($escaped_spans)'"
     | from tsv --flexible --noheaders --no-infer
@@ -141,7 +148,6 @@ let external_completer = {|place|
     # avoid empty result preventing native file completion
     | default --empty null
 }
-
 
 @complete fish-completer
 extern git []
@@ -201,10 +207,7 @@ $env.config.menus ++= [
         name: history_menu
         only_buffer_difference: true
         marker: "? "
-        type: {
-            layout: list
-            page_size: 10
-        }
+        type: {layout: list, page_size: 10}
     }
     {
         name: help_menu
@@ -284,7 +287,7 @@ $env.config.keybindings ++= [
         mode: [emacs vi_normal vi_insert]
         event: {
             until: [
-                {send: menu name: completion_menu}
+                {send: menu, name: completion_menu}
                 {send: menunext}
                 {edit: complete}
             ]
@@ -297,7 +300,7 @@ $env.config.keybindings ++= [
         mode: [emacs vi_normal vi_insert]
         event: {
             until: [
-                {send: menu name: completion_menu}
+                {send: menu, name: completion_menu}
                 {send: menuprevious}
                 {edit: complete}
             ]
@@ -308,19 +311,14 @@ $env.config.keybindings ++= [
         modifier: control
         keycode: char_y
         mode: [emacs vi_normal vi_insert]
-        event: {
-            send: Enter
-        }
+        event: {send: Enter}
     }
     {
         name: zoxide_jump
         modifier: alt
         keycode: char_z
         mode: [emacs vi_normal vi_insert]
-        event: {
-            send: executehostcommand
-            cmd: "cd (zoxide query --interactive)"
-        }
+        event: {send: executehostcommand, cmd: "cd (zoxide query --interactive)"}
     }
 ]
 

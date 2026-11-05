@@ -19,7 +19,7 @@ export def factor [n: int]: nothing -> list<int> {
     | sort
 }
 
-def gcd-pair [a: int b: int]: nothing -> int {
+def gcd-pair [a: int, b: int]: nothing -> int {
     mut x = $a
     mut y = $b
 
@@ -51,7 +51,7 @@ export def gcd [...nums: int]: nothing -> int {
 }
 
 # Least common multiple of two numbers
-def lcm-pair [a: int b: int]: nothing -> int {
+def lcm-pair [a: int, b: int]: nothing -> int {
     ($a * $b) // (gcd $a $b)
 }
 
