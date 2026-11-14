@@ -35,7 +35,6 @@
       git = {
         colocate = true;
         private-commits = "private()";
-        sign-on-push = true;
       };
       fix.tools = {
         prettier = {
@@ -153,6 +152,7 @@
         "why_immutable(x)" = "x | roots(x:: & immutable_heads())";
       };
       revsets = {
+        git-sign-on-push = "~signed() & mine()";
         log = "coalesce(stack() | trunk(), default())";
         short-prefixes = "stack() | trunk() | heads(default())";
         bookmark-advance-to = "closest_pushable(@)";
