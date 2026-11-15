@@ -74,7 +74,7 @@
                   use-xdg-base-directories = lib.mkDefault true;
                   warn-dirty = lib.mkDefault false;
                   flake-registry = lib.mkDefault ""; # remove global registry
-                  sync-before-registering = true;
+                  sync-before-registering = false;
                   accept-flake-config = lib.mkIf isLix (lib.mkDefault false);
                   repl-overlays = lib.mkIf isLix [
                     (pkgs.writeText "pkgs.nix"
