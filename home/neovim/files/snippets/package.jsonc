@@ -3,11 +3,7 @@
 	"contributes": {
 		"snippets": [
 			{
-				"language": [
-					"sh",
-					"bash",
-					""
-				],
+				"language": ["sh", "bash", ""],
 				"path": "./shell.json"
 			}
 		]
