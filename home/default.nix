@@ -410,7 +410,8 @@
 
   systemd.user.tmpfiles.rules = [ "D %h/.ssh/sockets 0700 - - - -" ];
 
-  home.pointerCursor = {
+  home.pointerCursor = lib.mkDefault {
+    enable = true;
     name = "Adwaita";
     package = pkgs.adwaita-icon-theme;
     size = 24;
