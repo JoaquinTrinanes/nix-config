@@ -44,8 +44,8 @@ let
             toLuaBindings (lib.mapAttrs' (name: value: lib.nameValuePair "vim.g.${name}" value) globals)
           )
           + lib.optionalString (configDir != null) ''
-            vim.opt.runtimepath:prepend(${toLua [ (toString configDir) ]})
-            vim.opt.runtimepath:append(${toLua (map (p: "${p}/after") [ (toString configDir) ])})
+            vim.opt.runtimepath:prepend(${toLua [ "${configDir}" ]})
+            vim.opt.runtimepath:append(${toLua (map (p: "${p}/after") [ "${configDir}" ])})
           ''
           + restMkNeovimArgs.luaRcContent or ""
           + lib.optionalString (initLuaSrc != null) "dofile(${toLua "${configDir}/init.lua"})";

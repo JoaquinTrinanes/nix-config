@@ -1,4 +1,3 @@
-{ inputs, ... }:
 {
   perSystem =
     {
@@ -163,13 +162,7 @@
       mkNeovim = pkgs.callPackage ./mkNeovim.nix { };
       baseNeovim =
         let
-          _self = /. + (builtins.unsafeDiscardStringContext inputs.self);
-          configDir =
-            (lib.fileset.toSource {
-              root = _self;
-              fileset = ../../home/neovim/files;
-            })
-            + /home/neovim/files;
+          configDir = "${../../home/neovim/files}";
         in
         mkNeovim {
           neovim-unwrapped = inputs'.neovim-nightly-overlay.packages.default;
