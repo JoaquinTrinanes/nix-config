@@ -141,7 +141,5 @@ in
           </fontconfig>
         '';
     };
-
-    nixpkgs.config.joypixels.acceptLicense = true;
   };
 }

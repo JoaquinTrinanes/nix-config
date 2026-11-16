@@ -2,6 +2,7 @@
   lib,
   config,
   inputs,
+  withSystem,
   ...
 }:
 let
@@ -42,17 +43,22 @@ in
       nixpkgs.finalConfig = {
         inherit (cfg) overlays config;
       };
-      common.exclusiveModules = [
+      # Standalone home-manager configurations instantiate their own nixpkgs
+      home-manager.standaloneModules = [
         {
           _file = ./nixpkgs.nix;
           nixpkgs = cfg.finalConfig;
         }
       ];
+      # NixOS reuses the perSystem instance instead of importing nixpkgs again, so the system
+      # and `self.packages` share one evaluation. `nixpkgs.config` must then stay empty in NixOS
+      # modules (enforced by an assertion): configure nixpkgs through `parts.nixpkgs` instead.
       nixos.perHost =
         { system, ... }:
         {
           _file = ./nixpkgs.nix;
           nixpkgs.hostPlatform = lib.mkDefault system;
+          nixpkgs.pkgs = withSystem system ({ pkgs, ... }: pkgs);
         };
     };
   };

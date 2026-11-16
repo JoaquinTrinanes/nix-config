@@ -131,7 +131,7 @@ in
     };
   };
 
-  environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = lib.mkIf config.nixpkgs.config.allowUnfree "1";
+  environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = lib.mkIf pkgs.config.allowUnfree "1";
 
   environment.systemPackages = with pkgs; [
     coreutils

@@ -18,6 +18,7 @@
       config = {
         allowUnfree = lib.mkDefault true;
         allowAliases = lib.mkDefault true;
+        joypixels.acceptLicense = true;
       };
       overlays = [
         # (_final: prev: inputs.self.packages.${prev.stdenv.hostPlatform.system})
